@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains atom_builder.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function atom_builder_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the atom_builder module.
+    case 'help.page.atom_builder':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Interactively create atoms in a 3D image that can be rotated, saved, etc.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

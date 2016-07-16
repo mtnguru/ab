@@ -1,0 +1,14 @@
+{
+  "name": "drupal/atom_builder",
+  "type": "drupal-module",
+  "description": "Interactively create atoms in a 3D image that can be rotated, saved, etc.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/atom_builder",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/atom_builder",
+    "source": "http://cgit.drupalcode.org/atom_builder"
+  },
+  "require": { }
+}
