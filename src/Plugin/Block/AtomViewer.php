@@ -20,7 +20,12 @@ class AtomViewer extends BlockBase {
   public function build() {
     $build = [];
     $abid = 'ab-viewer-element-carbon';
-    $build['atom_viewer']['#markup'] = "<div id='$abid'></div>";
+    $build['atom_viewer'] = array(
+      'wrapper' => array(
+        'title' => array('#markup' => 'The Atom Viewer is cool'),
+        'scene' => array('#markup' => "<div class='$abid'></div>"),
+      ),
+    );
     return $build;
   }
 
