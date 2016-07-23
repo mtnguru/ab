@@ -8,23 +8,20 @@ use Drupal\Core\Block\BlockBase;
  * Provides a 'AtomBuilder' block.
  *
  * @Block(
- *  id = "atom_builder",
- *  admin_label = @Translation("Atom builder"),
+ *  id = "atom_builder_viewer",
+ *  admin_label = @Translation("Atom builder viewer"),
  * )
  */
-class AtomBuilder extends BlockBase {
+class AtomBuilderViewer extends BlockBase {
 
   /**
    * {@inheritdoc}
    */
   public function build() {
     $build = [];
-    $abid = 'ab-viewer-element-carbon';
     $build['atom_builder'] = array(
-      '#attached' => array( 'library' => array('atom_builder/atom-builder-js')),
+//    '#attached' => array( 'library' => array('atom_builder/atom-builder-js')),
       'wrapper' => array(
-        'title' => array('#markup' => 'The Atom Viewer is cool'),
-        'stats' => array('#markup' => "<div id='Stats-output'></div>"),
         'scene' => array('#markup' => "<div id='atom-builder-wrapper'></div>"),
       ),
     );

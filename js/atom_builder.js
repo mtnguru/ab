@@ -1,7 +1,11 @@
 Drupal.behaviors.atom_builder = {
   attach: function (context, settings) {
-    var stats;     // Statistics pane in upper left corner of screen
-    var controls;  // Controls in upper left corner of screen
+    const TITLE = 0;
+    const TYPE = 1;
+    const VALUE = 2
+
+
+    var controls;  // Controls in left sidebar
     var scene;     // The full scene being displayed
     var renderer;  // WebGLRenderer
     var canvasContainer;
@@ -11,6 +15,8 @@ Drupal.behaviors.atom_builder = {
     var camera;
     var cameraTrackballControls;
     var atomTrackballControls;
+    var sc = drupalSettings.atom_builder.controls.styler;
+    var styler = document.getElementById('edit-styler');
     var selectedObject;
     var objects = {
       protons: [],
@@ -21,20 +27,7 @@ Drupal.behaviors.atom_builder = {
 
     var conf = {
       proton: {
-        radius: 32,
-        opacity: .9,
-        colors: {
-          default: 0x6666dd,
-          top: 0xd4af37,
-          bottom: 0xdd66dd,
-          marker: 0x55dddd
-        }
-      },
-      innerElectron: {
-        opacity: .9
-      },
-      outerElectron: {
-        opacity: .9
+        radius: 32
       },
       tetraLet: {          // Helium 4
         scale: 1.5,
@@ -68,58 +61,7 @@ Drupal.behaviors.atom_builder = {
           scale: 2.5
         }
       },
-      geometry: {
-        opacity: .3,
-        color: 0xaaffff
-      },
-      axis: {
-        opacity: .3,
-        color: 0xffffaa
-      },
-      isotope: {
-        opacity: .3,
-        color: 0xffffff
-      },
-      valence: {
-        opacity: .3,
-        color: 0xffbbff
-      },
-      camera: {
-        perspective: 25,
-        position: {
-          x: 0,
-          y: 1400,
-          z: -1400
-        }
-      },
-      renderer: {
-        clearColor: 0xddeedd
-      },
-      plane: {
-        color: 0xcceecc,
-        width: 860,
-        depth: 860
-      }
     };
-
-    /**
-     * Initialize the statistics displayed in upper left corner of screen.
-     * @returns {Stats}
-     */
-    function initStats() {
-
-      var stats = new Stats();
-      stats.setMode(0); // 0: fps, 1: ms
-
-      // Align top-left
-      stats.domElement.style.position = 'absolute';
-      stats.domElement.style.left = '0px';
-      stats.domElement.style.top = '0px';
-
-      document.getElementById("Stats-output").appendChild(stats.domElement);
-
-      return stats;
-    }
 
     /**
      * Create a spotlight.
@@ -139,27 +81,28 @@ Drupal.behaviors.atom_builder = {
       axisGeometry.vertices.push(new THREE.Vector3(vertices[0].x, vertices[0].y, vertices[0].z));
       axisGeometry.vertices.push(new THREE.Vector3(vertices[1].x, vertices[1].y, vertices[1].z));
       var lineMaterial = new THREE.LineBasicMaterial({
-        color: conf.axis.color,
+        color: sc.geometry.controls.aaxis__color[VALUE],
         transparent: true,
-        opacity: conf.axis.opacity,
+        opacity: sc.geometry.controls.aaxis__opacity[VALUE],
         linewidth: 2
       });
       var axisLine = new THREE.Line(axisGeometry, lineMaterial);
       axisLine.scale.set(scale, scale, scale);
-      axisLine.name = 'axis';
+      axisLine.name = 'aaxis';
       return axisLine;
     }
 
     function createGeometryWireframe(scale, geometry, offset) {
       var wireframe = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-        color: conf.geometry.color,
+        color: sc.geometry.controls.awireframe__color[VALUE],
         transparent: true,
-        opacity: conf.geometry.opacity,
+        opacity: sc.geometry.controls.awireframe__opacity[VALUE],
         wireframe: true,
+        wireframeLinewidth: 10
       }));
       wireframe.scale.set(scale, scale, scale);
       wireframe.init_scale = scale;
-      wireframe.name = 'geometry';
+      wireframe.name = 'awireframe';
       if (offset) {
         if (offset.x) wireframe.position.x = offset.x;
         if (offset.y) wireframe.position.y = offset.y;
@@ -202,7 +145,7 @@ Drupal.behaviors.atom_builder = {
           var l = geo.length || 4;
           geometry = new THREE.BoxGeometry(l, l, l);
           break;
-        case 'pentagonal_bipyramid':
+        case 'pentagonalBipyramid':
           geometry = createBiPyramid(5, geo.length, geo.height, 35);
           break;
       }
@@ -259,34 +202,25 @@ Drupal.behaviors.atom_builder = {
 
     function createIcosahedron(prop, pos) {
       // Set proton colors
-      var c = {
-        0: conf.proton.colors.marker,
-        1: conf.proton.colors.top,
-        2: conf.proton.colors.bottom,
-        3: conf.proton.colors.default,
-        4: conf.proton.colors.default,
-        5: conf.proton.colors.default,
-        6: conf.proton.colors.default,
-        7: conf.proton.colors.default,
-        8: conf.proton.colors.default,
-        9: conf.proton.colors.default,
-        10: conf.proton.colors.default,
-        11: conf.proton.colors.default
+      var cf = sc.proton.controls;
+      var colors = {
+        'marker':  cf.proton_marker__color[VALUE],
+        'top':     cf.proton_top__color[VALUE],
+        'bottom':  cf.proton_bottom__color[VALUE],
+        'default': cf.proton_default__color[VALUE],
       };
-      var c2 = {
-        0: conf.proton.colors.default,
-        1: conf.proton.colors.default,
-        2: conf.proton.colors.default,
-        3: conf.proton.colors.default,
-        4: conf.proton.colors.default,
-        5: conf.proton.colors.default,
-        6: conf.proton.colors.default,
-        7: conf.proton.colors.default,
-        8: conf.proton.colors.default,
-        9: conf.proton.colors.default,
-        10: conf.proton.colors.default,
-        11: conf.proton.colors.default
-      };
+      var c = ['marker',
+               'top',
+               'bottom',
+               'default',
+               'default',
+               'default',
+               'default',
+               'default',
+               'default',
+               'default',
+               'default',
+               'default'];
 
       var atom = new THREE.Group();
       atom.name = 'icoLet';
@@ -296,14 +230,15 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: c[key], opacity: conf.proton.opacity || 1, transparent: true}},
+          {phong: {color: colors[c[key]], opacity: cf.proton__opacity[VALUE] || 1, transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
             y: vertice.y,
-            z: vertice.z,
+            z: vertice.z
           }
         );
+        proton.name = 'proton-' + c[key];
         objects.protons.push(proton);
         atom.add(proton);
       }
@@ -322,15 +257,16 @@ Drupal.behaviors.atom_builder = {
     }
 
     function createPentagonalBiPyramid(prop, pos) {
+      var cf = sc.proton.controls;
       // Set proton colors
       var c = {
-        0: conf.proton.colors.top,
-        1: conf.proton.colors.bottom,
-        2: conf.proton.colors.marker,
-        3: conf.proton.colors.default,
-        4: conf.proton.colors.default,
-        5: conf.proton.colors.default,
-        6: conf.proton.colors.default
+        0: cf.proton_top__color[VALUE],
+        1: cf.proton_bottom__color[VALUE],
+        2: cf.proton_marker__color[VALUE],
+        3: cf.proton_default__color[VALUE],
+        4: cf.proton_default__color[VALUE],
+        5: cf.proton_default__color[VALUE],
+        6: cf.proton_default__color[VALUE]
       };
 
       var atom = new THREE.Group();
@@ -341,7 +277,7 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: c[key], opacity: conf.proton.opacity, transparent: true}},
+          {phong: {color: c[key], opacity: cf.proton__opacity[VALUE], transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
@@ -365,12 +301,13 @@ Drupal.behaviors.atom_builder = {
     }
 
     function createTetrahedron(prop, pos) {
+      var cf = sc.proton.controls;
       // Set proton colors
       var c = {
-        0: conf.proton.colors.top,
-        1: conf.proton.colors.marker,
-        2: conf.proton.colors.default,
-        3: conf.proton.colors.default,
+        0: cf.proton_top__color[VALUE],
+        1: cf.proton_marker__color[VALUE],
+        2: cf.proton_default__color[VALUE],
+        3: cf.proton_default__color[VALUE],
       };
 
       var atom = new THREE.Group();
@@ -381,7 +318,7 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: c[key], opacity: conf.proton.opacity, transparent: true}},
+          {phong: {color: c[key], opacity: cf.proton__opacity[VALUE], transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
@@ -471,52 +408,38 @@ Drupal.behaviors.atom_builder = {
     }
 
     function changeMode(newMode) {
+
       switch (mouseMode) {
-        case 'Move Camera':
+        case 'camera':
           cameraTrackballControls.dispose();
           delete cameraTrackballControls;
-          render();
           break;
-        case 'Select/Move Atom':
+        case 'atom':
           canvasContainer.removeEventListener('mousedown', onDocumentMouseDown);
           break;
-        case 'Select/Move Proton':
-          canvasContainer.removeEventListener('mousedown', onDocumentMouseDown);
+        case 'attach':
           break;
-        case 'Rotate Selection':
-          cameraTrackballControls.dispose();
-          delete cameraTrackballControls;
+        case 'none':
           break;
       }
-      switch (newMode) {
-        case 'Move Camera':
+
+      mouseMode = newMode;
+      switch (mouseMode) {
+        case 'camera':
           cameraTrackballControls = createCameraTrackballControls();
           break;
-        case 'Select Atom':
+        case 'atom':
           canvasContainer.addEventListener('mousedown', onDocumentMouseDown, false);
           break;
-        case 'Select Proton':
-          canvasContainer.addEventListener('mousedown', onDocumentMouseDown, false);
-          break;
-        case 'Rotate Selection':
+        case 'attach':
           atomTrackballControls = createAtomTrackballControls(selectedObject);
           break;
+        case 'none':
+          break;
       }
-      mouseMode = newMode;
       render();
 
       return;
-    }
-
-    /**
-     * Change the transparency of all proton on the screen.
-     *
-     * @param value
-     * @returns {*}
-     */
-    function changeProtonTransparency(value) {
-      return value;
-      // Change all items transparency.
     }
 
     /**
@@ -526,112 +449,135 @@ Drupal.behaviors.atom_builder = {
      * @param value
      * @param prop
      */
-    function applyAtomControl(name, value, prop) {
-      if (mouseMode == 'Rotate Selection') {
-        var radians = value / 360 * 2 * Math.PI;
-        selectedObject.rotation[prop] = radians + (selectedObject.rotation['init_' + prop] || 0);
-      } else {
-        scene.traverse(function (node) {
-          switch (name) {
-            case 'rotation':
-              var index = nucletNames.indexOf(name);
-              if (nucletNames.indexOf(node.name) > -1) {
-                var radians = value / 360 * 2 * Math.PI;
-                node.rotation[prop] = radians + (node.rotation['init_' + prop] || 0);
-              }
-              break;
-            case 'scaleProtons':
-              if (node.name == 'proton') {
-                node.scale.set(value, value, value);
-              }
-              break;
-            case 'scaleGeometry':
-              if (node.name == 'geometry') {
-                var scale = (node.init_scale) ? value * node.init_scale : value;
-                node.scale.set(scale, scale, scale);
-              }
-              break;
-            case 'opacityPlane':
-              if (node.name == 'plane') {
-                node.material.opacity = value
-                node.material.visible = (value > .01);
-              }
-              break;
-            case 'opacityProtons':
-              if (node.name == 'proton') {
-                node.material.opacity = value
-                node.material.visible = (value > .01);
-              }
-              break;
-            case 'opacityGeometry':
-              if (node.name == 'geometry') {
-                node.material.opacity = value;
-                node.material.visible = (value > .05);
-              }
-              break;
-            case 'opacityAxis':
-              if (node.name == 'axis') {
-                node.material.opacity = value;
-                node.material.visible = (value > .05);
-              }
-              break;
-            case 'opacityValence':
-              if (node.name == 'valence') {
-                node.material.opacity = value;
-                node.material.visible = (value > .05);
-              }
-              break;
+    function listenSliderChange(id, prop) {
+      document.getElementById(id).onchange(function (event) {
+        if (mouseMode == 'Rotate Selection') {
+          var radians = value / 360 * 2 * Math.PI;
+          selectedObject.rotation[prop] = radians + (selectedObject.rotation['init_' + prop] || 0);
+        } else {
+          scene.traverse(function (node) {
+            switch (name) {
+              case 'rotation':
+                if (nucletNames.indexOf(node.name) > -1) {
+                  var radians = value / 360 * 2 * Math.PI;
+                  node.rotation[prop] = radians + (node.rotation['init_' + prop] || 0);
+                }
+                break;
+              case 'scaleProtons':
+                if (node.name == 'proton') {
+                  node.scale.set(value, value, value);
+                }
+                break;
+              case 'scaleGeometry':
+                if (node.name == 'geometry') {
+                  var scale = (node.init_scale) ? value * node.init_scale : value;
+                  node.scale.set(scale, scale, scale);
+                }
+                break;
+              case 'opacityPlane':
+                if (node.name == 'plane') {
+                  node.material.opacity = value
+                  node.material.visible = (value > .01);
+                }
+                break;
+              case 'opacityProtons':
+                if (node.name == 'proton') {
+                  node.material.opacity = value
+                  node.material.visible = (value > .01);
+                }
+                break;
+              case 'opacityGeometry':
+                if (node.name == 'geometry') {
+                  node.material.opacity = value;
+                  node.material.visible = (value > .05);
+                }
+                break;
+              case 'opacityAxis':
+                if (node.name == 'axis') {
+                  node.material.opacity = value;
+                  node.material.visible = (value > .05);
+                }
+                break;
+              case 'opacityValence':
+                if (node.name == 'valence') {
+                  node.material.opacity = value;
+                  node.material.visible = (value > .05);
+                }
+                break;
+            }
+          });
+        }
+        render();
+      });
+    };
+
+    function controlChanged(event) {
+      var args = this.id.split("--");
+      var argNames = args[0].split("-");
+      var value = event.target.value;
+      switch (argNames[0]) {
+        case "renderer":
+          renderer.setClearColor(new THREE.Color(parseInt(value.replace(/^#/, ''), 16)), 1);
+          break;
+        case "camera":
+          if (args[1] == 'perspective') {
+            camera.fov = value;
+            camera.updateProjectionMatrix();
           }
-        });
+          break;
+        default:
+          scene.traverse(function (node) {
+            var nodeNames = node.name.split("-");
+            var ok = false;
+            if (argNames.length == 2) {
+              if (args[0] == node.name) {
+                ok = true;
+              }
+            } else if (nodeNames[0] == argNames[0]) {
+              ok = true;
+            }
+            if (ok) {
+              switch (args[1]) {
+                case 'rotation':
+                  if (nucletNames.indexOf(node.name) > -1) {
+                    var radians = value / 360 * 2 * Math.PI;
+                    node.rotation[prop] = radians + (node.rotation['init_' + prop] || 0);
+                  }
+                  break;
+                case 'scale':
+                  var scale = (node.init_scale) ? value * node.init_scale : value;
+                  node.scale.set(scale, scale, scale);
+                  break;
+                case 'opacity':
+                  node.material.opacity = value;
+                  node.material.visible = (value > .02);
+                  break;
+                case 'linewidth':
+                  if  (argNames[0] == 'awireframe') {
+                    node.material.wireframeLinewidth = value;
+                  } else {
+                    node.material.linewidth = value;
+                  }
+                  break;
+                case 'color':
+                  node.material.color.setHex(value.replace(/#/, "0x"));
+                  break;
+              }
+            }
+          });
+          break;
       }
       render();
+      return;
     }
 
-    function rotateReset() {
-      controls.rotateX = 0;
-      controls.rotateY = 0;
-      controls.rotateZ = 0;
-      scene.traverse(function (node) {
-        if (node.name == 'tetraLet' ||
-          node.name == 'pentaLet' ||
-          node.name == 'icoLet') {
-          node.rotation.x = node.rotation['init_x'] || 0;
-          node.rotation.y = node.rotation['init_y'] || 0;
-          node.rotation.z = node.rotation['init_z'] || 0;
-        }
-      });
-      render();
+    function showStylerBlock() {
+      // Display the currently selected block - hide the rest
+      for (var i=0; i < styler.length; i++) {
+        document.getElementById('control-' + styler[i].value).style.display = (styler[i].selected) ? 'block' : 'none';
+      }
+
     }
-
-    function opacityReset() {
-      controls.opacityPlane = conf.plane.opacity;
-      controls.opacityProtons = conf.proton.opacity;
-      controls.opacityAxis = conf.axis.opacity;
-      controls.opacityGeometry = conf.geometry.opacity;
-      controls.opacityValence = conf.valence.opacity;
-      controls.opacityIsotope = conf.isotope.opacity;
-      controls.opacityInnerElectrons = conf.innerElectrons.opacity;
-      controls.opacityOuterElectrons = conf.outerElectrons.opacity;
-
-      scene.traverse(function (node) {
-        var blankline = 5;
-        if (node.name == 'proton')   node.material.opacity = conf.proton.opacity;
-        if (node.name == 'geometry') node.material.opacity = conf.geometry.opacity;
-        if (node.name == 'axis')     node.material.opacity = conf.axis.opacity;
-      });
-      render();
-    }
-
-    function scaleReset() {
-      controls.scaleProtons = 1;
-      controls.scaleGeometry = 1;
-      scene.traverse(function (node) {
-        if (node.name == 'proton')   node.scale.set(1, 1, 1);
-        if (node.name == 'geometry') node.scale.set(1, 1, 1);
-      });
-      render();
-    }
-
     /**
      * Create the controls in the upper right corner of screen.
      *
@@ -639,113 +585,41 @@ Drupal.behaviors.atom_builder = {
      *
      * @returns {controls|*}
      */
-    function createControls() {
-      vars = controls = new function () {
+    function initControls() {
 
-        this.mouseMode = 'Move Camera';
-        this.atomicNumber = 0;
-        this.element = 'Carbon';
-        this.atomicNumber = 6;
-        this.numProtons = 12;
-        this.valence = 4;
+      var form = document.forms['atom-builder-controls-form'];
 
-        this.scaleProtons = 1;
-        this.scaleGeometry = 1;
+      // Add a change listener to each item in the styler select list
+      showStylerBlock();
+      styler.addEventListener("change", showStylerBlock);
 
-        this.opacityPlane = 1;
-        this.opacityProtons = 0.90;
-        this.opacityAxis = .3;
-        this.opacityGeometry = .3;
-        this.opacityValence = .3;
-        this.opacityIsotope = 0;
-        this.opacityInnerElectrons = 0;
-        this.opacityOuterElectrons = 0;
-
-        this.setProtonColor = '#8888aa';
-        this.rotateX = 0;
-        this.rotateY = 0;
-        this.rotateZ = 0;
-        this.opacityReset = opacityReset;
-        this.scaleReset = scaleReset;
-        this.rotateReset = rotateReset;
-        this.resetProtonColor = function () {
+      // Initialize the Mouse Mode radio buttons
+      var radios = document.forms["atom-builder-controls-form"].elements["mouse--mode"];
+      for(var i = 0, max = radios.length; i < max; i++) {
+        radios[i].onclick = function (event) {
+          changeMode(event.target.value);
         }
-        this.addProton = function () {
+      }
+
+      // Initialize all the sliders, buttons and color fields in the styler blocks
+      for (var blockName in sc) {
+        if (sc[blockName].controls) {
+          for (var controlId in sc[blockName].controls) {
+            var id = controlId.replace(/_/g, "-");
+            switch (sc[blockName].controls[controlId][TYPE]) {
+              case 'range':
+                document.getElementById(id).addEventListener("input", controlChanged);
+                break;
+              case 'color':
+                document.getElementById(id).addEventListener("input", controlChanged);
+                break;
+            }
+          }
         }
-        this.addBlock = function () {
-        }
-        this.clearScene = function () {
-        }
-        this.loadBlock = function () {
-        }
-        this.loadElement = function () {
-        }
-        this.saveAtom = function () {
-        }
-      };
-      var gui = new dat.GUI({width: 350});
-      gui.add(controls, 'mouseMode', ['Move Camera', 'Select Atom', 'Select Proton', 'Rotate Selection']).name('Mouse Mode').onChange(function (value) {
-        changeMode(value)
-      });
+      }
 
-      var objectsFolder = gui.addFolder('--Objects');
-      objectsFolder.add(controls, 'addProton').name('--Add Proton');
-      objectsFolder.add(controls, 'addBlock').name('--Add Block');
-      objectsFolder.add(controls, 'saveAtom').name('--Save Atom');
-      objectsFolder.add(controls, 'loadElement').name('--Load Element');
-      objectsFolder.add(controls, 'loadBlock').name('--Load Block');
-      objectsFolder.add(controls, 'clearScene').name('--Clear Scene');
 
-      var transFolder = gui.addFolder('Transparency');
-      transFolder.add(controls, 'opacityPlane', 0, 1, .01).name('Plane').listen().onChange(function (value) {
-        applyAtomControl('opacityPlane', value)
-      });
-      transFolder.add(controls, 'opacityProtons', 0, 1, .01).name('Protons').listen().onChange(function (value) {
-        applyAtomControl('opacityProtons', value)
-      });
-      transFolder.add(controls, 'opacityGeometry', 0, 1, .01).name('Nuclet Geometry').listen().onChange(function (value) {
-        applyAtomControl('opacityGeometry', value)
-      });
-      transFolder.add(controls, 'opacityAxis', 0, 1, .01).name('Nuclet Axis').listen().onChange(function (value) {
-        applyAtomControl('opacityAxis', value)
-      });
-      transFolder.add(controls, 'opacityValence', 0, 1, .01).name('--Valence Attach').listen().onChange(function (value) {
-        applyAtomControl('opacityValence', value)
-      });
-      transFolder.add(controls, 'opacityIsotope', 0, 1, .01).name('--Isotope Attach');
-      transFolder.add(controls, 'opacityInnerElectrons', 0, 1, .01).name('--Nuclear Electrons');
-      transFolder.add(controls, 'opacityOuterElectrons', 0, 1, .01).name('--Outer Electrons');
-      transFolder.add(controls, 'opacityReset').name('Reset Transparency');
-
-      var scaleFolder = gui.addFolder('Scale');
-      scaleFolder.add(controls, 'scaleProtons', 0, 2, .1).name('Proton Scale').listen().onChange(function (value) {
-        applyAtomControl('scaleProtons', value)
-      });
-      scaleFolder.add(controls, 'scaleGeometry', 0, 2, .1).name('Geometry Scale').listen().onChange(function (value) {
-        applyAtomControl('scaleGeometry', value)
-      });
-      scaleFolder.add(controls, 'scaleReset').name('Reset Scaling');
-
-      var rotateFolder = gui.addFolder('Rotate Atoms');
-      rotateFolder.add(controls, 'rotateX', -360, 360, 1).name('X').listen().onChange(function (value) {
-        applyAtomControl('rotation', value, 'x');
-      });
-      rotateFolder.add(controls, 'rotateY', -360, 360, 1).name('Y').listen().onChange(function (value) {
-        applyAtomControl('rotation', value, 'y');
-      });
-      rotateFolder.add(controls, 'rotateZ', -360, 360, 1).name('Z').listen().onChange(function (value) {
-        applyAtomControl('rotation', value, 'z');
-      });
-      rotateFolder.add(controls, 'rotateReset').name('Reset Rotation');
-
-      var styleFolder = gui.addFolder('--Style');
-      styleFolder.addColor(controls, 'setProtonColor').name('--Proton Color');
-      styleFolder.add(controls, 'resetProtonColor').name('--Reset Proton Color');
-
-      //  gui.add(controls, 'animateElectrons').name('--Animate Electrons');
-      //  gui.add(controls, 'stopControls').name('--Stop Controls');
-
-      return controls;
+      return;
     }
 
     /**
@@ -829,7 +703,7 @@ Drupal.behaviors.atom_builder = {
        { length: 70},
        { x: 300, y: 67, z:  300}
        )); */
-      /*  scene.add(makeObject('pentagonal_bipyramid',
+      /*  scene.add(makeObject('pentagonalBipyramid',
        { lambert:   {color: 0xffaaaa, opacity: .8, transparent: true},
        wireframe: {color: 0x550000, wireframe: true}},
        { length: 75,
@@ -878,16 +752,16 @@ Drupal.behaviors.atom_builder = {
      * Initialize the Atom Builder.
      */
     function init() {
-      stats = initStats();
-
       canvasContainer = document.getElementById("atom-builder-wrapper");
+      var sceneCf = sc.scene.controls;
+      var lightCf = sc.lighting.controls;
 
       // Calculate dimensions of canvas - offsetWidth determines width
       // If offsetHeight is not 0, use it for the height, otherwise make the
       // canvas the same aspect ratio as the browser window.
-      canvasWidth = canvasContainer.offsetWidth;
-      canvasHeight = (canvasContainer.offsetHeight) ? canvasHeight :
-      window.innerHeight / window.innerWidth * canvasContainer.offsetWidth;
+      canvasWidth = window.innerWidth - 450;
+//    canvasWidth = canvasContainer.offsetWidth || 800;
+      canvasHeight = window.innerHeight / window.innerWidth * canvasWidth;
 
       // Create and position the scene
       scene = new THREE.Scene();
@@ -896,34 +770,35 @@ Drupal.behaviors.atom_builder = {
       scene.position.z = 0;
 
       // Create the renderer
+//    renderer = new THREE.WebGLRenderer({alpha: true});
       renderer = new THREE.WebGLRenderer();
-      renderer.setClearColor(conf.renderer.clearColor, 1.0);
+      renderer.setClearColor(sceneCf.renderer__color[VALUE], 1.0);
       renderer.setSize(canvasWidth, canvasHeight);
       renderer.shadowEnabled = true;
 
       // Create camera, and point it at the scene
-      camera = new THREE.PerspectiveCamera(conf.camera.perspective, canvasWidth / canvasHeight, .1, 10000);
-      camera.position.x = conf.camera.position.x;
-      camera.position.y = conf.camera.position.y;
-      camera.position.z = conf.camera.position.z;
+      camera = new THREE.PerspectiveCamera(sceneCf.camera__perspective[VALUE], canvasWidth / canvasHeight, .1, 10000);
+      camera.position.x = sceneCf.camera__position[VALUE][0];
+      camera.position.y = sceneCf.camera__position[VALUE][1];
+      camera.position.z = sceneCf.camera__position[VALUE][2];
       camera.lookAt(scene.position);
 
       // Create an ambient light and 2 spotlights
-      scene.add(new THREE.AmbientLight(0x555555));
+      scene.add(new THREE.AmbientLight(lightCf.ambient__color[VALUE]));
       scene.add(makeSpotLight({c: 0x777744, x: -500, y: 800, z: -500}));
       scene.add(makeSpotLight({c: 0x774477, x: 500, y: 800, z: -500}))
 
       // Create a background plane
       scene.add(makeObject('plane',
-        {lambert: {color: conf.plane.color}},
+        {lambert: {color: sceneCf.plane__color[VALUE]}},
         {
-          width: conf.plane.width,
-          depth: conf.plane.depth
+          width: sceneCf.plane__width[VALUE],
+          depth: sceneCf.plane__depth[VALUE]
         },
         {
-          x: 0,
-          y: 0,
-          z: 0,
+          x: sceneCf.plane__position[VALUE][0],
+          y: sceneCf.plane__position[VALUE][1],
+          z: sceneCf.plane__position[VALUE][2],
           rotation: {x: -0.5 * Math.PI}
         }
       ));
@@ -936,10 +811,10 @@ Drupal.behaviors.atom_builder = {
       canvas = canvasContainer.querySelector('canvas');
 
       // Set mode so the mouse moves the camera
-      changeMode('Move Camera');
+      changeMode('camera');
 
       // Create the controls in the upper right corner of screen
-      controls = createControls();
+      controls = initControls();
 
       // Render the scene and animate it
       render();
@@ -957,7 +832,6 @@ Drupal.behaviors.atom_builder = {
     }
 
     function render() {
-      stats.update();
       renderer.render(scene, camera);
     }
 

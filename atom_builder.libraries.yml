@@ -2,7 +2,9 @@ atom-builder-js:
   js:
     js/threejs/three.js: {}
     js/libs/dat.gui.js: {}
+    js/libs/spectrum/spectrum.js: {}
     js/threejs/libs/stats.min.js: {}
     js/threejs/controls/TrackballControls.js: {}
     js/atom_builder.js: {}
-
+  css:
+    js/libs/spectrum/spectrum.css
