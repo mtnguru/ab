@@ -1,0 +1,230 @@
+name: Default
+description: 'Initial style set'
+controls:
+  mouse--mode:
+    type: radios
+    defaultValue: camera
+  style--selectfile:
+    type: loadFile
+    defaultValue: base.yml
+  style--name:
+    type: textfield
+  style--description:
+    type: textarea
+  nucleus--position:
+    type: position
+    defaultValue:
+      - 0
+      - 0
+      - 0
+  nucleus--rotate:
+    type: rotation
+    defaultValue:
+      - 0
+      - 0
+      - 0
+  proton-default--color:
+    type: color
+    defaultValue: '#6666dd'
+  proton-top--color:
+    type: color
+    defaultValue: '#d4af37'
+  proton-bottom--color:
+    type: color
+    defaultValue: '#dd66dd'
+  proton-marker--color:
+    type: color
+    defaultValue: '#55dddd'
+  proton--opacity:
+    type: range
+    defaultValue: 0.9
+  proton--scale:
+    type: range
+    defaultValue: 1
+  protonid--color:
+    type: color
+    defaultValue: '#aaddff'
+  protonid--opacity:
+    type: range
+  protonid--scale:
+    type: range
+    defaultValue: 1
+  nelectrons--color:
+    type: color
+    defaultValue: '#eeffaa'
+  nelectrons--opacity:
+    type: range
+    defaultValue: 0.3
+  nelectrons--scale:
+    type: range
+    defaultValue: 1
+  oelectrons--color:
+    type: color
+    defaultValue: '#ddbbaa'
+  oelectrons--opacity:
+    type: range
+    defaultValue: 0.3
+  oelectrons--scale:
+    type: range
+    defaultValue: 1
+  awireframe--color:
+    type: color
+    defaultValue: '#aaffcc'
+  awireframe--opacity:
+    type: range
+    defaultValue: 0.3
+  awireframe--scale:
+    type: range
+    defaultValue: 1
+  awireframe--linewidth:
+    type: range
+    defaultValue: 3
+  avertexid--color:
+    type: color
+    defaultValue: '#ccaaff'
+  avertexid--opacity:
+    type: range
+    defaultValue: 0.3
+  avertexid--scale:
+    type: range
+    defaultValue: 1
+  aface--color:
+    type: color
+    defaultValue: '#88cccc'
+  aface--opacity:
+    type: range
+  afaceid--color:
+    type: color
+    defaultValue: '#aaffee'
+  afaceid--opacity:
+    type: range
+    defaultValue: 0.3
+  afaceid--scale:
+    type: range
+    defaultValue: 1
+  aaxis--color:
+    type: color
+    defaultValue: '#ffbbcc'
+  aaxis--opacity:
+    type: range
+  aaxis--linewidth:
+    type: range
+    defaultValue: 3
+  bwireframe--color:
+    type: color
+    defaultValue: '#aaee99'
+  bwireframe--opacity:
+    type: range
+    defaultValue: 0.3
+  bwireframe--scale:
+    type: range
+    defaultValue: 1
+  bwireframe--linewidth:
+    type: range
+    defaultValue: 3
+  bvertexid--color:
+    type: color
+    defaultValue: '#ffccee'
+  bvertexid--opacity:
+    type: range
+    defaultValue: 0.3
+  bvertexid--scale:
+    type: range
+    defaultValue: 1
+  bface--color:
+    type: color
+    defaultValue: '#88cccc'
+  bface--opacity:
+    type: range
+  bfaceid--color:
+    type: color
+    defaultValue: '#ffcc33'
+  bfaceid--opacity:
+    type: range
+    defaultValue: 0.3
+  bfaceid--scale:
+    type: range
+    defaultValue: 1
+  baxis--color:
+    type: color
+    defaultValue: '#aabb99'
+  baxis--opacity:
+    type: range
+  baxis--linewidth:
+    type: range
+    defaultValue: 3
+  valence--color:
+    type: color
+    defaultValue: '#ff00ff'
+  valence--opacity:
+    type: range
+    defaultValue: 0.3
+  isotope--color:
+    type: color
+    defaultValue: '#0000ff'
+  isotope--opacity:
+    type: range
+    defaultValue: 0.3
+  camera--perspective:
+    type: range
+    defaultValue: 25
+  camera--position:
+    type: position
+    defaultValue:
+      - 0
+      - 1400
+      - -1400
+  renderer--color:
+    type: color
+    defaultValue: '#fcf3ff'
+  plane--color:
+    type: color
+    defaultValue: '#cccccc'
+  plane--width:
+    type: range
+    defaultValue: 850
+  plane--depth:
+    type: range
+    defaultValue: 850
+  plane--position:
+    type: position
+    defaultValue:
+      - 0
+      - 0
+      - 0
+  plane--rotation:
+    type: rotation
+    defaultValue:
+      - 0
+      - -180
+      - 1
+  ambient--color:
+    type: color
+    defaultValue: '#777777'
+  spotlight-1--color:
+    type: color
+    defaultValue: '#664466'
+  spotlight-1--position:
+    type: position
+    defaultValue:
+      - -500
+      - 800
+      - -500
+  spotlight-2--color:
+    type: color
+    defaultValue: '#446644'
+  spotlight-2--position:
+    type: position
+    defaultValue:
+      - 800
+      - 800
+      - -200
+  spotlight-3--color:
+    type: color
+    defaultValue: '#000000'
+  spotlight-3--position:
+    type: position
+    defaultValue:
+      - -500
+      - 800
+      - -500

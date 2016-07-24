@@ -13,7 +13,6 @@ use Drupal\Component\Serialization\Yaml;
  */
 class AtomBuilderControlsForm extends FormBase {
 
-
   /**
    * {@inheritdoc}
    */
@@ -21,7 +20,7 @@ class AtomBuilderControlsForm extends FormBase {
     return 'atom_builder_controls_form';
   }
 
-  public function createControlBlock($blockName, $blockConf, $showTitle) {
+  public function createControlBlock($blockName, $blockConf, $showTitle, &$controlSet) {
 
     // Create a container for the block
     $block[$blockName] = array(
@@ -40,6 +39,11 @@ class AtomBuilderControlsForm extends FormBase {
       $control = array();
       $id = str_replace('_', '-', $controlName);
       $containerClass = 'sa-control';
+      if (empty($controlSet[$id])) {
+        $defaultValue = $controlConf[2];
+      } else {
+        $defaultValue = $controlSet[$id]['defaultValue'];
+      }
       switch ($controlConf[1]) {
 
         case 'button':
@@ -53,7 +57,7 @@ class AtomBuilderControlsForm extends FormBase {
           $control = array(
             '#type' => 'range',
             '#title' => $controlConf[0],
-            '#default_value' => $controlConf[2],
+            '#default_value' => $defaultValue,
             '#min' => $controlConf[3][0],
             '#max' => $controlConf[3][1],
             '#step' => $controlConf[3][2],
@@ -64,7 +68,7 @@ class AtomBuilderControlsForm extends FormBase {
           $control = array(
             '#type' => 'radios',
             '#title' => $controlConf[0],
-            '#default_value' => $controlConf[2],
+            '#default_value' => $defaultValue,
             '#options' => $controlConf[3],
           );
           break;
@@ -73,7 +77,7 @@ class AtomBuilderControlsForm extends FormBase {
           $control = array(
             '#type' => 'radios',
             '#title' => $controlConf[0],
-            '#default_value' => $controlConf[2],
+            '#default_value' => $defaultValue,
             '#options' => $controlConf[3],
           );
           break;
@@ -89,7 +93,7 @@ class AtomBuilderControlsForm extends FormBase {
             $controlConf[0] . '__x' => array(
               '#type' => 'range',
               '#title' => 'X',
-              '#default_value' => $controlConf[2],
+              '#default_value' => $defaultValue[0],
               '#attributes' => array('id' => $id . '--x'),
               '#min' => $controlConf[3][0],
               '#max' => $controlConf[3][1],
@@ -98,7 +102,7 @@ class AtomBuilderControlsForm extends FormBase {
             $controlConf[0] . '__y' => array(
               '#type' => 'range',
               '#title' => 'Y',
-              '#default_value' => $controlConf[2],
+              '#default_value' => $defaultValue[1],
               '#attributes' => array('id' => $id . '--y'),
               '#min' => $controlConf[3][0],
               '#max' => $controlConf[3][1],
@@ -107,9 +111,8 @@ class AtomBuilderControlsForm extends FormBase {
             $controlConf[0] . '__z' => array(
               '#type' => 'range',
               '#title' => 'Z',
-              '#default_value' => $controlConf[2],
+              '#default_value' => $defaultValue[2],
               '#attributes' => array('id' => $id . '--z'),
-              '#attributes' => array('id' => $id . '--z', 'class' => array('sa-indent')),
               '#min' => $controlConf[3][0],
               '#max' => $controlConf[3][1],
               '#step' => $controlConf[3][2],
@@ -121,7 +124,24 @@ class AtomBuilderControlsForm extends FormBase {
           $control = array(
             '#type' => 'color',
             '#title' => $controlConf[0],
-            '#default_value' => $controlConf[2],
+            '#default_value' => $defaultValue,
+          );
+          break;
+
+        case 'textfield':
+          $control = array(
+            '#type' => 'textfield',
+            '#title' => 'Style Name',
+            '#maxlength' => $controlConf[3],
+          );
+          break;
+
+        case 'textarea':
+          $control = array(
+            '#type' => 'textarea',
+            '#title' => 'Description',
+            '#maxlength' => $controlConf[3],
+            '#rows' => $controlConf[4],
           );
           break;
 
@@ -140,6 +160,12 @@ class AtomBuilderControlsForm extends FormBase {
         default:
           break;
       }
+      if (!in_array($controlConf[1], array('label', 'header', 'hr', 'button'))) {
+        $controlSet[$id]['type'] = $controlConf[1];
+        if ($defaultValue != null) {
+          $controlSet[$id]['defaultValue'] = $defaultValue;
+        }
+      }
       $control['#attributes'] = array(
         'id' => $id,
         'class' => array($containerClass),
@@ -157,9 +183,6 @@ class AtomBuilderControlsForm extends FormBase {
 
     $controlsConf = Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/controls/atom_builder.yml'));
 
-    $form['#attached']['library'][] = 'atom_builder/atom-builder-js';
-    $form['#attached']['drupalSettings']['atom_builder']['controls'] = $controlsConf;
-    $form['#attributes'] = array('name' => 'atom-builder-controls-form');
 
     // Styler Select list
     foreach ($controlsConf['styler'] as $blockName => $block) {
@@ -170,15 +193,25 @@ class AtomBuilderControlsForm extends FormBase {
       '#options' => $options,
     );
 
+    $styleSet = array(
+      'name' => 'Default',
+      'description' => 'Initial style set',
+    );
+
     // Add block controls
     $form['controls'] = array(
       '#type' => 'container',
       '#attributes' => array('id' => 'controls'),
     );
     foreach ($controlsConf['styler'] as $blockName => $block) {
-      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, false);
+      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, false, $styleSet['controls']);
     }
 
+    $form['#attached']['library'][] = 'atom_builder/atom-builder-js';
+    $form['#attached']['drupalSettings']['atom_builder']['styleSet'] = $styleSet;
+    $form['#attributes'] = array('name' => 'atom-builder-controls-form');
+
+//  file_put_contents(drupal_get_path('module', 'atom_builder') . '/styles/base.yml', Yaml::encode($styleSet));
     return $form;
   }
 

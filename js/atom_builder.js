@@ -25,6 +25,14 @@ Drupal.behaviors.atom_builder = {
     var mouseMode = 'Camera';
     var nucletNames = ['tetraLet', 'octaLet', 'icoLet', 'pentaLet'];
 
+    var cf = sc.proton.controls;
+    var protonColors = {
+      'marker':  cf.proton_marker__color[VALUE],
+      'top':     cf.proton_top__color[VALUE],
+      'bottom':  cf.proton_bottom__color[VALUE],
+      'default': cf.proton_default__color[VALUE],
+    };
+
     var conf = {
       proton: {
         radius: 32
@@ -69,10 +77,11 @@ Drupal.behaviors.atom_builder = {
      * @param v
      * @returns {THREE.SpotLight}
      */
-    function makeSpotLight(v) {
+    function makeSpotLight(name, v) {
       var spotLight = new THREE.SpotLight(v.c);
       spotLight.position.set(v.x || -40, v.y || 60, v.z || -10);
       spotLight.castShadow = true;
+      spotLight.name = name;
       return spotLight;
     }
 
@@ -202,13 +211,6 @@ Drupal.behaviors.atom_builder = {
 
     function createIcosahedron(prop, pos) {
       // Set proton colors
-      var cf = sc.proton.controls;
-      var colors = {
-        'marker':  cf.proton_marker__color[VALUE],
-        'top':     cf.proton_top__color[VALUE],
-        'bottom':  cf.proton_bottom__color[VALUE],
-        'default': cf.proton_default__color[VALUE],
-      };
       var c = ['marker',
                'top',
                'bottom',
@@ -230,7 +232,7 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: colors[c[key]], opacity: cf.proton__opacity[VALUE] || 1, transparent: true}},
+          {phong: {color: protonColors[c[key]], opacity: cf.proton__opacity[VALUE] || 1, transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
@@ -259,15 +261,14 @@ Drupal.behaviors.atom_builder = {
     function createPentagonalBiPyramid(prop, pos) {
       var cf = sc.proton.controls;
       // Set proton colors
-      var c = {
-        0: cf.proton_top__color[VALUE],
-        1: cf.proton_bottom__color[VALUE],
-        2: cf.proton_marker__color[VALUE],
-        3: cf.proton_default__color[VALUE],
-        4: cf.proton_default__color[VALUE],
-        5: cf.proton_default__color[VALUE],
-        6: cf.proton_default__color[VALUE]
-      };
+      var c = [
+        'top',
+        'bottom',
+        'marker',
+        'default',
+        'default',
+        'default',
+        'default'];
 
       var atom = new THREE.Group();
       atom.name = 'pentaLet';
@@ -277,7 +278,7 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: c[key], opacity: cf.proton__opacity[VALUE], transparent: true}},
+          {phong: {color: protonColors[c[key]], opacity: cf.proton__opacity[VALUE] || 1, transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
@@ -285,6 +286,7 @@ Drupal.behaviors.atom_builder = {
             z: vertice.z
           }
         );
+        proton.name = 'proton-' + c[key];
         objects.protons.push(proton);
         atom.add(proton);
       }
@@ -303,12 +305,9 @@ Drupal.behaviors.atom_builder = {
     function createTetrahedron(prop, pos) {
       var cf = sc.proton.controls;
       // Set proton colors
-      var c = {
-        0: cf.proton_top__color[VALUE],
-        1: cf.proton_marker__color[VALUE],
-        2: cf.proton_default__color[VALUE],
-        3: cf.proton_default__color[VALUE],
-      };
+      var c = [
+        'top', 'marker', 'default', 'default'
+      ];
 
       var atom = new THREE.Group();
       atom.name = 'tetraLet';
@@ -318,7 +317,7 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: c[key], opacity: cf.proton__opacity[VALUE], transparent: true}},
+          {phong: {color: protonColors[c[key]], opacity: cf.proton__opacity[VALUE] || 1, transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
@@ -326,6 +325,7 @@ Drupal.behaviors.atom_builder = {
             z: vertice.z
           }
         );
+        proton.name = 'proton-' + c[key];
         objects.protons.push(proton);
         atom.add(proton);
       }
@@ -553,14 +553,18 @@ Drupal.behaviors.atom_builder = {
                   node.material.visible = (value > .02);
                   break;
                 case 'linewidth':
-                  if  (argNames[0] == 'awireframe') {
+                  if (argNames[0] == 'awireframe') {
                     node.material.wireframeLinewidth = value;
                   } else {
                     node.material.linewidth = value;
                   }
                   break;
                 case 'color':
-                  node.material.color.setHex(value.replace(/#/, "0x"));
+                  if (argNames[0] == 'spotlight' || argNames[0] == 'ambient') {
+                    node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                  } else {
+                    node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                  }
                   break;
               }
             }
@@ -784,9 +788,34 @@ Drupal.behaviors.atom_builder = {
       camera.lookAt(scene.position);
 
       // Create an ambient light and 2 spotlights
-      scene.add(new THREE.AmbientLight(lightCf.ambient__color[VALUE]));
-      scene.add(makeSpotLight({c: 0x777744, x: -500, y: 800, z: -500}));
-      scene.add(makeSpotLight({c: 0x774477, x: 500, y: 800, z: -500}))
+      var ambient = new THREE.AmbientLight(lightCf.ambient__color[VALUE]);
+      ambient.name = 'ambient';
+      scene.add(ambient);
+
+      if (lightCf.spotlight_1__color[VALUE] != "#000000") {
+        scene.add(makeSpotLight('spotlight-1', {
+          c: lightCf.spotlight_1__color[VALUE],
+          x: lightCf.spotlight_1__position[VALUE][0],
+          y: lightCf.spotlight_1__position[VALUE][1],
+          z: lightCf.spotlight_1__position[VALUE][2]
+        }));
+      }
+      if (lightCf.spotlight_2__color[VALUE] != "#000000") {
+        scene.add(makeSpotLight('spotlight-2', {
+          c: lightCf.spotlight_2__color[VALUE],
+          x: lightCf.spotlight_2__position[VALUE][0],
+          y: lightCf.spotlight_2__position[VALUE][1],
+          z: lightCf.spotlight_2__position[VALUE][2]
+        }));
+      }
+      if (lightCf.spotlight_3__color[VALUE] != "#000000") {
+        scene.add(makeSpotLight('spotlight-3', {
+          c: lightCf.spotlight_3__color[VALUE],
+          x: lightCf.spotlight_3__position[VALUE][0],
+          y: lightCf.spotlight_3__position[VALUE][1],
+          z: lightCf.spotlight_3__position[VALUE][2]
+        }));
+      }
 
       // Create a background plane
       scene.add(makeObject('plane',
