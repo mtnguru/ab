@@ -39,10 +39,10 @@ class AtomBuilderControlsForm extends FormBase {
       $control = array();
       $id = str_replace('_', '-', $controlName);
       $containerClass = 'sa-control';
-      if (empty($controlSet[$id])) {
+      if (empty($controlSet[$controlName])) {
         $defaultValue = $controlConf[2];
       } else {
-        $defaultValue = $controlSet[$id]['defaultValue'];
+        $defaultValue = $controlSet[$controlName]['defaultValue'];
       }
       switch ($controlConf[1]) {
 
@@ -161,9 +161,9 @@ class AtomBuilderControlsForm extends FormBase {
           break;
       }
       if (!in_array($controlConf[1], array('label', 'header', 'hr', 'button'))) {
-        $controlSet[$id]['type'] = $controlConf[1];
+        $controlSet[$controlName]['type'] = $controlConf[1];
         if ($defaultValue != null) {
-          $controlSet[$id]['defaultValue'] = $defaultValue;
+          $controlSet[$controlName]['defaultValue'] = $defaultValue;
         }
       }
       $control['#attributes'] = array(
@@ -211,7 +211,7 @@ class AtomBuilderControlsForm extends FormBase {
     $form['#attached']['drupalSettings']['atom_builder']['styleSet'] = $styleSet;
     $form['#attributes'] = array('name' => 'atom-builder-controls-form');
 
-//  file_put_contents(drupal_get_path('module', 'atom_builder') . '/styles/base.yml', Yaml::encode($styleSet));
+    file_put_contents(drupal_get_path('module', 'atom_builder') . '/styles/base.yml', Yaml::encode($styleSet));
     return $form;
   }
 
