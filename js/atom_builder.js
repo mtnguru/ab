@@ -1,10 +1,5 @@
 Drupal.behaviors.atom_builder = {
   attach: function (context, settings) {
-    const TITLE = 0;
-    const TYPE = 1;
-    const VALUE = 2
-
-
     var controls;  // Controls in left sidebar
     var scene;     // The full scene being displayed
     var renderer;  // WebGLRenderer
@@ -15,7 +10,7 @@ Drupal.behaviors.atom_builder = {
     var camera;
     var cameraTrackballControls;
     var atomTrackballControls;
-    var sc = drupalSettings.atom_builder.controls.styler;
+    var style = drupalSettings.atom_builder.styleSet.controls;
     var styler = document.getElementById('edit-styler');
     var selectedObject;
     var objects = {
@@ -24,6 +19,13 @@ Drupal.behaviors.atom_builder = {
     };
     var mouseMode = 'Camera';
     var nucletNames = ['tetraLet', 'octaLet', 'icoLet', 'pentaLet'];
+
+    var protonColors = {
+      'marker':  style.proton_marker__color.defaultValue,
+      'top':     style.proton_top__color.defaultValue,
+      'bottom':  style.proton_bottom__color.defaultValue,
+      'default': style.proton_default__color.defaultValue,
+    };
 
     var conf = {
       proton: {
@@ -69,10 +71,11 @@ Drupal.behaviors.atom_builder = {
      * @param v
      * @returns {THREE.SpotLight}
      */
-    function makeSpotLight(v) {
+    function makeSpotLight(name, v) {
       var spotLight = new THREE.SpotLight(v.c);
       spotLight.position.set(v.x || -40, v.y || 60, v.z || -10);
       spotLight.castShadow = true;
+      spotLight.name = name;
       return spotLight;
     }
 
@@ -81,9 +84,9 @@ Drupal.behaviors.atom_builder = {
       axisGeometry.vertices.push(new THREE.Vector3(vertices[0].x, vertices[0].y, vertices[0].z));
       axisGeometry.vertices.push(new THREE.Vector3(vertices[1].x, vertices[1].y, vertices[1].z));
       var lineMaterial = new THREE.LineBasicMaterial({
-        color: sc.geometry.controls.aaxis__color[VALUE],
+        color: style.aaxis__color.defaultValue,
         transparent: true,
-        opacity: sc.geometry.controls.aaxis__opacity[VALUE],
+        opacity: style.aaxis__opacity.defaultValue,
         linewidth: 2
       });
       var axisLine = new THREE.Line(axisGeometry, lineMaterial);
@@ -94,9 +97,9 @@ Drupal.behaviors.atom_builder = {
 
     function createGeometryWireframe(scale, geometry, offset) {
       var wireframe = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-        color: sc.geometry.controls.awireframe__color[VALUE],
+        color: style.awireframe__color.defaultValue,
         transparent: true,
-        opacity: sc.geometry.controls.awireframe__opacity[VALUE],
+        opacity: style.awireframe__opacity.defaultValue,
         wireframe: true,
         wireframeLinewidth: 10
       }));
@@ -202,13 +205,6 @@ Drupal.behaviors.atom_builder = {
 
     function createIcosahedron(prop, pos) {
       // Set proton colors
-      var cf = sc.proton.controls;
-      var colors = {
-        'marker':  cf.proton_marker__color[VALUE],
-        'top':     cf.proton_top__color[VALUE],
-        'bottom':  cf.proton_bottom__color[VALUE],
-        'default': cf.proton_default__color[VALUE],
-      };
       var c = ['marker',
                'top',
                'bottom',
@@ -230,7 +226,7 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: colors[c[key]], opacity: cf.proton__opacity[VALUE] || 1, transparent: true}},
+          {phong: {color: protonColors[c[key]], opacity: style.proton__opacity.defaultValue || 1, transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
@@ -257,17 +253,15 @@ Drupal.behaviors.atom_builder = {
     }
 
     function createPentagonalBiPyramid(prop, pos) {
-      var cf = sc.proton.controls;
       // Set proton colors
-      var c = {
-        0: cf.proton_top__color[VALUE],
-        1: cf.proton_bottom__color[VALUE],
-        2: cf.proton_marker__color[VALUE],
-        3: cf.proton_default__color[VALUE],
-        4: cf.proton_default__color[VALUE],
-        5: cf.proton_default__color[VALUE],
-        6: cf.proton_default__color[VALUE]
-      };
+      var c = [
+        'top',
+        'bottom',
+        'marker',
+        'default',
+        'default',
+        'default',
+        'default'];
 
       var atom = new THREE.Group();
       atom.name = 'pentaLet';
@@ -277,7 +271,7 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: c[key], opacity: cf.proton__opacity[VALUE], transparent: true}},
+          {phong: {color: protonColors[c[key]], opacity: style.proton__opacity.defaultValue || 1, transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
@@ -285,6 +279,7 @@ Drupal.behaviors.atom_builder = {
             z: vertice.z
           }
         );
+        proton.name = 'proton-' + c[key];
         objects.protons.push(proton);
         atom.add(proton);
       }
@@ -301,14 +296,10 @@ Drupal.behaviors.atom_builder = {
     }
 
     function createTetrahedron(prop, pos) {
-      var cf = sc.proton.controls;
       // Set proton colors
-      var c = {
-        0: cf.proton_top__color[VALUE],
-        1: cf.proton_marker__color[VALUE],
-        2: cf.proton_default__color[VALUE],
-        3: cf.proton_default__color[VALUE],
-      };
+      var c = [
+        'top', 'marker', 'default', 'default'
+      ];
 
       var atom = new THREE.Group();
       atom.name = 'tetraLet';
@@ -318,7 +309,7 @@ Drupal.behaviors.atom_builder = {
       for (var key in geometry.vertices) {
         var vertice = geometry.vertices[key];
         var proton = makeObject('proton',
-          {phong: {color: c[key], opacity: cf.proton__opacity[VALUE], transparent: true}},
+          {phong: {color: protonColors[c[key]], opacity: style.proton__opacity.defaultValue || 1, transparent: true}},
           {radius: conf.proton.radius},
           {
             x: vertice.x,
@@ -326,6 +317,7 @@ Drupal.behaviors.atom_builder = {
             z: vertice.z
           }
         );
+        proton.name = 'proton-' + c[key];
         objects.protons.push(proton);
         atom.add(proton);
       }
@@ -553,14 +545,18 @@ Drupal.behaviors.atom_builder = {
                   node.material.visible = (value > .02);
                   break;
                 case 'linewidth':
-                  if  (argNames[0] == 'awireframe') {
+                  if (argNames[0] == 'awireframe') {
                     node.material.wireframeLinewidth = value;
                   } else {
                     node.material.linewidth = value;
                   }
                   break;
                 case 'color':
-                  node.material.color.setHex(value.replace(/#/, "0x"));
+                  if (argNames[0] == 'spotlight' || argNames[0] == 'ambient') {
+                    node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                  } else {
+                    node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                  }
                   break;
               }
             }
@@ -602,22 +598,17 @@ Drupal.behaviors.atom_builder = {
       }
 
       // Initialize all the sliders, buttons and color fields in the styler blocks
-      for (var blockName in sc) {
-        if (sc[blockName].controls) {
-          for (var controlId in sc[blockName].controls) {
-            var id = controlId.replace(/_/g, "-");
-            switch (sc[blockName].controls[controlId][TYPE]) {
-              case 'range':
-                document.getElementById(id).addEventListener("input", controlChanged);
-                break;
-              case 'color':
-                document.getElementById(id).addEventListener("input", controlChanged);
-                break;
-            }
-          }
+      for (var controlId in style) {
+        var id = controlId.replace(/_/g, "-");
+        switch (style[controlId].type) {
+          case 'range':
+            document.getElementById(id).addEventListener("input", controlChanged);
+            break;
+          case 'color':
+            document.getElementById(id).addEventListener("input", controlChanged);
+            break;
         }
       }
-
 
       return;
     }
@@ -753,8 +744,6 @@ Drupal.behaviors.atom_builder = {
      */
     function init() {
       canvasContainer = document.getElementById("atom-builder-wrapper");
-      var sceneCf = sc.scene.controls;
-      var lightCf = sc.lighting.controls;
 
       // Calculate dimensions of canvas - offsetWidth determines width
       // If offsetHeight is not 0, use it for the height, otherwise make the
@@ -772,33 +761,58 @@ Drupal.behaviors.atom_builder = {
       // Create the renderer
 //    renderer = new THREE.WebGLRenderer({alpha: true});
       renderer = new THREE.WebGLRenderer();
-      renderer.setClearColor(sceneCf.renderer__color[VALUE], 1.0);
+      renderer.setClearColor(style.renderer__color.defaultValue, 1.0);
       renderer.setSize(canvasWidth, canvasHeight);
       renderer.shadowEnabled = true;
 
       // Create camera, and point it at the scene
-      camera = new THREE.PerspectiveCamera(sceneCf.camera__perspective[VALUE], canvasWidth / canvasHeight, .1, 10000);
-      camera.position.x = sceneCf.camera__position[VALUE][0];
-      camera.position.y = sceneCf.camera__position[VALUE][1];
-      camera.position.z = sceneCf.camera__position[VALUE][2];
+      camera = new THREE.PerspectiveCamera(style.camera__perspective.defaultValue, canvasWidth / canvasHeight, .1, 10000);
+      camera.position.x = style.camera__position.defaultValue[0];
+      camera.position.y = style.camera__position.defaultValue[1];
+      camera.position.z = style.camera__position.defaultValue[2];
       camera.lookAt(scene.position);
 
       // Create an ambient light and 2 spotlights
-      scene.add(new THREE.AmbientLight(lightCf.ambient__color[VALUE]));
-      scene.add(makeSpotLight({c: 0x777744, x: -500, y: 800, z: -500}));
-      scene.add(makeSpotLight({c: 0x774477, x: 500, y: 800, z: -500}))
+      var ambient = new THREE.AmbientLight(style.ambient__color.defaultValue);
+      ambient.name = 'ambient';
+      scene.add(ambient);
+
+      if (style.spotlight_1__color.defaultValue != "#000000") {
+        scene.add(makeSpotLight('spotlight-1', {
+          c: style.spotlight_1__color.defaultValue,
+          x: style.spotlight_1__position.defaultValue[0],
+          y: style.spotlight_1__position.defaultValue[1],
+          z: style.spotlight_1__position.defaultValue[2]
+        }));
+      }
+      if (style.spotlight_2__color.defaultValue != "#000000") {
+        scene.add(makeSpotLight('spotlight-2', {
+          c: style.spotlight_2__color.defaultValue,
+          x: style.spotlight_2__position.defaultValue[0],
+          y: style.spotlight_2__position.defaultValue[1],
+          z: style.spotlight_2__position.defaultValue[2]
+        }));
+      }
+      if (style.spotlight_3__color.defaultValue != "#000000") {
+        scene.add(makeSpotLight('spotlight-3', {
+          c: style.spotlight_3__color.defaultValue,
+          x: style.spotlight_3__position.defaultValue[0],
+          y: style.spotlight_3__position.defaultValue[1],
+          z: style.spotlight_3__position.defaultValue[2]
+        }));
+      }
 
       // Create a background plane
       scene.add(makeObject('plane',
-        {lambert: {color: sceneCf.plane__color[VALUE]}},
+        {lambert: {color: style.plane__color.defaultValue}},
         {
-          width: sceneCf.plane__width[VALUE],
-          depth: sceneCf.plane__depth[VALUE]
+          width: style.plane__width.defaultValue,
+          depth: style.plane__depth.defaultValue
         },
         {
-          x: sceneCf.plane__position[VALUE][0],
-          y: sceneCf.plane__position[VALUE][1],
-          z: sceneCf.plane__position[VALUE][2],
+          x: style.plane__position.defaultValue[0],
+          y: style.plane__position.defaultValue[1],
+          z: style.plane__position.defaultValue[2],
           rotation: {x: -0.5 * Math.PI}
         }
       ));

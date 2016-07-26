@@ -1,7 +1,7 @@
 mouse:
 styler:
   mouse:
-    title: Mouse Mode
+    title: Mouse
     controls:
       mouse__mode:
         - Mouse mode
@@ -27,14 +27,21 @@ styler:
   style:
     title:               Styles
     controls:
-      style__load:             ['Load Style',   'button']
-      style__save:             ['Save Style',   'button']
+      header_load:             ['Load Style',   'header']
+      style__selectfile:       [ null,          'loadFile', 'base.yml']
+      style__load:             ['Load',         'button',   'styles/*.yml']
+      hr1:                     [ null,          'hr']
+      header_save:             ['Save Style',   'header']
+      style__name:             ['Style Name',   'textfield',  '', 32]
+      style__description:      ['Save Style',   'textarea',   '', 128, 5]
+      style__save:             ['Save',         'button',   'styles']
+      hr2:                     [ null,          'hr']
       style__reset:            ['Reset Style',  'button']
   nucleus:
     title:               Nucleus
     controls:
       nucleus__position:       ['Position',     'position', [0, 0, 0]]
-      nucleus__rotate:         ['Rotate',       'rotate',   [0, 0, 0], [-360, 360, 1]]
+      nucleus__rotate:         ['Rotate',       'rotation', [0, 0, 0], [-360, 360, 1]]
   proton:
     title:               Protons
     controls:
@@ -45,18 +52,18 @@ styler:
       proton__opacity:         ['Opacity',      'range',    .9, [0, 1, .01]]
       proton__scale:           ['Scale',        'range',     1, [0, 2, .01]]
       hr1:                     [ null, 'hr']
-      protonid__color:         ['IDs',          'color',    '#aaffff']
+      protonid__color:         ['IDs',          'color',    '#aaddff']
       protonid__opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
       protonid__scale:         ['Scale',         'range',    1, [0, 2, .01]]
 
   electron:
     title:               Electrons
     controls:
-      nelectrons__color:       ['Nuclear',        'color',    '#ffffaa']
+      nelectrons__color:       ['Nuclear',        'color',    '#eeffaa']
       nelectrons__opacity:     ['Opacity',        'range',    .3, [0, 1, .01]]
       nelectrons__scale:       ['Scale',          'range',    1,  [0, 2, .01]]
       hr1:                     [ null, 'hr']
-      oelectrons__color:       ['Outer',          'color',    '#ffffaa']
+      oelectrons__color:       ['Outer',          'color',    '#ddbbaa']
       oelectrons__opacity:     ['Opacity',        'range',    .3, [0, 1, .01]]
       oelectrons__scale:       ['Scale',          'range',    1,  [0, 2, .01]]
 
@@ -65,13 +72,13 @@ styler:
     title:               Geometry
     controls:
 
-      awireframe__color:       ['Wireframe',     'color',    '#aaffff']
+      awireframe__color:       ['Wireframe',     'color',    '#aaffcc']
       awireframe__opacity:     ['Opacity',       'range',    .3, [0, 1, .01]]
       awireframe__scale:       ['Scale',         'range',    1,  [0, 2, .01]]
       awireframe__linewidth:   ['Linewidth',     'range',     3, [0, 5, .1]]
 
       hr1:                     [ null, 'hr']
-      avertexid__color:        ['Vertex IDs',    'color',    '#ffffff']
+      avertexid__color:        ['Vertex IDs',    'color',    '#ccaaff']
       avertexid__opacity:      ['Opacity',       'range',    .3, [0, 1, .01]]
       avertexid__scale:        ['Scale',         'range',    1,  [0, 2, .01]]
 
@@ -80,12 +87,12 @@ styler:
       aface__opacity:          ['Opacity',       'range',     0, [0, 1, .01]]
 
       hr3:                     [ null, 'hr']
-      afaceid__color:          ['Face IDs',      'color',    '#ffff00']
+      afaceid__color:          ['Face IDs',      'color',    '#aaffee']
       afaceid__opacity:        ['Opacity',       'range',    .3, [0, 1, .01]]
       afaceid__scale:          ['Scale',         'range',    1,  [0, 2, .01]]
 
       hr4:                     [ null, 'hr']
-      aaxis__color:            ['Axis',          'color',    '#ffff00']
+      aaxis__color:            ['Axis',          'color',    '#ffbbcc']
       aaxis__opacity:          ['Opacity',       'range',     0, [0, 1, .01]]
       aaxis__linewidth:        ['Linewidth',     'range',     3, [0, 5, .1]]
 
@@ -94,13 +101,13 @@ styler:
 
     title:               Dual Geometry
     controls:
-      bwireframe__color:       ['Wireframe',     'color',    '#aaffff']
+      bwireframe__color:       ['Wireframe',     'color',    '#aaee99']
       bwireframe__opacity:     ['Opacity',       'range',    .3, [0, 1, .01]]
       bwireframe__scale:       ['Scale',         'range',    1,  [0, 2, .01]]
       bwireframe__linewidth:   ['Linewidth',     'range',     3, [0, 5, .1]]
 
       hr1:                     [ null, 'hr']
-      bvertexid__color:        ['Vertex IDs',    'color',    '#ffffff']
+      bvertexid__color:        ['Vertex IDs',    'color',    '#ffccee']
       bvertexid__opacity:      ['Opacity',       'range',    .3, [0, 1, .01]]
       bvertexid__scale:        ['Scale',         'range',    1,  [0, 2, .01]]
 
@@ -109,12 +116,12 @@ styler:
       bface__opacity:          ['Opacity',       'range',     0, [0, 1, .01]]
 
       hr3:                     [ null, 'hr']
-      bfaceid__color:          ['Face IDs',      'color',    '#ffff00']
+      bfaceid__color:          ['Face IDs',      'color',    '#ffcc33']
       bfaceid__opacity:        ['Opacity',       'range',    .3, [0, 1, .01]]
       bfaceid__scale:          ['Scale',         'range',    1,  [0, 2, .01]]
 
       hr4:                     [ null, 'hr']
-      baxis__color:            ['Axis',          'color',    '#ffff00']
+      baxis__color:            ['Axis',          'color',    '#aabb99']
       baxis__opacity:          ['Opacity',       'range',     0, [0, 1, .01]]
       baxis__linewidth:        ['Linewidth',     'range',     3, [0, 5, .1]]
 
@@ -131,19 +138,19 @@ styler:
   scene:
     title:               Scene
     controls:
-      renderer__color:         ['Background',     'color',    '#fcf3ff']
-
-      hr1:                     [ null, 'hr']
       header__camera:          ['Camera',         'header']
       camera__perspective:     ['Perspective',    'range',    25, [1, 90, 1]]
       camera__position:        ['Position',       'position', [0, 1400, -1400]]
+
+      hr1:                     [ null, 'hr']
+      renderer__color:         ['Background',     'color',    '#fcf3ff']
 
       hr2:                     [ null, 'hr']
       plane__color:            ['Plane',          'color',    '#cccccc']
       plane__width:            ['Width',          'range',    850, [1, 1500, 1]]
       plane__depth:            ['Depth',          'range',    850, [1, 1500, 1]]
       plane__position:         ['Position',       'position', [0, 0, 0]]
-      plane__rotation:         ['Rotation',       'rotate',   [0, -180, 1], [-360, 360, 1]]
+      plane__rotation:         ['Rotation',       'rotation', [0, -180, 1], [-360, 360, 1]]
   lighting:
     title:               Lighting
     controls:
