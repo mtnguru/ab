@@ -5,37 +5,24 @@
  */
 
 Drupal.atom_builder = {
-  base: {},
-  scene: {},
-  controls: {},
-  style: {},
-  object: {},
-  nuclet: {},
-  nucleus: {},
-  builder: {},
-  viewer: {},
+//base: {},
+//scene: {},
+//controls: {},
+//style: {},
+//object: {},
+//nuclet: {},
+//nucleus: {},
+//builder: {},
+//viewer: {},
 };
 
-Drupal.atom_builder.base = {};
-
-Drupal.atom_builder.baseC = function () {
-
-  var listDirectory = function () {
-    var directories;
-    return directories
-  }
-
-  var loadYml = function ($path) {
-    return 
-  
+Drupal.atom_builder.baseD = function () {
 
   var saveYml = function ($path) {
     return
   }
 
   return {
-    listDirectory: listDirectory,
-    loadYml: loadYml,
     saveYml: saveYml
   };
 };

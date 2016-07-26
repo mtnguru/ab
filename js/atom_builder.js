@@ -5,7 +5,7 @@
 
 Drupal.atom_builder.builder = {};
 
-Drupal.atom_builder.builderC = function () {
+Drupal.atom_builder.builderD = function () {
 
   var saveYml = function ($path) {
     return

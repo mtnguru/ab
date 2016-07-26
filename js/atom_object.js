@@ -5,7 +5,7 @@
 
 Drupal.atom_builder.object = {};
 
-Drupal.atom_builder.objectC = function () {
+Drupal.atom_builder.objectD = function () {
 
   var conf = {
     proton: {
@@ -43,7 +43,9 @@ Drupal.atom_builder.objectC = function () {
         scale: 2.5
       }
     },
-  };function createAxisLine(scale, vertices) {
+  };
+
+  function createAxisLine(scale, vertices) {
     var axisGeometry = new THREE.Geometry();
     axisGeometry.vertices.push(new THREE.Vector3(vertices[0].x, vertices[0].y, vertices[0].z));
     axisGeometry.vertices.push(new THREE.Vector3(vertices[1].x, vertices[1].y, vertices[1].z));
@@ -105,29 +107,6 @@ Drupal.atom_builder.objectC = function () {
     }
     return vertices;
   }
-
-
-  /*
-   var geometry = new THREE.TextGeometry( theText, {
-   font: font,
-   size: 80,
-   height: 20,
-   curveSegments: 2
-   });
-   geometry.computeBoundingBox();
-   var centerOffset = -0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
-   var material = new THREE.MultiMaterial( [
-   new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, overdraw: 0.5 } ),
-   new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: 0.5 } )
-   ] );
-   var mesh = new THREE.Mesh( geometry, material );
-   mesh.position.x = centerOffset;
-   mesh.position.y = 100;
-   mesh.position.z = 0;
-   mesh.rotation.x = 0;
-   mesh.rotation.y = Math.PI * 2;
-   */
-
 
   function makeObject(name, mat, geo, pos) {
     // Set the geometry
@@ -217,14 +196,7 @@ Drupal.atom_builder.objectC = function () {
     return object;
   }
 
-
-  var saveYml = function ($path) {
-    $dir = DRUPAL_ROOT . '/sites/all/libraries';
-    $files = file_scan_directory($dir, '/.*\.js/');
-    return
-  }
-
   return {
-    saveYml: saveYml
+    makeObject: makeObject,
   };
 };

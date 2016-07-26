@@ -5,7 +5,7 @@
 
 Drupal.atom_builder.style = {};
 
-Drupal.atom_builder.styleC = function () {
+Drupal.atom_builder.styleD = function () {
 
   var saveYml = function ($path) {
     return

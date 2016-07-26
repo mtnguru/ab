@@ -3,9 +3,7 @@
  *
  */
 
-Drupal.atom_builder.controls = {};
-
-Drupal.atom_builder.controlsC = function () {
+Drupal.atom_builder.controlsD = function () {
   function changeMode(newMode) {
 
     switch (mouseMode) {

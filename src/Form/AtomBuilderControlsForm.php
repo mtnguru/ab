@@ -183,7 +183,6 @@ class AtomBuilderControlsForm extends FormBase {
 
     $controlsConf = Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/controls/atom_builder.yml'));
 
-
     // Styler Select list
     foreach ($controlsConf['styler'] as $blockName => $block) {
       $options[$blockName] = $block['title'];
@@ -208,6 +207,7 @@ class AtomBuilderControlsForm extends FormBase {
     }
 
     $form['#attached']['library'][] = 'atom_builder/atom-builder-js';
+    $form['#attached']['drupalSettings']['atom_builder']['Set'] = $styleSet;
     $form['#attached']['drupalSettings']['atom_builder']['styleSet'] = $styleSet;
     $form['#attributes'] = array('name' => 'atom-builder-controls-form');
 
@@ -221,5 +221,4 @@ class AtomBuilderControlsForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
   }
-
 }
