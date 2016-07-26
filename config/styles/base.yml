@@ -78,7 +78,7 @@ controls:
     defaultValue: 1
   awireframe__linewidth:
     type: range
-    defaultValue: 3
+    defaultValue: 1
   avertexid__color:
     type: color
     defaultValue: '#ccaaff'
@@ -109,7 +109,7 @@ controls:
     type: range
   aaxis__linewidth:
     type: range
-    defaultValue: 3
+    defaultValue: 1
   bwireframe__color:
     type: color
     defaultValue: '#aaee99'
@@ -121,7 +121,7 @@ controls:
     defaultValue: 1
   bwireframe__linewidth:
     type: range
-    defaultValue: 3
+    defaultValue: 1
   bvertexid__color:
     type: color
     defaultValue: '#ffccee'
@@ -152,7 +152,7 @@ controls:
     type: range
   baxis__linewidth:
     type: range
-    defaultValue: 3
+    defaultValue: 1
   valence__color:
     type: color
     defaultValue: '#ff00ff'

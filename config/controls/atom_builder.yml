@@ -75,7 +75,7 @@ styler:
       awireframe__color:       ['Wireframe',     'color',    '#aaffcc']
       awireframe__opacity:     ['Opacity',       'range',    .3, [0, 1, .01]]
       awireframe__scale:       ['Scale',         'range',    1,  [0, 2, .01]]
-      awireframe__linewidth:   ['Linewidth',     'range',     3, [0, 5, .1]]
+      awireframe__linewidth:   ['Linewidth',     'range',     1, [0, 5, .1]]
 
       hr1:                     [ null, 'hr']
       avertexid__color:        ['Vertex IDs',    'color',    '#ccaaff']
@@ -94,7 +94,7 @@ styler:
       hr4:                     [ null, 'hr']
       aaxis__color:            ['Axis',          'color',    '#ffbbcc']
       aaxis__opacity:          ['Opacity',       'range',     0, [0, 1, .01]]
-      aaxis__linewidth:        ['Linewidth',     'range',     3, [0, 5, .1]]
+      aaxis__linewidth:        ['Linewidth',     'range',     1, [0, 5, .1]]
 
 
   dualGeometry:
@@ -104,7 +104,7 @@ styler:
       bwireframe__color:       ['Wireframe',     'color',    '#aaee99']
       bwireframe__opacity:     ['Opacity',       'range',    .3, [0, 1, .01]]
       bwireframe__scale:       ['Scale',         'range',    1,  [0, 2, .01]]
-      bwireframe__linewidth:   ['Linewidth',     'range',     3, [0, 5, .1]]
+      bwireframe__linewidth:   ['Linewidth',     'range',     1, [0, 5, .1]]
 
       hr1:                     [ null, 'hr']
       bvertexid__color:        ['Vertex IDs',    'color',    '#ffccee']
@@ -123,7 +123,7 @@ styler:
       hr4:                     [ null, 'hr']
       baxis__color:            ['Axis',          'color',    '#aabb99']
       baxis__opacity:          ['Opacity',       'range',     0, [0, 1, .01]]
-      baxis__linewidth:        ['Linewidth',     'range',     3, [0, 5, .1]]
+      baxis__linewidth:        ['Linewidth',     'range',     1, [0, 5, .1]]
 
   attachments :
 
