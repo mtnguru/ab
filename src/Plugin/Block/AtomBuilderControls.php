@@ -4,6 +4,7 @@ namespace Drupal\atom_builder\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Serialization\Yaml;
 
 /**
  * Provides a 'AtomBuilderControls' block.
@@ -18,11 +19,37 @@ class AtomBuilderControls extends BlockBase {
   public function blockForm($form, FormStateInterface $form_state) {
 
     // Give the viewer a name so the controls block can connect to it.
-    $form['viewer_name'] = array(
+    $form['viewer_id'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Viewer Name'),
       '#description' => $this->t('Use the same name assigned the Atom Builder block'),
-      '#default_value' => isset($this->configuration['viewer_name']) ? $this->configuration['viewer_name'] : 'Atom Builder',
+      '#default_value' => isset($this->configuration['viewer_id']) ? $this->configuration['viewer_id'] : 'Atom Builder',
+    );
+
+    // Select a Style file
+    $style_files = file_scan_directory(drupal_get_path('module','atom_builder') . '/config/styles', '/\.yml/');
+    foreach ($style_files as $file) {
+      $style_options[$file->filename] = $file->name;
+    }
+    $form['style_file'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Style'),
+      '#description' => $this->t(''),
+      '#default_value' => isset($this->configuration['style_file']) ? $this->configuration['style_file'] : 'base',
+      '#options' => $style_options,
+    );
+
+    // Select a control file
+    $control_files = file_scan_directory(drupal_get_path('module','atom_builder') . '/config/controls', '/\.yml/');
+    foreach ($control_files as $file) {
+      $control_options[$file->filename] = $file->name;
+    }
+    $form['control_file'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Controls'),
+      '#description' => $this->t(''),
+      '#default_value' => isset($this->configuration['control_file']) ? $this->configuration['control_file'] : 'atom_builder',
+      '#options' => $control_options,
     );
 
     return $form;
@@ -32,15 +59,29 @@ class AtomBuilderControls extends BlockBase {
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['viewer_name'] = $form_state->getValue('viewer_name');
+    $this->configuration['viewer_id'] = $form_state->getValue('viewer_id');
+    $this->configuration['style_file'] = $form_state->getValue('style_file');
+    $this->configuration['control_file'] = $form_state->getValue('control_file');
   }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
-    // Pass in the configuration to the formBuilder or getForm so they can be attached.
+    $config = $this->getConfiguration();
     $render['form'] = \Drupal::formBuilder()->getForm('Drupal\atom_builder\Form\AtomBuilderControlsForm');
+    $render['form']['#attached'] =  array(
+      'library' => array('atom_builder/atom-builder-js'),
+      'drupalSettings' => array(
+        'atom_builder' => array(
+          'viewerId' => $config['viewer_id'],
+          'styleFile' => $config['style_file'],
+          'styleSet' => Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/styles/' . $config['style_file'])),
+          'controlFile' => $config['control_file'],
+          'controlSet' => Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/controls/' . $config['control_file'])),
+        ),
+      ),
+    );
     return $render;
   }
 }

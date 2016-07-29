@@ -22,26 +22,26 @@ styler:
   objects:
     title:               Objects
     controls:
-      nucleus__load:           ['Load Nucleus', 'button']
-      nucleus__save:           ['Save Nucleus', 'button']
+      nucleus__load:           ['Load Nucleus', 'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
+      nucleus__save:           ['Save Nucleus', 'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
   style:
     title:               Styles
     controls:
       header_load:             ['Load Style',   'header']
-      style__selectfile:       [ null,          'loadFile', 'base.yml']
-      style__load:             ['Load',         'button',   'styles/*.yml']
+      style__selectfile:       [ null,          'loadFile',   'base.yml']
+      style__load:             ['Load',         'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
       hr1:                     [ null,          'hr']
       header_save:             ['Save Style',   'header']
       style__name:             ['Style Name',   'textfield',  '', 32]
       style__description:      ['Save Style',   'textarea',   '', 128, 5]
-      style__save:             ['Save',         'button',   'styles']
+      style__save:             ['Save',         'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
       hr2:                     [ null,          'hr']
-      style__reset:            ['Reset Style',  'button']
+      style__reset:            ['Reset Style',  'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
   nucleus:
     title:               Nucleus
     controls:
-      nucleus__position:       ['Position',     'position', [0, 0, 0]]
-      nucleus__rotate:         ['Rotate',       'rotation', [0, 0, 0], [-360, 360, 1]]
+      nucleus__position:       ['Position',     'position', [0, 0, 0], [-1000, 1000, 1]]
+      nucleus__rotation:       ['Rotate',       'rotation', [0, 0, 0], [-360, 360, 1]]
   proton:
     title:               Protons
     controls:
@@ -101,7 +101,7 @@ styler:
 
     title:               Dual Geometry
     controls:
-      bwireframe__color:       ['Wireframe',     'color',    '#aaee99']
+      bwireframe__color:       ['Wireframe',     'color',    '#ffdd33']
       bwireframe__opacity:     ['Opacity',       'range',    .3, [0, 1, .01]]
       bwireframe__scale:       ['Scale',         'range',    1,  [0, 2, .01]]
       bwireframe__linewidth:   ['Linewidth',     'range',     1, [0, 5, .1]]
@@ -140,16 +140,17 @@ styler:
     controls:
       header__camera:          ['Camera',         'header']
       camera__perspective:     ['Perspective',    'range',    25, [1, 90, 1]]
-      camera__position:        ['Position',       'position', [0, 1400, -1400]]
+      camera__position:        ['Position',       'position', [0, 1400, -1400], [-2000, 2000, 1]]
 
       hr1:                     [ null, 'hr']
       renderer__color:         ['Background',     'color',    '#fcf3ff']
 
       hr2:                     [ null, 'hr']
       plane__color:            ['Plane',          'color',    '#cccccc']
+      plane__opacity:          ['Opacity',        'range',    1, [0, 1, .01]]
       plane__width:            ['Width',          'range',    850, [1, 1500, 1]]
       plane__depth:            ['Depth',          'range',    850, [1, 1500, 1]]
-      plane__position:         ['Position',       'position', [0, 0, 0]]
+      plane__position:         ['Position',       'position', [0, 0, 0], [-1000, 1000, 1]]
       plane__rotation:         ['Rotation',       'rotation', [0, -180, 1], [-360, 360, 1]]
   lighting:
     title:               Lighting
@@ -157,11 +158,11 @@ styler:
       ambient__color:          ['Ambient',        'color',    '#777777']
       hr1:                     [ null, 'hr']
       spotlight_1__color:      ['Spotlight 1',    'color',    '#664466']
-      spotlight_1__position:   ['Position',       'position', [-500, 800, -500]]
+      spotlight_1__position:   ['Position',       'position', [-500, 800, -500], [-1000, 1000, 1]]
       hr2:                     [ null, 'hr']
       spotlight_2__color:      ['Spotlight 2',    'color',    '#446644']
-      spotlight_2__position:   ['Position',       'position', [ 800, 800, -200]]
+      spotlight_2__position:   ['Position',       'position', [ 800, 800, -200], [-1000, 1000, 1]]
       hr3:                     [ null, 'hr']
       spotlight_3__color:      ['Spotlight 3',    'color',    '#000000']
-      spotlight_3__position:   ['Position',       'position', [-500, 800, -500]]
+      spotlight_3__position:   ['Position',       'position', [-500, 800, -500], [-1000, 1000, 1]]
 

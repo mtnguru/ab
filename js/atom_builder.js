@@ -3,9 +3,7 @@
  *
  */
 
-Drupal.atom_builder.builder = {};
-
-Drupal.atom_builder.builderD = function () {
+Drupal.atom_builder.builderC = function () {
 
   var saveYml = function ($path) {
     return

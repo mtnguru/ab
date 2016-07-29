@@ -3,6 +3,7 @@
 namespace Drupal\atom_builder\Form;
 
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Serialization\Yaml;
 
@@ -40,15 +41,33 @@ class AtomBuilderControlsForm extends FormBase {
       $id = str_replace('_', '-', $controlName);
       $containerClass = 'sa-control';
       if (empty($controlSet[$controlName])) {
-        $defaultValue = $controlConf[2];
+        if (!empty($controlConf[2])) {
+          $defaultValue = $controlConf[2];
+        } else {
+          $defaultValue = "Undefined";
+        }
       } else {
         $defaultValue = $controlSet[$controlName]['defaultValue'];
       }
       switch ($controlConf[1]) {
 
+        case 'link':
+          $control = array(
+            '#type' => 'container',
+            'link' => array(
+              '#type' => 'link',
+              '#title' => $controlConf[0],
+              '#url' => Url::fromRoute($controlConf[2], $controlConf[3]),
+              '#attributes' => array('class' => array('use_ajax')),
+              '#suffix' => '<br />',
+            ),
+          );
+          break;
+
         case 'button':
           $control = array(
             '#type' => 'button',
+            '#attributes' => array('onclick' => 'return (false);'),
             '#value' => $controlConf[0],
           );
           break;
@@ -160,17 +179,16 @@ class AtomBuilderControlsForm extends FormBase {
         default:
           break;
       }
-      if (!in_array($controlConf[1], array('label', 'header', 'hr', 'button'))) {
+      if (!in_array($controlConf[1], array('label', 'header', 'hr'))) {
         $controlSet[$controlName]['type'] = $controlConf[1];
         if ($defaultValue != null) {
           $controlSet[$controlName]['defaultValue'] = $defaultValue;
         }
       }
-      $control['#attributes'] = array(
-        'id' => $id,
-        'class' => array($containerClass),
-        'name' => $id,
-      );
+      $control['#attributes']['id'] = $id;
+      $control['#attributes']['name'] = $id;
+      $control['#attributes']['class'] = array($containerClass);
+
       $block[$blockName][$controlName] = $control;
     }
     return $block;
@@ -181,10 +199,10 @@ class AtomBuilderControlsForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $controlsConf = Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/controls/atom_builder.yml'));
+    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/controls/atom_builder.yml'));
 
-    // Styler Select list
-    foreach ($controlsConf['styler'] as $blockName => $block) {
+    // Create Styler Select list
+    foreach ($controlSet['styler'] as $blockName => $block) {
       $options[$blockName] = $block['title'];
     }
     $form['styler'] = array(
@@ -202,16 +220,13 @@ class AtomBuilderControlsForm extends FormBase {
       '#type' => 'container',
       '#attributes' => array('id' => 'controls'),
     );
-    foreach ($controlsConf['styler'] as $blockName => $block) {
+    foreach ($controlSet['styler'] as $blockName => $block) {
       $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, false, $styleSet['controls']);
     }
 
-    $form['#attached']['library'][] = 'atom_builder/atom-builder-js';
-    $form['#attached']['drupalSettings']['atom_builder']['Set'] = $styleSet;
-    $form['#attached']['drupalSettings']['atom_builder']['styleSet'] = $styleSet;
     $form['#attributes'] = array('name' => 'atom-builder-controls-form');
 
-    file_put_contents(drupal_get_path('module', 'atom_builder') . '/styles/base.yml', Yaml::encode($styleSet));
+    file_put_contents(drupal_get_path('module', 'atom_builder') . '/config/styles/base2.yml', Yaml::encode($styleSet));
     return $form;
   }
 

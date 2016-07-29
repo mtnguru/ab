@@ -4,37 +4,20 @@ controls:
   mouse__mode:
     type: radios
     defaultValue: camera
-  nucleus__load:
-    type: button
-    defaultValue: Undefined
-  nucleus__save:
-    type: button
-    defaultValue: Undefined
   style__selectfile:
     type: loadFile
     defaultValue: base.yml
-  style__load:
-    type: button
-    defaultValue: 'styles/*.yml'
   style__name:
     type: textfield
-    defaultValue: Undefined
   style__description:
     type: textarea
-    defaultValue: Undefined
-  style__save:
-    type: button
-    defaultValue: styles
-  style__reset:
-    type: button
-    defaultValue: Undefined
   nucleus__position:
     type: position
     defaultValue:
       - 0
       - 0
       - 0
-  nucleus__rotation:
+  nucleus__rotate:
     type: rotation
     defaultValue:
       - 0
@@ -63,7 +46,6 @@ controls:
     defaultValue: '#aaddff'
   protonid__opacity:
     type: range
-    defaultValue: Undefined
   protonid__scale:
     type: range
     defaultValue: 1
@@ -111,7 +93,6 @@ controls:
     defaultValue: '#88cccc'
   aface__opacity:
     type: range
-    defaultValue: Undefined
   afaceid__color:
     type: color
     defaultValue: '#aaffee'
@@ -126,13 +107,12 @@ controls:
     defaultValue: '#ffbbcc'
   aaxis__opacity:
     type: range
-    defaultValue: Undefined
   aaxis__linewidth:
     type: range
     defaultValue: 1
   bwireframe__color:
     type: color
-    defaultValue: '#ffcc88'
+    defaultValue: '#aaee99'
   bwireframe__opacity:
     type: range
     defaultValue: 0.3
@@ -156,7 +136,6 @@ controls:
     defaultValue: '#88cccc'
   bface__opacity:
     type: range
-    defaultValue: Undefined
   bfaceid__color:
     type: color
     defaultValue: '#ffcc33'
@@ -171,7 +150,6 @@ controls:
     defaultValue: '#aabb99'
   baxis__opacity:
     type: range
-    defaultValue: Undefined
   baxis__linewidth:
     type: range
     defaultValue: 1
@@ -202,9 +180,6 @@ controls:
   plane__color:
     type: color
     defaultValue: '#cccccc'
-  plane__opacity:
-    type: range
-    defaultValue: 1
   plane__width:
     type: range
     defaultValue: 850

@@ -1,0 +1,13 @@
+element: Hydrogen
+isotope: 0
+variant: 0
+num_protons: 1
+nuclets:
+  1:
+    position: 1
+    type: monolet
+    num_protons: 1
+    num_nuclear_electrons: 0
+    protons:
+      1:
+        present: true

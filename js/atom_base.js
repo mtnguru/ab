@@ -16,7 +16,7 @@ Drupal.atom_builder = {
 //viewer: {},
 };
 
-Drupal.atom_builder.baseD = function () {
+Drupal.atom_builder.baseC = function () {
 
   var saveYml = function ($path) {
     return

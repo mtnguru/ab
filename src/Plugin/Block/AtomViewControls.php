@@ -35,21 +35,6 @@ class AtomViewControls extends BlockBase {
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['proton_transparency'] = $form_state->getValue('proton_transparency');
-    $this->configuration['geometry_transparency'] = $form_state->getValue('geometry_transparency');
-    $this->configuration['axis_transparency'] = $form_state->getValue('axis_transparency');
-    $this->configuration['mouse_mode'] = $form_state->getValue('mouse_mode');
-    $this->configuration['mouse_controls_enabled'] = $form_state->getValue('mouse_controls_enabled');
-    $this->configuration['darn'] = $form_state->getValue('darn');
-    $this->configuration['some_text_here'] = $form_state->getValue('some_text_here');
-    $this->configuration['reset_transparency'] = $form_state->getValue('reset_transparency');
-    $this->configuration['date_field'] = $form_state->getValue('date_field');
-    $this->configuration['an_email_address'] = $form_state->getValue('an_email_address');
-    $this->configuration['what_is_an_image_button'] = $form_state->getValue('what_is_an_image_button');
-    $this->configuration['number_field'] = $form_state->getValue('number_field');
-    $this->configuration['password_field'] = $form_state->getValue('password_field');
-    $this->configuration['radio_buttons'] = $form_state->getValue('radio_buttons');
-    $this->configuration['a_link_dude'] = $form_state->getValue('a_link_dude');
-    $this->configuration['what_is_a_value'] = $form_state->getValue('what_is_a_value');
   }
 
   /**

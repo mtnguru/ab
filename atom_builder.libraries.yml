@@ -6,7 +6,7 @@ atom-builder-js:
     js/threejs/libs/stats.min.js: {}
     js/threejs/controls/TrackballControls.js: {}
     js/atom_base.js: {}
-    js/atom_scene.js: {}
+    js/atom_viewer.js: {}
     js/atom_controls.js: {}
     js/atom_style.js: {}
     js/atom_object.js: {}
@@ -16,3 +16,6 @@ atom-builder-js:
     js/atom.js: {}
   css:
     js/libs/spectrum/spectrum.css
+  dependencies:
+    - core/drupal.ajax
+

@@ -5,17 +5,17 @@ controls:
     type: radios
     defaultValue: camera
   nucleus__load:
-    type: button
-    defaultValue: Undefined
+    type: link
+    defaultValue: atom_builder.ajax_load_style
   nucleus__save:
-    type: button
-    defaultValue: Undefined
+    type: link
+    defaultValue: atom_builder.ajax_load_style
   style__selectfile:
     type: loadFile
     defaultValue: base.yml
   style__load:
-    type: button
-    defaultValue: 'styles/*.yml'
+    type: link
+    defaultValue: atom_builder.ajax_load_style
   style__name:
     type: textfield
     defaultValue: Undefined
@@ -23,11 +23,11 @@ controls:
     type: textarea
     defaultValue: Undefined
   style__save:
-    type: button
-    defaultValue: styles
+    type: link
+    defaultValue: atom_builder.ajax_load_style
   style__reset:
-    type: button
-    defaultValue: Undefined
+    type: link
+    defaultValue: atom_builder.ajax_load_style
   nucleus__position:
     type: position
     defaultValue:
@@ -132,7 +132,7 @@ controls:
     defaultValue: 1
   bwireframe__color:
     type: color
-    defaultValue: '#ffcc88'
+    defaultValue: '#ffdd33'
   bwireframe__opacity:
     type: range
     defaultValue: 0.3

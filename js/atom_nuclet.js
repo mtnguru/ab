@@ -3,9 +3,7 @@
  *
  */
 
-Drupal.atom_builder.nuclet = {};
-
-Drupal.atom_builder.nucletD = function () {
+Drupal.atom_builder.nucletC = function () {
   function createIcosahedron(prop, pos) {
     // Set proton colors
     var c = ['marker',

@@ -3,7 +3,14 @@
  *
  */
 
-Drupal.atom_builder.controlsD = function () {
+Drupal.atom_builder.controlsC = function (_viewer, controlSet) {
+
+  var viewer = _viewer;
+  var cameraTrackballControls;
+  var atomTrackballControls;
+  var mouseMode = 'none';
+  var styler = document.getElementById('edit-styler');
+
   function changeMode(newMode) {
 
     switch (mouseMode) {
@@ -26,7 +33,7 @@ Drupal.atom_builder.controlsD = function () {
         cameraTrackballControls = createCameraTrackballControls();
         break;
       case 'atom':
-        canvasContainer.addEventListener('mousedown', onDocumentMouseDown, false);
+        viewer.canvasContainer.addEventListener('mousedown', onDocumentMouseDown, false);
         break;
       case 'attach':
         atomTrackballControls = createAtomTrackballControls(selectedObject);
@@ -34,150 +41,52 @@ Drupal.atom_builder.controlsD = function () {
       case 'none':
         break;
     }
-    render();
+//  render();
 
     return;
   }
-
-  /**
-   * Apply controls effecting all atoms from the panel in the upper right corner.
-   *
-   * @param name
-   * @param value
-   * @param prop
-   */
-  function listenSliderChange(id, prop) {
-    document.getElementById(id).onchange(function (event) {
-      if (mouseMode == 'Rotate Selection') {
-        var radians = value / 360 * 2 * Math.PI;
-        selectedObject.rotation[prop] = radians + (selectedObject.rotation['init_' + prop] || 0);
-      } else {
-        scene.traverse(function (node) {
-          switch (name) {
-            case 'rotation':
-              if (nucletNames.indexOf(node.name) > -1) {
-                var radians = value / 360 * 2 * Math.PI;
-                node.rotation[prop] = radians + (node.rotation['init_' + prop] || 0);
-              }
-              break;
-            case 'scaleProtons':
-              if (node.name == 'proton') {
-                node.scale.set(value, value, value);
-              }
-              break;
-            case 'scaleGeometry':
-              if (node.name == 'geometry') {
-                var scale = (node.init_scale) ? value * node.init_scale : value;
-                node.scale.set(scale, scale, scale);
-              }
-              break;
-            case 'opacityPlane':
-              if (node.name == 'plane') {
-                node.material.opacity = value
-                node.material.visible = (value > .01);
-              }
-              break;
-            case 'opacityProtons':
-              if (node.name == 'proton') {
-                node.material.opacity = value
-                node.material.visible = (value > .01);
-              }
-              break;
-            case 'opacityGeometry':
-              if (node.name == 'geometry') {
-                node.material.opacity = value;
-                node.material.visible = (value > .05);
-              }
-              break;
-            case 'opacityAxis':
-              if (node.name == 'axis') {
-                node.material.opacity = value;
-                node.material.visible = (value > .05);
-              }
-              break;
-            case 'opacityValence':
-              if (node.name == 'valence') {
-                node.material.opacity = value;
-                node.material.visible = (value > .05);
-              }
-              break;
-          }
-        });
-      }
-      render();
-    });
-  };
 
   function controlChanged(event) {
-    var args = this.id.split("--");
-    var argNames = args[0].split("-");
-    var value = event.target.value;
-    switch (argNames[0]) {
-      case "renderer":
-        renderer.setClearColor(new THREE.Color(parseInt(value.replace(/^#/, ''), 16)), 1);
-        break;
-      case "camera":
-        if (args[1] == 'perspective') {
-          camera.fov = value;
-          camera.updateProjectionMatrix();
-        }
-        break;
-      default:
-        scene.traverse(function (node) {
-          var nodeNames = node.name.split("-");
-          var ok = false;
-          if (argNames.length == 2) {
-            if (args[0] == node.name) {
-              ok = true;
-            }
-          } else if (nodeNames[0] == argNames[0]) {
-            ok = true;
-          }
-          if (ok) {
-            switch (args[1]) {
-              case 'rotation':
-                if (nucletNames.indexOf(node.name) > -1) {
-                  var radians = value / 360 * 2 * Math.PI;
-                  node.rotation[prop] = radians + (node.rotation['init_' + prop] || 0);
-                }
-                break;
-              case 'scale':
-                var scale = (node.init_scale) ? value * node.init_scale : value;
-                node.scale.set(scale, scale, scale);
-                break;
-              case 'opacity':
-                node.material.opacity = value;
-                node.material.visible = (value > .02);
-                break;
-              case 'linewidth':
-                if (argNames[0] == 'awireframe') {
-                  node.material.wireframeLinewidth = value;
-                } else {
-                  node.material.linewidth = value;
-                }
-                break;
-              case 'color':
-                if (argNames[0] == 'spotlight' || argNames[0] == 'ambient') {
-                  node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
-                } else {
-                  node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
-                }
-                break;
-            }
-          }
-        });
-        break;
-    }
-    render();
+    viewer.style.applyStyle(this.id, event.target.value);
     return;
   }
-    function showStylerBlock() {
-      // Display the currently selected block - hide the rest
-      for (var i=0; i < styler.length; i++) {
-        document.getElementById('control-' + styler[i].value).style.display = (styler[i].selected) ? 'block' : 'none';
-      }
 
+
+  function buttonClicked(event) {
+
+    var args = this.id.split("--");
+    switch (args[0]) {
+      case 'nucleus':
+        // load and save
+        break;
+      case 'nuclet':
+        // load and save ?
+        break;
+      case 'style':
+        switch (args[1]) {
+          case 'load':
+            viewer.style.load();
+            break;
+          case 'save':
+            viewer.style.save();
+            break;
+          case 'reset':
+            viewer.style.reset();
+            break;
+        }
+        break;
     }
+    return false;
+  }
+
+  function showStylerBlock() {
+    // Display the currently selected block - hide the rest
+    for (var i=0; i < styler.length; i++) {
+      document.getElementById('control-' + styler[i].value).style.display = (styler[i].selected) ? 'block' : 'none';
+    }
+
+  }
+
   /**
    * Create the controls in the upper right corner of screen.
    *
@@ -185,7 +94,7 @@ Drupal.atom_builder.controlsD = function () {
    *
    * @returns {controls|*}
    */
-  function initControls() {
+  function createControls() {
 
     var form = document.forms['atom-builder-controls-form'];
 
@@ -202,19 +111,20 @@ Drupal.atom_builder.controlsD = function () {
     }
 
     // Initialize all the sliders, buttons and color fields in the styler blocks
-    for (var controlId in style) {
+    for (var controlId in viewer.style.current) {
       var id = controlId.replace(/_/g, "-");
-      switch (style[controlId].type) {
+      switch (viewer.style.current[controlId].type) {
+        case 'color':
         case 'range':
           document.getElementById(id).addEventListener("input", controlChanged);
           break;
-        case 'color':
-          document.getElementById(id).addEventListener("input", controlChanged);
-          break;
+        case 'link':
+        case 'button':
+          document.getElementById(id).addEventListener("click", buttonClicked);
       }
     }
 
-    return;
+    return false;
   }
 
   /**
@@ -223,7 +133,7 @@ Drupal.atom_builder.controlsD = function () {
    * @returns {THREE.TrackballControls}
    */
   function createCameraTrackballControls() {
-    var cameraTrackballControls = new THREE.TrackballControls(camera, renderer.domElement);
+    var cameraTrackballControls = new THREE.TrackballControls(viewer.camera, viewer.renderer.domElement);
     cameraTrackballControls.rotateSpeed = 2.0;
     cameraTrackballControls.zoomSpeed = 1.0;
     cameraTrackballControls.panSpeed = 3.0;
@@ -233,7 +143,7 @@ Drupal.atom_builder.controlsD = function () {
     //  cameraTrackballControls.dynamicDampingFactor=0.3;
 
     cameraTrackballControls.keys = [65, 83, 68];
-    cameraTrackballControls.addEventListener('change', render);
+    cameraTrackballControls.addEventListener('change', viewer.render);
     return cameraTrackballControls;
   }
 
@@ -243,7 +153,7 @@ Drupal.atom_builder.controlsD = function () {
    * @returns {THREE.TrackballControls}
    */
   function createAtomTrackballControls(atom) {
-    var atomTrackballControls = new THREE.TrackballControls(atom, renderer.domElement);
+    var atomTrackballControls = new THREE.TrackballControls(atom, viewer.renderer.domElement);
     atomTrackballControls.rotateSpeed = 2.0;
     atomTrackballControls.zoomSpeed = 1.0;
     atomTrackballControls.panSpeed = 3.0;
@@ -256,11 +166,12 @@ Drupal.atom_builder.controlsD = function () {
     atomTrackballControls.addEventListener('change', render);
     return atomTrackballControls;
   }
+
   function onDocumentMouseDown(event) {
     var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
-    vector = vector.unproject(camera);
+    vector = vector.unproject(viewer.camera);
 
-    var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+    var raycaster = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
     var intersects;
     switch (mouseMode) {
       case 'Select Atom':
@@ -288,11 +199,24 @@ Drupal.atom_builder.controlsD = function () {
           intersects[0].object.material.opacity = 0.4;
           break;
       }
-      render();
+//    render();
     }
   }
 
-  return {
-    saveYml: saveYml
+  var animate = function animate() {
+    requestAnimationFrame(animate);
+    if (cameraTrackballControls) {
+      cameraTrackballControls.update();
+    }
+    if (atomTrackballControls) {
+      atomTrackballControls.update();
+    }
   };
+
+  var cameraControls = createCameraTrackballControls();
+  var controls = createControls();
+  changeMode('camera');
+  return {
+    animate: animate
+  }
 };
