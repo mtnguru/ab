@@ -27,7 +27,7 @@ class AtomBuilderControls extends BlockBase {
     );
 
     // Select a Style file
-    $style_files = file_scan_directory(drupal_get_path('module','atom_builder') . '/config/styles', '/\.yml/');
+    $style_files = file_scan_directory(drupal_get_path('module','atom_builder') . '/config/style', '/\.yml/');
     foreach ($style_files as $file) {
       $style_options[$file->filename] = $file->name;
     }
@@ -70,15 +70,24 @@ class AtomBuilderControls extends BlockBase {
   public function build() {
     $config = $this->getConfiguration();
     $render['form'] = \Drupal::formBuilder()->getForm('Drupal\atom_builder\Form\AtomBuilderControlsForm');
+
+    // Read in the styleSet
+    $styleSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/style/' . $config['style_file']));
+    $styleSet['filename'] = $config['style_file'];
+
+    // Read in the controls
+    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/controls/' . $config['control_file']));
+    $controlSet['filename'] = $config['control_file'];
+
     $render['form']['#attached'] =  array(
       'library' => array('atom_builder/atom-builder-js'),
       'drupalSettings' => array(
         'atom_builder' => array(
           'viewerId' => $config['viewer_id'],
           'styleFile' => $config['style_file'],
-          'styleSet' => Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/styles/' . $config['style_file'])),
+          'styleSet' => Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/style/' . $config['style_file'])),
           'controlFile' => $config['control_file'],
-          'controlSet' => Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/controls/' . $config['control_file'])),
+          'controlSet' => $controlSet,
         ),
       ),
     );

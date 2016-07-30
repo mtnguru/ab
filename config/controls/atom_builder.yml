@@ -1,47 +1,29 @@
 mouse:
 styler:
-  mouse:
-    title: Mouse
+  nucleus:
+    title:               Nucleus
     controls:
-      mouse__mode:
-        - Mouse mode
-        - radios
-        - camera
-        -
-          camera:      Move Camera
-          atom:        Move Atom
-          attach:      Attach Nuclets
-          spotlight_1: Move Spotlight 1
-          spotlight_2: Move Spotlight 2
-          spotlight_3: Move Spotlight 3
-          none:        None
+      nucleus__loadlabel:      ['Select nucleus',     'header']
+      nucleus__selectyml:      [ null,          'selectyml', 'base.yml',   'nucleus', 'atom_builder.ajax_yml_load']
+      hr1:                     [ null,          'hr']
+      nucleus__savelabel:      ['Save new nucleus', 'header']
+      nucleus__saveyml:        [ null,          'saveyml',   'base.yml',   'nucleus', 'atom_builder.ajax_yml_save']
+      hr2:                     [ null,          'hr']
+      nucleus__position:       ['Position',       'position', [0, 0, 0], [-1000, 1000, 1]]
   build:
     title:               Build Atom
     controls:
       text:                    ['Display nuclets here, plus other controls needed to build atoms', 'label']
-  objects:
-    title:               Objects
-    controls:
-      nucleus__load:           ['Load Nucleus', 'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
-      nucleus__save:           ['Save Nucleus', 'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
   style:
     title:               Styles
     controls:
-      header_load:             ['Load Style',   'header']
-      style__selectfile:       [ null,          'loadFile',   'base.yml']
-      style__load:             ['Load',         'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
-      hr1:                     [ null,          'hr']
-      header_save:             ['Save Style',   'header']
-      style__name:             ['Style Name',   'textfield',  '', 32]
-      style__description:      ['Save Style',   'textarea',   '', 128, 5]
-      style__save:             ['Save',         'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
-      hr2:                     [ null,          'hr']
-      style__reset:            ['Reset Style',  'link',       'atom_builder.ajax_load_style', { styleFile: 'base.yml'}]
-  nucleus:
-    title:               Nucleus
-    controls:
-      nucleus__position:       ['Position',     'position', [0, 0, 0], [-1000, 1000, 1]]
-      nucleus__rotation:       ['Rotate',       'rotation', [0, 0, 0], [-360, 360, 1]]
+      style__reset:            ['Reset Style',    'button']
+      hr1:                     [ null,            'hr']
+      style__loadlabel:        ['Current Style',     'header']
+      style__selectyml:        [ null,            'selectyml', 'base.yml',   'style',  'atom_builder.ajax_yml_load']
+      hr2:                     [ null,            'hr']
+      style__savelabel:        ['Create New Style', 'header']
+      style__saveyml:          [ null,            'saveyml',   '',           'style',  'atom_builder.ajax_yml_save']
   proton:
     title:               Protons
     controls:
@@ -165,4 +147,19 @@ styler:
       hr3:                     [ null, 'hr']
       spotlight_3__color:      ['Spotlight 3',    'color',    '#000000']
       spotlight_3__position:   ['Position',       'position', [-500, 800, -500], [-1000, 1000, 1]]
+  mouse:
+    title: Mouse
+    controls:
+      mouse__mode:
+        - Mouse mode
+        - radios
+        - camera
+        -
+          camera:      Move Camera
+          atom:        Move Atom
+          attach:      Attach Nuclets
+          spotlight_1: Move Spotlight 1
+          spotlight_2: Move Spotlight 2
+          spotlight_3: Move Spotlight 3
+          none:        None
 

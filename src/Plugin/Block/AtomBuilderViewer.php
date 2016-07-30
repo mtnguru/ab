@@ -38,7 +38,7 @@ class AtomBuilderViewer extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    $config = $this->getConfiguration();
+//  $config = $this->getConfiguration();
     $build = array(
       'atom_builder' => array(
         'wrapper' => array(

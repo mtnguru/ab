@@ -8,16 +8,23 @@
 # defined as a classname
 # ("\Drupal\atom_builder\Controller\AtomBuilderController")
 # and a method ("atomBuilder").
-atom_builder.atom_builder_controller_atomBuilder:
-  path: '/atom/builder'
+# atom_builder.atom_builder_controller_atomBuilder:
+#  path: '/atom/builder'
+#  defaults:
+#    _controller: '\Drupal\atom_builder\Controller\AtomBuilderController::atomBuilder'
+#    _title: 'Atom Builder'
+#  requirements:
+#    _permission: 'access content'
+atom_builder.loadYml:
+  path: '/ajax-ab/loadYml'
   defaults:
-    _controller: '\Drupal\atom_builder\Controller\AtomBuilderController::atomBuilder'
-    _title: 'Atom Builder'
+    _controller: '\Drupal\atom_builder\Controller\AtomBuilderController::loadYml'
   requirements:
     _permission: 'access content'
-atom_builder.ajax_load_style:
-  path: '/ajax/load-style/{styleFile}'
+atom_builder.saveYml:
+  path: '/ajax-ab/saveYml'
   defaults:
-    _controller: '\Drupal\atom_builder\Controller\AtomBuilderController::loadStyle'
+    _controller: '\Drupal\atom_builder\Controller\AtomBuilderController::saveYml'
   requirements:
     _permission: 'access content'
+

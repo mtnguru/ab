@@ -4,25 +4,34 @@
  * File that generates nuclets  proton, helium, lithium, helium - 1, 4, 7, 11
  */
 
-Drupal.atom_builder = {
-//base: {},
-//scene: {},
-//controls: {},
-//style: {},
-//object: {},
-//nuclet: {},
-//nucleus: {},
-//builder: {},
-//viewer: {},
-};
+Drupal.atom_builder = {};
 
 Drupal.atom_builder.baseC = function () {
 
-  var saveYml = function ($path) {
-    return
+  Drupal.AjaxCommands.prototype.loadYmlCommand = function(ajax, response, status) {
+    Drupal.atom_builder[response.component].loadYml(response);
+  };
+
+  Drupal.AjaxCommands.prototype.saveYmlCommand = function(ajax, response, status) {
+    Drupal.atom_builder[response.component].saveYml(response);
+  };
+
+  var doAjax = function doAjax (url, data, success, error) {
+    jQuery.ajax({
+      url: url,
+      type: 'POST',
+      data: data,
+      dataType: 'json',
+      success: function (response) {
+        success(response);
+      },
+      error: function (response) {
+        (error) ? error(response) : success(response);
+      }
+    });
   }
 
   return {
-    saveYml: saveYml
+    doAjax: doAjax
   };
 };

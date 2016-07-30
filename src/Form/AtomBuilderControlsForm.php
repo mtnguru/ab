@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Serialization\Yaml;
+use Drupal\atom_builder\Utils\AtomBuilderFiles;
 
 /**
  * Class AtomBuilderControlsForm.
@@ -51,14 +52,75 @@ class AtomBuilderControlsForm extends FormBase {
       }
       switch ($controlConf[1]) {
 
+        case 'selectyml':
+
+          $control = array(
+            '#type' => 'container',
+            '#attributes' => array('class' => array('selectyml')),
+            'selectyml' => array (
+              '#type' => 'select',
+              '#title' => $controlConf[0],
+              '#default_value' => $controlConf[2],
+              '#options' => AtomBuilderFiles::createFileList(drupal_get_path('module','atom_builder') . '/config/' . $controlConf[3], '/\.yml/'),
+            ),
+            'overwrite_button' => array(
+              '#type' => 'item',
+              '#prefix' => '<div id="' . $id . '--button" class="button-wrapper">',
+              '#suffix' => '</div>',
+              '#markup' => t('Overwrite'),
+            ),
+          );
+          break;
+
+        case 'saveyml':
+          $options = array(
+            'component' => $controlConf[3],
+            'directory' => drupal_get_path('module', 'atom_builder') . '/config/' . $controlConf[3],
+            'filename' => $controlConf[2],
+          );
+          $control = array(
+            '#type' => 'container',
+            '#attributes' => array('class' => array('saveyml')),
+            'name' => array(
+              '#type' => 'textfield',
+              '#maxlength' => 24,
+              '#title' => 'Name',
+            ),
+            'filename' => array(
+              '#type' => 'textfield',
+              '#maxlength' => 16,
+              '#title' => 'File name',
+              '#description' => t('Only characters, numbers, and underscores allowed - Leave blank to have it automatically generated.'),
+            ),
+/*          'description' => array(
+              '#type' => 'textarea',
+              '#maxlength' => 30,
+              '#title' => 'Description',
+              '#maxlength' => 64,
+              '#rows' => 4,
+            ), */
+            'save_button' => array(
+              '#type' => 'item',
+              '#prefix' => '<div id="' . $id . '--button" class="button-wrapper">',
+              '#suffix' => '</div>',
+              '#markup' => t('Save'),
+            ),
+          );
+          break;
+
         case 'link':
+          $options = array(
+            'component' => $controlConf[3],
+            'directory' => drupal_get_path('module', 'atom_builder') . '/config/' . $controlConf[3],
+            'filename' => $controlConf[2],
+          );
           $control = array(
             '#type' => 'container',
             'link' => array(
               '#type' => 'link',
               '#title' => $controlConf[0],
-              '#url' => Url::fromRoute($controlConf[2], $controlConf[3]),
-              '#attributes' => array('class' => array('use_ajax')),
+              '#url' => Url::fromRoute($controlConf[2], $options),
+              '#attributes' => array('class' => array('use-ajax')),
               '#suffix' => '<br />',
             ),
           );
@@ -226,7 +288,8 @@ class AtomBuilderControlsForm extends FormBase {
 
     $form['#attributes'] = array('name' => 'atom-builder-controls-form');
 
-    file_put_contents(drupal_get_path('module', 'atom_builder') . '/config/styles/base2.yml', Yaml::encode($styleSet));
+    $styleSet['name'] = "Base new";
+    file_put_contents(drupal_get_path('module', 'atom_builder') . '/config/style/base2.yml', Yaml::encode($styleSet));
     return $form;
   }
 
@@ -235,5 +298,9 @@ class AtomBuilderControlsForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
+  }
+
+  public function loadYml(array &$form, FormStateInterface $form_state) {
+    return;
   }
 }

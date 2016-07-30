@@ -5,46 +5,93 @@
 
 'use strict';
 
-Drupal.AjaxCommands.prototype.loadStyle = function(ajax, response, status) {
-  return;
-//  response.styleSet;
-}
-
 Drupal.atom_builder.styleC = function (_viewer, styleSet) {
   var viewer = _viewer;
-  var currentSet = styleSet.controls;
+  var currentSet = styleSet;
   var defaultSet = (JSON.parse(JSON.stringify(currentSet)));
   var styleSetName = styleSet.name;
 
-  var load = function ($path) {
-    return styleSet;
+  var loadYml = function (results) {
+    results[0].ymlContents['filename'] = results[0].filename;
+    defaultSet = results[0].ymlContents;
+    currentSet.name = defaultSet.name;
+    currentSet.description = defaultSet.description;
+    currentSet.filename = defaultSet.filename;
+    reset();
   };
 
-  var save = function ($path, description) {
-    return
+  var savedYml = function (response) {
+    var select = document.getElementById('style--selectyml').querySelector('select');
+    // Remove current options
+    while (select.hasChildNodes()) {
+      select.removeChild(select.lastChild);
+    }
+
+    // Create the new option list
+    for (var file in response[0].filelist) {
+      var opt = document.createElement('option');
+      opt.appendChild( document.createTextNode(response[0].filelist[file]));
+      opt.value = file;
+      select.appendChild(opt);
+    }
+
+    // Set select to new file
+    select.value = response[0].filename;
+
+    // Clear the Name and File name fields
+    var inputs = document.getElementById('style--saveyml').querySelectorAll('input');
+    inputs[0].value = '';
+    inputs[1].value = '';
+  }
+
+  var saveYml = function (controls) {
+    // Verify they entered a name.  If not popup an alert. return
+    currentSet.name = controls.name;
+    currentSet.filename = controls.filename;
+    Drupal.atom_builder.base.doAjax(
+      'ajax-ab/saveYml',
+      { name: controls.name,
+        component: 'style',
+        filename: controls.filename,
+        ymlContents: currentSet },
+      savedYml
+    );
+    return;
   };
 
-  var reset = function () {
-    for (var id in currentSet) {
-      if (Object.prototype.toString.call(currentSet[id].defaultValue) === '[object Array]') {  // If it's an array
-        for (var i in currentSet[id].defaultValue) {
-          if (currentSet[id].defaultValue[i] != defaultSet[id].defaultValue[i]) {
-            applyStyle(id, defaultSet[id].defaultValue);
+  var overwriteYml = function (controls) {
+    // Verify they entered a name.  If not popup an alert. return
+    Drupal.atom_builder.base.doAjax(
+      'ajax-ab/loadYml',
+      { name: currentSet.name,
+        filename: currentSet.filename,
+        ymlContents: currentSet },
+      savedYml
+    );
+    return;
+  };
+
+  var reset = function reset() {
+    for (var id in currentSet.controls) {
+      if (Object.prototype.toString.call(currentSet.controls[id].defaultValue) === '[object Array]') {  // If it's an array
+        for (var i in currentSet.controls[id].defaultValue) {
+          if (currentSet.controls[id].defaultValue[i] != defaultSet.controls[id].defaultValue[i]) {
+            applyControl(id, defaultSet.controls[id].defaultValue);
           }
         }
       } else {
-        if (currentSet[id].defaultValue != defaultSet[id].defaultValue) {
-          applyStyle(id, defaultSet[id].defaultValue);
+        if (currentSet.controls[id].defaultValue != defaultSet.controls[id].defaultValue) {
+          applyControl(id, defaultSet.controls[id].defaultValue);
         }
       }
     }
   };
 
-  var applyStyle = function (id, value) {
+  var applyControl = function applyControl(id, value) {
     id = id.replace(/_/g, '-');
     var args = id.split("--");
     var argNames = args[0].split("-");
-    currentSet[id.replace(/-/g, '_')].defaultValue = value;
+    currentSet.controls[id.replace(/-/g, '_')].defaultValue = value;
     switch (argNames[0]) {
       case "renderer":
         viewer.renderer.setClearColor(new THREE.Color(parseInt(value.replace(/^#/, ''), 16)), 1);
@@ -105,10 +152,11 @@ Drupal.atom_builder.styleC = function (_viewer, styleSet) {
   };
 
   return {
-    load: load,
-    save: save,
     reset: reset,
-    applyStyle: applyStyle,
-    current: currentSet
+    applyControl: applyControl,
+    loadYml: loadYml,
+    saveYml: saveYml,
+    overwriteYml: overwriteYml,
+    current: currentSet.controls
   };
 };

@@ -1,45 +1,27 @@
-name: Default
+name: 'Base new'
 description: 'Initial style set'
 controls:
-  mouse__mode:
-    type: radios
-    defaultValue: camera
-  nucleus__load:
-    type: button
-    defaultValue: Undefined
-  nucleus__save:
-    type: button
-    defaultValue: Undefined
-  style__selectfile:
-    type: loadFile
+  nucleus__selectyml:
+    type: selectyml
     defaultValue: base.yml
-  style__load:
-    type: button
-    defaultValue: 'styles/*.yml'
-  style__name:
-    type: textfield
-    defaultValue: Undefined
-  style__description:
-    type: textarea
-    defaultValue: Undefined
-  style__save:
-    type: button
-    defaultValue: styles
-  style__reset:
-    type: button
-    defaultValue: Undefined
+  nucleus__saveyml:
+    type: saveyml
+    defaultValue: base.yml
   nucleus__position:
     type: position
     defaultValue:
       - 0
       - 0
       - 0
-  nucleus__rotation:
-    type: rotation
-    defaultValue:
-      - 0
-      - 0
-      - 0
+  style__reset:
+    type: button
+    defaultValue: Undefined
+  style__selectyml:
+    type: selectyml
+    defaultValue: base.yml
+  style__saveyml:
+    type: saveyml
+    defaultValue: Undefined
   proton_default__color:
     type: color
     defaultValue: '#6666dd'
@@ -132,7 +114,7 @@ controls:
     defaultValue: 1
   bwireframe__color:
     type: color
-    defaultValue: '#ffcc88'
+    defaultValue: '#ffdd33'
   bwireframe__opacity:
     type: range
     defaultValue: 0.3
@@ -253,3 +235,6 @@ controls:
       - -500
       - 800
       - -500
+  mouse__mode:
+    type: radios
+    defaultValue: camera

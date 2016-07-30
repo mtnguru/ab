@@ -19,7 +19,7 @@ Drupal.atom_builder.controlsC = function (_viewer, controlSet) {
         delete cameraTrackballControls;
         break;
       case 'atom':
-        canvasContainer.removeEventListener('mousedown', onDocumentMouseDown);
+        viewer.canvasContainer.removeEventListener('mousedown', onDocumentMouseDown);
         break;
       case 'attach':
         break;
@@ -41,40 +41,48 @@ Drupal.atom_builder.controlsC = function (_viewer, controlSet) {
       case 'none':
         break;
     }
-//  render();
-
-    return;
   }
 
   function controlChanged(event) {
-    viewer.style.applyStyle(this.id, event.target.value);
-    return;
+    var args = this.id.split("--");
+    viewer.style.applyControl(this.id, event.target.value);
   }
 
+  function selectYmlChanged(event) {
+    var args = this.id.split("--");
+    Drupal.atom_builder.base.doAjax(
+      'ajax-ab/loadYml',
+      { component: args[0],
+        filename: event.target.value },
+      viewer[args[0]].loadYml
+    );
+  }
 
   function buttonClicked(event) {
 
     var args = this.id.split("--");
-    switch (args[0]) {
-      case 'nucleus':
-        // load and save
+    switch (args[1]) {
+      case 'selectyml':
+        viewer[args[0]].overwriteYml();
         break;
-      case 'nuclet':
-        // load and save ?
-        break;
-      case 'style':
-        switch (args[1]) {
-          case 'load':
-            viewer.style.load();
-            break;
-          case 'save':
-            viewer.style.save();
-            break;
-          case 'reset':
-            viewer.style.reset();
-            break;
+      case 'saveyml':
+        var wrapper  = document.getElementById(args[0] + '--saveyml');
+        var name = wrapper.querySelector('input[name=name]').value;
+        var filename = wrapper.querySelector('input[name=filename]').value;
+        if (name.length) {
+          if (filename.length == 0) {
+            filename = name;
+          }
+          if (filename.indexOf('.yml') == -1) {
+            filename += '.yml';
+          }
+          viewer[args[0]].saveYml({name: name, filename: filename.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_')});
         }
         break;
+      case 'reset':
+        viewer[args[0]].reset();
+        break;
+
     }
     return false;
   }
@@ -118,9 +126,17 @@ Drupal.atom_builder.controlsC = function (_viewer, controlSet) {
         case 'range':
           document.getElementById(id).addEventListener("input", controlChanged);
           break;
+        case 'saveyml':
+          document.getElementById(id + '--button').addEventListener("click", buttonClicked);
+          break;
+        case 'selectyml':
+          document.getElementById(id).addEventListener("input", selectYmlChanged);
+          document.getElementById(id + '--button').addEventListener("click", buttonClicked);
+          break;
         case 'link':
         case 'button':
           document.getElementById(id).addEventListener("click", buttonClicked);
+          break;
       }
     }
 

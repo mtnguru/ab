@@ -1,33 +1,24 @@
-name: Default
+name: Base
 description: 'Initial style set'
 controls:
   mouse__mode:
     type: radios
     defaultValue: camera
-  nucleus__load:
-    type: link
-    defaultValue: atom_builder.ajax_load_style
-  nucleus__save:
-    type: link
-    defaultValue: atom_builder.ajax_load_style
-  style__selectfile:
-    type: loadFile
+  nucleus__selectyml:
+    type: selectyml
     defaultValue: base.yml
-  style__load:
-    type: link
-    defaultValue: atom_builder.ajax_load_style
-  style__name:
-    type: textfield
-    defaultValue: Undefined
-  style__description:
-    type: textarea
-    defaultValue: Undefined
-  style__save:
-    type: link
-    defaultValue: atom_builder.ajax_load_style
+  nucleus__saveyml:
+    type: saveyml
+    defaultValue: base.yml
+  style__selectyml:
+    type: selectyml
+    defaultValue: base.yml
+  style__saveyml:
+    type: saveyml
+    defaultValue: base.yml
   style__reset:
-    type: link
-    defaultValue: atom_builder.ajax_load_style
+    type: button
+    defaultValue: Undefined
   nucleus__position:
     type: position
     defaultValue:
