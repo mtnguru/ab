@@ -33,10 +33,10 @@ controls:
       - '0'
   proton_default__color:
     type: color
-    defaultValue: '#ff33ff'
+    defaultValue: '#66b7dd'
   proton_top__color:
     type: color
-    defaultValue: '#33ff33'
+    defaultValue: '#6336d4'
   proton_bottom__color:
     type: color
     defaultValue: '#ff3333'
@@ -45,10 +45,10 @@ controls:
     defaultValue: '#ffff00'
   proton__opacity:
     type: range
-    defaultValue: '0.9'
+    defaultValue: '0.77'
   proton__scale:
     type: range
-    defaultValue: '1'
+    defaultValue: '0.51'
   protonid__color:
     type: color
     defaultValue: '#aaddff'
@@ -78,16 +78,16 @@ controls:
     defaultValue: '1'
   awireframe__color:
     type: color
-    defaultValue: '#aaffcc'
+    defaultValue: '#fff7aa'
   awireframe__opacity:
     type: range
-    defaultValue: '0.3'
+    defaultValue: '1'
   awireframe__scale:
     type: range
-    defaultValue: '1'
+    defaultValue: '1.38'
   awireframe__linewidth:
     type: range
-    defaultValue: '1'
+    defaultValue: '5'
   avertexid__color:
     type: color
     defaultValue: '#ccaaff'
@@ -189,10 +189,10 @@ controls:
       - '-1400'
   renderer__color:
     type: color
-    defaultValue: '#fcf3ff'
+    defaultValue: '#000000'
   plane__color:
     type: color
-    defaultValue: '#cccccc'
+    defaultValue: '#54429c'
   plane__opacity:
     type: range
     defaultValue: '1'
@@ -244,3 +244,4 @@ controls:
       - '-500'
       - '800'
       - '-500'
+filename: James.yml

@@ -7,8 +7,6 @@
 Drupal.behaviors.atom_builder = {
   // Attach functions are executed by Drupal upon page load or ajax loads.
   attach: function (context, settings) {
-    var style = drupalSettings.atom_builder.styleSet.controls;
-
     if (Drupal.atom_builder.base) {  // Ensures we only run this once
       return;
     }

@@ -62,11 +62,12 @@ Drupal.atom_builder.styleC = function (_viewer, styleSet) {
   var overwriteYml = function (controls) {
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atom_builder.base.doAjax(
-      'ajax-ab/loadYml',
+      'ajax-ab/saveYml',
       { name: currentSet.name,
+        component: 'style',
         filename: currentSet.filename,
         ymlContents: currentSet },
-      savedYml
+      null  // TODO: Put in useful error codes and have them be displayed.
     );
     return;
   };

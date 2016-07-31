@@ -23,7 +23,7 @@ Drupal.atom_builder.baseC = function () {
       data: data,
       dataType: 'json',
       success: function (response) {
-        success(response);
+        if (success) success(response);
       },
       error: function (response) {
         (error) ? error(response) : success(response);
