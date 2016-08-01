@@ -251,11 +251,11 @@ Drupal.atom_builder.objectC = function (_viewer) {
 
     // Create geometry wireframe and faces - isocahedron
     atom.add(createGeometryWireframe('awireframe', 1.66, geometry));
-    atom.add(createGeometryFaces('afaces', 1.66, geometry));
+//  atom.add(createGeometryFaces('afaces', 1.66, geometry));
 
     // Create dual geometry wireframe and faces - dodecahedron
     atom.add(createGeometryWireframe('bwireframe', 1.66, dualGeometry));
-    atom.add(createGeometryFaces('bfaces', 1.66, dualGeometry));
+//  atom.add(createGeometryFaces('bfaces', 1.66, dualGeometry));
 
     // Create axis
     atom.add(createAxisLine(2.5, [geometry.vertices[1], geometry.vertices[2]]));

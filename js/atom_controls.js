@@ -130,7 +130,7 @@ Drupal.atom_builder.controlsC = function (_viewer, controlSet) {
           document.getElementById(id + '--button').addEventListener("click", buttonClicked);
           break;
         case 'selectyml':
-          document.getElementById(id).addEventListener("input", selectYmlChanged);
+          document.getElementById(id).addEventListener("change", selectYmlChanged);
           document.getElementById(id + '--button').addEventListener("click", buttonClicked);
           break;
         case 'link':
