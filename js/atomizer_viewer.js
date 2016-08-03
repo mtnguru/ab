@@ -1,9 +1,9 @@
 /**
- * @file - atom_scene.js
+ * @file - atomizerscene.js
  *
  */
 
-Drupal.atom_builder.viewerC = function (view) {
+Drupal.atomizer.viewerC = function (view) {
 
   var ambient;
   var spotlights = [];
@@ -47,7 +47,7 @@ Drupal.atom_builder.viewerC = function (view) {
     viewer.renderer.shadowEnabled = true;
 
     // add the output of the renderer to the html element
-    viewer.canvasContainer = document.getElementById("atom-builder-wrapper");
+    viewer.canvasContainer = document.getElementById("atomizer-wrapper");
     viewer.canvasContainer.appendChild(viewer.renderer.domElement);
 
     // Create camera, and point it at the scene
@@ -99,11 +99,11 @@ Drupal.atom_builder.viewerC = function (view) {
   // End of functions, start code for ViewerC initialization
 
   viewer.render = render;
-  viewer.style = Drupal.atom_builder.styleC(viewer, view.styleSet);
+  viewer.style = Drupal.atomizer.styleC(viewer, view.controlSet.styleSetDir, view.controlSet.styleSetFile);
   makeScene();
-  viewer.controls = Drupal.atom_builder.controlsC(viewer, view.controlSet);
+  viewer.controls = Drupal.atomizer.controlsC(viewer, view.controlSet);
 
-  viewer.object = Drupal.atom_builder.objectC(viewer);
+  viewer.object = Drupal.atomizer.objectC(viewer);
   viewer.scene.add(viewer.object.makeObject('plane',
     {lambert: {color: viewer.style.current.plane__color.defaultValue}},
     {

@@ -1,15 +1,15 @@
 <?php
 
-namespace Drupal\atom_builder\Utils;
+namespace Drupal\atomizer\Utils;
 
 use Drupal\Component\Serialization\Yaml;
 
 /**
- * Class AtomBuilderFiles.
+ * Class AtomizerFiles.
  *
- * @package Drupal\atom_builder\Utils
+ * @package Drupal\atomizer\Utils
  */
-class AtomBuilderFiles {
+class AtomizerFiles {
   static public function createFileList($directory) {
     $files = file_scan_directory($directory, '/\.yml$/');
     foreach ($files as $file) {

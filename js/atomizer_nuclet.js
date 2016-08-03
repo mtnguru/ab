@@ -1,9 +1,9 @@
 /**
- * @file - atom_nuclet.js
+ * @file - atomizernuclet.js
  *
  */
 
-Drupal.atom_builder.nucletC = function () {
+Drupal.atomizer.nucletC = function () {
   function createIcosahedron(prop, pos) {
     // Set proton colors
     var c = ['marker',

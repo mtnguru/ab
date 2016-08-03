@@ -6,25 +6,25 @@
 # system will look for a route with that path. In this case it will find a
 # match, and execute the _controller callback. In this case the callback is
 # defined as a classname
-# ("\Drupal\atom_builder\Controller\AtomBuilderController")
+# ("\Drupal\atomizer\Controller\AtomizerController")
 # and a method ("atomBuilder").
-# atom_builder.atom_builder_controller_atomBuilder:
+# atomizer.atomizer_controller_atomBuilder:
 #  path: '/atom/builder'
 #  defaults:
-#    _controller: '\Drupal\atom_builder\Controller\AtomBuilderController::atomBuilder'
-#    _title: 'Atom Builder'
+#    _controller: '\Drupal\atomizer\Controller\AtomizerController::atomBuilder'
+#    _title: 'Atomizer'
 #  requirements:
 #    _permission: 'access content'
-atom_builder.loadYml:
+atomizer.loadYml:
   path: '/ajax-ab/loadYml'
   defaults:
-    _controller: '\Drupal\atom_builder\Controller\AtomBuilderController::loadYml'
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::loadYml'
   requirements:
     _permission: 'access content'
-atom_builder.saveYml:
+atomizer.saveYml:
   path: '/ajax-ab/saveYml'
   defaults:
-    _controller: '\Drupal\atom_builder\Controller\AtomBuilderController::saveYml'
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::saveYml'
   requirements:
     _permission: 'access content'
 

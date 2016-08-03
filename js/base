@@ -1,4 +1,4 @@
-Drupal.behaviors.atom_builder = {
+Drupal.behaviors.atomizer = {
   attach: function (context, settings) {
     var controls;  // Controls in left sidebar
     var scene;     // The full scene being displayed
@@ -10,7 +10,7 @@ Drupal.behaviors.atom_builder = {
     var camera;
     var cameraTrackballControls;
     var atomTrackballControls;
-    var style = drupalSettings.atom_builder.styleSet.controls;
+    var style = drupalSettings.atomizer.styleSet.controls;
     var styler = document.getElementById('edit-styler');
     var selectedObject;
     var objects = {
@@ -433,14 +433,14 @@ Drupal.behaviors.atom_builder = {
      */
     function initControls() {
 
-      var form = document.forms['atom-builder-controls-form'];
+      var form = document.forms['atomizer-controls-form'];
 
       // Add a change listener to each item in the styler select list
       showStylerBlock();
       styler.addEventListener("change", showStylerBlock);
 
       // Initialize the Mouse Mode radio buttons
-      var radios = document.forms["atom-builder-controls-form"].elements["mouse--mode"];
+      var radios = document.forms["atomizer-controls-form"].elements["mouse--mode"];
       for(var i = 0, max = radios.length; i < max; i++) {
         radios[i].onclick = function (event) {
           changeMode(event.target.value);
@@ -556,10 +556,10 @@ Drupal.behaviors.atom_builder = {
 
 
     /**
-     * Initialize the Atom Builder.
+     * Initialize the Atomizer.
      */
     function init() {
-      canvasContainer = document.getElementById("atom-builder-wrapper");
+      canvasContainer = document.getElementById("atomizer-wrapper");
 
       // Calculate dimensions of canvas - offsetWidth determines width
       // If offsetHeight is not 0, use it for the height, otherwise make the

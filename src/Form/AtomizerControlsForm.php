@@ -1,25 +1,25 @@
 <?php
 
-namespace Drupal\atom_builder\Form;
+namespace Drupal\atomizer\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Serialization\Yaml;
-use Drupal\atom_builder\Utils\AtomBuilderFiles;
+use Drupal\atomizer\Utils\AtomizerFiles;
 
 /**
- * Class AtomBuilderControlsForm.
+ * Class AtomizerControlsForm.
  *
- * @package Drupal\atom_builder\Form
+ * @package Drupal\atomizer\Form
  */
-class AtomBuilderControlsForm extends FormBase {
+class AtomizerControlsForm extends FormBase {
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'atom_builder_controls_form';
+    return 'atomizer_controls_form';
   }
 
   public function createControlBlock($blockName, $blockConf, $showTitle, &$controlSet) {
@@ -61,7 +61,7 @@ class AtomBuilderControlsForm extends FormBase {
               '#type' => 'select',
               '#title' => $controlConf[0],
               '#default_value' => $controlConf[2],
-              '#options' => AtomBuilderFiles::createFileList(drupal_get_path('module','atom_builder') . '/config/' . $controlConf[3], '/\.yml/'),
+              '#options' => AtomizerFiles::createFileList(drupal_get_path('module','atomizer') . $controlConf[3], '/\.yml/'),
             ),
             'overwrite_button' => array(
               '#type' => 'item',
@@ -75,7 +75,7 @@ class AtomBuilderControlsForm extends FormBase {
         case 'saveyml':
           $options = array(
             'component' => $controlConf[3],
-            'directory' => drupal_get_path('module', 'atom_builder') . '/config/' . $controlConf[3],
+            'directory' => drupal_get_path('module', 'atomizer') . '/config/' . $controlConf[3],
             'filename' => $controlConf[2],
           );
           $control = array(
@@ -111,7 +111,7 @@ class AtomBuilderControlsForm extends FormBase {
         case 'link':
           $options = array(
             'component' => $controlConf[3],
-            'directory' => drupal_get_path('module', 'atom_builder') . '/config/' . $controlConf[3],
+            'directory' => drupal_get_path('module', 'atomizer') . '/config/' . $controlConf[3],
             'filename' => $controlConf[2],
           );
           $control = array(
@@ -259,9 +259,7 @@ class AtomBuilderControlsForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
-
-    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atom_builder') . '/config/controls/atom_builder.yml'));
+  public function buildForm(array $form, FormStateInterface $form_state, $controlSet = array()) {
 
     // Create Styler Select list
     foreach ($controlSet['styler'] as $blockName => $block) {
@@ -286,10 +284,10 @@ class AtomBuilderControlsForm extends FormBase {
       $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, false, $styleSet['controls']);
     }
 
-    $form['#attributes'] = array('name' => 'atom-builder-controls-form');
+    $form['#attributes'] = array('name' => 'atomizer-controls-form');
 
-    $styleSet['name'] = "Base new";
-    file_put_contents(drupal_get_path('module', 'atom_builder') . '/config/style/base2.yml', Yaml::encode($styleSet));
+//  $styleSet['name'] = "Base new";
+//  file_put_contents(drupal_get_path('module', 'atomizer') . '/config/style/base2.yml', Yaml::encode($styleSet));
     return $form;
   }
 

@@ -1,3 +1,6 @@
+name: Platonic Solids
+styleSetDir: /config/style/solids
+styleSetFile: base.yml
 mouse:
 styler:
   mouse:

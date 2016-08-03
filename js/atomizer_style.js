@@ -1,15 +1,14 @@
 /**
- * @file - atom_style.js
+ * @file - atomizerstyle.js
  *
  */
 
 'use strict';
 
-Drupal.atom_builder.styleC = function (_viewer, styleSet) {
+Drupal.atomizer.styleC = function (_viewer, styleSetDir, styleSetFile) {
   var viewer = _viewer;
-  var currentSet = styleSet;
-  var defaultSet = (JSON.parse(JSON.stringify(currentSet)));
-  var styleSetName = styleSet.name;
+  var currentSet = {};
+  var defaultSet = {};
 
   var loadYml = function (results) {
     results[0].ymlContents['filename'] = results[0].filename;
@@ -48,7 +47,7 @@ Drupal.atom_builder.styleC = function (_viewer, styleSet) {
     // Verify they entered a name.  If not popup an alert. return
     currentSet.name = controls.name;
     currentSet.filename = controls.filename;
-    Drupal.atom_builder.base.doAjax(
+    Drupal.atomizer.base.doAjax(
       'ajax-ab/saveYml',
       { name: controls.name,
         component: 'style',
@@ -61,7 +60,7 @@ Drupal.atom_builder.styleC = function (_viewer, styleSet) {
 
   var overwriteYml = function (controls) {
     // Verify they entered a name.  If not popup an alert. return
-    Drupal.atom_builder.base.doAjax(
+    Drupal.atomizer.base.doAjax(
       'ajax-ab/saveYml',
       { name: currentSet.name,
         component: 'style',
@@ -151,6 +150,13 @@ Drupal.atom_builder.styleC = function (_viewer, styleSet) {
     }
     viewer.render();
   };
+
+  Drupal.atomizer.base.doAjax(
+    'ajax-ab/loadYml',
+    { directory: styleSetDir,
+      filename:  styleSetFile },
+    loadYml
+  );
 
   return {
     reset: reset,

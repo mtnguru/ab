@@ -1,9 +1,9 @@
 /**
- * @file - atom_object.js
+ * @file - atomizerobject.js
  *
  */
 
-Drupal.atom_builder.objectC = function (_viewer) {
+Drupal.atomizer.objectC = function (_viewer) {
   var viewer = _viewer;
 
   var objects = {
@@ -84,6 +84,30 @@ Drupal.atom_builder.objectC = function (_viewer) {
       wireframe.init_offset = offset;
     }
     return wireframe;
+  }
+
+  function createGeometryFaces(id, scale, geometry, offset) {
+
+    // add one random mesh to each scene
+    var material = new THREE.MeshStandardMaterial( {
+      color: viewer.style.current[id + '__color'].defaultValue,
+      transparent: true,
+      opacity: viewer.style.current[id + '__opacity'].defaultValue,
+      roughness: 0.5,
+      metalness: 0,
+//    shading: THREE.FlatShading
+    } );
+    faces = new THREE.Mesh(geometry, material);
+    faces.scale.set(scale, scale, scale);
+    faces.init_scale = scale;
+    faces.name = id;
+    if (offset) {
+      if (offset.x) faces.position.x = offset.x;
+      if (offset.y) faces.position.y = offset.y;
+      if (offset.z) faces.position.z = offset.z;
+      faces.init_offset = offset;
+    }
+    return faces;
   }
 
   function createGeometryVertices(scale, geometry, offset) {
@@ -232,6 +256,8 @@ Drupal.atom_builder.objectC = function (_viewer) {
     var geometry = new THREE.IcosahedronGeometry(60);
     var dualGeometry = new THREE.DodecahedronGeometry(60);
 
+    // Create geometry wireframe and faces - isocahedron
+
     // Add Protons
     for (var key in geometry.vertices) {
       var vertice = geometry.vertices[key];
@@ -249,16 +275,15 @@ Drupal.atom_builder.objectC = function (_viewer) {
       atom.add(proton);
     }
 
-    // Create geometry wireframe and faces - isocahedron
-    atom.add(createGeometryWireframe('awireframe', 1.66, geometry));
-//  atom.add(createGeometryFaces('afaces', 1.66, geometry));
 
     // Create dual geometry wireframe and faces - dodecahedron
-    atom.add(createGeometryWireframe('bwireframe', 1.66, dualGeometry));
-//  atom.add(createGeometryFaces('bfaces', 1.66, dualGeometry));
+//  atom.add(createGeometryWireframe('bwireframe', 1.66, dualGeometry));
+//  atom.add(createGeometryFaces('bface', 1.66, dualGeometry));
 
     // Create axis
     atom.add(createAxisLine(2.5, [geometry.vertices[1], geometry.vertices[2]]));
+    atom.add(createGeometryWireframe('awireframe', 1.66, geometry));
+    atom.add(createGeometryFaces('aface', 1.66, geometry));
 
     // Position and rotate the atom
     atom.position.x = pos.x;
@@ -304,7 +329,8 @@ Drupal.atom_builder.objectC = function (_viewer) {
     }
 
     atom.add(createGeometryWireframe('awireframe', conf.pentaLet.wireframe.scale, geometry));
-    atom.add(createAxisLine(conf.pentaLet.wireframe.scale, [geometry.vertices[0], geometry.vertices[1]]));
+    atom.add(createGeometryFaces('aface', conf.pentaLet.wireframe.scale, geometry));
+    atom.add(createAxisLine(conf.pentaLet.axis.scale, [geometry.vertices[0], geometry.vertices[1]]));
 
     // Position the atom
     atom.position.x = pos.x;
@@ -343,6 +369,7 @@ Drupal.atom_builder.objectC = function (_viewer) {
     }
 
     atom.add(createGeometryWireframe('awireframe', conf.tetraLet.wireframe.scale, geometry, {y: conf.tetraLet.wireframe.offset.y}));
+    atom.add(createGeometryFaces('aface', conf.tetraLet.wireframe.scale, geometry));
     atom.add(createAxisLine(conf.tetraLet.axis.scale,
       [geometry.vertices[0], {
         x: geometry.vertices[0].x,

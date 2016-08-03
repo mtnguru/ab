@@ -1,3 +1,6 @@
+name: Element Viewer
+styleSetDir: /config/style/element
+styleSetFile: base.yml
 mouse:
 styler:
   mouse:

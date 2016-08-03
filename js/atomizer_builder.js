@@ -1,9 +1,9 @@
 /**
- * @file - atom_builder.js
+ * @file - atomizer.js
  *
  */
 
-Drupal.atom_builder.builderC = function () {
+Drupal.atomizer.builderC = function () {
 
   var saveYml = function ($path) {
     return

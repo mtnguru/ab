@@ -1,11 +1,12 @@
 <?php
 
-namespace Drupal\atom_builder\Ajax;
+namespace Drupal\atomizer\Ajax;
 use Drupal\Core\Ajax\CommandInterface;
 
 class SaveYmlCommand implements CommandInterface {
-  public function __construct($name, $filename, $component, $filelist) {
+  public function __construct($name, $directory, $filename, $component, $filelist) {
     $this->filename = $filename;
+    $this->directory = $directory;
     $this->name = $name;
     $this->component = $component;
     $this->filelist = $filelist;

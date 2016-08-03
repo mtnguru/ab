@@ -1,9 +1,9 @@
 /**
- * @file - atom_controls.js
+ * @file - atomizercontrols.js
  *
  */
 
-Drupal.atom_builder.controlsC = function (_viewer, controlSet) {
+Drupal.atomizer.controlsC = function (_viewer, controlSet) {
 
   var viewer = _viewer;
   var cameraTrackballControls;
@@ -50,7 +50,7 @@ Drupal.atom_builder.controlsC = function (_viewer, controlSet) {
 
   function selectYmlChanged(event) {
     var args = this.id.split("--");
-    Drupal.atom_builder.base.doAjax(
+    Drupal.atomizer.base.doAjax(
       'ajax-ab/loadYml',
       { component: args[0],
         filename: event.target.value },
@@ -104,14 +104,14 @@ Drupal.atom_builder.controlsC = function (_viewer, controlSet) {
    */
   function createControls() {
 
-    var form = document.forms['atom-builder-controls-form'];
+    var form = document.forms['atomizer-controls-form'];
 
     // Add a change listener to each item in the styler select list
     showStylerBlock();
     styler.addEventListener("change", showStylerBlock);
 
     // Initialize the Mouse Mode radio buttons
-    var radios = document.forms["atom-builder-controls-form"].elements["mouse--mode"];
+    var radios = document.forms["atomizer-controls-form"].elements["mouse--mode"];
     for(var i = 0, max = radios.length; i < max; i++) {
       radios[i].onclick = function (event) {
         changeMode(event.target.value);

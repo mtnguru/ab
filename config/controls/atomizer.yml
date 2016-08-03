@@ -1,13 +1,16 @@
+name: Atom Builder
+styleSetDir: /config/style/builder
+styleSetFile: base.yml
 mouse:
 styler:
   nucleus:
     title:               Nucleus
     controls:
       nucleus__loadlabel:      ['Select nucleus',   'header']
-      nucleus__selectyml:      [ null,              'selectyml', 'carbon.yml', 'nucleus', 'atom_builder.ajax_yml_load']
+      nucleus__selectyml:      [ null,              'selectyml', 'carbon.yml', 'nucleus', 'atomizer.ajax_yml_load']
       hr1:                     [ null,              'hr']
       nucleus__savelabel:      ['Save new nucleus', 'header']
-      nucleus__saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'atom_builder.ajax_yml_save']
+      nucleus__saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'atomizer.ajax_yml_save']
       hr2:                     [ null,              'hr']
       nucleus__position:       ['Position',         'position', [0, 0, 0], [-1000, 1000, 1]]
   build:
@@ -20,10 +23,10 @@ styler:
       style__reset:            ['Reset Style',      'button']
       hr1:                     [ null,              'hr']
       style__loadlabel:        ['Current Style',    'header']
-      style__selectyml:        [ null,              'selectyml', 'base.yml',   'style',   'atom_builder.ajax_yml_load']
+      style__selectyml:        [ null,              'selectyml', 'base.yml',   'style',   'atomizer.ajax_yml_load']
       hr2:                     [ null,              'hr']
       style__savelabel:        ['Create New Style', 'header']
-      style__saveyml:          [ null,              'saveyml',   '',           'style',   'atom_builder.ajax_yml_save']
+      style__saveyml:          [ null,              'saveyml',   '',           'style',   'atomizer.ajax_yml_save']
   proton:
     title:               Protons
     controls:
