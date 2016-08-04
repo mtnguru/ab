@@ -1,0 +1,8 @@
+name: Atomizer Workbench
+defaultView: atoms
+styleSetDirectory: config/style/workbench
+views:
+  atoms:
+    name: 9 Nuclets
+    producer: workbench
+    styleSetPath: config/style/workbench/base.yml

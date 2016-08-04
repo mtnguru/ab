@@ -1,0 +1,8 @@
+name: Atom Builder
+defaultView: builder
+styleSetDirectory: config/style/builder
+views:
+  builder:
+    name: Atom Builder
+    producer: atom_builder
+    styleSetPath: config/style/builder/base.yml

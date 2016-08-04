@@ -1,0 +1,22 @@
+atomizer-js:
+  js:
+    js/threejs/three.js: {}
+    js/libs/dat.gui.js: {}
+    js/libs/spectrum/spectrum.js: {}
+    js/threejs/libs/stats.min.js: {}
+    js/threejs/controls/TrackballControls.js: {}
+    js/atomizer_base.js: {}
+    js/atomizer_viewer.js: {}
+    js/atomizer_controls.js: {}
+    js/atomizer_style.js: {}
+    js/atomizer_object.js: {}
+    js/atomizer_nuclet.js: {}
+    js/atomizer_nucleus.js: {}
+    js/producers/atom_builder.js: {}
+    js/producers/workbench.js: {}
+    js/atomizer.js: {}
+  css:
+    js/libs/spectrum/spectrum.css
+  dependencies:
+    - core/drupal.ajax
+

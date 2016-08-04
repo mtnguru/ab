@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains atomizer.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function atomizer_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the atomizer module.
+    case 'help.page.atomizer':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Interactively create atoms in a 3D image that can be rotated, saved, etc.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

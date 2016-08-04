@@ -1,0 +1,247 @@
+name: Dark
+description: 'Initial style set'
+controls:
+  mouse__mode:
+    type: radios
+    defaultValue: camera
+  nucleus__selectyml:
+    type: selectyml
+    defaultValue: base.yml
+  nucleus__saveyml:
+    type: saveyml
+    defaultValue: base.yml
+  style__selectyml:
+    type: selectyml
+    defaultValue: base.yml
+  style__saveyml:
+    type: saveyml
+    defaultValue: base.yml
+  style__reset:
+    type: button
+    defaultValue: Undefined
+  nucleus__position:
+    type: position
+    defaultValue:
+      - '0'
+      - '0'
+      - '0'
+  nucleus__rotation:
+    type: rotation
+    defaultValue:
+      - '0'
+      - '0'
+      - '0'
+  proton_default__color:
+    type: color
+    defaultValue: '#565656'
+  proton_top__color:
+    type: color
+    defaultValue: '#b34649'
+  proton_bottom__color:
+    type: color
+    defaultValue: '#dd66dd'
+  proton_marker__color:
+    type: color
+    defaultValue: '#55dddd'
+  proton__opacity:
+    type: range
+    defaultValue: '0.9'
+  proton__scale:
+    type: range
+    defaultValue: '1'
+  protonid__color:
+    type: color
+    defaultValue: '#aaddff'
+  protonid__opacity:
+    type: range
+    defaultValue: Undefined
+  protonid__scale:
+    type: range
+    defaultValue: '1'
+  nelectrons__color:
+    type: color
+    defaultValue: '#eeffaa'
+  nelectrons__opacity:
+    type: range
+    defaultValue: '0.3'
+  nelectrons__scale:
+    type: range
+    defaultValue: '1'
+  oelectrons__color:
+    type: color
+    defaultValue: '#ddbbaa'
+  oelectrons__opacity:
+    type: range
+    defaultValue: '0.3'
+  oelectrons__scale:
+    type: range
+    defaultValue: '1'
+  awireframe__color:
+    type: color
+    defaultValue: '#aaffcc'
+  awireframe__opacity:
+    type: range
+    defaultValue: '0.3'
+  awireframe__scale:
+    type: range
+    defaultValue: '1'
+  awireframe__linewidth:
+    type: range
+    defaultValue: '1'
+  avertexid__color:
+    type: color
+    defaultValue: '#ccaaff'
+  avertexid__opacity:
+    type: range
+    defaultValue: '0.3'
+  avertexid__scale:
+    type: range
+    defaultValue: '1'
+  aface__color:
+    type: color
+    defaultValue: '#88cccc'
+  aface__opacity:
+    type: range
+    defaultValue: Undefined
+  afaceid__color:
+    type: color
+    defaultValue: '#aaffee'
+  afaceid__opacity:
+    type: range
+    defaultValue: '0.3'
+  afaceid__scale:
+    type: range
+    defaultValue: '1'
+  aaxis__color:
+    type: color
+    defaultValue: '#ffbbcc'
+  aaxis__opacity:
+    type: range
+    defaultValue: Undefined
+  aaxis__linewidth:
+    type: range
+    defaultValue: '1'
+  bwireframe__color:
+    type: color
+    defaultValue: '#ffdd33'
+  bwireframe__opacity:
+    type: range
+    defaultValue: '0.3'
+  bwireframe__scale:
+    type: range
+    defaultValue: '1'
+  bwireframe__linewidth:
+    type: range
+    defaultValue: '1'
+  bvertexid__color:
+    type: color
+    defaultValue: '#ffccee'
+  bvertexid__opacity:
+    type: range
+    defaultValue: '0.3'
+  bvertexid__scale:
+    type: range
+    defaultValue: '1'
+  bface__color:
+    type: color
+    defaultValue: '#88cccc'
+  bface__opacity:
+    type: range
+    defaultValue: Undefined
+  bfaceid__color:
+    type: color
+    defaultValue: '#ffcc33'
+  bfaceid__opacity:
+    type: range
+    defaultValue: '0.3'
+  bfaceid__scale:
+    type: range
+    defaultValue: '1'
+  baxis__color:
+    type: color
+    defaultValue: '#aabb99'
+  baxis__opacity:
+    type: range
+    defaultValue: Undefined
+  baxis__linewidth:
+    type: range
+    defaultValue: '1'
+  valence__color:
+    type: color
+    defaultValue: '#ff00ff'
+  valence__opacity:
+    type: range
+    defaultValue: '0.3'
+  isotope__color:
+    type: color
+    defaultValue: '#0000ff'
+  isotope__opacity:
+    type: range
+    defaultValue: '0.3'
+  camera__perspective:
+    type: range
+    defaultValue: '25'
+  camera__position:
+    type: position
+    defaultValue:
+      - '0'
+      - '1400'
+      - '-1400'
+  renderer__color:
+    type: color
+    defaultValue: '#fcf3ff'
+  plane__color:
+    type: color
+    defaultValue: '#cccccc'
+  plane__opacity:
+    type: range
+    defaultValue: '1'
+  plane__width:
+    type: range
+    defaultValue: '850'
+  plane__depth:
+    type: range
+    defaultValue: '850'
+  plane__position:
+    type: position
+    defaultValue:
+      - '0'
+      - '0'
+      - '0'
+  plane__rotation:
+    type: rotation
+    defaultValue:
+      - '0'
+      - '-180'
+      - '1'
+  ambient__color:
+    type: color
+    defaultValue: '#777777'
+  spotlight_1__color:
+    type: color
+    defaultValue: '#664466'
+  spotlight_1__position:
+    type: position
+    defaultValue:
+      - '-500'
+      - '800'
+      - '-500'
+  spotlight_2__color:
+    type: color
+    defaultValue: '#446644'
+  spotlight_2__position:
+    type: position
+    defaultValue:
+      - '800'
+      - '800'
+      - '-200'
+  spotlight_3__color:
+    type: color
+    defaultValue: '#000000'
+  spotlight_3__position:
+    type: position
+    defaultValue:
+      - '-500'
+      - '800'
+      - '-500'
+filename: Dark.yml

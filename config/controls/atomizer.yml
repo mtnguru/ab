@@ -1,0 +1,166 @@
+name: Atom Builder
+mouse:
+styler:
+  nucleus:
+    title:               Nucleus
+    controls:
+      nucleus__loadlabel:      ['Select nucleus',   'header']
+      nucleus__selectyml:      [ null,              'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
+      hr1:                     [ null,              'hr']
+      nucleus__savelabel:      ['Save new nucleus', 'header']
+      nucleus__saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_save']
+      hr2:                     [ null,              'hr']
+      nucleus__position:       ['Position',         'position', [0, 0, 0], [-1000, 1000, 1]]
+  build:
+    title:               Build Atom
+    controls:
+      text:                    ['Display nuclets here, plus other controls needed to build atoms', 'label']
+  style:
+    title:               Styles
+    controls:
+      style__reset:            ['Reset Style',      'button']
+      hr1:                     [ null,              'hr']
+      style__loadlabel:        ['Current Style',    'header']
+      style__selectyml:        [ null,              'selectyml', 'base.yml',   'style',   'config/style/builder', 'atomizer.ajax_yml_load']
+      hr2:                     [ null,              'hr']
+      style__savelabel:        ['Create New Style', 'header']
+      style__saveyml:          [ null,              'saveyml',   '',           'style',   'config/style/builder', 'atomizer.ajax_yml_save']
+  proton:
+    title:               Protons
+    controls:
+      proton_default__color:   ['Default',      'color',    '#6666dd']
+      proton_top__color:       ['Top',          'color',    '#d4af37']
+      proton_bottom__color:    ['Bottom',       'color',    '#dd66dd']
+      proton_marker__color:    ['Marker',       'color',    '#55dddd']
+      proton__opacity:         ['Opacity',      'range',    .9, [0, 1, .01]]
+      proton__scale:           ['Scale',        'range',     1, [0, 2, .01]]
+      hr1:                     [ null, 'hr']
+      protonid__color:         ['IDs',          'color',    '#aaddff']
+      protonid__opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
+      protonid__scale:         ['Scale',        'range',    1, [0, 2, .01]]
+
+  electron:
+    title:               Electrons
+    controls:
+      nelectrons__color:       ['Nuclear',      'color',    '#eeffaa']
+      nelectrons__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      nelectrons__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+      hr1:                     [ null, 'hr']
+      oelectrons__color:       ['Outer',        'color',    '#ddbbaa']
+      oelectrons__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      oelectrons__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+
+  geometry:
+
+    title:               Geometry
+    controls:
+
+      awireframe__color:       ['Wireframe',    'color',    '#aaffcc']
+      awireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      awireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+      awireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr1:                     [ null, 'hr']
+      avertexid__color:        ['Vertex IDs',   'color',    '#ccaaff']
+      avertexid__opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
+      avertexid__scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                     [ null, 'hr']
+      aface__color:            ['Faces',        'color',    '#88cccc']
+      aface__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+
+      hr3:                     [ null, 'hr']
+      afaceid__color:          ['Face IDs',     'color',    '#aaffee']
+      afaceid__opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
+      afaceid__scale:          ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr4:                     [ null, 'hr']
+      aaxis__color:            ['Axis',         'color',    '#ffbbcc']
+      aaxis__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      aaxis__linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+
+  dualGeometry:
+
+    title:               Dual Geometry
+    controls:
+      bwireframe__color:       ['Wireframe',    'color',    '#ffdd33']
+      bwireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      bwireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+      bwireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr1:                     [ null, 'hr']
+      bvertexid__color:        ['Vertex IDs',   'color',    '#ffccee']
+      bvertexid__opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
+      bvertexid__scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                     [ null, 'hr']
+      bface__color:            ['Faces',        'color',    '#88cccc']
+      bface__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+
+      hr3:                     [ null, 'hr']
+      bfaceid__color:          ['Face IDs',     'color',    '#ffcc33']
+      bfaceid__opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
+      bfaceid__scale:          ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr4:                     [ null, 'hr']
+      baxis__color:            ['Axis',         'color',    '#aabb99']
+      baxis__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      baxis__linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  attachments :
+
+    title:               Attach Points
+    controls:
+      valence__color:          ['Valence',       'color',    '#ff00ff']
+      valence__opacity:        ['Valence',       'range',    .3, [0, 1, .01]]
+      hr1:                     [ null, 'hr']
+      isotope__color:          ['Isotope',       'color',    '#0000ff']
+      isotope__opacity:        ['Isotope',       'range',    .3, [0, 1, .01]]
+
+  scene:
+    title:               Scene
+    controls:
+      header__camera:          ['Camera',        'header']
+      camera__perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
+      camera__position:        ['Position',      'position', [0, 1400, -1400], [-2000, 2000, 1]]
+
+      hr1:                     [ null, 'hr']
+      renderer__color:         ['Background',    'color',    '#fcf3ff']
+
+      hr2:                     [ null, 'hr']
+      plane__color:            ['Plane',         'color',    '#cccccc']
+      plane__opacity:          ['Opacity',       'range',    1, [0, 1, .01]]
+      plane__width:            ['Width',         'range',    850, [1, 1500, 1]]
+      plane__depth:            ['Depth',         'range',    850, [1, 1500, 1]]
+      plane__position:         ['Position',      'position', [0, 0, 0], [-1000, 1000, 1]]
+      plane__rotation:         ['Rotation',      'rotation', [0, -180, 1], [-360, 360, 1]]
+  lighting:
+    title:               Lighting
+    controls:
+      ambient__color:          ['Ambient',       'color',    '#777777']
+      hr1:                     [ null, 'hr']
+      spotlight_1__color:      ['Spotlight 1',   'color',    '#664466']
+      spotlight_1__position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
+      hr2:                     [ null, 'hr']
+      spotlight_2__color:      ['Spotlight 2',   'color',    '#446644']
+      spotlight_2__position:   ['Position',      'position', [ 800, 800, -200], [-1000, 1000, 1]]
+      hr3:                     [ null, 'hr']
+      spotlight_3__color:      ['Spotlight 3',   'color',    '#000000']
+      spotlight_3__position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
+  mouse:
+    title: Mouse
+    controls:
+      mouse__mode:
+        - Mouse mode
+        - radios
+        - camera
+        -
+          camera:      Move Camera
+          atom:        Move Atom
+          attach:      Attach Nuclets
+          spotlight_1: Move Spotlight 1
+          spotlight_2: Move Spotlight 2
+          spotlight_3: Move Spotlight 3
+          none:        None
+

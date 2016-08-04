@@ -1,0 +1,26 @@
+name: Lithium
+element: Lithium
+isotope: 0
+variant: 0
+num_protons: 7
+nuclets:
+  1:
+    position: 1
+    geometry: pentalet
+    num_protons: 7
+    num_nuclear_electrons: 0
+    protons:
+      1:
+        present: true
+      2:
+        present: true
+      3:
+        present: true
+      4:
+        present: true
+      5:
+        present: true
+      6:
+        present: true
+      7:
+        present: true
