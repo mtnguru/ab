@@ -22,7 +22,7 @@ class AtomizerControlsForm extends FormBase {
     return 'atomizer_controls_form';
   }
 
-  public function createControlBlock($blockName, $blockConf, $showTitle, &$controlSet) {
+  public function createControlBlock($blockName, $blockConf, $showTitle) {
 
     // Create a container for the block
     $block[$blockName] = array(
@@ -41,11 +41,7 @@ class AtomizerControlsForm extends FormBase {
       $control = array();
       $id = str_replace('_', '-', $controlName);
       $containerClass = 'sa-control';
-      if (empty($controlSet[$control][$id])) {
-        $defaultValue = $controlConf[2];
-      } else {
-        $defaultValue = $controlSet[$controlName]['defaultValue'];
-      }
+      $defaultValue = (empty($controlConf[2])) ? '' : $controlConf[2];
       switch ($controlConf[1]) {
 
         case 'selectyml':

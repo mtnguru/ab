@@ -8,7 +8,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var nucleus = Drupal.atomizer.nucleusC(viewer);
 
   var createView = function (nucleusFilename) {
-    nucleus.add(nucleusFilename);
+//  nucleus.add(nucleusFilename);
 
     return;
   };
