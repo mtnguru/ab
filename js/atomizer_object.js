@@ -54,9 +54,9 @@ Drupal.atomizer.objectC = function (_viewer) {
     axisGeometry.vertices.push(new THREE.Vector3(vertices[0].x, vertices[0].y, vertices[0].z));
     axisGeometry.vertices.push(new THREE.Vector3(vertices[1].x, vertices[1].y, vertices[1].z));
     var lineMaterial = new THREE.LineBasicMaterial({
-      color: viewer.style.current.aaxis__color.defaultValue,
+      color: viewer.style.get('aaxis__color'),
       transparent: true,
-//    opacity: viewer.style.current.aaxis__opacity.defaultValue,
+//    opacity: viewer.style.get('aaxis__opacity'),
       linewidth: 2
     });
     var axisLine = new THREE.Line(axisGeometry, lineMaterial);
@@ -68,11 +68,11 @@ Drupal.atomizer.objectC = function (_viewer) {
   function createGeometryWireframe(id, scale, geometry, offset) {
 
     var wireframe = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-      color: viewer.style.current[id + '__color'].defaultValue,
+      color: viewer.style.get(id + '__color'),
       transparent: true,
-      opacity: viewer.style.current[id + '__opacity'].defaultValue,
+      opacity: viewer.style.get(id + '__opacity'),
       wireframe: true,
-      wireframeLinewidth: viewer.style.current[id + '__linewidth'].defaultValue
+      wireframeLinewidth: viewer.style.get(id + '__linewidth')
     }));
     wireframe.scale.set(scale, scale, scale);
     wireframe.init_scale = scale;
@@ -90,9 +90,9 @@ Drupal.atomizer.objectC = function (_viewer) {
 
     // add one random mesh to each scene
     var material = new THREE.MeshStandardMaterial( {
-      color: viewer.style.current[id + '__color'].defaultValue,
+      color: viewer.style.get(id + '__color'),
       transparent: true,
-      opacity: viewer.style.current[id + '__opacity'].defaultValue,
+      opacity: viewer.style.get(id + '__opacity'),
       roughness: 0.5,
       metalness: 0,
 //    shading: THREE.FlatShading
@@ -227,15 +227,15 @@ Drupal.atomizer.objectC = function (_viewer) {
 
   function setProtonColors() {
     return {
-      default: viewer.style.current.proton_default__color.defaultValue,
-      top:     viewer.style.current.proton_top__color.defaultValue,
-      bottom:  viewer.style.current.proton_bottom__color.defaultValue,
-      marker:  viewer.style.current.proton_marker__color.defaultValue,
+      default: viewer.style.get('proton_default__color'),
+      top:     viewer.style.get('proton_top__color'),
+      bottom:  viewer.style.get('proton_bottom__color'),
+      marker:  viewer.style.get('proton_marker__color'),
     };
   }
 
 
-  function createIcolet(pos) {
+  function createIcoLet(pos) {
     // Set proton colors
     var protonColors = setProtonColors();
     var c = ['marker',
@@ -262,7 +262,7 @@ Drupal.atomizer.objectC = function (_viewer) {
     for (var key in geometry.vertices) {
       var vertice = geometry.vertices[key];
       var proton = makeObject('proton',
-        {phong: {color: protonColors[c[key]], opacity: viewer.style.current.proton__opacity.defaultValue || 1, transparent: true}},
+        {phong: {color: protonColors[c[key]], opacity: viewer.style.get('proton__opacity') || 1, transparent: true}},
         {radius: conf.proton.radius},
         {
           x: vertice.x,
@@ -295,7 +295,7 @@ Drupal.atomizer.objectC = function (_viewer) {
     return atom;
   }
 
-  function createPentalet(pos) {
+  function createPentaLet(pos) {
     // Set proton colors
     var protonColors = setProtonColors();
     var c = [
@@ -315,7 +315,7 @@ Drupal.atomizer.objectC = function (_viewer) {
     for (var key in geometry.vertices) {
       var vertice = geometry.vertices[key];
       var proton = makeObject('proton',
-        {phong: {color: protonColors[c[key]], opacity: viewer.style.current.proton__opacity.defaultValue || 1, transparent: true}},
+        {phong: {color: protonColors[c[key]], opacity: viewer.style.get('proton__opacity') || 1, transparent: true}},
         {radius: conf.proton.radius},
         {
           x: vertice.x,
@@ -340,7 +340,7 @@ Drupal.atomizer.objectC = function (_viewer) {
     return atom;
   }
 
-  function createTetralet(pos) {
+  function createTetraLet(pos) {
     // Set proton colors
     var protonColors = setProtonColors();
     var c = [
@@ -355,7 +355,7 @@ Drupal.atomizer.objectC = function (_viewer) {
     for (var key in geometry.vertices) {
       var vertice = geometry.vertices[key];
       var proton = makeObject('proton',
-        {phong: {color: protonColors[c[key]], opacity: viewer.style.current.proton__opacity.defaultValue || 1, transparent: true}},
+        {phong: {color: protonColors[c[key]], opacity: viewer.style.get('proton__opacity') || 1, transparent: true}},
         {radius: conf.proton.radius},
         {
           x: vertice.x,
@@ -446,25 +446,11 @@ Drupal.atomizer.objectC = function (_viewer) {
     return geom;
   }
 
-  /**
-   * Add 3x3 array of Atoms for development purposes.
-   */
-  function addAtoms() {
-    viewer.scene.add(createIcolet({x: 0, y: 92, z: -300}));
-    viewer.scene.add(createIcolet({x: 0, y: 92, z: 0}));
-    viewer.scene.add(createIcolet({x: 0, y: 92, z: 300}));
-
-    viewer.scene.add(createPentalet({x: -300, y: 67, z: -300}));
-    viewer.scene.add(createPentalet({x: -300, y: 67, z: 0}));
-    viewer.scene.add(createPentalet({x: -300, y: 67, z: 300}));
-
-    viewer.scene.add(createTetralet({x: 300, y: 67, z: -300}));
-    viewer.scene.add(createTetralet({x: 300, y: 67, z: 0}));
-    viewer.scene.add(createTetralet({x: 300, y: 67, z: 300}));
-  }
 
   return {
     makeObject: makeObject,
-    addAtoms: addAtoms
+    createIcoLet: createIcoLet,
+    createPentaLet: createPentaLet,
+    createTetraLet: createTetraLet
   };
 };

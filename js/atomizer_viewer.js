@@ -3,7 +3,10 @@
  *
  */
 
-Drupal.atomizer.viewerC = function (view) {
+// Initialize namespace for viewer classes in js/producers directory
+Drupal.atomizer.producers = {};
+
+Drupal.atomizer.viewerC = function (atomizer) {
 
   var ambient;
   var spotlights = [];
@@ -42,86 +45,102 @@ Drupal.atomizer.viewerC = function (view) {
 
     // Create the renderer
     viewer.renderer = new THREE.WebGLRenderer();
-    viewer.renderer.setClearColor(viewer.style.current.renderer__color.defaultValue, 1.0);
+    viewer.renderer.setClearColor(viewer.style.get('renderer__color'), 1.0);
     viewer.renderer.setSize(canvasWidth, canvasHeight);
     viewer.renderer.shadowEnabled = true;
 
     // add the output of the renderer to the html element
-    viewer.canvasContainer = document.getElementById("atomizer-wrapper");
+    viewer.canvasContainer = document.getElementById(viewer.atomizer.atomizerId + '-wrapper');
     viewer.canvasContainer.appendChild(viewer.renderer.domElement);
 
     // Create camera, and point it at the scene
     viewer.camera = new THREE.PerspectiveCamera(
-      viewer.style.current.camera__perspective.defaultValue,
+      viewer.style.get('camera__perspective'),
       canvasWidth / canvasHeight,
       .1, 10000
     );
-    viewer.camera.position.x = viewer.style.current.camera__position.defaultValue[0];
-    viewer.camera.position.y = viewer.style.current.camera__position.defaultValue[1];
-    viewer.camera.position.z = viewer.style.current.camera__position.defaultValue[2];
+    viewer.camera.position.x = viewer.style.get('camera__position')[0];
+    viewer.camera.position.y = viewer.style.get('camera__position')[1];
+    viewer.camera.position.z = viewer.style.get('camera__position')[2];
     viewer.camera.lookAt(viewer.scene.position);
 
     // Create an ambient light and 2 spotlights
-    ambient = new THREE.AmbientLight(viewer.style.current.ambient__color.defaultValue);
+    ambient = new THREE.AmbientLight(viewer.style.get('ambient__color'));
     ambient.name = 'ambient';
     viewer.scene.add(ambient);
 
-    if (viewer.style.current.spotlight_1__color.defaultValue != "#000000") {
+    if (viewer.style.get('spotlight_1__color') != "#000000") {
       spotlights[0] = makeSpotLight('spotlight-1', {
-        c: viewer.style.current.spotlight_1__color.defaultValue,
-        x: viewer.style.current.spotlight_1__position.defaultValue[0],
-        y: viewer.style.current.spotlight_1__position.defaultValue[1],
-        z: viewer.style.current.spotlight_1__position.defaultValue[2]
+        c: viewer.style.get('spotlight_1__color'),
+        x: viewer.style.get('spotlight_1__position', 0),
+        y: viewer.style.get('spotlight_1__position', 1),
+        z: viewer.style.get('spotlight_1__position', 2)
       });
       viewer.scene.add(spotlights[0]);
     }
-    if (viewer.style.current.spotlight_2__color.defaultValue != "#000000") {
+    if (viewer.style.get('spotlight_2__color') != "#000000") {
       spotlights[1] = makeSpotLight('spotlight-2', {
-        c: viewer.style.current.spotlight_2__color.defaultValue,
-        x: viewer.style.current.spotlight_2__position.defaultValue[0],
-        y: viewer.style.current.spotlight_2__position.defaultValue[1],
-        z: viewer.style.current.spotlight_2__position.defaultValue[2]
+        c: viewer.style.get('spotlight_2__color'),
+        x: viewer.style.get('spotlight_2__position', 0),
+        y: viewer.style.get('spotlight_2__position', 1),
+        z: viewer.style.get('spotlight_2__position', 2)
       });
       viewer.scene.add(spotlights[1]);
     }
-    if (viewer.style.current.spotlight_3__color.defaultValue != "#000000") {
+    if (viewer.style.get('spotlight_3__color') != "#000000") {
       spotlights[2] = makeSpotLight('spotlight-3', {
-        c: viewer.style.current.spotlight_3__color.defaultValue,
-        x: viewer.style.current.spotlight_3__position.defaultValue[0],
-        y: viewer.style.current.spotlight_3__position.defaultValue[1],
-        z: viewer.style.current.spotlight_3__position.defaultValue[2]
+        c: viewer.style.get('spotlight_3__color'),
+        x: viewer.style.get('spotlight_3__position', 0),
+        y: viewer.style.get('spotlight_3__position', 1),
+        z: viewer.style.get('spotlight_3__position', 2)
       });
       viewer.scene.add(spotlights[2]);
     }
+
+    // Make controls
+    viewer.controls = Drupal.atomizer.controlsC(viewer);
+
+    // Initialize the ObjectC - doesn't actually create anything.
+    viewer.object = Drupal.atomizer.objectC(viewer);
+
+    // Make the back plane
+    viewer.scene.add(viewer.object.makeObject('plane',
+      {lambert: {color: viewer.style.get('plane__color')}},
+      {
+        width: viewer.style.get('plane__width'),
+        depth: viewer.style.get('plane__depth')
+      },
+      {
+        x: viewer.style.get('plane__position', 0),
+        y: viewer.style.get('plane__position', 1),
+        z: viewer.style.get('plane__position', 2),
+        rotation: {x: -0.5 * Math.PI}
+      }
+    ));
+
+    // Create the producer for the current view and create it.
+    var producerC = Drupal.atomizer.producers[viewer.view.producer + 'C'];
+    viewer.producer = producerC(viewer);
+    viewer.producer.createView();
+
+    // Render the image
+    render();
+    // Start any animationj and trackball controls tracking.
+    viewer.controls.animate();
   }
 
 
-  // End of functions, start code for ViewerC initialization
-
+  // Attach functions for external use
   viewer.render = render;
-  viewer.style = Drupal.atomizer.styleC(viewer, view.controlSet.styleSetDir, view.controlSet.styleSetFile);
-  makeScene();
-  viewer.controls = Drupal.atomizer.controlsC(viewer, view.controlSet);
+  viewer.makeScene = makeScene;
+  viewer.atomizer = atomizer;
+  viewer.view = atomizer.views[atomizer.defaultView];
 
+  // Initialize the objectC
   viewer.object = Drupal.atomizer.objectC(viewer);
-  viewer.scene.add(viewer.object.makeObject('plane',
-    {lambert: {color: viewer.style.current.plane__color.defaultValue}},
-    {
-      width: viewer.style.current.plane__width.defaultValue,
-      depth: viewer.style.current.plane__depth.defaultValue
-    },
-    {
-      x: viewer.style.current.plane__position.defaultValue[0],
-      y: viewer.style.current.plane__position.defaultValue[1],
-      z: viewer.style.current.plane__position.defaultValue[2],
-      rotation: {x: -0.5 * Math.PI}
-    }
-  ));
 
-  viewer.object.addAtoms();
-
-  render();
-  viewer.controls.animate();
+  // Load styles
+  viewer.style = Drupal.atomizer.styleC(viewer, makeScene);
 
   return viewer;
 };

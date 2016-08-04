@@ -27,4 +27,11 @@ atomizer.saveYml:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::saveYml'
   requirements:
     _permission: 'access content'
+atomizer.listDirectory:
+  path: '/ajax-ab/listDirectory'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::listDirectory'
+  requirements:
+    _permission: 'access content'
+
 

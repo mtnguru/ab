@@ -1,4 +1,4 @@
-name: James
+name: Dark
 description: 'Initial style set'
 controls:
   mouse__mode:
@@ -33,22 +33,22 @@ controls:
       - '0'
   proton_default__color:
     type: color
-    defaultValue: '#66b7dd'
+    defaultValue: '#565656'
   proton_top__color:
     type: color
-    defaultValue: '#6336d4'
+    defaultValue: '#b34649'
   proton_bottom__color:
     type: color
-    defaultValue: '#ff3333'
+    defaultValue: '#dd66dd'
   proton_marker__color:
     type: color
-    defaultValue: '#ffff00'
+    defaultValue: '#55dddd'
   proton__opacity:
     type: range
-    defaultValue: '0.77'
+    defaultValue: '0.9'
   proton__scale:
     type: range
-    defaultValue: '0.51'
+    defaultValue: '1'
   protonid__color:
     type: color
     defaultValue: '#aaddff'
@@ -78,16 +78,16 @@ controls:
     defaultValue: '1'
   awireframe__color:
     type: color
-    defaultValue: '#ffaac4'
+    defaultValue: '#aaffcc'
   awireframe__opacity:
     type: range
-    defaultValue: '1'
+    defaultValue: '0.3'
   awireframe__scale:
     type: range
-    defaultValue: '0.7'
+    defaultValue: '1'
   awireframe__linewidth:
     type: range
-    defaultValue: '5'
+    defaultValue: '1'
   avertexid__color:
     type: color
     defaultValue: '#ccaaff'
@@ -102,7 +102,7 @@ controls:
     defaultValue: '#88cccc'
   aface__opacity:
     type: range
-    defaultValue: '0'
+    defaultValue: Undefined
   afaceid__color:
     type: color
     defaultValue: '#aaffee'
@@ -189,10 +189,10 @@ controls:
       - '-1400'
   renderer__color:
     type: color
-    defaultValue: '#000000'
+    defaultValue: '#fcf3ff'
   plane__color:
     type: color
-    defaultValue: '#54429c'
+    defaultValue: '#cccccc'
   plane__opacity:
     type: range
     defaultValue: '1'
@@ -244,4 +244,4 @@ controls:
       - '-500'
       - '800'
       - '-500'
-filepath: config/style/builder/James.yml
+filename: Dark.yml

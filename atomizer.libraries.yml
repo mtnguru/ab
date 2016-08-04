@@ -12,7 +12,8 @@ atomizer-js:
     js/atomizer_object.js: {}
     js/atomizer_nuclet.js: {}
     js/atomizer_nucleus.js: {}
-    js/atomizer_builder.js: {}
+    js/producers/atom_builder.js: {}
+    js/producers/workbench.js: {}
     js/atomizer.js: {}
   css:
     js/libs/spectrum/spectrum.css

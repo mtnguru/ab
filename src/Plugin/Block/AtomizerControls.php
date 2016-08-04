@@ -32,7 +32,7 @@ class AtomizerControls extends BlockBase {
     }
     $form['control_file'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Viewer file'),
+      '#title' => $this->t('Control Set file'),
       '#description' => $this->t(''),
       '#default_value' => isset($this->configuration['control_file']) ? $this->configuration['control_file'] : 'base',
       '#options' => $control_options,
@@ -66,7 +66,7 @@ class AtomizerControls extends BlockBase {
       'library' => array('atomizer/atomizer-js'),
       'drupalSettings' => array(
         'atomizer' => array(
-          $config['atomizer_id'] = array(
+          $config['atomizer_id'] => array(
             'atomizerId' =>  $config['atomizer_id'],
             'controlSet' =>  $controlSet,
           ),

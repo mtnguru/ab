@@ -11,10 +11,8 @@ Drupal.behaviors.atomizer = {
       return;
     }
     Drupal.atomizer.base     = Drupal.atomizer.baseC();
-    var atomizers = {};
     for (var atomizerKey in drupalSettings.atomizer) {
-      var settings = drupalSettings.atomizer[atomizerKey];
-      atomizers.push(Drupal.atomizer.viewerC(drupalSettings.atomizer[atomizerKey]));
+      Drupal.atomizer.viewerC(drupalSettings.atomizer[atomizerKey]);
     }
   }
 };

@@ -1,26 +1,49 @@
 /**
  * @file - atomizerstyle.js
  *
+ * Class to manage and apply styles
+ * Sets the color, position, opacity, linewidth, or rendered items.
  */
 
 'use strict';
 
-Drupal.atomizer.styleC = function (_viewer, styleSetDir, styleSetFile) {
+Drupal.atomizer.styleC = function (_viewer, callback) {
   var viewer = _viewer;
   var currentSet = {};
   var defaultSet = {};
+  var styleSetDirectory = viewer.atomizer.styleSetDirectory;
 
   var loadYml = function (results) {
-    results[0].ymlContents['filename'] = results[0].filename;
+    results[0].ymlContents['filepath'] = results[0].filepath;
     defaultSet = results[0].ymlContents;
-    currentSet.name = defaultSet.name;
-    currentSet.description = defaultSet.description;
-    currentSet.filename = defaultSet.filename;
-    reset();
+    if (currentSet.name) {
+      reset();
+      currentSet.name = defaultSet.name;
+      currentSet.description = defaultSet.description;
+      currentSet.filepath = defaultSet.filepath;
+    } else {
+      currentSet = JSON.parse(JSON.stringify(defaultSet));
+    }
+    // This is a hack, the callback is only run the first time the style file is loaded.
+    if (callback) {
+      callback();
+      callback = null;
+    }
   };
 
   var savedYml = function (response) {
     var select = document.getElementById('style--selectyml').querySelector('select');
+    Drupal.atomizer.base.doAjax(
+      '/ajax-ab/listDirectory',
+      {
+        directory: controls.directory,
+        component: 'style'
+      },
+      updateStyleSelect
+    );
+  };
+
+  var updateStyleSelect = function updateStyleSelect(response) {
     // Remove current options
     while (select.hasChildNodes()) {
       select.removeChild(select.lastChild);
@@ -35,23 +58,23 @@ Drupal.atomizer.styleC = function (_viewer, styleSetDir, styleSetFile) {
     }
 
     // Set select to new file
-    select.value = response[0].filename;
+    select.value = response[0].filepath;
 
     // Clear the Name and File name fields
     var inputs = document.getElementById('style--saveyml').querySelectorAll('input');
     inputs[0].value = '';
     inputs[1].value = '';
-  }
+  };
 
   var saveYml = function (controls) {
     // Verify they entered a name.  If not popup an alert. return
     currentSet.name = controls.name;
-    currentSet.filename = controls.filename;
+    currentSet.filepath = controls.filepath;
     Drupal.atomizer.base.doAjax(
-      'ajax-ab/saveYml',
+      '/ajax-ab/saveYml',
       { name: controls.name,
         component: 'style',
-        filename: controls.filename,
+        filepath: controls.filepath,
         ymlContents: currentSet },
       savedYml
     );
@@ -61,10 +84,10 @@ Drupal.atomizer.styleC = function (_viewer, styleSetDir, styleSetFile) {
   var overwriteYml = function (controls) {
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
-      'ajax-ab/saveYml',
+      '/ajax-ab/saveYml',
       { name: currentSet.name,
         component: 'style',
-        filename: currentSet.filename,
+        filepath: currentSet.filepath,
         ymlContents: currentSet },
       null  // TODO: Put in useful error codes and have them be displayed.
     );
@@ -72,16 +95,30 @@ Drupal.atomizer.styleC = function (_viewer, styleSetDir, styleSetFile) {
   };
 
   var reset = function reset() {
+    var def;
+    var updateAll = false;
     for (var id in currentSet.controls) {
+      // if defaultValue defines an array then set all elements.
       if (Object.prototype.toString.call(currentSet.controls[id].defaultValue) === '[object Array]') {  // If it's an array
         for (var i in currentSet.controls[id].defaultValue) {
-          if (currentSet.controls[id].defaultValue[i] != defaultSet.controls[id].defaultValue[i]) {
-            applyControl(id, defaultSet.controls[id].defaultValue);
+          def = defaultSet.controls[id].defaultValue[i];
+          if (updateAll || currentSet.controls[id].defaultValue[i] != def) {
+            applyControl(id, def);
+            var element = document.getElementById(id.replace(/_/g, '-'));
+            if (element) {
+              element.value = def;
+            }
           }
         }
+      // else defaultValue is not an array, set the one value
       } else {
-        if (currentSet.controls[id].defaultValue != defaultSet.controls[id].defaultValue) {
+        def = defaultSet.controls[id].defaultValue;
+        if (updateAll || currentSet.controls[id].defaultValue != def) {
           applyControl(id, defaultSet.controls[id].defaultValue);
+          var element = document.getElementById(id.replace(/_/g, '-'));
+          if (element) {
+            element.value = def;
+          }
         }
       }
     }
@@ -127,7 +164,7 @@ Drupal.atomizer.styleC = function (_viewer, styleSetDir, styleSetFile) {
                 break;
               case 'opacity':
                 node.material.opacity = value;
-                node.material.visible = (value > .02);
+                node.material.visible = (value > .05);
                 break;
               case 'linewidth':
                 if (argNames[0] == 'awireframe' || argNames == 'bwireframe') {
@@ -151,10 +188,24 @@ Drupal.atomizer.styleC = function (_viewer, styleSetDir, styleSetFile) {
     viewer.render();
   };
 
+
+  var getStyleDefault = function getStyleDefault(id, index) {
+    if (index == null) {
+      return currentSet.controls[id]['defaultValue'];
+    } else {
+      return currentSet.controls[id]['defaultValue'][index];
+    }
+  };
+
+  var getCurrentControls = function() {
+    return currentSet.controls;
+  };
+
   Drupal.atomizer.base.doAjax(
-    'ajax-ab/loadYml',
-    { directory: styleSetDir,
-      filename:  styleSetFile },
+    '/ajax-ab/loadYml',
+    { filepath: viewer.view.styleSetPath,
+      component: 'style'
+    },
     loadYml
   );
 
@@ -164,6 +215,8 @@ Drupal.atomizer.styleC = function (_viewer, styleSetDir, styleSetFile) {
     loadYml: loadYml,
     saveYml: saveYml,
     overwriteYml: overwriteYml,
-    current: currentSet.controls
+    get: getStyleDefault,
+    getCurrentControls: getCurrentControls,
+    getYmlDirectory: function () { return styleSetDirectory; }
   };
 };

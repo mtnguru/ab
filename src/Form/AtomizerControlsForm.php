@@ -22,7 +22,7 @@ class AtomizerControlsForm extends FormBase {
     return 'atomizer_controls_form';
   }
 
-  public function createControlBlock($blockName, $blockConf, $showTitle, &$controlSet) {
+  public function createControlBlock($blockName, $blockConf, $showTitle) {
 
     // Create a container for the block
     $block[$blockName] = array(
@@ -41,15 +41,6 @@ class AtomizerControlsForm extends FormBase {
       $control = array();
       $id = str_replace('_', '-', $controlName);
       $containerClass = 'sa-control';
-      if (empty($controlSet[$controlName])) {
-        if (!empty($controlConf[2])) {
-          $defaultValue = $controlConf[2];
-        } else {
-          $defaultValue = "Undefined";
-        }
-      } else {
-        $defaultValue = $controlSet[$controlName]['defaultValue'];
-      }
       switch ($controlConf[1]) {
 
         case 'selectyml':
@@ -61,7 +52,7 @@ class AtomizerControlsForm extends FormBase {
               '#type' => 'select',
               '#title' => $controlConf[0],
               '#default_value' => $controlConf[2],
-              '#options' => AtomizerFiles::createFileList(drupal_get_path('module','atomizer') . $controlConf[3], '/\.yml/'),
+              '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/' . $controlConf[4], '/\.yml/'),
             ),
             'overwrite_button' => array(
               '#type' => 'item',
@@ -73,11 +64,6 @@ class AtomizerControlsForm extends FormBase {
           break;
 
         case 'saveyml':
-          $options = array(
-            'component' => $controlConf[3],
-            'directory' => drupal_get_path('module', 'atomizer') . '/config/' . $controlConf[3],
-            'filename' => $controlConf[2],
-          );
           $control = array(
             '#type' => 'container',
             '#attributes' => array('class' => array('saveyml')),
@@ -111,7 +97,7 @@ class AtomizerControlsForm extends FormBase {
         case 'link':
           $options = array(
             'component' => $controlConf[3],
-            'directory' => drupal_get_path('module', 'atomizer') . '/config/' . $controlConf[3],
+            'directory' => drupal_get_path('module', 'atomizer') . '/' . $controlConf[4],
             'filename' => $controlConf[2],
           );
           $control = array(
@@ -138,7 +124,7 @@ class AtomizerControlsForm extends FormBase {
           $control = array(
             '#type' => 'range',
             '#title' => $controlConf[0],
-            '#default_value' => $defaultValue,
+            '#default_value' => $controlConf[2],
             '#min' => $controlConf[3][0],
             '#max' => $controlConf[3][1],
             '#step' => $controlConf[3][2],
@@ -149,7 +135,7 @@ class AtomizerControlsForm extends FormBase {
           $control = array(
             '#type' => 'radios',
             '#title' => $controlConf[0],
-            '#default_value' => $defaultValue,
+            '#default_value' => $controlConf[2],
             '#options' => $controlConf[3],
           );
           break;
@@ -158,7 +144,7 @@ class AtomizerControlsForm extends FormBase {
           $control = array(
             '#type' => 'radios',
             '#title' => $controlConf[0],
-            '#default_value' => $defaultValue,
+            '#default_value' => $controlConf[2],
             '#options' => $controlConf[3],
           );
           break;
@@ -174,7 +160,7 @@ class AtomizerControlsForm extends FormBase {
             $controlConf[0] . '__x' => array(
               '#type' => 'range',
               '#title' => 'X',
-              '#default_value' => $defaultValue[0],
+              '#default_value' => $controlConf[2][0],
               '#attributes' => array('id' => $id . '--x'),
               '#min' => $controlConf[3][0],
               '#max' => $controlConf[3][1],
@@ -183,7 +169,7 @@ class AtomizerControlsForm extends FormBase {
             $controlConf[0] . '__y' => array(
               '#type' => 'range',
               '#title' => 'Y',
-              '#default_value' => $defaultValue[1],
+              '#default_value' => $controlConf[2][1],
               '#attributes' => array('id' => $id . '--y'),
               '#min' => $controlConf[3][0],
               '#max' => $controlConf[3][1],
@@ -192,7 +178,7 @@ class AtomizerControlsForm extends FormBase {
             $controlConf[0] . '__z' => array(
               '#type' => 'range',
               '#title' => 'Z',
-              '#default_value' => $defaultValue[2],
+              '#default_value' => $controlConf[2][2],
               '#attributes' => array('id' => $id . '--z'),
               '#min' => $controlConf[3][0],
               '#max' => $controlConf[3][1],
@@ -205,7 +191,7 @@ class AtomizerControlsForm extends FormBase {
           $control = array(
             '#type' => 'color',
             '#title' => $controlConf[0],
-            '#default_value' => $defaultValue,
+            '#default_value' => $controlConf[2],
           );
           break;
 
@@ -241,12 +227,6 @@ class AtomizerControlsForm extends FormBase {
         default:
           break;
       }
-      if (!in_array($controlConf[1], array('label', 'header', 'hr'))) {
-        $controlSet[$controlName]['type'] = $controlConf[1];
-        if ($defaultValue != null) {
-          $controlSet[$controlName]['defaultValue'] = $defaultValue;
-        }
-      }
       $control['#attributes']['id'] = $id;
       $control['#attributes']['name'] = $id;
       $control['#attributes']['class'] = array($containerClass);
@@ -281,7 +261,7 @@ class AtomizerControlsForm extends FormBase {
       '#attributes' => array('id' => 'controls'),
     );
     foreach ($controlSet['styler'] as $blockName => $block) {
-      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, false, $styleSet['controls']);
+      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, false);
     }
 
     $form['#attributes'] = array('name' => 'atomizer-controls-form');

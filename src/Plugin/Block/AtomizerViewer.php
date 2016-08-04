@@ -18,24 +18,24 @@ class AtomizerViewer extends BlockBase {
 
   public function blockForm($form, FormStateInterface $form_state) {
 
-    // Give the viewer a name so the controls block can connect to it.
+    // Give the atomizer the controls block can connect to it.
     $form['atomizer_id'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Atomizer ID'),
-      '#description' => $this->t('Give this viewer the same id as that assigned the Atomizer Control block'),
+      '#description' => $this->t('Give this atomizer the same id as that assigned the Atomizer Control block'),
       '#default_value' => isset($this->configuration['atomizer_id']) ? $this->configuration['atomizer_id'] : 'Atomizer',
     );
 
-    $viewer_files = file_scan_directory(drupal_get_path('module','atomizer') . '/config/viewers', '/\.yml/');
-    foreach ($viewer_files as $file) {
-      $viewer_options[$file->filename] = $file->name;
+    $atomizer_files = file_scan_directory(drupal_get_path('module','atomizer') . '/config/atomizers', '/\.yml/');
+    foreach ($atomizer_files as $file) {
+      $atomizer_options[$file->filename] = $file->name;
     }
-    $form['viewer_file'] = array(
+    $form['atomizer_file'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Viewer file'),
+      '#title' => $this->t('Atomizer file'),
       '#description' => $this->t(''),
-      '#default_value' => isset($this->configuration['viewer_file']) ? $this->configuration['viewer_file'] : 'default',
-      '#options' => $viewer_options,
+      '#default_value' => isset($this->configuration['atomizer_file']) ? $this->configuration['atomizer_file'] : 'default',
+      '#options' => $atomizer_options,
     );
 
     return $form;
@@ -46,7 +46,7 @@ class AtomizerViewer extends BlockBase {
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['atomizer_id'] = $form_state->getValue('atomizer_id');
-    $this->configuration['viewer_file'] = $form_state->getValue('viewer_file');
+    $this->configuration['atomizer_file'] = $form_state->getValue('atomizer_file');
   }
 
   /**
@@ -56,24 +56,22 @@ class AtomizerViewer extends BlockBase {
     $config = $this->getConfiguration();
 
     // Read in the controls file
-    $viewer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/viewers/' . $config['viewer_file']));
-    $viewer['filename'] = $config['viewer_file'];
+    $atomizer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_file']));
+    $atomizer['filename']   = $config['atomizer_file'];
+    $atomizer['atomizerId'] = $config['atomizer_id'];
 
     $build = array(
       'atomizer' => array(
-        $config['atomizer_id'] = array(
+        $config['atomizer_id'] => array(
           'wrapper' => array(
-            'scene' => array('#markup' => "<div id='atomizer-wrapper'></div>"),
+            'scene' => array('#markup' => '<div id="' . $config['atomizer_id'] . '-wrapper"></div>'),
           ),
         ),
         '#attached' => array(
           'library' => array('atomizer/atomizer-js'),
           'drupalSettings' => array(
             'atomizer' => array(
-              $config['atomizer_id'] = array(
-                'atomizerId' =>  $config['atomizer_id'],
-                'viewer' =>  $viewer,
-              ),
+              $config['atomizer_id'] => $atomizer,
             ),
           ),
         ),

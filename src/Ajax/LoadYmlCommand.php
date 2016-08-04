@@ -4,9 +4,8 @@ namespace Drupal\atomizer\Ajax;
 use Drupal\Core\Ajax\CommandInterface;
 
 class LoadYmlCommand implements CommandInterface {
-  public function __construct($directory, $filename, $component, $ymlContents) {
-    $this->directory = $directory;
-    $this->filename = $filename;
+  public function __construct($filepath, $component, $ymlContents) {
+    $this->filepath = $filepath;
     $this->component = $component;
     $this->ymlContents = $ymlContents;
   }
@@ -14,8 +13,7 @@ class LoadYmlCommand implements CommandInterface {
   public function render() {
     return array(
       'command' => 'loadYmlCommand',
-      'directory' => $this->directory,
-      'filename' => $this->filename,
+      'filepath' => $this->filepath,
       'component' => $this->component,
       'ymlContents' => $this->ymlContents,
     );

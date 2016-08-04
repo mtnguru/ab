@@ -17,34 +17,39 @@ use Drupal\Component\Serialization\Yaml;
 class AtomizerController extends ControllerBase {
 
   public function loadYml() {
-    $filename = $_POST['filename'];
+    $filepath  = $_POST['filepath'];
     $component = $_POST['component'];
-    $directory = $_POST['directory'];
 
     $response = new AjaxResponse();
-    $ymlContents = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . $directory . '/' . $filename));
-    $response->addCommand(new LoadYmlCommand($directory, $filename, $component, $ymlContents));
+    $ymlContents = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/' . $filepath));
+    $response->addCommand(new LoadYmlCommand($filepath, $component, $ymlContents));
 
     return $response;
   }
 
   public function saveYml() {
 
-    $filename = $_POST['filename'];
-    $directory = $_POST['directory'];
-    $name = $_POST['name'];
-    $component = $_POST['component'];
+    $filepath =    $_POST['filepath'];
+    $component =   $_POST['component'];
+    $name =        $_POST['name'];
     $ymlContents = $_POST['ymlContents'];
 
     $response = new AjaxResponse();
-    file_put_contents(drupal_get_path('module', 'atomizer') . $directory . '/' . $filename, Yaml::encode($ymlContents));
-    $files = file_scan_directory(drupal_get_path('module','atomizer') . $directory, '/\.yml/');
-    foreach ($files as $file) {
-      $filelist[$file->filename] = $file->name;
-    }
-    $response->addCommand(new SaveYmlCommand($name, $directory, $filename, $component, $filelist ));
+    file_put_contents(drupal_get_path('module', 'atomizer') . '/' . $filepath, Yaml::encode($ymlContents));
+//  $response  // respond with success or something.
 
     return $response;
   }
 
+  public function listDirectory() {
+    $directory = $_POST['directory'];
+    $component = $_POST['component'];
+    $files = file_scan_directory(drupal_get_path('module', 'atomizer') . '/' . $directory, '/\.yml/');
+    foreach ($files as $file) {
+      $filelist[$file->filename] = $file->name;
+    }
+    $response = new AjaxResponse();
+    $response->addCommand(new ListDirectoryCommand($directory, $component, $filelist));
+    return $response;
+  }
 }

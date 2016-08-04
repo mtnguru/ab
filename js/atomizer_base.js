@@ -26,6 +26,7 @@ Drupal.atomizer.baseC = function () {
         if (success) success(response);
       },
       error: function (response) {
+        alert(response.responseText);
         (error) ? error(response) : success(response);
       }
     });

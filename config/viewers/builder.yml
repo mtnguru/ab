@@ -1,6 +1,0 @@
-name: Atom Builder
-views:
-  default:
-    name: Atom Builder
-    function: atomBuilder
-    styleSet: base.yml

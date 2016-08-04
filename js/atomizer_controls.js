@@ -53,7 +53,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     Drupal.atomizer.base.doAjax(
       'ajax-ab/loadYml',
       { component: args[0],
-        filename: event.target.value },
+        filepath: viewer[args[0]].getYmlDirectory() + '/' + event.target.value },
       viewer[args[0]].loadYml
     );
   }
@@ -69,6 +69,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         var wrapper  = document.getElementById(args[0] + '--saveyml');
         var name = wrapper.querySelector('input[name=name]').value;
         var filename = wrapper.querySelector('input[name=filename]').value;
+        // If user didn't enter a file name then generate it from the Name
         if (name.length) {
           if (filename.length == 0) {
             filename = name;
@@ -76,7 +77,8 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
           if (filename.indexOf('.yml') == -1) {
             filename += '.yml';
           }
-          viewer[args[0]].saveYml({name: name, filename: filename.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_')});
+          // Save the yml file
+          viewer[args[0]].saveYml({name: name, filepath: viewer[args[0]].getYmlDirectory() + '/' + filename.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_')});
         }
         break;
       case 'reset':
@@ -119,9 +121,11 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     }
 
     // Initialize all the sliders, buttons and color fields in the styler blocks
-    for (var controlId in viewer.style.current) {
+    var styleControls = viewer.style.getCurrentControls();
+    for (var controlId in styleControls) {
+      var control = styleControls[controlId];
       var id = controlId.replace(/_/g, "-");
-      switch (viewer.style.current[controlId].type) {
+      switch (control.type) {
         case 'color':
         case 'range':
           document.getElementById(id).addEventListener("input", controlChanged);
