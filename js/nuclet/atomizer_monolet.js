@@ -5,6 +5,8 @@
 
 Drupal.atomizer.objectC = function (_viewer) {
   var viewer = _viewer;
+  var visibleThresh = .03;
+  var transparentThresh = .97;
 
   var objects = {
     protons: [],
@@ -53,10 +55,12 @@ Drupal.atomizer.objectC = function (_viewer) {
     var axisGeometry = new THREE.Geometry();
     axisGeometry.vertices.push(new THREE.Vector3(vertices[0].x, vertices[0].y, vertices[0].z));
     axisGeometry.vertices.push(new THREE.Vector3(vertices[1].x, vertices[1].y, vertices[1].z));
+    var opacity = viewer.style.get('aaxis__opacity');
     var lineMaterial = new THREE.LineBasicMaterial({
       color: viewer.style.get('aaxis__color'),
-      transparent: true,
-//    opacity: viewer.style.get('aaxis__opacity'),
+      opacity: opacity,
+      transparent: (opacity < transparentThresh),
+      visible:     (opacity > visibleThresh),
       linewidth: 2
     });
     var axisLine = new THREE.Line(axisGeometry, lineMaterial);
@@ -67,10 +71,12 @@ Drupal.atomizer.objectC = function (_viewer) {
 
   function createGeometryWireframe(id, scale, geometry, offset) {
 
+    var opacity = viewer.style.get(id + '__opacity');
     var wireframe = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
       color: viewer.style.get(id + '__color'),
-      transparent: true,
-      opacity: viewer.style.get(id + '__opacity'),
+      opacity: opacity,
+      transparent: (opacity < transparentThresh),
+      visible:     (opacity > visibleThresh),
       wireframe: true,
       wireframeLinewidth: viewer.style.get(id + '__linewidth')
     }));
@@ -89,10 +95,12 @@ Drupal.atomizer.objectC = function (_viewer) {
   function createGeometryFaces(id, scale, geometry, offset) {
 
     // add one random mesh to each scene
+    var opacity = viewer.style.get(id + '__opacity');
     var material = new THREE.MeshStandardMaterial( {
       color: viewer.style.get(id + '__color'),
-      transparent: true,
-      opacity: viewer.style.get(id + '__opacity'),
+      opacity: opacity,
+      transparent: (opacity < transparentThresh),
+      visible:     (opacity > visibleThresh),
       roughness: 0.5,
       metalness: 0,
 //    shading: THREE.FlatShading
@@ -153,8 +161,8 @@ Drupal.atomizer.objectC = function (_viewer) {
       case 'sphere':
         geometry = new THREE.SphereGeometry(
           geo.radius || 50,
-          geo.widthSegments || 25,
-          geo.heightSegments || 25
+          geo.widthSegments || 50,
+          geo.heightSegments || 50
         );
         break;
       case 'octahedron':
@@ -165,6 +173,9 @@ Drupal.atomizer.objectC = function (_viewer) {
         break;
       case 'icosahedron':
         geometry = new THREE.IcosahedronGeometry(geo.length || 3);
+        break;
+      case 'dodecahedron':
+        geometry = new THREE.DodecahedronGeometry(geo.length || 3);
         break;
       case 'cube':
         var l = geo.length || 4;
@@ -254,15 +265,20 @@ Drupal.atomizer.objectC = function (_viewer) {
     var atom = new THREE.Group();
     atom.name = 'icoLet';
     var geometry = new THREE.IcosahedronGeometry(60);
-    var dualGeometry = new THREE.DodecahedronGeometry(60);
 
     // Create geometry wireframe and faces - isocahedron
 
     // Add Protons
     for (var key in geometry.vertices) {
       var vertice = geometry.vertices[key];
+      var opacity = viewer.style.get('proton__opacity') || 1;
       var proton = makeObject('proton',
-        {phong: {color: protonColors[c[key]], opacity: viewer.style.get('proton__opacity') || 1, transparent: true}},
+        {phong: {
+          color: protonColors[c[key]],
+          opacity: opacity,
+          transparent: (opacity < transparentThresh),
+          visible:     (opacity > visibleThresh)
+        }},
         {radius: conf.proton.radius},
         {
           x: vertice.x,
@@ -275,8 +291,8 @@ Drupal.atomizer.objectC = function (_viewer) {
       atom.add(proton);
     }
 
-
     // Create dual geometry wireframe and faces - dodecahedron
+//  var dualGeometry = new THREE.DodecahedronGeometry(60);
 //  atom.add(createGeometryWireframe('bwireframe', 1.66, dualGeometry));
 //  atom.add(createGeometryFaces('bface', 1.66, dualGeometry));
 
@@ -314,8 +330,14 @@ Drupal.atomizer.objectC = function (_viewer) {
     // Add the protons
     for (var key in geometry.vertices) {
       var vertice = geometry.vertices[key];
+      var opacity = viewer.style.get('proton__opacity') || 1;
       var proton = makeObject('proton',
-        {phong: {color: protonColors[c[key]], opacity: viewer.style.get('proton__opacity') || 1, transparent: true}},
+        {phong: {
+          color: protonColors[c[key]],
+          opacity: opacity,
+          transparent: (opacity < transparentThresh),
+          visible:     (opacity > visibleThresh)
+        }},
         {radius: conf.proton.radius},
         {
           x: vertice.x,
@@ -354,8 +376,14 @@ Drupal.atomizer.objectC = function (_viewer) {
     // Add the protons
     for (var key in geometry.vertices) {
       var vertice = geometry.vertices[key];
+      var opacity = viewer.style.get('proton__opacity') || 1;
       var proton = makeObject('proton',
-        {phong: {color: protonColors[c[key]], opacity: viewer.style.get('proton__opacity') || 1, transparent: true}},
+        {phong: {
+          color: protonColors[c[key]],
+          opacity: opacity,
+          transparent: (opacity < transparentThresh),
+          visible:     (opacity > visibleThresh)
+        }},
         {radius: conf.proton.radius},
         {
           x: vertice.x,

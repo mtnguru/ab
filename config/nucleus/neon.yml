@@ -6,7 +6,7 @@ num_protons: 20
 nuclets:
   1:
     position: 1
-    geometry: icosahedron
+    type: icosalet
     num_protons: 12
     num_nuclear_electrons: 6
     protons:

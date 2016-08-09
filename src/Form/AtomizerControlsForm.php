@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\atomizer\Utils\AtomizerFiles;
 
+
 /**
  * Class AtomizerControlsForm.
  *
@@ -20,6 +21,45 @@ class AtomizerControlsForm extends FormBase {
    */
   public function getFormId() {
     return 'atomizer_controls_form';
+  }
+
+  private function makeRangeControl($id, $name, $defaultValue, $min, $max, $step) {
+    $sliderClass = 'az-slider';
+    $sliderId = $id . '--'  . $sliderClass;
+    $valueClass = 'az-value';
+    $valueId = $id . '--' . $valueClass;
+
+    return array(
+      '#type' => 'container',
+      'title' => array(
+        '#markup' => '<div class="az-name">' . $name . '</div>'
+      ),
+      'value' => array (
+        '#type' => 'textfield',
+        '#default_value' => $defaultValue,
+        '#attributes' => array(
+          'id' => $valueId,
+          'class' => array($valueClass),
+        ),
+      ),
+      /*          'min' => array(
+                    '#markup' => '<div class="az-min">' . $controlConf[3][0] . '</div>'
+                  ), */
+      'range' => array (
+        '#type' => 'range',
+        '#default_value' => $defaultValue,
+        '#min' => $min,
+        '#max' => $max,
+        '#step' => $step,
+        '#attributes' => array(
+          'id' => $sliderId,
+          'class' => array($sliderClass),
+        ),
+      ),
+      /*          'max' => array(
+                    '#markup' => '<div class="az-max">' . $controlConf[3][1] . '</div>'
+                  ), */
+    );
   }
 
   public function createControlBlock($blockName, $blockConf, $showTitle) {
@@ -40,8 +80,8 @@ class AtomizerControlsForm extends FormBase {
     foreach ($blockConf['controls'] as $controlName => $controlConf) {
       $control = array();
       $id = str_replace('_', '-', $controlName);
-      $containerClass = 'sa-control';
-      $defaultValue = (empty($controlConf[2])) ? '' : $controlConf[2];
+      $containerClasses = array('az-control', 'az-control-' . $controlConf[1]);
+      $defaultValue = (isset($controlConf[2])) ? $controlConf[2] : '';
       switch ($controlConf[1]) {
 
         case 'selectyml':
@@ -122,13 +162,13 @@ class AtomizerControlsForm extends FormBase {
           break;
 
         case 'range':
-          $control = array(
-            '#type' => 'range',
-            '#title' => $controlConf[0],
-            '#default_value' => $defaultValue,
-            '#min' => $controlConf[3][0],
-            '#max' => $controlConf[3][1],
-            '#step' => $controlConf[3][2],
+          $control = $this->makeRangeControl(
+            $id,
+            '&nbsp;&nbsp;' . $controlConf[0],
+            $defaultValue,
+            $controlConf[3][0],
+            $controlConf[3][1],
+            $controlConf[3][2]
           );
           break;
 
@@ -152,40 +192,27 @@ class AtomizerControlsForm extends FormBase {
 
         case 'rotation':
         case 'position':
-          $containerClass .= ' sa-indent';
           $control = array(
             '#type' => 'container',
+            '#attributes' => ['class' => ['multi-slider']],
             'title' => array(
-              '#markup' => '<div class="sa-label">' . $controlConf[0] . '</div>',
-            ),
-            $controlConf[0] . '__x' => array(
-              '#type' => 'range',
-              '#title' => 'X',
-              '#default_value' => $defaultValue[0],
-              '#attributes' => array('id' => $id . '--x'),
-              '#min' => $controlConf[3][0],
-              '#max' => $controlConf[3][1],
-              '#step' => $controlConf[3][2],
-            ),
-            $controlConf[0] . '__y' => array(
-              '#type' => 'range',
-              '#title' => 'Y',
-              '#default_value' => $defaultValue[1],
-              '#attributes' => array('id' => $id . '--y'),
-              '#min' => $controlConf[3][0],
-              '#max' => $controlConf[3][1],
-              '#step' => $controlConf[3][2],
-            ),
-            $controlConf[0] . '__z' => array(
-              '#type' => 'range',
-              '#title' => 'Z',
-              '#default_value' => $defaultValue[2],
-              '#attributes' => array('id' => $id . '--z'),
-              '#min' => $controlConf[3][0],
-              '#max' => $controlConf[3][1],
-              '#step' => $controlConf[3][2],
+              '#markup' => '<div class="az-label">' . $controlConf[0] . '</div>',
             ),
           );
+          $i = 0;
+          foreach (['x', 'y', 'z'] as $axis) {
+            $did = str_replace('_', '-', $id) . '--' . $axis;
+            $control[$id . '__' . $axis] = $this->makeRangeControl(
+              $did,
+              strtoupper($axis),
+              $controlConf[2][$i],
+              $controlConf[3][0],
+              $controlConf[3][1],
+              $controlConf[3][2]
+            );
+            $control[$id . '__' . $axis]['#attributes']['class'][] = 'az-indent';
+            $i++;
+          }
           break;
 
         case 'color':
@@ -231,11 +258,11 @@ class AtomizerControlsForm extends FormBase {
           break;
 
         case 'header':
-          $control = array('#markup' => "<div class='sa-header'>$controlConf[0]</div>");
+          $control = array('#markup' => "<div class='az-header'>$controlConf[0]</div>");
           break;
 
         case 'label':
-          $control = array('#markup' => "<div class='sa-label>$controlConf[0]</div>");
+          $control = array('#markup' => "<div class='az-label>$controlConf[0]</div>");
           break;
 
         case 'hr':
@@ -247,7 +274,7 @@ class AtomizerControlsForm extends FormBase {
       }
       $control['#attributes']['id'] = $id;
       $control['#attributes']['name'] = $id;
-      $control['#attributes']['class'] = array($containerClass);
+      $control['#attributes']['class'] = $containerClasses;
 
       $block[$blockName][$controlName] = $control;
     }

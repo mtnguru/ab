@@ -3,40 +3,41 @@
  *
  */
 
-Drupal.atomizer.nucleusC = function () {
-  var nuclei;
+Drupal.atomizer.nucleusC = function (_viewer) {
+  var viewer = _viewer;
+  var nucleus;
+  var nucleusConf;
 
-  var loadYml = function (results) {
-    results[0].ymlContents['filename'] = results[0].filename;
-    defaultSet = results[0].ymlContents;
-    currentSet.name = defaultSet.name;
-    currentSet.description = defaultSet.description;
-    currentSet.filename = defaultSet.filename;
-    reset();
+  var loadNucleus = function loadNucleus (filepath, settings) {
+    // Verify they entered a name.  If not popup an alert. return
+    Drupal.atomizer.base.doAjax(
+      '/ajax-ab/loadYml',
+      { component: 'nucleus',
+        settings: {fart: 'cool'},
+        filepath: filepath
+      },
+      createNucleus
+    );
+  };
+
+  var createNucleus = function createNucleus (results) {
+    if (nucleus) {
+      viewer.scene.remove(nucleus);
+    }
+    nucleusConf = results[0].ymlContents;
+    nucleusConf['filepath'] = results[0].filepath;
+    nucleus = new THREE.Group();
+    for (var n in nucleusConf.nuclets) {
+      var nuclet =  viewer.nuclet.create(nucleusConf.nuclets[n]);
+      nucleus.add(nuclet);
+    }
+    viewer.scene.add(nucleus);
+    viewer.render();
   };
 
   var savedYml = function (response) {
     var select = document.getElementById('style--selectyml').querySelector('select');
     // Remove current options
-    while (select.hasChildNodes()) {
-      select.removeChild(select.lastChild);
-    }
-
-    // Create the new option list
-    for (var file in response[0].filelist) {
-      var opt = document.createElement('option');
-      opt.appendChild( document.createTextNode(response[0].filelist[file]));
-      opt.value = file;
-      select.appendChild(opt);
-    }
-
-    // Set select to new file
-    select.value = response[0].filename;
-
-    // Clear the Name and File name fields
-    var inputs = document.getElementById('style--saveyml').querySelectorAll('input');
-    inputs[0].value = '';
-    inputs[1].value = '';
   }
 
   var saveYml = function (controls) {
@@ -44,7 +45,7 @@ Drupal.atomizer.nucleusC = function () {
     currentSet.name = controls.name;
     currentSet.filename = controls.filename;
     Drupal.atomizer.base.doAjax(
-      'ajax-ab/saveYml',
+      '/ajax-ab/saveYml',
       { name: controls.name,
         component: 'style',
         filename: controls.filename,
@@ -57,7 +58,7 @@ Drupal.atomizer.nucleusC = function () {
   var overwriteYml = function (controls) {
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
-      'ajax-ab/saveYml',
+      '/ajax-ab/saveYml',
       { name: currentSet.name,
         component: 'style',
         filename: currentSet.filename,
@@ -68,8 +69,10 @@ Drupal.atomizer.nucleusC = function () {
   };
 
   return {
-    loadYml: loadYml,
+    loadYml: createNucleus,
     saveYml: saveYml,
-    overwriteYml: overwriteYml
+    overwriteYml: overwriteYml,
+    loadNucleus: loadNucleus,
+    getYmlDirectory: function () { return 'config/nucleus'; }
   };
 };

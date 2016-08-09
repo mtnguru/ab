@@ -2,14 +2,16 @@ name: Carbon 12
 element: Carbon
 isotope: 0
 variant: 0
-num_protons: 12
+numProtons: 12
 nuclets:
   1:
     position: 1
-    geometry: icosahedron
-    num_protons: 12
-    num_nuclear_electrons: 6
+    type: icosalet
+    numProtons: 12
+    numNuclearElectrons: 6
     protons:
+      0:
+        present: true
       1:
         present: true
       2:
@@ -31,7 +33,5 @@ nuclets:
       10:
         present: true
       11:
-        present: true
-      12:
         present: true
 

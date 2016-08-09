@@ -10,5 +10,5 @@ nuclets:
     num_protons: 1
     num_nuclear_electrons: 0
     protons:
-      1:
+      0:
         present: true

@@ -1,8 +1,8 @@
-name: Lithium 7
+name: Lithium 6
 element: Lithium
 isotope: 0
 valence: 0
-num_protons: 7
+num_protons: 6
 nuclets:
   1:
     position: 1
@@ -13,7 +13,7 @@ nuclets:
       0:
         present: true
       1:
-        present: true
+        present: false
       2:
         present: true
       3:

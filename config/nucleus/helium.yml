@@ -10,11 +10,11 @@ nuclets:
     num_protons: 4
     num_nuclear_electrons: 0
     protons:
+      0:
+        present: true
       1:
         present: true
       2:
         present: true
       3:
-        present: true
-      4:
         present: true

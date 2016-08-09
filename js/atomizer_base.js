@@ -16,18 +16,19 @@ Drupal.atomizer.baseC = function () {
     Drupal.atomizer[response.component].saveYml(response);
   };
 
-  var doAjax = function doAjax (url, data, success, error) {
+  var doAjax = function doAjax (url, data, successCallback, errorCallback) {
     jQuery.ajax({
       url: url,
       type: 'POST',
-      data: data,
-      dataType: 'json',
+      data: JSON.stringify(data),
+      contentType: "application/json; charset=utf-8",
+      processData: false,
       success: function (response) {
-        if (success) success(response);
+        if (successCallback) successCallback(response);
       },
       error: function (response) {
         alert(response.responseText);
-        (error) ? error(response) : success(response);
+        (errorCallback) ? errorCallback(response) : successCallback(response);
       }
     });
   }

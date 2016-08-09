@@ -1,4 +1,4 @@
-name: Berylium
+name: Beryllium 8
 element: Beryllium
 isotope: 0
 variant: 0
@@ -6,10 +6,12 @@ num_protons: 8
 nuclets:
   1:
     position: 1
-    geometry: icosahedron
+    type: pentalet
     num_protons: 8
     num_nuclear_electrons: 6
     protons:
+      0:
+        present: true
       1:
         present: true
       2:
@@ -17,21 +19,19 @@ nuclets:
       3:
         present: true
       4:
-        present: false
+        present: true
       5:
         present: true
       6:
         present: true
       7:
-        present: false
-      8:
         present: true
+      8:
+        present: false
       9:
         present: false
       10:
-        present: true
+        present: false
       11:
         present: false
-      12:
-        present: true
 

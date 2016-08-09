@@ -34,7 +34,8 @@ Drupal.atomizer.viewerC = function (atomizer) {
     // Calculate dimensions of canvas - offsetWidth determines width
     // If offsetHeight is not 0, use it for the height, otherwise make the
     // canvas the same aspect ratio as the browser window.
-    var canvasWidth = window.innerWidth - 450;
+//  var canvasWidth = window.innerWidth - 422;
+    var canvasWidth = window.innerWidth - 273;
     var canvasHeight = window.innerHeight / window.innerWidth * canvasWidth;
 
     // Create and position the scene
@@ -69,42 +70,25 @@ Drupal.atomizer.viewerC = function (atomizer) {
     ambient.name = 'ambient';
     viewer.scene.add(ambient);
 
-    if (viewer.style.get('spotlight_1__color') != "#000000") {
-      spotlights[0] = makeSpotLight('spotlight-1', {
-        c: viewer.style.get('spotlight_1__color'),
-        x: viewer.style.get('spotlight_1__position', 0),
-        y: viewer.style.get('spotlight_1__position', 1),
-        z: viewer.style.get('spotlight_1__position', 2)
+    for (var i = 1; i < 3; i++) {
+      spotlights[i] = makeSpotLight('spotlight-' + i, {
+        c: viewer.style.get('spotlight_' + i + '__color'),
+        x: viewer.style.get('spotlight_' + i + '__position', 0),
+        y: viewer.style.get('spotlight_' + i + '__position', 1),
+        z: viewer.style.get('spotlight_' + i + '__position', 2)
       });
-      viewer.scene.add(spotlights[0]);
-    }
-    if (viewer.style.get('spotlight_2__color') != "#000000") {
-      spotlights[1] = makeSpotLight('spotlight-2', {
-        c: viewer.style.get('spotlight_2__color'),
-        x: viewer.style.get('spotlight_2__position', 0),
-        y: viewer.style.get('spotlight_2__position', 1),
-        z: viewer.style.get('spotlight_2__position', 2)
-      });
-      viewer.scene.add(spotlights[1]);
-    }
-    if (viewer.style.get('spotlight_3__color') != "#000000") {
-      spotlights[2] = makeSpotLight('spotlight-3', {
-        c: viewer.style.get('spotlight_3__color'),
-        x: viewer.style.get('spotlight_3__position', 0),
-        y: viewer.style.get('spotlight_3__position', 1),
-        z: viewer.style.get('spotlight_3__position', 2)
-      });
-      viewer.scene.add(spotlights[2]);
+      viewer.scene.add(spotlights[i]);
     }
 
     // Make controls
     viewer.controls = Drupal.atomizer.controlsC(viewer);
 
     // Initialize the ObjectC - doesn't actually create anything.
-    viewer.object = Drupal.atomizer.objectC(viewer);
+    viewer.nuclet = Drupal.atomizer.nucletC(viewer);
+
 
     // Make the back plane
-    viewer.scene.add(viewer.object.makeObject('plane',
+    viewer.scene.add(viewer.nuclet.makeObject('plane',
       {lambert: {color: viewer.style.get('plane__color')}},
       {
         width: viewer.style.get('plane__width'),
@@ -135,9 +119,6 @@ Drupal.atomizer.viewerC = function (atomizer) {
   viewer.makeScene = makeScene;
   viewer.atomizer = atomizer;
   viewer.view = atomizer.views[atomizer.defaultView];
-
-  // Initialize the objectC
-  viewer.object = Drupal.atomizer.objectC(viewer);
 
   // Load styles
   viewer.style = Drupal.atomizer.styleC(viewer, makeScene);

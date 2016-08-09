@@ -12,9 +12,12 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   var currentSet = {};
   var defaultSet = {};
   var styleSetDirectory = viewer.atomizer.styleSetDirectory;
+  var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'pentalet'];
+//var nucletNames = ['bwireframe', 'bface'];
+
 
   var loadYml = function (results) {
-    results[0].ymlContents['filepath'] = results[0].filepath;
+    results[0].ymlContents.filepath = results[0].data.filepath;
     defaultSet = results[0].ymlContents;
     if (currentSet.name) {
       reset();
@@ -125,46 +128,72 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   var applyControl = function applyControl(id, value) {
-    id = id.replace(/_/g, '-');
-    var args = id.split("--");
+    var did = id.replace(/_/g, '-');
+    var uid = id.replace(/-/g, '_');
+    var args = did.split("--");
     var argNames = args[0].split("-");
-    currentSet.controls[id.replace(/-/g, '_')].defaultValue = value;
+    // Set the currentSet
+//  currentSet.controls[id.replace(/-/g, '_')].defaultValue = value;
+    if (args.length > 2) {
+      var $indice = { 'x': 0, 'y': 1, 'z': 2 }[args[2]];
+      currentSet.controls[args[0].replace(/-/, '_') + '__' + args[1]].defaultValue[$indice] = value;
+    } else {
+      currentSet.controls[args[0].replace(/-/, '_') + '__' + args[1]].defaultValue = value;
+    }
     switch (argNames[0]) {
-      case "renderer":
+      case 'renderer':
         viewer.renderer.setClearColor(new THREE.Color(parseInt(value.replace(/^#/, ''), 16)), 1);
         break;
-      case "camera":
+      case 'camera':
         if (args[1] == 'perspective') {
           viewer.camera.fov = value;
           viewer.camera.updateProjectionMatrix();
         }
         break;
+      case 'ambient':
+        node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+        break;
       default:
         viewer.scene.traverse(function (node) {
           var nodeNames = node.name.split("-");
           var ok = false;
-          if (argNames.length == 2) {
-            if (args[0] == node.name) {
+          if (args[0] == 'nucleus') {
+            if (nucletNames.includes(nodeNames[0])) {
               ok = true;
             }
-          } else if (nodeNames[0] == argNames[0]) {
-            ok = true;
+          } else {
+            if (argNames.length == 2) {
+              if (args[0] == node.name) {
+                ok = true;
+              }
+            } else if (nodeNames[0] == argNames[0]) {
+              ok = true;
+            }
           }
+
           if (ok) {
             switch (args[1]) {
               case 'rotation':
-                if (nucletNames.indexOf(node.name) > -1) {
-                  var radians = value / 360 * 2 * Math.PI;
-                  node.rotation[prop] = radians + (node.rotation['init_' + prop] || 0);
-                }
+                var radians = value / 360 * 2 * Math.PI;
+                node.rotation[args[2]] = radians + (node.rotation['init_' + args[2]] || 0);
+                break;
+              case 'position':
+                node.position[args[2]] = value;
                 break;
               case 'scale':
                 var scale = (node.init_scale) ? value * node.init_scale : value;
                 node.scale.set(scale, scale, scale);
                 break;
+              case 'width':
+              case 'depth':
+                if (argNames[0] == 'plane') {
+                  node.geometry = THREE.PlaneBufferGeometry(currentSet['plane__width'], currentSet['plane__depth']);
+                }
+                break;
               case 'opacity':
                 node.material.opacity = value;
-                node.material.visible = (value > .05);
+                node.material.visible =     (value > .05);
+                node.material.transparent = (value < .97);
                 break;
               case 'linewidth':
                 if (argNames[0] == 'awireframe' || argNames == 'bwireframe') {
@@ -174,7 +203,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                 }
                 break;
               case 'color':
-                if (argNames[0] == 'spotlight' || argNames[0] == 'ambient') {
+                if (argNames[0] == 'spotlight') {
                   node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
                 } else {
                   node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);

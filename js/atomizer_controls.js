@@ -45,13 +45,18 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
 
   function controlChanged(event) {
     var args = this.id.split("--");
+    if (this.className.indexOf('az-slider') > -1) {
+      document.getElementById(args[0] + '--' + args[1] + '--' + args[2] + '--az-value').value = event.target.value;
+    } else if (this.className.indexOf('az-control-range') > -1) {
+      document.getElementById(this.id + '--az-value').value = event.target.value;
+    }
     viewer.style.applyControl(this.id, event.target.value);
   }
 
   function selectYmlChanged(event) {
     var args = this.id.split("--");
     Drupal.atomizer.base.doAjax(
-      'ajax-ab/loadYml',
+      '/ajax-ab/loadYml',
       { component: args[0],
         filepath: viewer[args[0]].getYmlDirectory() + '/' + event.target.value },
       viewer[args[0]].loadYml
@@ -125,22 +130,33 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     for (var controlId in styleControls) {
       var control = styleControls[controlId];
       var id = controlId.replace(/_/g, "-");
-      switch (control.type) {
-        case 'color':
-        case 'range':
-          document.getElementById(id).addEventListener("input", controlChanged);
-          break;
-        case 'saveyml':
-          document.getElementById(id + '--button').addEventListener("click", buttonClicked);
-          break;
-        case 'selectyml':
-          document.getElementById(id).addEventListener("change", selectYmlChanged);
-          document.getElementById(id + '--button').addEventListener("click", buttonClicked);
-          break;
-        case 'link':
-        case 'button':
-          document.getElementById(id).addEventListener("click", buttonClicked);
-          break;
+      var element = document.getElementById(id);
+      if (element) {
+        switch (control.type) {
+          case 'color':
+            element.addEventListener("input", controlChanged);
+            break;
+          case 'range':
+            element.addEventListener("input", controlChanged);
+            break;
+          case 'rotation':
+          case 'position':
+            document.getElementById(id + '--x--az-slider').addEventListener("input", controlChanged);
+            document.getElementById(id + '--y--az-slider').addEventListener("input", controlChanged);
+            document.getElementById(id + '--z--az-slider').addEventListener("input", controlChanged);
+            break;
+          case 'saveyml':
+            document.getElementById(id + '--button').addEventListener("click", buttonClicked);
+            break;
+          case 'selectyml':
+            element.addEventListener("change", selectYmlChanged);
+            document.getElementById(id + '--button').addEventListener("click", buttonClicked);
+            break;
+          case 'link':
+          case 'button':
+            element.addEventListener("click", buttonClicked);
+            break;
+        }
       }
     }
 
