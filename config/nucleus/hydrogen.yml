@@ -1,4 +1,4 @@
-name: Hydrogen
+name: 01 0 Hydrogen
 element: Hydrogen
 isotope: 0
 variant: 0
@@ -11,4 +11,8 @@ nuclets:
     num_nuclear_electrons: 0
     protons:
       0:
+        present: false
+      1:
         present: true
+      2:
+        present: false

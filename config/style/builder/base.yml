@@ -36,16 +36,16 @@ controls:
     defaultValue: 50
   proton_default__color:
     type: color
-    defaultValue: '#6666dd'
+    defaultValue: '#767697'
   proton_top__color:
     type: color
     defaultValue: '#d4af37'
   proton_bottom__color:
     type: color
-    defaultValue: '#dd66dd'
+    defaultValue: '#a569a5'
   proton_marker__color:
     type: color
-    defaultValue: '#55dddd'
+    defaultValue: '#62baba'
   proton__opacity:
     type: range
     defaultValue: 1
@@ -81,16 +81,16 @@ controls:
     defaultValue: 1
   awireframe__color:
     type: color
-    defaultValue: '#aaffcc'
+    defaultValue: '#0fff14'
   awireframe__opacity:
     type: range
     defaultValue: '1'
   awireframe__scale:
     type: range
-    defaultValue: '0.92'
+    defaultValue: '1.04'
   awireframe__linewidth:
     type: range
-    defaultValue: '4.8'
+    defaultValue: '1'
   avertexid__color:
     type: color
     defaultValue: '#ccaaff'
@@ -126,7 +126,7 @@ controls:
     defaultValue: '2.8'
   bwireframe__color:
     type: color
-    defaultValue: '#fbd100'
+    defaultValue: '#f2ff05'
   bwireframe__opacity:
     type: range
     defaultValue: '1'
@@ -135,7 +135,7 @@ controls:
     defaultValue: '1'
   bwireframe__linewidth:
     type: range
-    defaultValue: 1
+    defaultValue: '1'
   bvertexid__color:
     type: color
     defaultValue: '#ffccee'
@@ -144,7 +144,7 @@ controls:
     defaultValue: 0.3
   bvertexid__scale:
     type: range
-    defaultValue: 1
+    defaultValue: '0.5'
   bface__color:
     type: color
     defaultValue: '#235b5b'

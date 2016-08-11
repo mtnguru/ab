@@ -22,6 +22,9 @@ controls:
   style__saveyml:
     type: saveyml
     defaultValue: Undefined
+  proton__radius:
+    type: range
+    defaultValue: 50
   proton_default__color:
     type: color
     defaultValue: '#6666dd'

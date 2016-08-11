@@ -1,4 +1,4 @@
-name: Boron 10
+name: 05 0 Boron 10
 element: Boron
 isotope: 0
 variant: 0
@@ -23,7 +23,7 @@ nuclets:
       5:
         present: true
       6:
-        present: false
+        present: true
       7:
         present: true
       8:
@@ -31,7 +31,7 @@ nuclets:
       9:
         present: false
       10:
-        present: true
+        present: false
       11:
         present: true
 

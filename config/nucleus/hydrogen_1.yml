@@ -1,20 +1,18 @@
-name: 02 0 Helium
-element: Helium
+name: 01 1 Hydrogen Deuterium
+element: Hydrogen
 isotope: 0
 variant: 0
-num_protons: 4
+num_protons: 2
 nuclets:
   1:
     position: 1
-    type: tetralet
-    num_protons: 4
+    type: monolet
+    num_protons: 2
     num_nuclear_electrons: 0
     protons:
       0:
         present: true
       1:
         present: true
-      2:
-        present: true
-      3:
-        present: true
+      1:
+        present: false

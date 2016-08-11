@@ -35,11 +35,10 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   var savedYml = function (response) {
-    var select = document.getElementById('style--selectyml').querySelector('select');
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/listDirectory',
       {
-        directory: controls.directory,
+        directory: styleSetDirectory,
         component: 'style'
       },
       updateStyleSelect
@@ -47,6 +46,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   var updateStyleSelect = function updateStyleSelect(response) {
+    var select = document.getElementById('style--selectyml').querySelector('select');
     // Remove current options
     while (select.hasChildNodes()) {
       select.removeChild(select.lastChild);
@@ -115,7 +115,11 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
         }
       // else defaultValue is not an array, set the one value
       } else {
-        def = defaultSet.controls[id].defaultValue;
+        if (defaultSet.controls[id]) {
+          def = defaultSet.controls[id].defaultValue;
+        } else {
+          alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
+        }
         if (updateAll || currentSet.controls[id].defaultValue != def) {
           applyControl(id, defaultSet.controls[id].defaultValue);
           var element = document.getElementById(id.replace(/_/g, '-'));
