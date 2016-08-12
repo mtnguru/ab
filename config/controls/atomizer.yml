@@ -155,7 +155,7 @@ styler:
       mouse__mode:
         - Mouse mode
         - radios
-        - attach
+        - camera
         -
           camera:      Move Camera
           attach:      Attach Nuclets
