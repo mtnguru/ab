@@ -9,7 +9,12 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   var cameraTrackballControls;
   var atomTrackballControls;
   var mouseMode = 'none';
+  var mouse = {x: 10000, y: 10000};
   var styler = document.getElementById('edit-styler');
+  var projector;
+  var intersected = null;
+  var highlightedFace = null;
+  var highlightedNuclet = null;
 
   function changeMode(newMode) {
 
@@ -22,6 +27,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         viewer.canvasContainer.removeEventListener('mousedown', onDocumentMouseDown);
         break;
       case 'attach':
+        viewer.canvasContainer.removeEventListener('mousemove', onDocumentMouseHoverFaces);
         break;
       case 'none':
         break;
@@ -36,7 +42,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         viewer.canvasContainer.addEventListener('mousedown', onDocumentMouseDown, false);
         break;
       case 'attach':
-        atomTrackballControls = createAtomTrackballControls(selectedObject);
+        viewer.canvasContainer.addEventListener('mousemove', onDocumentMouseHoverFaces, false);
         break;
       case 'none':
         break;
@@ -112,6 +118,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   function createControls() {
 
     var form = document.forms['atomizer-controls-form'];
+    projector = new THREE.Projector();
 
     // Add a change listener to each item in the styler select list
     showStylerBlock();
@@ -207,14 +214,14 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
     vector = vector.unproject(viewer.camera);
 
-    var raycaster = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
+    var ray = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
     var intersects;
     switch (mouseMode) {
       case 'Select Atom':
-        intersects = raycaster.intersectObjects(objects.protons);
+        intersects = ray.intersectObjects(objects.protons);
         break;
       case 'Select Proton':
-        intersects = raycaster.intersectObjects(objects.protons);
+        intersects = ray.intersectObjects(objects.protons);
         break;
     }
     if (intersects.length > 0) {
@@ -239,6 +246,65 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     }
   }
 
+  function onDocumentMouseHoverFaces(event) {
+    var y;
+    var x = event.offsetX || (event.pageX - viewer.canvasContainer.offsetLeft);
+    if (event.offsetY) {
+      y = event.offsetY || (event.pageY - viewer.canvasContainer.offsetTop);
+    } else {
+      y = event.layerY + viewer.canvasContainer.offsetTop;
+    }
+
+//  var y = event.clientY + event.pageY - viewer.canvasContainer.offsetHeight;
+    console.log('mouse  ' + event.clientX + '  ' + event.clientY);
+    console.log('layer  ' + event.layerX + '  ' + event.layerY);
+    console.log('canvas ' + viewer.canvasContainer.offsetLeft + '  ' + viewer.canvasContainer.offsetHeight);
+    console.log('pos    ' + x + '  ' + y);
+
+//  console.log('event ' + event.clientX + '  ' + event.clientY);
+    mouse.x =  (x / viewer.canvasWidth) * 2 - 1;
+    mouse.y = -(y / viewer.canvasHeight) * 2 + 1;
+//  mouse.x =  (event.layerX / viewer.canvasWidth) * 2 + 1;
+//  mouse.y = -(event.layerY / viewer.canvasHeight) * 2 + 1;
+  }
+
+  function highlightAttachProtons(nuclet, face, color) {
+    var p = ['a', 'b', 'c'];
+    for (var i in p) {
+      var proton = nuclet[face[p[i]]];
+      if (color) {
+        proton.currentHex = proton.material.color.getHex();
+        proton.material.color.setHex(color);
+      } else {
+        proton.material.color.setHex(proton.currentHex);
+      }
+    }
+  }
+
+  function updateAttach() {
+    var vector = new THREE.Vector3(mouse.x, mouse.y, 1);
+    vector = vector.unproject(viewer.camera);
+    var ray = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
+    var intersects = ray.intersectObjects(viewer.nuclet.objects.aface);
+    if (intersects.length > 0) {
+      if (highlightedFace != intersects[0].face) {
+        if (highlightedFace) {
+          highlightAttachProtons(highlightedNuclet.children, highlightedFace);
+        }
+        highlightedFace = intersects[0].face;
+        highlightedNuclet = intersects[0].object.parent;
+        highlightAttachProtons(highlightedNuclet.children, highlightedFace, 0x33aa33);
+        viewer.render();
+      }
+    } else {
+      if (highlightedFace) {
+        highlightAttachProtons(highlightedNuclet.children, highlightedFace);
+        highlightedFace = null;
+        viewer.render();
+      }
+    }
+  }
+
   var animate = function animate() {
     requestAnimationFrame(animate);
     if (cameraTrackballControls) {
@@ -247,11 +313,14 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     if (atomTrackballControls) {
       atomTrackballControls.update();
     }
+    if (mouseMode == 'attach') {
+      updateAttach();
+    }
   };
 
   var cameraControls = createCameraTrackballControls();
   var controls = createControls();
-  changeMode('camera');
+  changeMode(viewer.style.get('mouse__mode'));
   return {
     animate: animate
   }

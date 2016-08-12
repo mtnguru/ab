@@ -11,10 +11,16 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
   var objects = {
     protons: [],
-    nuclets: []
+    nuclets: [],
+    aface: [],
+    bface: [],
+    awireframe: [],
+    bwireframe: [],
+    aaxis: [],
+    baxis: []
   };
 
-  function createAxisLine(scale, vertices) {
+  function createAxisLine(id, scale, vertices) {
     var axisGeometry = new THREE.Geometry();
     axisGeometry.vertices.push(new THREE.Vector3(vertices[0].x, vertices[0].y, vertices[0].z));
     axisGeometry.vertices.push(new THREE.Vector3(vertices[1].x, vertices[1].y, vertices[1].z));
@@ -28,7 +34,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
     });
     var axisLine = new THREE.Line(axisGeometry, lineMaterial);
     axisLine.scale.set(scale, scale, scale);
-    axisLine.name = 'aaxis';
+    axisLine.name = id;
+    objects[id].push(axisLine);
     return axisLine;
   }
 
@@ -60,6 +67,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       wireframe.position.y = offsetY * viewer.style.get('proton__radius');
       wireframe.init_offsetY = offsetY * viewer.style.get('proton__radius');
     }
+    objects[id].push(wireframe);
     return wireframe;
   }
 
@@ -96,34 +104,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       if (offset.z) faces.position.z = offset.z;
       faces.init_offset = offset;
     }
+    objects[id].push(faces);
     return faces;
-  }
-
-  function createGeometryVertices(scale, geometry, offset) {
-    var vertices = new THREE.Group();
-    vertices.name = 'verticeIDs';
-    for (var key in geometry.vertices) {
-      var vertice = geometry.vertices[key];
-      var textGeometry = new THREE.TextGeometry( key, {
-        size: 80,
-        height: 20,
-        curveSegments: 20
-      });
-      textGeometry.computeBoundingBox();
-      var centerOffset = -0.5 * ( textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x );
-      var material = new THREE.MultiMaterial( [
-        new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, overdraw: 0.5 } ),
-        new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: 0.5 } )
-      ] );
-      var mesh = new THREE.Mesh( textGeometry, material );
-      mesh.position.x = vertice.x;
-      mesh.position.y = vertice.y;
-      mesh.position.z = vertice.z;
-      mesh.rotation.x = 0;
-      mesh.rotation.y = Math.PI * 2;
-      vertices.add(mesh);
-    }
-    return vertices;
   }
 
   function makeObject(name, mat, geo, pos) {
@@ -483,6 +465,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     // Create axis
     if (config.axis) {
       nuclet.add(createAxisLine(
+        'aaxis',
         config.axis.scale,
         [
           config.axis.vertices[0],
@@ -588,7 +571,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 //  atom.add(createGeometryFaces('bface', 1.66, dualGeometry));
 
     // Create axis
-    atom.add(createAxisLine(2, [geometry.vertices[1], geometry.vertices[2]]));
+    atom.add(createAxisLine('aaxis', 2, [geometry.vertices[1], geometry.vertices[2]]));
     atom.add(createGeometryWireframe('awireframe', 1.64, geometry));
     atom.add(createGeometryFaces('aface', 1.64, geometry));
 
@@ -645,7 +628,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     atom.add(createGeometryWireframe('awireframe', 2.15, geometry));
     atom.add(createGeometryFaces('aface', 2.15, geometry));
-    atom.add(createAxisLine(2, [geometry.vertices[0], geometry.vertices[1]]));
+    atom.add(createAxisLine('aaxis', 2, [geometry.vertices[0], geometry.vertices[1]]));
 
     // Position the atom
     atom.position.x = pos.x;
@@ -693,7 +676,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     atom.add(createGeometryWireframe('awireframe', 2.43, geometry, {y:.59 * viewer.style.get('proton__radius')}));
     atom.add(createGeometryFaces('aface', 1.2, geometry));
-    atom.add(createAxisLine(2,
+    atom.add(createAxisLine('aaxis', 2,
       [geometry.vertices[0], {
         x: geometry.vertices[0].x,
         y: -geometry.vertices[0].y,
@@ -776,6 +759,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     createMonoLet:  createMonoLet,
     createIcosaLet: createIcosaLet,
     createPentaLet: createPentaLet,
-    createTetraLet: createTetraLet
+    createTetraLet: createTetraLet,
+    objects: objects
   };
 };

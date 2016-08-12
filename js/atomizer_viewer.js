@@ -35,8 +35,8 @@ Drupal.atomizer.viewerC = function (atomizer) {
     // If offsetHeight is not 0, use it for the height, otherwise make the
     // canvas the same aspect ratio as the browser window.
 //  var canvasWidth = window.innerWidth - 422;
-    var canvasWidth = window.innerWidth - 273;
-    var canvasHeight = window.innerHeight / window.innerWidth * canvasWidth;
+    viewer.canvasWidth = window.innerWidth - 273;
+    viewer.canvasHeight = window.innerHeight / window.innerWidth * viewer.canvasWidth;
 
     // Create and position the scene
     viewer.scene = new THREE.Scene();
@@ -47,7 +47,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
     // Create the renderer
     viewer.renderer = new THREE.WebGLRenderer();
     viewer.renderer.setClearColor(viewer.style.get('renderer__color'), 1.0);
-    viewer.renderer.setSize(canvasWidth, canvasHeight);
+    viewer.renderer.setSize(viewer.canvasWidth, viewer.canvasHeight);
     viewer.renderer.shadowEnabled = true;
 
     // add the output of the renderer to the html element
@@ -57,7 +57,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
     // Create camera, and point it at the scene
     viewer.camera = new THREE.PerspectiveCamera(
       viewer.style.get('camera__perspective'),
-      canvasWidth / canvasHeight,
+      viewer.canvasWidth / viewer.canvasHeight,
       .1, 10000
     );
     viewer.camera.position.x = viewer.style.get('camera__position')[0];

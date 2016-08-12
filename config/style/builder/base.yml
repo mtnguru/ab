@@ -3,7 +3,7 @@ description: 'Initial style set'
 controls:
   mouse__mode:
     type: radios
-    defaultValue: camera
+    defaultValue: attach
   nucleus__selectyml:
     type: selectyml
     defaultValue: base.yml

@@ -155,11 +155,11 @@ styler:
       mouse__mode:
         - Mouse mode
         - radios
-        - camera
+        - attach
         -
           camera:      Move Camera
-          atom:        Move Atom
           attach:      Attach Nuclets
+          atom:        Move Atom
           spotlight_1: Move Spotlight 1
           spotlight_2: Move Spotlight 2
           spotlight_3: Move Spotlight 3
