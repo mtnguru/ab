@@ -1,4 +1,4 @@
-name: Base
+name: Base Cool
 description: 'Initial style set'
 controls:
   mouse__mode:
@@ -48,7 +48,7 @@ controls:
     defaultValue: '#62baba'
   proton__opacity:
     type: range
-    defaultValue: '1'
+    defaultValue: 1
   proton__scale:
     type: range
     defaultValue: 1
@@ -150,7 +150,7 @@ controls:
     defaultValue: '#06acac'
   bface__opacity:
     type: range
-    defaultValue: '0'
+    defaultValue: '0.89'
   bfaceid__color:
     type: color
     defaultValue: '#ffcc33'

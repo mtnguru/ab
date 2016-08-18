@@ -50,6 +50,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
     viewer.renderer.setSize(viewer.canvasWidth, viewer.canvasHeight);
     viewer.renderer.shadowEnabled = true;
 
+
     // add the output of the renderer to the html element
     viewer.canvasContainer = document.getElementById(viewer.atomizer.atomizerId + '-wrapper');
     viewer.canvasContainer.appendChild(viewer.renderer.domElement);
@@ -85,7 +86,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
 
     // Initialize the ObjectC - doesn't actually create anything.
     viewer.nuclet = Drupal.atomizer.nucletC(viewer);
-
+    viewer.sprites = Drupal.atomizer.spritesC(viewer);
 
     // Make the back plane
     viewer.scene.add(viewer.nuclet.makeObject('plane',
@@ -109,7 +110,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
 
     // Render the image
     render();
-    // Start any animationj and trackball controls tracking.
+    // Start any animation and trackball controls tracking.
     viewer.controls.animate();
   }
 

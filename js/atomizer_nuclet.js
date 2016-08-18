@@ -17,8 +17,28 @@ Drupal.atomizer.nucletC = function (_viewer) {
     awireframe: [],
     bwireframe: [],
     aaxis: [],
-    baxis: []
+    baxis: [],
+    vertexIds: [],
+    faceIds: []
   };
+
+  /*
+	computeFaceNormals: function () {
+		var cb = new THREE.Vector3(), ab = new THREE.Vector3();
+		for ( var f = 0, fl = this.faces.length; f < fl; f ++ ) {
+			var face = this.faces[ f ];
+
+			var vA = this.vertices[ face.a ];
+			var vB = this.vertices[ face.b ];
+			var vC = this.vertices[ face.c ];
+
+			cb.subVectors( vC, vB );
+			ab.subVectors( vA, vB );
+			cb.cross( ab );
+			cb.normalize();
+			face.normal.copy( cb );
+		}
+	} */
 
   function createAxisLine(id, scale, vertices) {
     var axisGeometry = new THREE.Geometry();
@@ -379,8 +399,9 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
       /////////// Define IcosaLet - Carbon nuclet
       case 'icosalet':
-        var geoScale = 1.60;
-        var geoScaleDual = 1.60;
+        var frameScale = 1.90;
+        var geoScale = 1.705;
+        var geoScaleDual = 1.55;
         config = {
           protons: {
             types: [
@@ -397,6 +418,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
               'default', // 10
               'bottom'   // 11
             ]
+          },
+          frame: {
+            scale: frameScale,
+            geometry: new icosahedronGeometry(frameScale * protonRadius)
           },
           shape: {
             scale: geoScale,
@@ -435,12 +460,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
     var config = getConfig(nucletConf.type);
     nuclet.config = config;
 
-    // Add Protons
+    //// Add Protons
     var opacity = viewer.style.get('proton__opacity') || 1;
-//  for (var key in config.shape.geometry.vertices) {
     for (var key in nucletConf.protons) {
-      var vertice = config.shape.geometry.vertices[key];
       if (nucletConf.protons[key].present == false) continue;
+      var vertice = config.frame.geometry.vertices[key];
       var proton = makeObject('proton',
         {
           phong: {
@@ -462,7 +486,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       nuclet.add(proton);
     }
 
-    // Create axis
+    //// Create axis
     if (config.axis) {
       nuclet.add(createAxisLine(
         'aaxis',
@@ -474,6 +498,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       ));
     }
 
+    //// Create Primary Geometry wireframe and faces
     if (config.shape) {
       nuclet.add(createGeometryWireframe(
         'awireframe',
@@ -493,15 +518,34 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     // Create dual geometry wireframe and faces - dodecahedron
     if (config.shapeDual) {
-      nuclet.add(createGeometryWireframe('bwireframe', config.shapeDual.scale, config.shapeDual.geometry, config.shapeDual.rotation));
-      nuclet.add(createGeometryFaces('bface', config.shapeDual.scale, config.shapeDual.geometry, config.shapeDual.rotation));
+      nuclet.add(createGeometryWireframe(
+        'bwireframe',
+        config.shapeDual.scale,
+        config.shapeDual.geometry,
+        config.shapeDual.rotation
+      ));
+      nuclet.add(createGeometryFaces(
+        'bface',
+        config.shapeDual.scale,
+        config.shapeDual.geometry,
+        config.shapeDual.rotation
+      ));
     }
 
-    // Position and rotate the atom
+    var verticeIds = viewer.sprites.createVerticeIds('avertexid', config.shape.geometry, viewer.style.get('avertexid__color'));
+    verticeIds.position.x = 0;
+    verticeIds.position.y = 0;
+    verticeIds.position.z = 0;
+    nuclet.add(verticeIds);
+
+    nuclet.add(viewer.sprites.createFaceIds('afaceid', config.shape.geometry, viewer.style.get('afaceid__color')));
+
+    //// Set the nuclet position
     nuclet.position.x = config.position.x || 0;
     nuclet.position.y = config.position.y || 0;
     nuclet.position.z = config.position.z || 0;
 
+    //// Set the nuclet rotation
     if (config.rotation) {
       for (var i in axes) {
         var axis = axes[i];
@@ -512,6 +556,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
         }
       }
     }
+
+    //// Create vertice ID's
+
+    //// Create face ID's
 
     return nuclet;
   }
