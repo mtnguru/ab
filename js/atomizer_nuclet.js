@@ -532,12 +532,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       ));
     }
 
-    var verticeIds = viewer.sprites.createVerticeIds('avertexid', config.shape.geometry, viewer.style.get('avertexid__color'));
-    verticeIds.position.x = 0;
-    verticeIds.position.y = 0;
-    verticeIds.position.z = 0;
-    nuclet.add(verticeIds);
-
+    nuclet.add(viewer.sprites.createVerticeIds('avertexid', config.shape.geometry, viewer.style.get('avertexid__color')));
     nuclet.add(viewer.sprites.createFaceIds('afaceid', config.shape.geometry, viewer.style.get('afaceid__color')));
 
     //// Set the nuclet position

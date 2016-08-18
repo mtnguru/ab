@@ -81,14 +81,14 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		return sprite;
 	}
 
-	var createVerticeIds = function createVerticeIds (name, geometry, settings) {
+	var createVerticeIds = function createVerticeIds (name, geometry) {
 		geometry.mergeVertices();
 		var verticeIds = new THREE.Group();
 		verticeIds.name = name;
 
 		var parameters = {
 			fontsize: 60,
-			backgroundColor: '#000000',
+			backgroundColor: '#333333',
 			color: viewer.style.get(name + '__color')
 		};
 
@@ -107,17 +107,15 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		return verticeIds;
 	}
 
-	var createFaceIds = function createFaceIds (name, geometry, settings) {
+	var createFaceIds = function createFaceIds (name, geometry) {
 		var faceIds = new THREE.Group();
 		computeCentroids(geometry.faces, geometry.vertices);
 		faceIds.name = name;
 
-		var baseColor = viewer.style.get(name + '__color');
-
 		var parameters = {
 			fontsize: 60,
 			backgroundColor: viewer.style.get(name + '__color'),
-			color: '#000000'
+			color: '#333333'
 		};
 
 		for (var i = 0; i < geometry.faces.length; i++)
