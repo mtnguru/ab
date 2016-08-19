@@ -91,9 +91,6 @@ controls:
   awireframe__linewidth:
     type: range
     defaultValue: '5'
-  avertexid__color:
-    type: color
-    defaultValue: '#ccaaff'
   avertexid__opacity:
     type: range
     defaultValue: 0.3
@@ -106,9 +103,6 @@ controls:
   aface__opacity:
     type: range
     defaultValue: Undefined
-  afaceid__color:
-    type: color
-    defaultValue: '#aaffee'
   afaceid__opacity:
     type: range
     defaultValue: 0.3
@@ -136,9 +130,6 @@ controls:
   bwireframe__linewidth:
     type: range
     defaultValue: '4.7'
-  bvertexid__color:
-    type: color
-    defaultValue: '#ffccee'
   bvertexid__opacity:
     type: range
     defaultValue: 0.3
@@ -151,9 +142,6 @@ controls:
   bface__opacity:
     type: range
     defaultValue: Undefined
-  bfaceid__color:
-    type: color
-    defaultValue: '#ffcc33'
   bfaceid__opacity:
     type: range
     defaultValue: 0.3

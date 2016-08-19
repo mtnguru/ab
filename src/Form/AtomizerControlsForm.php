@@ -262,7 +262,7 @@ class AtomizerControlsForm extends FormBase {
           break;
 
         case 'label':
-          $control = array('#markup' => "<div class='az-label>$controlConf[0]</div>");
+          $control = array('#markup' => "<div class='az-label'>$controlConf[0]</div>");
           break;
 
         case 'hr':
@@ -306,7 +306,7 @@ class AtomizerControlsForm extends FormBase {
       '#attributes' => array('id' => 'controls'),
     );
     foreach ($controlSet['styler'] as $blockName => $block) {
-      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, false);
+      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, $styleSet, false);
     }
 
     $form['#attributes'] = array('name' => 'atomizer-controls-form');

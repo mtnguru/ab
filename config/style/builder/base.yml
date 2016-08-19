@@ -36,29 +36,20 @@ controls:
     defaultValue: 50
   proton_default__color:
     type: color
-    defaultValue: '#767697'
+    defaultValue: '#6b67a5'
   proton_top__color:
     type: color
-    defaultValue: '#d4af37'
+    defaultValue: '#b39c46'
   proton_bottom__color:
     type: color
-    defaultValue: '#a569a5'
+    defaultValue: '#dd66dd'
   proton_marker__color:
     type: color
-    defaultValue: '#62baba'
+    defaultValue: '#55dddd'
   proton__opacity:
     type: range
     defaultValue: '1'
   proton__scale:
-    type: range
-    defaultValue: 1
-  protonid__color:
-    type: color
-    defaultValue: '#aaddff'
-  protonid__opacity:
-    type: range
-    defaultValue: 1
-  protonid__scale:
     type: range
     defaultValue: 1
   nelectrons__color:
@@ -81,7 +72,7 @@ controls:
     defaultValue: 1
   awireframe__color:
     type: color
-    defaultValue: '#0fff14'
+    defaultValue: '#eaff45'
   awireframe__opacity:
     type: range
     defaultValue: '1'
@@ -90,43 +81,37 @@ controls:
     defaultValue: '1'
   awireframe__linewidth:
     type: range
-    defaultValue: '2.1'
-  avertexid__color:
-    type: color
-    defaultValue: '#ccaaff'
+    defaultValue: '2'
   avertexid__opacity:
     type: range
-    defaultValue: 0.3
-  avertexid__scale:
+    defaultValue: '0'
+  avertexids__scale:
     type: range
-    defaultValue: 1
+    defaultValue: '1'
   aface__color:
     type: color
-    defaultValue: '#f65c5c'
+    defaultValue: '#84a1a1'
   aface__opacity:
     type: range
     defaultValue: '0'
-  afaceid__color:
-    type: color
-    defaultValue: '#aaffee'
   afaceid__opacity:
     type: range
-    defaultValue: 0.3
-  afaceid__scale:
+    defaultValue: '0'
+  afaceids__scale:
     type: range
-    defaultValue: 1
+    defaultValue: '1'
   aaxis__color:
     type: color
-    defaultValue: '#28050e'
+    defaultValue: '#1fff2b'
   aaxis__opacity:
     type: range
     defaultValue: 0.5
   aaxis__linewidth:
     type: range
-    defaultValue: '2.8'
+    defaultValue: '2'
   bwireframe__color:
     type: color
-    defaultValue: '#4bedd7'
+    defaultValue: '#44fee5'
   bwireframe__opacity:
     type: range
     defaultValue: '1'
@@ -135,29 +120,23 @@ controls:
     defaultValue: '1'
   bwireframe__linewidth:
     type: range
-    defaultValue: '5'
-  bvertexid__color:
-    type: color
-    defaultValue: '#ffccee'
+    defaultValue: '1.9'
   bvertexid__opacity:
     type: range
-    defaultValue: 0.3
-  bvertexid__scale:
+    defaultValue: '0'
+  bvertexids__scale:
     type: range
-    defaultValue: '0.5'
+    defaultValue: '0.8'
   bface__color:
     type: color
-    defaultValue: '#06acac'
+    defaultValue: '#1e3e3e'
   bface__opacity:
     type: range
-    defaultValue: '0'
-  bfaceid__color:
-    type: color
-    defaultValue: '#ffcc33'
+    defaultValue: '0.53'
   bfaceid__opacity:
     type: range
-    defaultValue: 0.3
-  bfaceid__scale:
+    defaultValue: '0'
+  bfaceids__scale:
     type: range
     defaultValue: 1
   baxis__color:

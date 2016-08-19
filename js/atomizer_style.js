@@ -20,12 +20,13 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     results[0].ymlContents.filepath = results[0].data.filepath;
     defaultSet = results[0].ymlContents;
     if (currentSet.name) {
-      reset();
+      reset(false, false);
       currentSet.name = defaultSet.name;
       currentSet.description = defaultSet.description;
       currentSet.filepath = defaultSet.filepath;
     } else {
       currentSet = JSON.parse(JSON.stringify(defaultSet));
+      reset(true, true);
     }
     // This is a hack, the callback is only run the first time the style file is loaded.
     if (callback) {
@@ -97,16 +98,17 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     return;
   };
 
-  var reset = function reset() {
+  var reset = function reset(controlsOnly, updateAll) {
     var def;
-    var updateAll = false;
     for (var id in currentSet.controls) {
       // if defaultValue defines an array then set all elements.
       if (Object.prototype.toString.call(currentSet.controls[id].defaultValue) === '[object Array]') {  // If it's an array
         for (var i in currentSet.controls[id].defaultValue) {
           def = defaultSet.controls[id].defaultValue[i];
           if (updateAll || currentSet.controls[id].defaultValue[i] != def) {
-            applyControl(id, def);
+            if (!controlsOnly) {
+              applyControl(id, def);
+            }
             var element = document.getElementById(id.replace(/_/g, '-'));
             if (element) {
               element.value = def;
@@ -121,7 +123,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
           alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
         }
         if (updateAll || currentSet.controls[id].defaultValue != def) {
-          applyControl(id, defaultSet.controls[id].defaultValue);
+          if (!controlsOnly) {
+            applyControl(id, defaultSet.controls[id].defaultValue);
+          }
           var element = document.getElementById(id.replace(/_/g, '-'));
           if (element) {
             element.value = def;
@@ -165,6 +169,11 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
             if (nucletNames.includes(nodeNames[0])) {
               ok = true;
             }
+          } else if (args[0].indexOf('wireframe') > -1 &&
+                     args[1] == 'scale'                &&
+                     nodeNames[0].indexOf('face') > -1 &&
+                     nodeNames[0].charAt(0) == args[0].charAt(0)) {
+            ok = true;
           } else {
             if (argNames.length == 2) {
               if (args[0] == node.name) {

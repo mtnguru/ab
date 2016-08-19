@@ -1,4 +1,4 @@
-name: Base Cool
+name: Base Save
 description: 'Initial style set'
 controls:
   mouse__mode:
@@ -36,19 +36,19 @@ controls:
     defaultValue: 50
   proton_default__color:
     type: color
-    defaultValue: '#767697'
+    defaultValue: '#6b67a5'
   proton_top__color:
     type: color
-    defaultValue: '#d4af37'
+    defaultValue: '#b39c46'
   proton_bottom__color:
     type: color
-    defaultValue: '#a569a5'
+    defaultValue: '#dd66dd'
   proton_marker__color:
     type: color
-    defaultValue: '#62baba'
+    defaultValue: '#55dddd'
   proton__opacity:
     type: range
-    defaultValue: 1
+    defaultValue: '1'
   proton__scale:
     type: range
     defaultValue: 1
@@ -72,7 +72,7 @@ controls:
     defaultValue: 1
   awireframe__color:
     type: color
-    defaultValue: '#0fff14'
+    defaultValue: '#dced5c'
   awireframe__opacity:
     type: range
     defaultValue: '1'
@@ -81,25 +81,25 @@ controls:
     defaultValue: '1'
   awireframe__linewidth:
     type: range
-    defaultValue: '2.1'
+    defaultValue: '2'
   avertexid__opacity:
     type: range
-    defaultValue: 0.3
-  avertexid__scale:
+    defaultValue: '0'
+  avertexids__scale:
     type: range
-    defaultValue: 1
+    defaultValue: '1'
   aface__color:
     type: color
-    defaultValue: '#f65c5c'
+    defaultValue: '#84a1a1'
   aface__opacity:
     type: range
     defaultValue: '0'
   afaceid__opacity:
     type: range
-    defaultValue: 0.3
-  afaceid__scale:
+    defaultValue: '0'
+  afaceids__scale:
     type: range
-    defaultValue: 1
+    defaultValue: '1'
   aaxis__color:
     type: color
     defaultValue: '#28050e'
@@ -120,23 +120,23 @@ controls:
     defaultValue: '1'
   bwireframe__linewidth:
     type: range
-    defaultValue: '5'
+    defaultValue: '2'
   bvertexid__opacity:
     type: range
-    defaultValue: 0.3
-  bvertexid__scale:
+    defaultValue: 0
+  bvertexids__scale:
     type: range
     defaultValue: '0.5'
   bface__color:
     type: color
-    defaultValue: '#06acac'
+    defaultValue: '#1e3e3e'
   bface__opacity:
     type: range
-    defaultValue: '0.89'
+    defaultValue: '0.53'
   bfaceid__opacity:
     type: range
-    defaultValue: 0.3
-  bfaceid__scale:
+    defaultValue: '0'
+  bfaceids__scale:
     type: range
     defaultValue: 1
   baxis__color:

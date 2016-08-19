@@ -54,8 +54,7 @@
     margin: 1em 0;
   }
   .control-block {
-    display: none
-  ;
+    display: none;
     hr {
       margin: 10px 0 15px;
       border-top: 1px solid #bbb;
@@ -67,8 +66,9 @@
     margin-bottom: 8px;
   }
   .az-label {
-    font-weight: bold;
-    margin-top: 5px;
+//  font-weight: bold;
+    font-size: 13px;
+    margin-top: 8px;
   }
   .az-indent .az-name {
     padding-left: 15px;
@@ -118,7 +118,7 @@
     width: 100%;
   }
   .form-type-color {
-    margin: 10px 0 7px;
+    margin: 10px 0 2px;
     &not:first-child {
       border-top: solid 1px #aaa;
       padding-top: 10px;
