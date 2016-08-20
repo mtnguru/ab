@@ -42,16 +42,16 @@ controls:
     defaultValue: '#b39c46'
   proton_bottom__color:
     type: color
-    defaultValue: '#dd66dd'
+    defaultValue: '#cf31cf'
   proton_marker__color:
     type: color
-    defaultValue: '#55dddd'
+    defaultValue: '#13baba'
   proton__opacity:
     type: range
     defaultValue: '1'
   proton__scale:
     type: range
-    defaultValue: 1
+    defaultValue: '1'
   nelectrons__color:
     type: color
     defaultValue: '#eeffaa'
@@ -105,7 +105,7 @@ controls:
     defaultValue: '#1fff2b'
   aaxis__opacity:
     type: range
-    defaultValue: 0.5
+    defaultValue: '0'
   aaxis__linewidth:
     type: range
     defaultValue: '2'
@@ -117,10 +117,10 @@ controls:
     defaultValue: '1'
   bwireframe__scale:
     type: range
-    defaultValue: '1'
+    defaultValue: '0.92'
   bwireframe__linewidth:
     type: range
-    defaultValue: '1.9'
+    defaultValue: '2'
   bvertexid__opacity:
     type: range
     defaultValue: '0'

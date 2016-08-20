@@ -6,6 +6,7 @@ styler:
     controls:
       nucleus__loadlabel:      ['Select nucleus',   'header']
       nucleus__selectyml:      [ null,              'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
+      nucleus__popupNucleus:   ['Popup Nucleus',    'popup',     'carbon_12',  'nucleus']
       hr1:                     [ null,              'hr']
       nucleus__savelabel:      ['Save new nucleus', 'header']
       nucleus__saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_save']

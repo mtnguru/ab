@@ -560,8 +560,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       /////////// Define IcosaLet - Carbon nuclet
       case 'icosalet':
         var frameScale = 1.90;
-        var geoScale = 1.705;
-        var geoScaleDual = 1.55;
+        var geoScale = 1.37;
+        var geoScaleDual = 1.52;
         config = {
           protons: {
             types: [
@@ -662,7 +662,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     if (config.shape) {
       nuclet.add(createGeometryWireframe(
         'awireframe',
-        config.shape.scale +.02,
+        config.shape.scale +.01,
         config.shape.geometry,
         config.shape.rotation || null,
         config.shape.offsetY || null
@@ -683,14 +683,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
       if (nuclet.name == 'icosalet') {
         nuclet.add(createGeometryLines(
           'bwireframe',
-          config.shapeDual.scale +.02,
+          config.shapeDual.scale +.01,
           config.shapeDual.geometry,
           config.shapeDual.rotation
         ));
       } else {
         nuclet.add(createGeometryWireframe(
           'bwireframe',
-          config.shapeDual.scale +.02,
+          config.shapeDual.scale +.01,
           config.shapeDual.geometry,
           config.shapeDual.rotation
         ));

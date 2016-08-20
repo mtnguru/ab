@@ -99,6 +99,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   var reset = function reset(controlsOnly, updateAll) {
+
     var def;
     for (var id in currentSet.controls) {
       // if defaultValue defines an array then set all elements.
@@ -128,7 +129,12 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
           }
           var element = document.getElementById(id.replace(/_/g, '-'));
           if (element) {
-            element.value = def;
+            if (element.className.indexOf('az-control-range') > -1) {
+              document.getElementById(id.replace(/_/g, '-') + '--az-slider').value = def;
+              document.getElementById(id.replace(/_/g, '-') + '--az-value').value = def;
+            } else {
+              element.value = def;
+            }
           }
         }
       }
@@ -210,7 +216,13 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                 break;
               case 'linewidth':
                 if (argNames[0] == 'awireframe' || argNames == 'bwireframe') {
-                  node.material.wireframeLinewidth = value;
+                  if (node.parent.name == 'icosalet') {   // The dual - dodecahedron is drawn with lines
+                    for (var i = 0; i < node.children.length; i++) {
+                      node.children[i].material.linewidth = value;
+                    }
+                  } else {
+                    node.material.wireframeLinewidth = value;
+                  }
                 } else {
                   node.material.linewidth = value;
                 }
