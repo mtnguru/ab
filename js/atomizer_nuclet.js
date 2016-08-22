@@ -406,17 +406,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
 
   function cubeGeometry (radius, detail) {
-
-    /**
-    0   0
-    2   1
-    3   2
-    1   3
-    4   4
-    6   5
-    7   6
-    5   7
-     **/
     var vertices = [
       1,  1,  1,     1, -1,  1,
       1, -1, -1,     1,  1, -1,
@@ -472,9 +461,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
   cubeGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   cubeGeometry.prototype.constructor = cubeGeometry;
-
-
-
 
   function getConfig(type) {
     var protonRadius = viewer.style.get('proton__radius');
@@ -645,11 +631,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
       /////////// Define IcosaLet - Carbon nuclet
       case 'icosalet':
         var frameScale = 1.90;
-        var geoScale = 1.37;
-        var geoScaleDual = 1.52;
-        var electronScale = 1.52;
-        var cubeScale = 1.52;
-        var tetraScale = 1.52;
+        var geoScale = 1.07 * viewer.style.get('awireframe__scale');
+        var geoScaleDual = 1.52 * viewer.style.get('bwireframe__scale');
+        var cubeScale = 1.55 * viewer.style.get('cwireframe__scale');
+        var tetraScale = 1.55 * viewer.style.get('dwireframe__scale');
+        var electronScale = 1.15 * viewer.style.get('ewireframe__scale');
         config = {
           protons: {
             types: [
