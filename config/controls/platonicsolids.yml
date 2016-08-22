@@ -1,22 +1,6 @@
 name: Atom Builder
 mouse:
 styler:
-  nucleus:
-    title:               Nucleus
-    controls:
-      nucleus__loadlabel:      ['Select nucleus',   'header']
-      nucleus__selectyml:      [ null,              'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
-      nucleus__popupNucleus:   ['Popup Nucleus',    'popup',     'carbon_12',  'nucleus']
-      hr1:                     [ null,              'hr']
-      nucleus__savelabel:      ['Save new nucleus', 'header']
-      nucleus__saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_save']
-      hr2:                     [ null,              'hr']
-      nucleus__position:       ['Position',         'position', [0, 0, 0], [-1000, 1000, 1]]
-      nucleus__rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
-  build:
-    title:               Build Atom
-    controls:
-      text:                    ['Display nuclets here, plus other controls needed to build atoms', 'label']
   style:
     title:               Styles
     controls:
@@ -38,9 +22,9 @@ styler:
       proton__opacity:         ['Opacity',      'range',    .9, [0, 1, .01]]
       proton__scale:           ['Scale',        'range',     1, [0, 2, .01]]
 
-  geometry:
+  isocahedron:
 
-    title:               Geometry
+    title:               Isocahedron
     controls:
 
       awireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
@@ -68,9 +52,9 @@ styler:
       aaxis__linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
 
 
-  dualGeometry:
+  dodecahedron:
 
-    title:               Dual Geometry
+    title:               Dodecahedron
     controls:
       bwireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
 
@@ -179,16 +163,6 @@ styler:
       caxis__color:            ['Axis',         'color',    '#ffbbcc']
       caxis__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
       caxis__linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
-
-  attachments :
-
-    title:               Attach Points
-    controls:
-      valence__color:          ['Valence',       'color',    '#ff00ff']
-      valence__opacity:        ['Valence',       'range',    .3, [0, 1, .01]]
-      hr1:                     [ null, 'hr']
-      isotope__color:          ['Isotope',       'color',    '#0000ff']
-      isotope__opacity:        ['Isotope',       'range',    .3, [0, 1, .01]]
 
   scene:
     title:               Scene
