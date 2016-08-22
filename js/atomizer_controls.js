@@ -7,7 +7,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
 
   var viewer = _viewer;
   var cameraTrackballControls;
-  var atomTrackballControls;
+  var objectTrackballControls;
   var mouseMode = 'none';
   var mouse = {x: 10000, y: 10000};
   var styler = document.getElementById('edit-styler');
@@ -24,7 +24,8 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         delete cameraTrackballControls;
         break;
       case 'atom':
-        viewer.canvasContainer.removeEventListener('mousedown', onDocumentMouseDown);
+        objectTrackballControls.dispose();
+        delete objectTrackballControls;
         break;
       case 'attach':
         viewer.canvasContainer.removeEventListener('mousemove', onDocumentMouseHoverFaces);
@@ -39,7 +40,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         cameraTrackballControls = createCameraTrackballControls();
         break;
       case 'atom':
-        viewer.canvasContainer.addEventListener('mousedown', onDocumentMouseDown, false);
+        objectTrackballControls = createObjectTrackballControls(Drupal.atomizer.octolet);
         break;
       case 'attach':
         viewer.canvasContainer.addEventListener('mousemove', onDocumentMouseHoverFaces, false);
@@ -195,19 +196,19 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    *
    * @returns {THREE.TrackballControls}
    */
-  function createAtomTrackballControls(atom) {
-    var atomTrackballControls = new THREE.TrackballControls(atom, viewer.renderer.domElement);
-    atomTrackballControls.rotateSpeed = 2.0;
-    atomTrackballControls.zoomSpeed = 1.0;
-    atomTrackballControls.panSpeed = 3.0;
-    atomTrackballControls.noZoom = false;
-    atomTrackballControls.noPan = false;
-    atomTrackballControls.staticMoving = true;
-    //  atomTrackballControls.dynamicDampingFactor=0.3;
+  function createObjectTrackballControls(object) {
+    var objectTrackballControls = new THREE.TrackballControls(object, viewer.renderer.domElement);
+    objectTrackballControls.rotateSpeed = 2.0;
+    objectTrackballControls.zoomSpeed = 1.0;
+    objectTrackballControls.panSpeed = 3.0;
+    objectTrackballControls.noZoom = false;
+    objectTrackballControls.noPan = false;
+    objectTrackballControls.staticMoving = true;
+    // objectTrackballControls.dynamicDampingFactor=0.3;
 
-    atomTrackballControls.keys = [65, 83, 68];
-    atomTrackballControls.addEventListener('change', render);
-    return atomTrackballControls;
+    objectTrackballControls.keys = [65, 83, 68];
+    objectTrackballControls.addEventListener('change', viewer.render);
+    return objectTrackballControls;
   }
 
   function onDocumentMouseDown(event) {
@@ -310,8 +311,8 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     if (cameraTrackballControls) {
       cameraTrackballControls.update();
     }
-    if (atomTrackballControls) {
-      atomTrackballControls.update();
+    if (objectTrackballControls) {
+      objectTrackballControls.update();
     }
     if (mouseMode == 'attach') {
       updateAttach();

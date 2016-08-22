@@ -13,11 +13,20 @@ Drupal.atomizer.nucletC = function (_viewer) {
     protons: [],
     nuclets: [],
     aface: [],
-    bface: [],
     awireframe: [],
-    bwireframe: [],
     aaxis: [],
+    bface: [],
+    bwireframe: [],
     baxis: [],
+    cface: [],
+    cwireframe: [],
+    caxis: [],
+    dface: [],
+    dwireframe: [],
+    daxis: [],
+    eface: [],
+    ewireframe: [],
+    eaxis: [],
     vertexIds: [],
     faceIds: []
   };
@@ -294,106 +303,175 @@ Drupal.atomizer.nucletC = function (_viewer) {
     this.type = 'IcosahedronGeometry';
     this.parameters = { radius: radius, detail: detail };
   }
- icosahedronGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
- icosahedronGeometry.prototype.constructor = icosahedronGeometry;
+  icosahedronGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
+  icosahedronGeometry.prototype.constructor = icosahedronGeometry;
 
- function dodecahedronGeometry ( radius, detail ) {
+  function dodecahedronGeometry ( radius, detail ) {
 
-   var t = ( 1 + Math.sqrt( 5 ) ) / 2;
-   var r = 1 / t;
+    var t = ( 1 + Math.sqrt( 5 ) ) / 2;
+    var r = 1 / t;
 
-   var vertices = [
+    var vertices = [
       1,  1,  1,     r,  t,  0,
-     -r,  t,  0,    -1,  1,  1,
+      -r,  t,  0,    -1,  1,  1,
       0,  r,  t,     1,  1, -1,
       t,  0,  r,     0, -r,  t,
-     -t,  0,  r,    -1,  1, -1,
+      -t,  0,  r,    -1,  1, -1,
       1, -1, -1,     r, -t,  0,
-     -r, -t,  0,    -1, -1, -1,
+      -r, -t,  0,    -1, -1, -1,
       0, -r, -t,     t,  0, -r,
       1, -1,  1,    -1, -1,  1,
-     -t,  0, -r,     0,  r, -t
-   ];
+      -t,  0, -r,     0,  r, -t
+    ];
 
-   var indices = [
-     15, 10, 14,    15, 14, 19,    15, 19,  5,  //  0
-     5, 19,  9,     5,  9,  2,     5,  2,  1,  //  1
-     14, 13, 18,    14, 18,  9,    14,  9, 19,  //  2
-     10, 11, 12,    10, 12, 13,    10, 13, 14,  //  3
-     6, 16, 11,     6, 11, 10,     6, 10, 15,  //  4
-     0,  6, 15,     0, 15,  5,     0,  5,  1,  //  5
-     9, 18,  8,     9,  8,  3,     9,  3,  2,  //  6
-     13, 12, 17,    13, 17,  8,    13,  8, 18,  //  7
-     17, 12, 11,    17, 11, 16,    17, 16,  7,  //  8
-     4,  7, 16,     4, 16,  6,     4,  6,  0,  //  9
-     3,  4,  0,     3,  0,  1,     3,  1,  2,  // 10
-     8, 17,  7,     8,  7,  4,     8,  4,  3   // 11
-   ];
+    var indices = [
+      15, 10, 14,    15, 14, 19,    15, 19,  5,  //  0
+      5, 19,  9,     5,  9,  2,     5,  2,  1,  //  1
+      14, 13, 18,    14, 18,  9,    14,  9, 19,  //  2
+      10, 11, 12,    10, 12, 13,    10, 13, 14,  //  3
+      6, 16, 11,     6, 11, 10,     6, 10, 15,  //  4
+      0,  6, 15,     0, 15,  5,     0,  5,  1,  //  5
+      9, 18,  8,     9,  8,  3,     9,  3,  2,  //  6
+      13, 12, 17,    13, 17,  8,    13,  8, 18,  //  7
+      17, 12, 11,    17, 11, 16,    17, 16,  7,  //  8
+      4,  7, 16,     4, 16,  6,     4,  6,  0,  //  9
+      3,  4,  0,     3,  0,  1,     3,  1,  2,  // 10
+      8, 17,  7,     8,  7,  4,     8,  4,  3   // 11
+    ];
 
 
-   THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
+    THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
 
-   this.type = 'DodecahedronGeometry';
+    this.type = 'DodecahedronGeometry';
 
-   this.parameters = {
-     radius: radius,
-     detail: detail
-   };
+    this.parameters = {
+      radius: radius,
+      detail: detail
+    };
 
-   this.azfaces = [
-     {  // 0
-       'indices': [5, 19, 14, 10, 15],
-       'faces': [0, 1, 2]
-     },
-     {  // 1
-       'indices': [1, 2, 9, 19, 5],
-       'faces': [3, 4, 5]
-     },
-     {  // 2
-       'indices': [9, 18, 13, 14, 19],
-       'faces': [6, 7, 8]
-     },
-     {  // 3
-       'indices': [10, 11, 12, 13, 14],
-       'faces': [9, 10, 11]
-     },
-     {  // 4
-       'indices': [6, 15, 10, 11, 16],
-       'faces': [12, 13, 14]
-     },
-     {  // 5
-       'indices': [0, 1, 5, 15, 6],
-       'faces': [15, 16, 17]
-     },
-     {  // 6
-       'indices': [2, 3, 8, 18, 9],
-       'faces': [18, 19, 20]
-     },
-     {  // 7
-       'indices': [8, 17, 12, 13, 18],
-       'faces': [21, 22, 23]
-     },
-     {  // 8
-       'indices': [7, 16, 11, 12, 17],
-       'faces': [24, 25, 26]
-     },
-     {  // 9
-       'indices': [0, 6, 16, 7, 4],
-       'faces': [27, 28, 29]
-     },
-     {  // 10
-       'indices': [0, 1, 2, 3, 4],
-       'faces': [30, 31, 32]
-     },
-     {  // 11
-       'indices': [3, 4, 7, 17, 8],
-       'faces': [33, 34, 35]
-     }
-   ];
+    this.azfaces = [
+      {  // 0
+        'indices': [5, 19, 14, 10, 15],
+        'faces': [0, 1, 2]
+      },
+      {  // 1
+        'indices': [1, 2, 9, 19, 5],
+        'faces': [3, 4, 5]
+      },
+      {  // 2
+        'indices': [9, 18, 13, 14, 19],
+        'faces': [6, 7, 8]
+      },
+      {  // 3
+        'indices': [10, 11, 12, 13, 14],
+        'faces': [9, 10, 11]
+      },
+      {  // 4
+        'indices': [6, 15, 10, 11, 16],
+        'faces': [12, 13, 14]
+      },
+      {  // 5
+        'indices': [0, 1, 5, 15, 6],
+        'faces': [15, 16, 17]
+      },
+      {  // 6
+        'indices': [2, 3, 8, 18, 9],
+        'faces': [18, 19, 20]
+      },
+      {  // 7
+        'indices': [8, 17, 12, 13, 18],
+        'faces': [21, 22, 23]
+      },
+      {  // 8
+        'indices': [7, 16, 11, 12, 17],
+        'faces': [24, 25, 26]
+      },
+      {  // 9
+        'indices': [0, 6, 16, 7, 4],
+        'faces': [27, 28, 29]
+      },
+      {  // 10
+        'indices': [0, 1, 2, 3, 4],
+        'faces': [30, 31, 32]
+      },
+      {  // 11
+        'indices': [3, 4, 7, 17, 8],
+        'faces': [33, 34, 35]
+      }
+    ];
   }
 
   dodecahedronGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   dodecahedronGeometry.prototype.constructor = dodecahedronGeometry;
+
+
+  function cubeGeometry (radius, detail) {
+
+    /**
+    0   0
+    2   1
+    3   2
+    1   3
+    4   4
+    6   5
+    7   6
+    5   7
+     **/
+    var vertices = [
+      1,  1,  1,     1, -1,  1,
+      1, -1, -1,     1,  1, -1,
+     -1,  1, -1,    -1, -1, -1,
+     -1, -1,  1,    -1,  1,  1
+    ];
+
+    var indices = [
+      0, 1, 3,   1, 2, 3,
+      4, 5, 7,   5, 6, 7,
+      4, 7, 3,   7, 0, 3,
+      6, 5, 1,   5, 2, 1,
+      7, 6, 0,   6, 1, 0,
+      3, 2, 4,   2, 5, 4
+    ];
+
+    THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
+
+    this.type = 'DodecahedronGeometry';
+
+    this.parameters = {
+      radius: radius,
+      detail: detail
+    };
+
+    this.azfaces = [
+      {  // 0
+        'indices': [0, 1, 2, 3],
+        'faces': [0, 1]
+      },
+      {  // 1
+        'indices': [4, 5, 6, 7],
+        'faces': [2, 3]
+      },
+      {  // 2
+        'indices': [0, 3, 4, 7],
+        'faces': [4, 5]
+      },
+      {  // 3
+        'indices': [1, 6, 5, 2],
+        'faces': [6, 7]
+      },
+      {  // 4
+        'indices': [0, 7, 6, 1],
+        'faces': [8, 9]
+      },
+      {  // 5
+        'indices': [2, 5, 4, 3],
+        'faces': [10, 11]
+      },
+    ];
+  }
+
+  cubeGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
+  cubeGeometry.prototype.constructor = cubeGeometry;
 
 
 
@@ -478,12 +556,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
       /////////// Define Octolet - Boron
       case 'octolet':
+        var frameScale = 1.41;
+        var geoScale   = 1.2;
+        var geoScaleNorm = 1.2 * protonRadius;
         config = {
           protons: {
             types: [
               'top',      //  0  0   left
-              'marker',   //  1  1
-              'default',  //  2  2
+              'bottom',   //  1  1
+              'marker',  //  2  2
               'default',  //  3  3
               'default',  //  4  2
               'default',  //  5  2
@@ -493,12 +574,16 @@ Drupal.atomizer.nucletC = function (_viewer) {
           },
           frame: {
             scale: frameScale,
-            geometry: new icosahedronGeometry(frameScale * protonRadius)
+            geometry: new THREE.OctahedronGeometry(frameScale * protonRadius),
           },
           shape: {
-            scale: 2.43,
-            offsetY: .58,
-            geometry: new THREE.OctahedronGeometry(1.2 * protonRadius),
+            scale: geoScale,
+            geometry: new THREE.OctahedronGeometry(geoScale * protonRadius),
+          },
+          shapeDual: {
+            scale: geoScale,
+//          geometry: new THREE.CubeGeometry(geoScaleNorm, geoScaleNorm, geoScaleNorm, 1, 1, 1),
+            geometry: new cubeGeometry(geoScaleNorm),
           },
           axis: {
             scale: 2.5,
@@ -562,6 +647,9 @@ Drupal.atomizer.nucletC = function (_viewer) {
         var frameScale = 1.90;
         var geoScale = 1.37;
         var geoScaleDual = 1.52;
+        var electronScale = 1.52;
+        var cubeScale = 1.52;
+        var tetraScale = 1.52;
         config = {
           protons: {
             types: [
@@ -594,6 +682,27 @@ Drupal.atomizer.nucletC = function (_viewer) {
               y: -90,
             }
           },
+          shapeCube: {
+            scale: cubeScale,
+            geometry: new cubeGeometry(cubeScale * protonRadius)
+//          rotation: {
+//            y: -90,
+//          }
+          },
+          shapeTetra: {
+            scale: tetraScale,
+            geometry: new THREE.TetrahedronGeometry(tetraScale * protonRadius)
+//          rotation: {
+//            y: -90,
+//          }
+          },
+          shapeElectrons: {
+            scale: electronScale,
+            geometry: new THREE.OctahedronGeometry(frameScale * protonRadius),
+            rotation: {
+              y: -90,
+            }
+          },
           axis: {
             scale: 2.1
           },
@@ -621,29 +730,31 @@ Drupal.atomizer.nucletC = function (_viewer) {
     nuclet.config = config;
 
     //// Add Protons
-    var opacity = viewer.style.get('proton__opacity') || 1;
-    for (var key in nucletConf.protons) {
-      if (nucletConf.protons[key].present == false) continue;
-      var vertice = config.frame.geometry.vertices[key];
-      var proton = makeObject('proton',
-        {
-          phong: {
-            color: protonColors[config.protons.types[key]],
-            opacity: opacity,
-            transparent: (opacity < transparentThresh),
-            visible: (opacity > visibleThresh)
+    if (config.protons) {
+      var opacity = viewer.style.get('proton__opacity') || 1;
+      for (var key in nucletConf.protons) {
+        if (nucletConf.protons[key].present == false) continue;
+        var vertice = config.frame.geometry.vertices[key];
+        var proton = makeObject('proton',
+          {
+            phong: {
+              color: protonColors[config.protons.types[key]],
+              opacity: opacity,
+              transparent: (opacity < transparentThresh),
+              visible: (opacity > visibleThresh)
+            }
+          },
+          {radius: viewer.style.get('proton__radius')},
+          {
+            x: vertice.x,
+            y: vertice.y,
+            z: vertice.z
           }
-        },
-        {radius: viewer.style.get('proton__radius')},
-        {
-          x: vertice.x,
-          y: vertice.y,
-          z: vertice.z
-        }
-      );
-      proton.name = 'proton-' + config.protons.types[key];
-      objects.protons.push(proton);
-      nuclet.add(proton);
+        );
+        proton.name = 'proton-' + config.protons.types[key];
+        objects.protons.push(proton);
+        nuclet.add(proton);
+      }
     }
 
     //// Create axis
@@ -680,7 +791,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     // Create dual geometry wireframe and faces - dodecahedron
     if (config.shapeDual) {
-      if (nuclet.name == 'icosalet') {
+      if (nuclet.name == 'icosalet' ||
+          nuclet.name == 'octolet') {
         nuclet.add(createGeometryLines(
           'bwireframe',
           config.shapeDual.scale +.01,
@@ -706,10 +818,70 @@ Drupal.atomizer.nucletC = function (_viewer) {
       nuclet.add(viewer.sprites.createFaceIds('b', config.shapeDual.geometry, config.shapeDual.rotation));
     }
 
+    // Create inner electron geometry - cube
+    if (config.shapeCube) {
+      nuclet.add(createGeometryWireframe(
+        'cwireframe',
+        config.shapeCube.scale +.01,
+        config.shapeCube.geometry,
+        config.shapeCube.rotation
+      ));
+      nuclet.add(createGeometryFaces(
+        'cface',
+        config.shapeCube.scale,
+        config.shapeCube.geometry,
+        config.shapeCube.rotation
+      ));
+      nuclet.add(viewer.sprites.createVerticeIds('c', config.shapeCube.geometry, config.shapeCube.rotation));
+      nuclet.add(viewer.sprites.createFaceIds('c', config.shapeCube.geometry, config.shapeCube.rotation));
+    }
+
+    // Create inner electron geometry - tetrahedrohae
+    if (config.shapeTetra) {
+      nuclet.add(createGeometryWireframe(
+        'dwireframe',
+        config.shapeTetra.scale +.01,
+        config.shapeTetra.geometry,
+        config.shapeTetra.rotation
+      ));
+      nuclet.add(createGeometryFaces(
+        'dface',
+        config.shapeTetra.scale,
+        config.shapeTetra.geometry,
+        config.shapeTetra.rotation
+      ));
+      nuclet.add(viewer.sprites.createVerticeIds('d', config.shapeTetra.geometry, config.shapeTetra.rotation));
+      nuclet.add(viewer.sprites.createFaceIds('d', config.shapeTetra.geometry, config.shapeTetra.rotation));
+    }
+
+    // Create inner electron geometry - octohedron
+    if (config.shapeElectrons) {
+      nuclet.add(createGeometryWireframe(
+        'ewireframe',
+        config.shapeElectrons.scale +.01,
+        config.shapeElectrons.geometry,
+        config.shapeElectrons.rotation
+      ));
+      nuclet.add(createGeometryFaces(
+        'eface',
+        config.shapeElectrons.scale,
+        config.shapeElectrons.geometry,
+        config.shapeElectrons.rotation
+      ));
+      nuclet.add(viewer.sprites.createVerticeIds('e', config.shapeElectrons.geometry, config.shapeElectrons.rotation));
+      nuclet.add(viewer.sprites.createFaceIds('e', config.shapeElectrons.geometry, config.shapeElectrons.rotation));
+    }
+
     //// Set the nuclet position
-    nuclet.position.x = config.position.x || 0;
-    nuclet.position.y = config.position.y || 0;
-    nuclet.position.z = config.position.z || 0;
+    if (nucletConf.position) {
+      nuclet.position.x = nucletConf.position.x || 0;
+      nuclet.position.y = nucletConf.position.y || 0;
+      nuclet.position.z = nucletConf.position.z || 0;
+    } else {
+      nuclet.position.x = config.position.x || 0;
+      nuclet.position.y = config.position.y || 0;
+      nuclet.position.z = config.position.z || 0;
+    }
 
     //// Set the nuclet rotation
     if (config.rotation) {
@@ -724,185 +896,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
     }
 
     return nuclet;
-  }
-
-  function createMonoLet(pos) {
-  }
-
-
-  function createIcosaLet(pos) {
-    // Set proton colors
-    var protonColors = setProtonColors();
-    var c = ['marker',
-      'top',
-      'bottom',
-      'default',
-      'default',
-      'default',
-      'default',
-      'default',
-      'default',
-      'default',
-      'default',
-      'default'];
-
-    var atom = new THREE.Group();
-    atom.name = 'icosaLet';
-    var geometry = new THREE.IcosahedronGeometry(1.9 * viewer.style.get('proton__radius'));
-
-    // Create geometry wireframe and faces - icosahedron
-
-    // Add Protons
-    for (var key in geometry.vertices) {
-      var vertice = geometry.vertices[key];
-      var opacity = viewer.style.get('proton__opacity') || 1;
-      var proton = makeObject('proton',
-        {phong: {
-          color: protonColors[c[key]],
-          opacity: opacity,
-          transparent: (opacity < transparentThresh),
-          visible:     (opacity > visibleThresh)
-        }},
-        {radius: viewer.style.get('proton__radius')},
-        {
-          x: vertice.x,
-          y: vertice.y,
-          z: vertice.z
-        }
-      );
-      proton.name = 'proton-' + c[key];
-      objects.protons.push(proton);
-      atom.add(proton);
-    }
-
-    // Create dual geometry wireframe and faces - dodecahedron
-//  var dualGeometry = new THREE.DodecahedronGeometry(60);
-//  atom.add(createGeometryWireframe('bwireframe', 1.66, dualGeometry));
-//  atom.add(createGeometryFaces('bface', 1.66, dualGeometry));
-
-    // Create axis
-    atom.add(createAxisLine('aaxis', 2, [geometry.vertices[1], geometry.vertices[2]]));
-    atom.add(createGeometryWireframe('awireframe', 1.64, geometry));
-    atom.add(createGeometryFaces('aface', 1.64, geometry));
-
-    // Position and rotate the atom
-    atom.position.x = pos.x;
-    atom.position.y = pos.y;
-    atom.position.z = pos.z;
-    atom.rotation.init_z = .552;
-    atom.rotation.z = .552;
-
-    return atom;
-  }
-
-  function createPentaLet(pos) {
-    // Set proton colors
-    var protonColors = setProtonColors();
-    var c = [
-      'top',
-      'bottom',
-      'marker',
-      'default',
-      'default',
-      'default',
-      'default'];
-
-    var atom = new THREE.Group();
-    atom.name = 'pentaLet';
-    var radius = viewer.style.get('proton__radius') * 1.70;
-    var height = radius * .61;
-    var geometry = createBiPyramid(5, radius, height);
-
-    // Add the protons
-    for (var key in geometry.vertices) {
-      var vertice = geometry.vertices[key];
-      var opacity = viewer.style.get('proton__opacity') || 1;
-      var proton = makeObject('proton',
-        {phong: {
-          color: protonColors[c[key]],
-          opacity: opacity,
-          transparent: (opacity < transparentThresh),
-          visible:     (opacity > visibleThresh)
-        }},
-        {radius: viewer.style.get('proton__radius')},
-        {
-          x: vertice.x,
-          y: vertice.y,
-          z: vertice.z
-        }
-      );
-      proton.name = 'proton-' + c[key];
-      objects.protons.push(proton);
-      atom.add(proton);
-    }
-
-    atom.add(createGeometryWireframe('awireframe', 2.15, geometry));
-    atom.add(createGeometryFaces('aface', 2.15, geometry));
-    atom.add(createAxisLine('aaxis', 2, [geometry.vertices[0], geometry.vertices[1]]));
-
-    // Position the atom
-    atom.position.x = pos.x;
-    atom.position.y = pos.y;
-    atom.position.z = pos.z;
-    objects.nuclets.push(atom);
-    return atom;
-  }
-
-  function createTetraLet(pos) {
-    // Set proton colors
-    var protonColors = setProtonColors();
-    var c = [
-      'top', 'marker', 'default', 'default'
-    ];
-
-    var atom = new THREE.Group();
-    atom.name = 'tetraLet';
-    var radius = 1.16 * viewer.style.get('proton__radius');
-    var height = radius * 1.40;
-    var geometry = createPyramid(3, radius, height);
-
-    // Add the protons
-    for (var key in geometry.vertices) {
-      var vertice = geometry.vertices[key];
-      var opacity = viewer.style.get('proton__opacity') || 1;
-      var proton = makeObject('proton',
-        {phong: {
-          color: protonColors[c[key]],
-          opacity: opacity,
-          transparent: (opacity < transparentThresh),
-          visible:     (opacity > visibleThresh)
-        }},
-        {radius: viewer.style.get('proton__radius')},
-        {
-          x: vertice.x,
-          y: vertice.y,
-          z: vertice.z
-        }
-      );
-      proton.name = 'proton-' + c[key];
-      objects.protons.push(proton);
-      atom.add(proton);
-    }
-
-    atom.add(createGeometryWireframe('awireframe', 2.43, geometry, {y:.59 * viewer.style.get('proton__radius')}));
-    atom.add(createGeometryFaces('aface', 1.2, geometry));
-    atom.add(createAxisLine('aaxis', 2,
-      [geometry.vertices[0], {
-        x: geometry.vertices[0].x,
-        y: -geometry.vertices[0].y,
-        z: geometry.vertices[0].z
-
-      }]
-    ));
-
-    //  atom.add(THREE.axisHelper(200));
-
-    // Position the atom
-    atom.position.x = pos.x;
-    atom.position.y = pos.y;
-    atom.position.z = pos.z;
-    objects.nuclets.push(atom);
-    return atom;
   }
 
   function createPyramid(n, rad, len) {
@@ -966,10 +959,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
   return {
     makeObject: makeObject,
     create: createNuclet,
-    createMonoLet:  createMonoLet,
-    createIcosaLet: createIcosaLet,
-    createPentaLet: createPentaLet,
-    createTetraLet: createTetraLet,
     objects: objects
   };
 };

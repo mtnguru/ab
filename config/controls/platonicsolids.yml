@@ -1,4 +1,4 @@
-name: Platonic Solids
+name: Atom Builder
 mouse:
 styler:
   nucleus:
@@ -6,11 +6,13 @@ styler:
     controls:
       nucleus__loadlabel:      ['Select nucleus',   'header']
       nucleus__selectyml:      [ null,              'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
+      nucleus__popupNucleus:   ['Popup Nucleus',    'popup',     'carbon_12',  'nucleus']
       hr1:                     [ null,              'hr']
       nucleus__savelabel:      ['Save new nucleus', 'header']
       nucleus__saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_save']
       hr2:                     [ null,              'hr']
       nucleus__position:       ['Position',         'position', [0, 0, 0], [-1000, 1000, 1]]
+      nucleus__rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
   build:
     title:               Build Atom
     controls:
@@ -25,6 +27,7 @@ styler:
       hr2:                     [ null,              'hr']
       style__savelabel:        ['Create New Style', 'header']
       style__saveyml:          [ null,              'saveyml',   '',           'style',   'config/style/builder', 'atomizer.ajax_yml_save']
+
   proton:
     title:               Protons
     controls:
@@ -34,45 +37,30 @@ styler:
       proton_marker__color:    ['Marker',       'color',    '#55dddd']
       proton__opacity:         ['Opacity',      'range',    .9, [0, 1, .01]]
       proton__scale:           ['Scale',        'range',     1, [0, 2, .01]]
-      hr1:                     [ null, 'hr']
-      protonid__color:         ['IDs',          'color',    '#aaddff']
-      protonid__opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
-      protonid__scale:         ['Scale',        'range',    1, [0, 2, .01]]
-
-  electron:
-    title:               Electrons
-    controls:
-      nelectrons__color:       ['Nuclear',      'color',    '#eeffaa']
-      nelectrons__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
-      nelectrons__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
-      hr1:                     [ null, 'hr']
-      oelectrons__color:       ['Outer',        'color',    '#ddbbaa']
-      oelectrons__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
-      oelectrons__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
 
   geometry:
 
     title:               Geometry
     controls:
 
-      awireframe__color:       ['Wireframe',    'color',    '#aaffcc']
-      awireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
       awireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
-      awireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
 
       hr1:                     [ null, 'hr']
-      avertexid__color:        ['Vertex IDs',   'color',    '#ccaaff']
+      awireframe__color:       ['Wireframe',    'color',    '#aaffcc']
+      awireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      awireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      avertexid__label:        ['IDs',          'label']
       avertexid__opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
-      avertexid__scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+      avertexids__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
 
       hr2:                     [ null, 'hr']
       aface__color:            ['Faces',        'color',    '#88cccc']
       aface__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
 
-      hr3:                     [ null, 'hr']
-      afaceid__color:          ['Face IDs',     'color',    '#aaffee']
+      afaceid__label:          ['IDs',          'label']
       afaceid__opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
-      afaceid__scale:          ['Scale',        'range',    1,  [0, 2, .01]]
+      afaceids__scale:         ['Scale',        'range',    1,  [0, 2, .01]]
 
       hr4:                     [ null, 'hr']
       aaxis__color:            ['Axis',         'color',    '#ffbbcc']
@@ -84,29 +72,113 @@ styler:
 
     title:               Dual Geometry
     controls:
-      bwireframe__color:       ['Wireframe',    'color',    '#ffdd33']
-      bwireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
       bwireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
-      bwireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
 
       hr1:                     [ null, 'hr']
-      bvertexid__color:        ['Vertex IDs',   'color',    '#ffccee']
+      bwireframe__color:       ['Wireframe',    'color',    '#ffdd33']
+      bwireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      bwireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      bvertexid__label:        ['IDs',          'label']
       bvertexid__opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
-      bvertexid__scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+      bvertexids__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
 
       hr2:                     [ null, 'hr']
       bface__color:            ['Faces',        'color',    '#88cccc']
       bface__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
 
-      hr3:                     [ null, 'hr']
-      bfaceid__color:          ['Face IDs',     'color',    '#ffcc33']
+      bfaceid__label:          ['IDs',          'label']
       bfaceid__opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
-      bfaceid__scale:          ['Scale',        'range',    1,  [0, 2, .01]]
+      bfaceids__scale:         ['Scale',        'range',    1,  [0, 2, .01]]
 
       hr4:                     [ null, 'hr']
       baxis__color:            ['Axis',         'color',    '#aabb99']
       baxis__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
       baxis__linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  octahedron:
+
+    title:               Octahedron
+    controls:
+      ewireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr1:                     [ null, 'hr']
+      ewireframe__color:       ['Wireframe',    'color',    '#ff00ff']
+      ewireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      ewireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      evertexid__label:        ['IDs',          'label']
+      evertexid__opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
+      evertexids__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                     [ null, 'hr']
+      eface__color:            ['Faces',        'color',    '#88cccc']
+      eface__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+
+      efaceid__label:          ['IDs',          'label']
+      efaceid__opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
+      efaceids__scale:         ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr4:                     [ null, 'hr']
+      eaxis__color:            ['Axis',         'color',    '#ffbbcc']
+      eaxis__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      eaxis__linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  tetrahedron:
+
+    title:               Tetrahedron
+    controls:
+      dwireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr1:                     [ null, 'hr']
+      dwireframe__color:       ['Wireframe',    'color',    '#ff00ff']
+      dwireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      dwireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      dvertexid__label:        ['IDs',          'label']
+      dvertexid__opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
+      dvertexids__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                     [ null, 'hr']
+      dface__color:            ['Faces',        'color',    '#88cccc']
+      dface__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+
+      dfaceid__label:          ['IDs',          'label']
+      dfaceid__opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
+      dfaceids__scale:         ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr4:                     [ null, 'hr']
+      daxis__color:            ['Axis',         'color',    '#ffbbcc']
+      daxis__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      daxis__linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  cube:
+
+    title:               Cube
+    controls:
+      cwireframe__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr1:                     [ null, 'hr']
+      cwireframe__color:       ['Wireframe',    'color',    '#ff00ff']
+      cwireframe__opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      cwireframe__linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      cvertexid__label:        ['IDs',          'label']
+      cvertexid__opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
+      cvertexids__scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                     [ null, 'hr']
+      cface__color:            ['Faces',        'color',    '#88cccc']
+      cface__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+
+      cfaceid__label:          ['IDs',          'label']
+      cfaceid__opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
+      cfaceids__scale:         ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr4:                     [ null, 'hr']
+      caxis__color:            ['Axis',         'color',    '#ffbbcc']
+      caxis__opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      caxis__linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
 
   attachments :
 
@@ -123,7 +195,7 @@ styler:
     controls:
       header__camera:          ['Camera',        'header']
       camera__perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
-      camera__position:        ['Position',      'position', [0, 1400, -1400], [-2000, 2000, 1]]
+      camera__position:        ['Position',      'position', [0, 2000, -2000], [-3000, 3000, 1]]
 
       hr1:                     [ null, 'hr']
       renderer__color:         ['Background',    'color',    '#fcf3ff']
@@ -131,10 +203,10 @@ styler:
       hr2:                     [ null, 'hr']
       plane__color:            ['Plane',         'color',    '#cccccc']
       plane__opacity:          ['Opacity',       'range',    1, [0, 1, .01]]
-      plane__width:            ['Width',         'range',    850, [1, 1500, 1]]
-      plane__depth:            ['Depth',         'range',    850, [1, 1500, 1]]
-      plane__position:         ['Position',      'position', [0, 0, 0], [-1000, 1000, 1]]
-      plane__rotation:         ['Rotation',      'rotation', [0, -180, 1], [-360, 360, 1]]
+      plane__width:            ['Width',         'range',    850, [500, 1500, 1]]
+      plane__depth:            ['Depth',         'range',    850, [500, 1500, 1]]
+      plane__position:         ['Position',      'position', [0, -200, 0], [-1000, 1000, 1]]
+      plane__rotation:         ['Rotation',      'rotation', [0, -180, 1], [-180, 180, 1]]
   lighting:
     title:               Lighting
     controls:
@@ -157,8 +229,8 @@ styler:
         - camera
         -
           camera:      Move Camera
-          atom:        Move Atom
           attach:      Attach Nuclets
+          atom:        Move Atom
           spotlight_1: Move Spotlight 1
           spotlight_2: Move Spotlight 2
           spotlight_3: Move Spotlight 3

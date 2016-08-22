@@ -1,9 +1,9 @@
 /**
- * @file - atomizer.js
+ * @file - platonicsolids.js
  *
  */
 
-Drupal.atomizer.producers.workbenchC = function (_viewer) {
+Drupal.atomizer.producers.platonicsolidsC = function (_viewer) {
   var viewer = _viewer;
   viewer.nuclet = Drupal.atomizer.nucletC(viewer);
 
@@ -91,7 +91,7 @@ Drupal.atomizer.producers.workbenchC = function (_viewer) {
     Drupal.atomizer.octolet = octolet;
     viewer.scene.add(octolet);
 
-//  viewer.scene.add(createObject('icosalet', {x: 0, y: 92, z:  200}));
+    viewer.scene.add(createObject('icosalet', {x: 0, y: 92, z:  200}));
 
 //  viewer.scene.add(createObject('icosalet', {x: 0, y: 92, z: -300}));
 //  viewer.scene.add(createObject('octolet', {x: 0, y: 92, z: 0}));

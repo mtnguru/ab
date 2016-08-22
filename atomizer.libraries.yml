@@ -12,6 +12,7 @@ atomizer-js:
     js/atomizer_nucleus.js: {}
     js/producers/atom_builder.js: {}
     js/producers/workbench.js: {}
+    js/producers/platonicsolids.js: {}
     js/atomizer.js: {}
   css:
     component:
