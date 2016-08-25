@@ -10,6 +10,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   var objectTrackballControls;
   var mouseMode = 'none';
   var mouse = {x: 10000, y: 10000};
+  var styler;
   var styler = document.getElementById('edit-styler');
   var projector;
   var intersected = null;
@@ -134,24 +135,34 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     }
 
     // Initialize all the sliders, buttons and color fields in the styler blocks
-    var styleControls = viewer.style.getCurrentControls();
-    for (var controlId in styleControls) {
-      var control = styleControls[controlId];
+    for (var controlId in viewer.atomizer.styleSet.styles) {
+      var control = viewer.atomizer.styleSet.styles[controlId];
       var id = controlId.replace(/_/g, "-");
       var element = document.getElementById(id);
-      if (element) {
+      if (element || control.type == 'rotation' || control.type == 'position') {
         switch (control.type) {
           case 'color':
             element.addEventListener("input", controlChanged);
+            viewer.style.set(control.defaultValue, id, control.type);
             break;
           case 'range':
             element.addEventListener("input", controlChanged);
+            viewer.style.set(control.defaultValue, id, control.type);
             break;
           case 'rotation':
           case 'position':
-            document.getElementById(id + '--x--az-slider').addEventListener("input", controlChanged);
-            document.getElementById(id + '--y--az-slider').addEventListener("input", controlChanged);
-            document.getElementById(id + '--z--az-slider').addEventListener("input", controlChanged);
+            var sid;
+            sid = id + '--az-slider';
+            document.getElementById(sid).addEventListener("input", controlChanged);
+            viewer.style.set(control.defaultValue, id, control.type);
+
+            sid = id + '--az-slider';
+            document.getElementById(sid).addEventListener("input", controlChanged);
+            viewer.style.set(control.defaultValue, id, control.type);
+
+            sid = id + '--az-slider';
+            document.getElementById(sid).addEventListener("input", controlChanged);
+            viewer.style.set(control.defaultValue, id, control.type);
             break;
           case 'saveyml':
             document.getElementById(id + '--button').addEventListener("click", buttonClicked);
@@ -165,6 +176,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
             element.addEventListener("click", buttonClicked);
             break;
         }
+        // Make sure that style has default values for all controls
       }
     }
 
@@ -306,6 +318,13 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     }
   }
 
+  var init = function init() {
+    var cameraControls = createCameraTrackballControls();
+    var controls = createControls();
+    styler = document.getElementById('edit-styler');
+    changeMode(viewer.style.get('mouse--mode'));
+  };
+
   var animate = function animate() {
     requestAnimationFrame(animate);
     if (cameraTrackballControls) {
@@ -319,10 +338,29 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     }
   };
 
-  var cameraControls = createCameraTrackballControls();
-  var controls = createControls();
-  changeMode(viewer.style.get('mouse__mode'));
+  var getDefault = function getDefault(id, index) {
+    var element = document.getElementById(id);
+    if (element) {
+      if (element.className.indexOf('az-control-range') > -1 ||
+          element.className.indexOf('az-control-rotation') > -1 ||
+          element.className.indexOf('az-control-position') > -1) {
+        if (index) {
+          return document.getElementById(id + '--' + index + '--az-slider').value;
+        } else {
+          return document.getElementById(id + '--az-slider').value;
+        }
+      } else {
+        return element.value;
+      }
+    } else {
+      alert('controls - element not found - ' + id);
+      return 0;
+    }
+  };
+
   return {
-    animate: animate
+    init: init,
+    animate: animate,
+    getDefault: getDefault
   }
 };

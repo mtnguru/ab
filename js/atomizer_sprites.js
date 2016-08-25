@@ -77,7 +77,7 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		texture.needsUpdate = true;
 
 		var spriteMaterial = new THREE.SpriteMaterial({map: texture});
-		spriteMaterial.opacity = parameters.opacity || 1;
+		spriteMaterial.opacity = parameters.opacity || 0;
 		spriteMaterial.transparent = parameters.transparent || false;
 		spriteMaterial.visible = parameters.visible || true;
 		var sprite = new THREE.Sprite(spriteMaterial);
@@ -85,17 +85,17 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		return sprite;
 	}
 
-	var createVerticeIds = function createVerticeIds (type, geometry, rotation) {
+	var createVerticeIds = function createVerticeIds (name, geometry) {
 		geometry.mergeVertices();
 		var verticeIds = new THREE.Group();
-		verticeIds.name = type + 'vertexids';
+		verticeIds.name = name + 'Vertexids';
 
-		var opacity = viewer.style.get(type + 'vertexid__opacity')
+		var opacity = viewer.style.get(name + 'Vertexid--opacity')
 
 		var parameters = {
 			fontsize: 60,
-			color: '#333333',
-			backgroundColor: viewer.style.get(type + 'wireframe__color'),
+			color: '#000000',
+			backgroundColor: viewer.style.get(name + 'Wireframe--color'),
 			opacity: opacity,
 			transparent: (opacity <.97) ? true : false,
 	    visible: (opacity >.03) ? true : false
@@ -104,7 +104,7 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		for (var i = 0; i < geometry.vertices.length; i++)
 		{
 			var spritey = makeTextSprite( " " + i + " ", parameters);
-			spritey.name = type + 'vertexid';
+			spritey.name = name + 'Vertexid';
 
 			var scale = 2.0;
 			spritey.position.x = scale * geometry.vertices[i].x;
@@ -115,31 +115,20 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		var scale = 1;
 		verticeIds.scale.set(scale, scale, scale);
 
-		if (rotation) {
-			for (var i in axes) {
-				var axis = axes[i];
-				if (rotation[axis]) {
-					var radians = rotation[axis] / 360 * 2 * Math.PI;
-					verticeIds.rotation['init_' + axis] = radians;
-					verticeIds.rotation[axis] = radians;
-				}
-			}
-		}
-
 		return verticeIds;
 	}
 
-	var createFaceIds = function createFaceIds (type, geometry, rotation) {
+	var createFaceIds = function createFaceIds (name, geometry) {
 		var faceIds = new THREE.Group();
 		computeCentroids(geometry.faces, geometry.vertices);
-		faceIds.name = type + 'faceids';
+		faceIds.name = name + 'Faceids';
 
-		var opacity = viewer.style.get(type + 'vertexid__opacity')
+		var opacity = viewer.style.get(name + 'Faceid--opacity')
 
 		var parameters = {
 			fontsize: 60,
-			color: viewer.style.get(type + 'wireframe__color'),
-			backgroundColor: '#333333',
+			color: viewer.style.get(name + 'Wireframe--color'),
+			backgroundColor: '#000000',
 			opacity: opacity,
 			transparent: (opacity <.97) ? true : false,
 			visible: (opacity >.03) ? true : false
@@ -148,7 +137,7 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		for (var i = 0; i < geometry.faces.length; i++)
 		{
 			var spritey = makeTextSprite( " " + i + " ", parameters);
-			spritey.name = type + 'faceid';
+			spritey.name = name + 'Faceid';
 
 			var scale = 2.0;
 			spritey.position.x = scale * geometry.faces[i].centroid.x;
@@ -158,17 +147,6 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		}
 		var scale = 1;
 		faceIds.scale.set(scale, scale, scale);
-
-		if (rotation) {
-			for (var i in axes) {
-				var axis = axes[i];
-				if (rotation[axis]) {
-					var radians = rotation[axis] / 360 * 2 * Math.PI;
-					faceIds.rotation['init_' + axis] = radians;
-					faceIds.rotation[axis] = radians;
-				}
-			}
-		}
 
 		return faceIds;
 	}

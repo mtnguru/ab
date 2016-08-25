@@ -44,12 +44,14 @@ Drupal.atomizer.viewerC = function (atomizer) {
     viewer.scene.position.y = 0;
     viewer.scene.position.z = 0;
 
+    // Make controls
+    viewer.controls = Drupal.atomizer.controlsC(viewer);
+
     // Create the renderer
     viewer.renderer = new THREE.WebGLRenderer();
-    viewer.renderer.setClearColor(viewer.style.get('renderer__color'), 1.0);
+    viewer.renderer.setClearColor(viewer.style.get('renderer--color'), 1.0);
     viewer.renderer.setSize(viewer.canvasWidth, viewer.canvasHeight);
     viewer.renderer.shadowEnabled = true;
-
 
     // add the output of the renderer to the html element
     viewer.canvasContainer = document.getElementById(viewer.atomizer.atomizerId + '-wrapper');
@@ -57,48 +59,50 @@ Drupal.atomizer.viewerC = function (atomizer) {
 
     // Create camera, and point it at the scene
     viewer.camera = new THREE.PerspectiveCamera(
-      viewer.style.get('camera__perspective'),
+      viewer.style.get('camera--perspective'),
       viewer.canvasWidth / viewer.canvasHeight,
       .1, 10000
     );
-    viewer.camera.position.x = viewer.style.get('camera__position')[0];
-    viewer.camera.position.y = viewer.style.get('camera__position')[1];
-    viewer.camera.position.z = viewer.style.get('camera__position')[2];
+    viewer.camera.position.x = viewer.style.get('camera--position', 'x');
+    viewer.camera.position.y = viewer.style.get('camera--position', 'y');
+    viewer.camera.position.z = viewer.style.get('camera--position', 'z');
     viewer.camera.lookAt(viewer.scene.position);
 
+    // Add the trackball and page controls
+    viewer.controls.init();
+
     // Create an ambient light and 2 spotlights
-    ambient = new THREE.AmbientLight(viewer.style.get('ambient__color'));
+    ambient = new THREE.AmbientLight(viewer.style.get('ambient--color'));
     ambient.name = 'ambient';
     viewer.scene.add(ambient);
 
     for (var i = 1; i < 3; i++) {
       spotlights[i] = makeSpotLight('spotlight-' + i, {
-        c: viewer.style.get('spotlight_' + i + '__color'),
-        x: viewer.style.get('spotlight_' + i + '__position', 0),
-        y: viewer.style.get('spotlight_' + i + '__position', 1),
-        z: viewer.style.get('spotlight_' + i + '__position', 2)
+        c: viewer.style.get('spotlight-' + i + '--color'),
+        x: viewer.style.get('spotlight-' + i + '--position', 'x'),
+        y: viewer.style.get('spotlight-' + i + '--position', 'y'),
+        z: viewer.style.get('spotlight-' + i + '--position', 'z')
       });
       viewer.scene.add(spotlights[i]);
     }
 
-    // Make controls
-    viewer.controls = Drupal.atomizer.controlsC(viewer);
-
     // Initialize the ObjectC - doesn't actually create anything.
     viewer.nuclet = Drupal.atomizer.nucletC(viewer);
+    viewer.shapes = Drupal.atomizer.shapesC(viewer);
     viewer.sprites = Drupal.atomizer.spritesC(viewer);
 
     // Make the back plane
+    var color = viewer.style.get('plane--color');
     viewer.scene.add(viewer.nuclet.makeObject('plane',
-      {lambert: {color: viewer.style.get('plane__color')}},
+      {lambert: {color: viewer.style.get('plane--color')}},
       {
-        width: viewer.style.get('plane__width'),
-        depth: viewer.style.get('plane__depth')
+        width: viewer.style.get('plane--width'),
+        depth: viewer.style.get('plane--depth')
       },
       {
-        x: viewer.style.get('plane__position', 0),
-        y: viewer.style.get('plane__position', 1),
-        z: viewer.style.get('plane__position', 2),
+        x: viewer.style.get('plane--position', 'x'),
+        y: viewer.style.get('plane--position', 'y'),
+        z: viewer.style.get('plane--position', 'z'),
         rotation: {x: -0.5 * Math.PI}
       }
     ));

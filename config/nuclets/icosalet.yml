@@ -1,0 +1,81 @@
+name: icosalet
+position: {x: 0, y: 0, z: 0}
+rotation: {x: 0, y: 0, z: 0}
+allowmove: false
+geoGroups:
+  protons:
+    allowrotate: false
+    rotation:
+      y: 31.7
+    geometries:
+      framework:
+        shape: icosahedron
+        scale: 1.9
+        protons:
+          - left
+          - marker
+          - default
+          - default
+          - default
+          - default
+          - default
+          - default
+          - default
+          - default
+          - default
+          - right
+  icosa:
+    allowrotate: false
+    rotation:
+      y: 31.7
+    geometries:
+      solid:
+        shape: icosahedron
+        scale: 1.39
+        wireframe: true
+        faces: true
+      vertexids:
+        shape: icosahedron
+        scale: 1.55
+        vertexids: true
+      faceids:
+        shape: icosahedron
+        scale: 1.3
+        faceids: true
+  dodeca:
+    allowrotate: false
+    rotation:
+      y: -58.3
+    geometries:
+      solid:
+        shape: dodecahedron
+        scale: 1.40
+        wireframe: true
+        faces: true
+      vertexids:
+        shape: dodecahedron
+        scale: 1.3
+        vertexids: true
+      faceids:
+        shape: dodecahedron
+        scale: 1.5
+        faceids: true
+  octa:
+    allowrotate: true
+    rotation: {y: -58.3}
+    geometries:
+      framework:
+        shape: octahedron
+        scale: 1.34
+        electrons: 
+          - default
+          - default
+          - default
+          - default
+          - default
+          - default
+        wireframe: true
+      vertexids:
+        shape: octahedron
+        scale: 1.3
+        vertexids: true

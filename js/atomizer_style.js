@@ -13,7 +13,6 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   var defaultSet = {};
   var styleSetDirectory = viewer.atomizer.styleSetDirectory;
   var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'pentalet'];
-//var nucletNames = ['bwireframe', 'bface'];
 
 
   var loadYml = function (results) {
@@ -70,22 +69,22 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     inputs[1].value = '';
   };
 
-  var saveYml = function (controls) {
+  var saveYml = function (styles) {
     // Verify they entered a name.  If not popup an alert. return
-    currentSet.name = controls.name;
-    currentSet.filepath = controls.filepath;
+    currentSet.name = styles.name;
+    currentSet.filepath = styles.filepath;
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/saveYml',
-      { name: controls.name,
+      { name: styles.name,
         component: 'style',
-        filepath: controls.filepath,
+        filepath: styles.filepath,
         ymlContents: currentSet },
       savedYml
     );
     return;
   };
 
-  var overwriteYml = function (controls) {
+  var overwriteYml = function (styles) {
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/saveYml',
@@ -101,37 +100,35 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   var reset = function reset(controlsOnly, updateAll) {
 
     var def;
-    for (var id in currentSet.controls) {
+    for (var id in currentSet.styles) {
       // if defaultValue defines an array then set all elements.
-      if (Object.prototype.toString.call(currentSet.controls[id].defaultValue) === '[object Array]') {  // If it's an array
-        for (var i in currentSet.controls[id].defaultValue) {
-          def = defaultSet.controls[id].defaultValue[i];
-          if (updateAll || currentSet.controls[id].defaultValue[i] != def) {
-            if (!controlsOnly) {
-              applyControl(id, def);
-            }
-            var element = document.getElementById(id.replace(/_/g, '-'));
-            if (element) {
-              element.value = def;
-            }
+      if (Object.prototype.toString.call(currentSet.styles[id].defaultValue) === '[object Array]') {  // If it's an array
+        var comp = id.split('--');
+        var ind = 'xyz'.indexOf(comp[2]);
+        def = defaultSet.styles[id].defaultValue[ind];
+        if (updateAll || currentSet.styles[id].defaultValue[ind] != def) {
+          if (!controlsOnly) {
+            applyControl(id, def);
           }
+          document.getElementById(id + '--az-slider').value = def;
+          document.getElementById(id + '--az-value').value = def;
         }
       // else defaultValue is not an array, set the one value
       } else {
-        if (defaultSet.controls[id]) {
-          def = defaultSet.controls[id].defaultValue;
+        if (defaultSet.styles[id]) {
+          def = defaultSet.styles[id].defaultValue;
         } else {
           alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
         }
-        if (updateAll || currentSet.controls[id].defaultValue != def) {
+        if (updateAll || currentSet.styles[id].defaultValue != def) {
           if (!controlsOnly) {
-            applyControl(id, defaultSet.controls[id].defaultValue);
+            applyControl(id, defaultSet.styles[id].defaultValue);
           }
-          var element = document.getElementById(id.replace(/_/g, '-'));
+          var element = document.getElementById(id);
           if (element) {
             if (element.className.indexOf('az-control-range') > -1) {
-              document.getElementById(id.replace(/_/g, '-') + '--az-slider').value = def;
-              document.getElementById(id.replace(/_/g, '-') + '--az-value').value = def;
+              document.getElementById(id + '--az-slider').value = def;
+              document.getElementById(id + '--az-value').value = def;
             } else {
               element.value = def;
             }
@@ -142,17 +139,13 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   var applyControl = function applyControl(id, value) {
-    var did = id.replace(/_/g, '-');
-    var uid = id.replace(/-/g, '_');
-    var args = did.split("--");
+    var args = id.split("--");
     var argNames = args[0].split("-");
     // Set the currentSet
-//  currentSet.controls[id.replace(/-/g, '_')].defaultValue = value;
     if (args.length > 2) {
-      var $indice = { 'x': 0, 'y': 1, 'z': 2 }[args[2]];
-      currentSet.controls[args[0].replace(/-/, '_') + '__' + args[1]].defaultValue[$indice] = value;
+      currentSet.styles[args[0] + '--' + args[1] + '--' + args[2]].defaultValue = value;
     } else {
-      currentSet.controls[args[0].replace(/-/, '_') + '__' + args[1]].defaultValue = value;
+      currentSet.styles[args[0] + '--' + args[1]].defaultValue = value;
     }
     switch (argNames[0]) {
       case 'renderer':
@@ -206,17 +199,34 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
               case 'width':
               case 'depth':
                 if (argNames[0] == 'plane') {
-                  node.geometry = THREE.PlaneBufferGeometry(currentSet['plane__width'], currentSet['plane__depth']);
+                  node.geometry = THREE.PlaneBufferGeometry(currentSet['plane--width'], currentSet['plane--depth']);
                 }
                 break;
               case 'opacity':
-                node.material.opacity = value;
-                node.material.visible =     (value > .05);
-                node.material.transparent = (value < .97);
+                var opacity =     value;
+                var visible =     (value > .02);
+                var transparent = (value < .97);
+                if (argNames[0].indexOf('Wireframe') > -1) {
+                  if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
+                    for (var i = 0; i < node.children.length; i++) {
+                      node.children[i].material.opacity = opacity;
+                      node.children[i].material.visible = visible;
+                      node.children[i].material.transparent = transparent;
+                    }
+                  } else {
+                    node.material.opacity = opacity;
+                    node.material.visible = visible;
+                    node.material.transparent = transparent;
+                  }
+                } else {
+                  node.material.opacity = opacity;
+                  node.material.visible = visible;
+                  node.material.transparent = transparent;
+                }
                 break;
               case 'linewidth':
-                if (argNames[0] == 'awireframe' || argNames == 'bwireframe') {
-                  if (node.parent.name == 'icosalet') {   // The dual - dodecahedron is drawn with lines
+                if (argNames[0].indexOf('Wireframe') > -1) {
+                  if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
                     for (var i = 0; i < node.children.length; i++) {
                       node.children[i].material.linewidth = value;
                     }
@@ -230,6 +240,14 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
               case 'color':
                 if (argNames[0] == 'spotlight') {
                   node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                } else if (argNames[0].indexOf('Wireframe') > -1) {
+                  if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
+                    for (var i = 0; i < node.children.length; i++) {
+                      node.children[i].material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                    }
+                  } else {
+                    node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                  }
                 } else {
                   node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
                 }
@@ -242,17 +260,41 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     viewer.render();
   };
 
-
-  var getStyleDefault = function getStyleDefault(id, index) {
+  var setStyle = function setStyle(value, id, type) {
+    var index;
     if (index == null) {
-      return currentSet.controls[id]['defaultValue'];
+      if (!currentSet.styles[id]) {
+        currentSet.styles[id] = {
+          'defaultValue': value,
+          'type': type
+        }
+      }
     } else {
-      return currentSet.controls[id]['defaultValue'][index];
+      if (!currentSet.styles[id] && !currentSet.styles[id][index]) {
+        currentSet.styles[id]['defaultValue'][index] = value;
+      }
+    }
+  };
+
+  var getStyle = function getStyle(id, index) {
+    if (index == null) {
+      if (currentSet.styles[id]) {
+        return currentSet.styles[id]['defaultValue'];
+      } else {
+        return viewer.controls.getDefault(id);
+      }
+    } else {
+      if (currentSet.styles[id] && currentSet.styles[id][index]) {
+        return currentSet.styles[id]['defaultValue'][index];
+      } else {
+//      alert('style for rotation or position needs fixed');
+        return viewer.controls.getDefault(id, index);
+      }
     }
   };
 
   var getCurrentControls = function() {
-    return currentSet.controls;
+    return currentSet.styles;
   };
 
   Drupal.atomizer.base.doAjax(
@@ -269,7 +311,8 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     loadYml: loadYml,
     saveYml: saveYml,
     overwriteYml: overwriteYml,
-    get: getStyleDefault,
+    get: getStyle,
+    set: setStyle,
     getCurrentControls: getCurrentControls,
     getYmlDirectory: function () { return styleSetDirectory; }
   };

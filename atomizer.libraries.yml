@@ -8,6 +8,7 @@ atomizer-js:
     js/atomizer_controls.js: {}
     js/atomizer_style.js: {}
     js/atomizer_sprites.js: {}
+    js/atomizer_shapes.js: {}
     js/atomizer_nuclet.js: {}
     js/atomizer_nucleus.js: {}
     js/producers/atom_builder.js: {}

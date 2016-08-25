@@ -34,4 +34,18 @@ nuclets:
         present: true
       11:
         present: true
+    electrons:
+      0:
+        present: true
+      1:
+        present: true
+      2:
+        present: true
+      3:
+        present: true
+      4:
+        present: true
+      5:
+        present: true
+
 

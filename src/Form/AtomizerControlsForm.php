@@ -62,7 +62,7 @@ class AtomizerControlsForm extends FormBase {
     );
   }
 
-  public function createControlBlock($blockName, $blockConf, $showTitle) {
+  public function createControlBlock($blockName, $blockConf, &$styleSet, $showTitle) {
 
     // Create a container for the block
     $block[$blockName] = array(
@@ -82,6 +82,7 @@ class AtomizerControlsForm extends FormBase {
       $id = str_replace('_', '-', $controlName);
       $containerClasses = array('az-control', 'az-control-' . $controlConf[1]);
       $defaultValue = (isset($controlConf[2])) ? $controlConf[2] : '';
+      $addValue = false;
       switch ($controlConf[1]) {
 
         case 'selectyml':
@@ -102,6 +103,7 @@ class AtomizerControlsForm extends FormBase {
               '#markup' => t('Overwrite'),
             ),
           );
+          $addValue = true;
           break;
 
         case 'saveyml':
@@ -133,6 +135,7 @@ class AtomizerControlsForm extends FormBase {
               '#markup' => t('Save'),
             ),
           );
+          $addValue = true;
           break;
 
         case 'link':
@@ -151,6 +154,7 @@ class AtomizerControlsForm extends FormBase {
               '#suffix' => '<br />',
             ),
           );
+          $addValue = true;
           break;
 
         case 'button':
@@ -159,6 +163,7 @@ class AtomizerControlsForm extends FormBase {
             '#attributes' => array('onclick' => 'return (false);'),
             '#value' => $controlConf[0],
           );
+          $addValue = true;
           break;
 
         case 'range':
@@ -170,6 +175,7 @@ class AtomizerControlsForm extends FormBase {
             $controlConf[3][1],
             $controlConf[3][2]
           );
+          $addValue = true;
           break;
 
         case 'radios':
@@ -179,6 +185,7 @@ class AtomizerControlsForm extends FormBase {
             '#default_value' => $defaultValue,
             '#options' => $controlConf[3],
           );
+          $addValue = true;
           break;
 
         case 'select':
@@ -188,6 +195,7 @@ class AtomizerControlsForm extends FormBase {
             '#default_value' => $defaultValue,
             '#options' => $controlConf[3],
           );
+          $addValue = true;
           break;
 
         case 'rotation':
@@ -199,19 +207,20 @@ class AtomizerControlsForm extends FormBase {
               '#markup' => '<div class="az-label">' . $controlConf[0] . '</div>',
             ),
           );
-          $i = 0;
-          foreach (['x', 'y', 'z'] as $axis) {
-            $did = str_replace('_', '-', $id) . '--' . $axis;
-            $control[$id . '__' . $axis] = $this->makeRangeControl(
-              $did,
+          foreach (['x', 'y', 'z'] as $ind => $axis) {
+            $control[$id . '--' . $axis] = $this->makeRangeControl(
+              $id . '--' . $axis,
               strtoupper($axis),
-              $controlConf[2][$i],
+              $controlConf[2][$ind],
               $controlConf[3][0],
               $controlConf[3][1],
               $controlConf[3][2]
             );
-            $control[$id . '__' . $axis]['#attributes']['class'][] = 'az-indent';
-            $i++;
+            $control[$id . '--' . $axis]['#attributes']['class'][] = 'az-indent';
+            $styleSet[$id . '--' . $axis] = array(
+              'type' => $controlConf[1],
+              'defaultValue' => $defaultValue[$ind],
+            );
           }
           break;
 
@@ -221,6 +230,7 @@ class AtomizerControlsForm extends FormBase {
             '#title' => $controlConf[0],
             '#default_value' => $defaultValue,
           );
+          $addValue = true;
           break;
 
         case 'textfield':
@@ -229,6 +239,7 @@ class AtomizerControlsForm extends FormBase {
             '#title' => 'Style Name',
             '#maxlength' => $controlConf[3],
           );
+          $addValue = true;
           break;
 
         case 'textarea':
@@ -238,23 +249,7 @@ class AtomizerControlsForm extends FormBase {
             '#maxlength' => $controlConf[3],
             '#rows' => $controlConf[4],
           );
-          break;
-
-        case 'textfield':
-          $control = array(
-            '#type' => 'textfield',
-            '#title' => 'Style Name',
-            '#maxlength' => $controlConf[3],
-          );
-          break;
-
-        case 'textarea':
-          $control = array(
-            '#type' => 'textarea',
-            '#title' => 'Description',
-            '#maxlength' => $controlConf[3],
-            '#rows' => $controlConf[4],
-          );
+          $addValue = true;
           break;
 
         case 'header':
@@ -271,6 +266,12 @@ class AtomizerControlsForm extends FormBase {
 
         default:
           break;
+      }
+      if ($addValue) {
+        $styleSet[$id] = array(
+          'type' => $controlConf[1],
+          'defaultValue' => $defaultValue,
+        );
       }
       $control['#attributes']['id'] = $id;
       $control['#attributes']['name'] = $id;
@@ -298,6 +299,7 @@ class AtomizerControlsForm extends FormBase {
     $styleSet = array(
       'name' => 'Default',
       'description' => 'Initial style set',
+      'styles' => array(),
     );
 
     // Add block controls
@@ -306,12 +308,12 @@ class AtomizerControlsForm extends FormBase {
       '#attributes' => array('id' => 'controls'),
     );
     foreach ($controlSet['styler'] as $blockName => $block) {
-      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, $styleSet, false);
+      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, $styleSet['styles'], false);
     }
 
     $form['#attributes'] = array('name' => 'atomizer-controls-form');
 
-//  $styleSet['name'] = "Base new";
+    $form['#az-styleset'] =  $styleSet;
 //  file_put_contents(drupal_get_path('module', 'atomizer') . '/config/style/base2.yml', Yaml::encode($styleSet));
     return $form;
   }
