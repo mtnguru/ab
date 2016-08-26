@@ -65,10 +65,10 @@ styles:
     defaultValue: 1
     type: range
   icosaWireframe--color:
-    defaultValue: '#ffff00'
+    defaultValue: '#ff33ff'
     type: color
   icosaWireframe--opacity:
-    defaultValue: 1
+    defaultValue: '0'
     type: range
   icosaWireframe--linewidth:
     defaultValue: '2.2'
@@ -122,7 +122,7 @@ styles:
     defaultValue: '#000000'
     type: color
   dodecaFaces--opacity:
-    defaultValue: '0.26'
+    defaultValue: '0.61'
     type: range
   dodecaFaceid--opacity:
     defaultValue: '0'
@@ -143,7 +143,7 @@ styles:
     defaultValue: 1
     type: range
   octaWireframe--color:
-    defaultValue: '#ff00ef'
+    defaultValue: '#ffff33'
     type: color
   octaWireframe--opacity:
     defaultValue: 1
@@ -152,7 +152,7 @@ styles:
     defaultValue: '2'
     type: range
   octaVertexid--opacity:
-    defaultValue: '0.82'
+    defaultValue: '0'
     type: range
   octaVertexids--scale:
     defaultValue: 1
@@ -383,7 +383,7 @@ styles:
       - -500
     type: position
   electron--color:
-    defaultValue: '#ff55ff'
+    defaultValue: '#ffff33'
     type: color
   electron--opacity:
     defaultValue: 1

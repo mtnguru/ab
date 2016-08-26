@@ -34,23 +34,29 @@ Drupal.atomizer.nucletC = function (_viewer) {
 		}
 	} */
 
-  function createAxisLine(id, scale, vertices) {
+  function createAxes(name, conf, geometry) {
     var axisGeometry = new THREE.Geometry();
-    axisGeometry.vertices.push(new THREE.Vector3(vertices[0].x, vertices[0].y, vertices[0].z));
-    axisGeometry.vertices.push(new THREE.Vector3(vertices[1].x, vertices[1].y, vertices[1].z));
-    var opacity = viewer.style.get('aaxis--opacity');
+    for (var i = 0; i < conf.vertices.length; i++) {
+      var vertice;
+      vertice = geometry.vertices[conf.vertices[i][0]];
+      axisGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
+      vertice = geometry.vertices[conf.vertices[i][1]];
+      axisGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
+    }
+    var opacity = viewer.style.get(name + 'Axes--opacity');
     var lineMaterial = new THREE.LineBasicMaterial({
-      color: viewer.style.get('aaxis--color'),
+      color: viewer.style.get(name + 'Axes--color'),
       opacity: opacity,
       transparent: (opacity < transparentThresh),
       visible:     (opacity > visibleThresh),
       linewidth: 2
     });
-    var axisLine = new THREE.Line(axisGeometry, lineMaterial);
-    axisLine.scale.set(scale, scale, scale);
-    axisLine.name = id;
-    addObject('axis');
-    return axisLine;
+    var axes = new THREE.LineSegments(axisGeometry, lineMaterial);
+    if (conf.scale) {
+      axes.scale.set(conf.scale, conf.scale, conf.scale);
+    }
+    axes.name = name + 'Axes';
+    return axes;
   }
 
   function createGeometryWireframe(id, scale, geometry, rotation, offsetY) {
@@ -192,8 +198,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       case 'electron':
         geometry = new THREE.SphereGeometry(
           geo.radius || viewer.style.get('electron--radius'),
-          geo.widthSegments || 10,
-          geo.heightSegments || 10
+          geo.widthSegments || 25,
+          geo.heightSegments || 25
         );
         break;
       case 'octahedron':
@@ -323,7 +329,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       // Loop through the groups of geometries
       for (var geoName in groupConf.geometries) {
         var geo = groupConf.geometries[geoName];
-        var geometry = createGeometry(geo.shape, geo.scale * protonRadius);
+        var geometry = createGeometry(geo.shape, (geo.scale || 1) * protonRadius);
 
         //// Add Protons
         if (geo.protons) {
@@ -382,18 +388,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
           }
         }
 
-        /**
-        //// Create axis
-        if (geo.axis) {
-          nucletGroup.add(createAxisLine(
-            'aaxis',
-            geo.axis.scale,
-            [
-              geo.axis.vertices[0],
-              geo.axis.vertices[1]
-            ]
-          ));
-        } */
+        //// Create axes
+        if (geo.axes) {
+          nucletGroup.add(createAxes(groupName, geo.axes, geometry));
+        }
 
         //// Create geometry wireframe
         if (geo.wireframe) {
@@ -401,7 +399,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
           if (geo.shape == 'dodecahedron' || geo.shape == 'hexahedron') {
             nucletGroup.add(createGeometryLines(
               name,
-              geo.scale + .01,
+              geo.scale + .02,
               geometry,
               geo.rotation || null,
               geo.offsetY || null
@@ -409,7 +407,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
           } else {
             nucletGroup.add(createGeometryWireframe(
               name,
-              geo.scale + .01,
+              geo.scale + .02,
               geometry,
               geo.rotation || null,
               geo.offsetY || null

@@ -39,7 +39,7 @@ styler:
       proton--opacity:         ['Opacity',      'range',    .9, [0, 1, .01]]
       proton--scale:           ['Scale',        'range',     1, [0, 2, .01]]
       hr1:                     [ null,          'hr']
-      electron--color:         ['Electrons',    'color',    '#ff55ff']
+      electron--color:         ['Electrons',    'color',    '#ffff33']
       electron--opacity:       ['Opacity',      'range',     1, [0, 1, .01]]
       electron--scale:         ['Scale',        'range',     1, [0, 2, .01]]
 
@@ -51,7 +51,7 @@ styler:
       icosa--scale:                ['Scale',        'range',    1,  [0, 2, .01]]
 
       hr1:                         [ null, 'hr']
-      icosaWireframe--color:       ['Wireframe',    'color',    '#ffff00']
+      icosaWireframe--color:       ['Wireframe',    'color',    '#ff33ff']
       icosaWireframe--opacity:     ['Opacity',      'range',     1, [0, 1, .01]]
       icosaWireframe--linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
 
@@ -68,16 +68,17 @@ styler:
       icosaFaceids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
 
       hr4:                         [ null, 'hr']
-      icosaAxis--color:            ['Axis',         'color',    '#ffbbcc']
-      icosaAxis--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
-      icosaAxis--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+      icosaAxes--color:            ['Axis',         'color',    '#ffbbcc']
+      icosaAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      icosaAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
+      icosaAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
 
 
   dodeca:
 
     title:               Dodecahedron
     controls:
-      dodeca--scale:                ['Scale',        'range',    1,  [0, 2, .01]]
+      dodeca--scale:                ['Scale',        'range',    .8,  [0, 2, .01]]
 
       hr1:                          [ null, 'hr']
       dodecaWireframe--color:       ['Wireframe',    'color',    '#00ffff']
@@ -97,9 +98,10 @@ styler:
       dodecaFaceids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
 
       hr4:                          [ null, 'hr']
-      dodecaAxis--color:            ['Axis',         'color',    '#aabb99']
-      dodecaAxis--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
-      dodecaAxis--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+      dodecaAxes--color:            ['Axis',         'color',    '#aabb99']
+      dodecaAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      dodecaAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
+      dodecaAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
 
   octahedron:
 
@@ -117,9 +119,10 @@ styler:
       octaVertexids--scale:        ['Scale',        'range',    1,  [0, 2, .01]]
 
       hr3:                         [ null, 'hr']
-      octaAxis--color:             ['Axis',         'color',    '#ffbbcc']
-      octaAexis--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
-      octaAexis--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+      octaAxes--color:             ['Axis',         'color',    '#ffbbcc']
+      octaAxes--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
+      octaAxes--scale:             ['Scale',        'range',     2, [0, 5, .01]]
+      octaAxes--linewidth:         ['Linewidth',    'range',     1, [0, 5, .1]]
 
       hr4:                         [null, 'hr']
       octa--rotation:              ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
@@ -140,9 +143,10 @@ styler:
       tetraVertexids--scale:       ['Scale',        'range',    1,  [0, 2, .01]]
 
       hr3:                         [ null, 'hr']
-      tetraAxis--color:            ['Axis',         'color',    '#ffbbcc']
-      tetraAxis--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
-      tetraAxis--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+      tetraAxes--color:            ['Axis',         'color',    '#ffbbcc']
+      tetraAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      tetraAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
+      tetraAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
 
   hexahedron:
 
@@ -168,9 +172,10 @@ styler:
       hexaFaceids--scale:          ['Scale',        'range',     1,  [0, 2, .01]]
 
       hr4:                         [ null, 'hr']
-      hexaAxis--color:             ['Axis',         'color',    '#ffbbcc']
-      hexaAxis--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
-      hexaAxis--linewidth:         ['Linewidth',    'range',     1, [0, 5, .1]]
+      hexaAxes--color:             ['Axis',         'color',    '#ffbbcc']
+      hexaAxes--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
+      hexaAxes--scale:             ['Scale',        'range',     2, [0, 5, .01]]
+      hexaAxes--linewidth:         ['Linewidth',    'range',     1, [0, 5, .1]]
 
   attachments :
 
