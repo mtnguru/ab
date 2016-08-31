@@ -68,7 +68,7 @@ styles:
     defaultValue: '#ff33ff'
     type: color
   icosaWireframe--opacity:
-    defaultValue: '0'
+    defaultValue: '1'
     type: range
   icosaWireframe--linewidth:
     defaultValue: '2.2'
@@ -416,6 +416,66 @@ styles:
     defaultValue: 1
     type: range
   hexaWireframe--linewidth:
+    defaultValue: 1
+    type: range
+  icosaAxes--color:
+    defaultValue: '#ffbbcc'
+    type: color
+  icosaAxes--opacity:
+    defaultValue: 0
+    type: range
+  icosaAxes--scale:
+    defaultValue: 2
+    type: range
+  icosaAxes--linewidth:
+    defaultValue: 1
+    type: range
+  dodecaAxes--color:
+    defaultValue: '#aabb99'
+    type: color
+  dodecaAxes--opacity:
+    defaultValue: 0
+    type: range
+  dodecaAxes--scale:
+    defaultValue: 2
+    type: range
+  dodecaAxes--linewidth:
+    defaultValue: 1
+    type: range
+  octaAxes--color:
+    defaultValue: '#ffbbcc'
+    type: color
+  octaAxes--opacity:
+    defaultValue: 0
+    type: range
+  octaAxes--scale:
+    defaultValue: 2
+    type: range
+  octaAxes--linewidth:
+    defaultValue: 1
+    type: range
+  tetraAxes--color:
+    defaultValue: '#ffbbcc'
+    type: color
+  tetraAxes--opacity:
+    defaultValue: 0
+    type: range
+  tetraAxes--scale:
+    defaultValue: 2
+    type: range
+  tetraAxes--linewidth:
+    defaultValue: 1
+    type: range
+  hexaAxes--color:
+    defaultValue: '#ffbbcc'
+    type: color
+  hexaAxes--opacity:
+    defaultValue: 0
+    type: range
+  hexaAxes--scale:
+    defaultValue: 2
+    type: range
+  hexaAxes--linewidth:
     defaultValue: 1
     type: range
 filepath: config/style/builder/base.yml

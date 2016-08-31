@@ -31,9 +31,10 @@ geoGroups:
     geometries:
       solid:
         shape: icosahedron
-        scale: 1.39
+        scale: 1.787
         wireframe: true
         faces: true
+        selectFace: true
       axes:
         shape: icosahedron
         axes:

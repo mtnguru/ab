@@ -334,6 +334,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
         //// Add Protons
         if (geo.protons) {
           var opacity = viewer.style.get('proton--opacity') || 1;
+          nuclet.protons = [];
           for (var key in nucletConf.protons) {
             if (nucletConf.protons[key].present == false) continue;
             var vertice = geometry.vertices[key];
@@ -357,6 +358,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
             proton.name = 'proton-' + protonType;
             addObject('protons', proton);
             nucletGroup.add(proton);
+            nuclet.protons.push(proton);
           }
         }
 
@@ -418,13 +420,18 @@ Drupal.atomizer.nucletC = function (_viewer) {
         //// Create geometry faces
         if (geo.faces) {
           var name = groupName + 'Faces';
-          nucletGroup.add(createGeometryFaces(
+          var faces =createGeometryFaces(
             name,
             geo.scale,
             geometry,
             geo.rotation || null,
             geo.offsetY || null
-          ));
+          );
+          if (geo.selectFace) {
+            objects['selectFace'] = [faces];
+          }
+          nucletGroup.add(faces);
+            objects.faces
         }
 
         if (geo.vertexids) {

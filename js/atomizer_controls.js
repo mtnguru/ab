@@ -268,6 +268,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
       y = event.layerY + viewer.canvasContainer.offsetTop;
     }
 
+
 //  var y = event.clientY + event.pageY - viewer.canvasContainer.offsetHeight;
     console.log('mouse  ' + event.clientX + '  ' + event.clientY);
     console.log('layer  ' + event.layerX + '  ' + event.layerY);
@@ -281,10 +282,10 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
 //  mouse.y = -(event.layerY / viewer.canvasHeight) * 2 + 1;
   }
 
-  function highlightAttachProtons(nuclet, face, color) {
+  function highlightAttachProtons(protons, face, color) {
     var p = ['a', 'b', 'c'];
     for (var i in p) {
-      var proton = nuclet[face[p[i]]];
+      var proton = protons[face[p[i]]];
       if (color) {
         proton.currentHex = proton.material.color.getHex();
         proton.material.color.setHex(color);
@@ -298,20 +299,20 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     var vector = new THREE.Vector3(mouse.x, mouse.y, 1);
     vector = vector.unproject(viewer.camera);
     var ray = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
-    var intersects = ray.intersectObjects(viewer.nuclet.objects.aface);
+    var intersects = ray.intersectObjects(viewer.nuclet.objects.selectFace);
     if (intersects.length > 0) {
       if (highlightedFace != intersects[0].face) {
         if (highlightedFace) {
-          highlightAttachProtons(highlightedNuclet.children, highlightedFace);
+          highlightAttachProtons(highlightedNuclet.protons, highlightedFace);
         }
         highlightedFace = intersects[0].face;
-        highlightedNuclet = intersects[0].object.parent;
-        highlightAttachProtons(highlightedNuclet.children, highlightedFace, 0x33aa33);
+        highlightedNuclet = intersects[0].object.parent.parent;
+        highlightAttachProtons(highlightedNuclet.protons, highlightedFace, 0x33aa33);
         viewer.render();
       }
     } else {
       if (highlightedFace) {
-        highlightAttachProtons(highlightedNuclet.children, highlightedFace);
+        highlightAttachProtons(highlightedNuclet.protons, highlightedFace);
         highlightedFace = null;
         viewer.render();
       }
