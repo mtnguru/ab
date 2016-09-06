@@ -12,7 +12,11 @@ Drupal.atomizer.viewerC = function (atomizer) {
   var spotlights = [];
   var viewer = {};
 
+  Physijs.scripts.worker = '/modules/custom/atomizer/js/physijs/physijs_worker.js';
+  Physijs.scripts.ammo =   '/modules/custom/atomizer/js/libs/ammo.js';
+
   var render = function render () {
+    viewer.scene.simulate();
     viewer.renderer.render(viewer.scene, viewer.camera);
   }
   /**
@@ -39,7 +43,8 @@ Drupal.atomizer.viewerC = function (atomizer) {
     viewer.canvasHeight = window.innerHeight / window.innerWidth * viewer.canvasWidth;
 
     // Create and position the scene
-    viewer.scene = new THREE.Scene();
+//  viewer.scene = new THREE.Scene();
+    viewer.scene = new Physijs.Scene();
     viewer.scene.position.x = 0;
     viewer.scene.position.y = 0;
     viewer.scene.position.z = 0;
@@ -48,7 +53,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
     viewer.controls = Drupal.atomizer.controlsC(viewer);
 
     // Create the renderer
-    viewer.renderer = new THREE.WebGLRenderer();
+    viewer.renderer = new THREE.WebGLRenderer({ antialias: true});
     viewer.renderer.setClearColor(viewer.style.get('renderer--color'), 1.0);
     viewer.renderer.setSize(viewer.canvasWidth, viewer.canvasHeight);
     viewer.renderer.shadowEnabled = true;

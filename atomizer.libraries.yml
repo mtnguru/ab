@@ -3,6 +3,8 @@ atomizer-js:
     js/threejs/three.js: {}
     js/threejs/renderers/Projector.js: {}
     js/threejs/controls/TrackballControls.js: {}
+    js/threejs/controls/OrbitControls.js: {}
+    js/physijs/physi.js: {}
     js/atomizer_base.js: {}
     js/atomizer_viewer.js: {}
     js/atomizer_controls.js: {}

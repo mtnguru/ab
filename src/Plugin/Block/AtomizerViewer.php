@@ -63,7 +63,7 @@ class AtomizerViewer extends BlockBase {
     // Read in the nuclets
     $files = file_scan_directory(drupal_get_path('module','atomizer') . '/config/nuclets', '/\.yml/');
     foreach ($files as $file) {
-      $nuclets[$file->name] = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/nuclets/' . $file->filename));
+      $nuclets[str_replace('nuclet_', '', $file->name)] = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/nuclets/' . $file->filename));
     }
 
     $build = array(

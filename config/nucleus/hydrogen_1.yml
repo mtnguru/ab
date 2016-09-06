@@ -2,12 +2,12 @@ name: 01 1 Hydrogen Deuterium
 element: Hydrogen
 isotope: 0
 variant: 0
-num_protons: 2
+numProtons: 2
 nuclets:
   1:
     position: 1
-    type: monolet
-    num_protons: 2
+    type: hydrogen
+    numProtons: 2
     num_nuclear_electrons: 0
     protons:
       0:

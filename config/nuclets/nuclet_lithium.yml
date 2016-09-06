@@ -1,0 +1,88 @@
+name: lithium
+position: {x: 0, y: 0, z: 0}
+rotation: {x: 0, y: 0, z: 0}
+allowmove: false
+geoGroups:
+  protons:
+    allowrotate: false
+    geometries:
+      framework:
+        shape: decahedron
+        scale: 1.72
+        scaleHeight: 1
+        protons:
+          0:
+            type: valence
+          1:
+            type: isotope
+          2:
+            type: valence
+          3:
+            type: isotope
+          4:
+            type: decalet
+          5:
+            type: decalet
+          6:
+            type: decalet
+  deca:
+    allowrotate: false
+    geometries:
+      solid:
+        shape: decahedron
+        scale: 1.71
+        scaleHeight: 1.15
+        wireframe: true
+        attachFaces: true
+        faces:
+          0:
+            type: valence
+            attach: deca-left
+            location: top-front
+          1:
+            type: isotope
+            attach: deca-left
+            location: top-middle
+          2:
+            type: isotope
+            attach: deca-right
+            location: top-middle
+          3:
+            type: valence
+            attach: deca-right
+            location: top-rear
+          4:
+            type: valence
+          5:
+            type: valence
+            attach: deca-left
+            location: top-rear
+          6:
+            type: valence
+            attach: deca-left
+            location: bottom-front
+          7:
+            type: valence
+          8:
+            type: valence
+            attach: deca-right
+            location: bottom-rear
+          9:
+            type: valence
+            attach: deca-right
+            location: top-front
+      axes:
+        shape: decahedron
+        axes:
+          scale: 3
+          vertices:
+            - [0, 1]
+      vertexids:
+        shape: decahedron
+        scale: 1.55
+        vertexids: true
+      faceids:
+        shape: decahedron
+        scale: 1.3
+        faceids: true
+

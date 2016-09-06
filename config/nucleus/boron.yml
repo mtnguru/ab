@@ -2,12 +2,12 @@ name: 05 0 Boron 10
 element: Boron
 isotope: 0
 variant: 0
-num_protons: 10
+numProtons: 10
 nuclets:
   1:
     position: 1
-    type: icosalet
-    num_protons: 10
+    type: carbon
+    numProtons: 10
     num_nuclear_electrons: 6
     protons:
       0:

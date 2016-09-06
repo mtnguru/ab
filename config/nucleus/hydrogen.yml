@@ -2,12 +2,12 @@ name: 01 0 Hydrogen
 element: Hydrogen
 isotope: 0
 variant: 0
-num_protons: 1
+numProtons: 1
 nuclets:
   1:
     position: 1
-    type: monolet
-    num_protons: 1
+    type: hydrogen
+    numProtons: 1
     num_nuclear_electrons: 0
     protons:
       0:

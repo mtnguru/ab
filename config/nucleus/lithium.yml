@@ -2,12 +2,12 @@ name: 03 1 Lithium 7
 element: Lithium
 isotope: 0
 valence: 0
-num_protons: 7
+numProtons: 7
 nuclets:
   1:
     position: 1
-    type: pentalet
-    num_protons: 7
+    type: lithium
+    numProtons: 7
     num_nuclear_electrons: 0
     protons:
       0:

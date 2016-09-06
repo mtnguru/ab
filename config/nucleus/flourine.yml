@@ -2,12 +2,12 @@ name: 09 0 Flourine 18
 element: Flourine
 isotope: 0
 variant: 0
-num_protons: 18
+numProtons: 18
 nuclets:
   1:
     position: 1
-    type: icosalet
-    num_protons: 12
+    type: carbon
+    numProtons: 12
     num_nuclear_electrons: 6
     protons:
       0:

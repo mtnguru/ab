@@ -55,7 +55,7 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		// get size data (height depends only on font size)
 		var metrics = context.measureText( message );
 		var textWidth = metrics.width;
-		var textHeight = 86;
+		var textHeight = 88;
 
 		// background
 		context.fillStyle   = backgroundColor;

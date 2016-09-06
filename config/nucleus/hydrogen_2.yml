@@ -2,12 +2,12 @@ name: 01 2 Hydrogen Tritium
 element: Hydrogen
 isotope: 0
 variant: 0
-num_protons: 3
+numProtons: 3
 nuclets:
   1:
     position: 1
-    type: monolet
-    num_protons: 3
+    type: hydrogen
+    numProtons: 3
     num_nuclear_electrons: 0
     protons:
       0:

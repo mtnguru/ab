@@ -6,7 +6,7 @@ numProtons: 12
 nuclets:
   1:
     position: 1
-    type: icosalet
+    type: carbon
     numProtons: 12
     numNuclearElectrons: 6
     protons:

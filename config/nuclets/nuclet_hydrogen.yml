@@ -1,0 +1,24 @@
+name: hydrogen
+position: {x: 0, y: 0, z: 0}
+rotation: {x: 0, y: 0, z: 0}
+allowmove: false
+geoGroups:
+  protons:
+    allowrotate: false
+    geometries:
+      framework:
+        shape: line
+        scale: 2.05
+        protons:
+          0:
+            type: default
+          1:
+            type: default
+          2:
+            type: default
+#     axes:
+#       shape: line
+#       axes:
+#         scale: 2
+#         vertices:
+#           - [0, 2]

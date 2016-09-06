@@ -53,13 +53,16 @@
     width: 100%;
     margin: 1em 0;
   }
-  .control-block {
+  .styler-controls .control-block {
     display: none;
+  }
+  .control-block {
     hr {
       margin: 10px 0 15px;
       border-top: 1px solid #bbb;
     }
   }
+
   .az-header {
     font-size: 16px;
     font-weight: bold;

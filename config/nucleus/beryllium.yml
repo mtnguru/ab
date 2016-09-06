@@ -2,12 +2,12 @@ name: 04 0 Beryllium 8
 element: Beryllium
 isotope: 0
 variant: 0
-num_protons: 8
+numProtons: 8
 nuclets:
   1:
     position: 1
-    type: icosalet
-    num_protons: 8
+    type: carbon
+    numProtons: 8
     num_nuclear_electrons: 4
     protons:
       0:

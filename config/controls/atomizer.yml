@@ -1,5 +1,12 @@
 name: Atom Builder
-mouse:
+static:
+  reset:
+#   title: Mouse
+    controls:
+      camera--reset:           ['Reset Camera',      'button']
+      style--reset:            ['Reset Style',      'button']
+
+      hr1: ['null', hr]
 styler:
   nucleus:
     title:               Nucleus
@@ -32,10 +39,15 @@ styler:
     title:               Protons, Electrons
     controls:
       proton--label:           ['Protons', 'header']
-      proton_default--color:   ['Default',      'color',    '#6666dd']
-      proton_left--color:      ['Left',         'color',    '#d4af37']
-      proton_right--color:     ['Right',        'color',    '#dd66dd']
-      proton_marker--color:    ['Marker',       'color',    '#55dddd']
+      proton-default--color:   ['Default',      'color',    '#777777']
+      proton-decalet--color:   ['Decalet',     'color',    '#4f53ac']
+      proton-isotope--color:   ['Isotope',      'color',    '#ac534f']
+      proton-valence--color:   ['Valence',      'color',    '#dd66dd']
+      proton-neutron--color:   ['New Neutron',  'color',    '#dd66dd']
+      proton-nucleon--color:   ['New Nucleon',  'color',    '#dd66dd']
+      proton-proton--color:    ['New Proton',   'color',    '#dd66dd']
+      proton-vattach--color:   ['Val Attach',   'color',    '#66dd66']
+      proton-iattach--color:   ['Isotope',      'color',    '#55dddd']
       proton--opacity:         ['Opacity',      'range',    .9, [0, 1, .01]]
       proton--scale:           ['Scale',        'range',     1, [0, 2, .01]]
       hr1:                     [ null,          'hr']
@@ -73,6 +85,39 @@ styler:
       icosaAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
       icosaAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
 
+
+  deca:
+
+    title:               Decahedron
+    controls:
+      deca--scale:                  ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr1:                          [ null, 'hr']
+      decaWireframe--color:         ['Wireframe',    'color',    '#00ffff']
+      decaWireframe--opacity:       ['Opacity',      'range',     1, [0, 1, .01]]
+      decaWireframe--linewidth:     ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      decaVertexid--label:          ['IDs',          'label']
+      decaVertexid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+      decaVertexids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
+
+      hr2:                          [ null, 'hr']
+      decaFaces--color:             ['Faces',        'color',    '#88cccc']
+      decaFaces--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
+
+      decaFaceid--label:            ['IDs',          'label']
+      decaFaceid--opacity:          ['Opacity',      'range',     0,  [0, 1, .01]]
+      decaFaceids--scale:           ['Scale',        'range',     1,  [0, 2, .01]]
+
+      hr4:                          [ null, 'hr']
+      decaAxes--color:              ['Axis',         'color',    '#aabb99']
+      decaAxes--opacity:            ['Opacity',      'range',     0, [0, 1, .01]]
+      decaAxes--scale:              ['Scale',        'range',     2, [0, 5, .01]]
+      decaAxes--linewidth:          ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr5:                          [null, 'hr']
+      decahedron--position:         ['Position',      'position', [0, 0, 0], [-360, 360, 1]]
+      decahedron--rotation:         ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
 
   dodeca:
 
@@ -142,6 +187,14 @@ styler:
       tetraVertexid--opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
       tetraVertexids--scale:       ['Scale',        'range',    1,  [0, 2, .01]]
 
+      hr2:                         [ null, 'hr']
+      tetraFaces--color:           ['Faces',        'color',    '#88cccc']
+      tetraFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+
+      tetraFaceid--label:          ['IDs',          'label']
+      tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+      tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
+
       hr3:                         [ null, 'hr']
       tetraAxes--color:            ['Axis',         'color',    '#ffbbcc']
       tetraAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
@@ -192,7 +245,7 @@ styler:
     controls:
       header--camera:          ['Camera',        'header']
       camera--perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
-      camera--position:        ['Position',      'position', [0, 1000, -1000], [-3000, 3000, 1]]
+      camera--position:        ['Position',      'position', [0, 0, -1000], [-3000, 3000, 1]]
 
       hr1:                     [ null, 'hr']
       renderer--color:         ['Background',    'color',    '#fcf3ff']
@@ -223,8 +276,9 @@ styler:
       mouse--mode:
         - Mouse mode
         - radios
-        - camera
+        - builder
         -
+          builder:     Atom Builder
           camera:      Move Camera
           attach:      Attach Nuclets
           atom:        Move Atom

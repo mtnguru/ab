@@ -25,14 +25,20 @@ Drupal.atomizer.nucleusC = function (_viewer) {
       viewer.scene.remove(nucleus);
     }
     nucleusConf = results[0].ymlContents;
-    nucleusConf['filepath'] = results[0].filepath;
+    nucleusConf['filepath'] = results[0].data.filepath;
+    localStorage.setItem('atomizer_builder_nucleus', results[0].data.filepath.replace(/^.*[\\\/]/, ''));
     nucleus = new THREE.Group();
+    nucleus.name = 'nucleus';
     for (var n in nucleusConf.nuclets) {
       var nuclet =  viewer.nuclet.create(nucleusConf.nuclets[n]);
       nucleus.add(nuclet);
     }
     viewer.scene.add(nucleus);
     viewer.render();
+  };
+
+  var addProton = function addProton (nuclet, face) {
+    // Ok, so we have our first proton to add.  We are adding it to an existing nuclet.
   };
 
   var savedYml = function (response) {
@@ -52,7 +58,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
         ymlContents: currentSet },
       savedYml
     );
-    return;
   };
 
   var overwriteYml = function (controls) {
@@ -65,7 +70,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
         ymlContents: currentSet },
       null  // TODO: Put in useful error codes and have them be displayed.
     );
-    return;
   };
 
   return {
@@ -73,6 +77,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     saveYml: saveYml,
     overwriteYml: overwriteYml,
     loadNucleus: loadNucleus,
+    addProton: addProton,
     getYmlDirectory: function () { return 'config/nucleus'; }
   };
 };

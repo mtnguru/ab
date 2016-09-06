@@ -2,12 +2,12 @@ name: 02 0 Helium
 element: Helium
 isotope: 0
 variant: 0
-num_protons: 4
+numProtons: 4
 nuclets:
   1:
     position: 1
-    type: tetralet
-    num_protons: 4
+    type: helium
+    numProtons: 4
     num_nuclear_electrons: 0
     protons:
       0:

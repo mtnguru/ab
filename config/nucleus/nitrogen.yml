@@ -2,14 +2,16 @@ name: 07 0 Nitrogen
 element: Nitrogen
 isotope: 0
 variant: 0
-num_protons: 14
+numProtons: 14
 nuclets:
   1:
-    position: 1
-    type: icosalet
-    num_protons: 12
-    num_nuclear_electrons: 6
+    location: 1
+    type: carbon
+    numProtons: 12
+    numNuclearElectrons: 6
     protons:
+      0:
+        present: true
       1:
         present: true
       2:
@@ -32,6 +34,45 @@ nuclets:
         present: true
       11:
         present: true
-      12:
+    electrons:
+      0:
+        present: true
+      1:
+        present: true
+      2:
+        present: true
+      3:
+        present: true
+      4:
+        present: true
+      5:
+        present: true
+  2:
+    location: 2
+    position:
+      x: -80
+      y: 80
+      z: -140
+    rotation:
+      x: -45
+      y: 0
+      z: 20
+    type: lithium
+    numProtons: 2
+    numNuclearElectrons: 7
+    protons:
+      0:
+        present: true
+      1:
+        present: false
+      2:
+        present: true
+      3:
+        present: true
+      4:
+        present: true
+      5:
+        present: true
+      6:
         present: true
 

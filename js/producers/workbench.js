@@ -22,10 +22,10 @@ Drupal.atomizer.producers.workbenchC = function (_viewer) {
           ]
         };
         break;
-      case 'pentalet':
+      case 'decalet':
         var nucletConf = {
           position: 1,
-          type: 'pentalet',
+          type: 'decalet',
           numProtons: 7,
           protons: [
             {present: true},

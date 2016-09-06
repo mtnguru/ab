@@ -12,7 +12,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   var currentSet = {};
   var defaultSet = {};
   var styleSetDirectory = viewer.atomizer.styleSetDirectory;
-  var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'pentalet'];
+  var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'decalet'];
 
 
   var loadYml = function (results) {
@@ -98,7 +98,6 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   var reset = function reset(controlsOnly, updateAll) {
-
     var def;
     for (var id in currentSet.styles) {
       // if defaultValue defines an array then set all elements.
@@ -138,6 +137,17 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     }
   };
 
+  // Reset the camera location
+
+  var cameraReset = function cameraReset() {
+    viewer.camera.position.x = viewer.style.get('camera--position', 'x');
+    viewer.camera.position.y = viewer.style.get('camera--position', 'y');
+    viewer.camera.position.z = viewer.style.get('camera--position', 'z');
+    viewer.camera.lookAt(viewer.scene.position);
+    viewer.render();
+    return;
+  }
+
   var applyControl = function applyControl(id, value) {
     var args = id.split("--");
     var argNames = args[0].split("-");
@@ -147,25 +157,34 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     } else {
       currentSet.styles[args[0] + '--' + args[1]].defaultValue = value;
     }
+
     switch (argNames[0]) {
+
       case 'renderer':
         viewer.renderer.setClearColor(new THREE.Color(parseInt(value.replace(/^#/, ''), 16)), 1);
         break;
+
       case 'camera':
         if (args[1] == 'perspective') {
           viewer.camera.fov = value;
           viewer.camera.updateProjectionMatrix();
         }
         break;
+
       case 'ambient':
         node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
         break;
+
       default:
         viewer.scene.traverse(function (node) {
           var nodeNames = node.name.split("-");
           var ok = false;
           if (args[0] == 'nucleus') {
-            if (nucletNames.includes(nodeNames[0])) {
+            if (nodeNames[0] == 'nucleus') {
+              ok = true;
+            }
+          } else if (args[0] == 'decahedron') {
+            if (nodeNames[0] == 'lithium') {
               ok = true;
             }
           } else if (args[0].indexOf('wireframe') > -1 &&
@@ -185,23 +204,28 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
 
           if (ok) {
             switch (args[1]) {
+
               case 'rotation':
                 var radians = value / 360 * 2 * Math.PI;
                 node.rotation[args[2]] = radians + (node.rotation['init_' + args[2]] || 0);
                 break;
+
               case 'position':
                 node.position[args[2]] = value;
                 break;
+
               case 'scale':
                 var scale = (node.init_scale) ? value * node.init_scale : value;
                 node.scale.set(scale, scale, scale);
                 break;
+
               case 'width':
               case 'depth':
                 if (argNames[0] == 'plane') {
                   node.geometry = THREE.PlaneBufferGeometry(currentSet['plane--width'], currentSet['plane--depth']);
                 }
                 break;
+
               case 'opacity':
                 var opacity =     value;
                 var visible =     (value > .02);
@@ -224,6 +248,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                   node.material.transparent = transparent;
                 }
                 break;
+
               case 'linewidth':
                 if (argNames[0].indexOf('Wireframe') > -1) {
                   if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
@@ -237,6 +262,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                   node.material.linewidth = value;
                 }
                 break;
+
               case 'color':
                 if (argNames[0] == 'spotlight') {
                   node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
@@ -252,6 +278,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                   node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
                 }
                 break;
+
             }
           }
         });
@@ -307,6 +334,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
 
   return {
     reset: reset,
+    cameraReset: cameraReset,
     applyControl: applyControl,
     loadYml: loadYml,
     saveYml: saveYml,

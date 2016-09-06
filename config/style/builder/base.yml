@@ -44,7 +44,7 @@ styles:
       - 0
     type: rotation
   proton-default--color:
-    defaultValue: '#6666dd'
+    defaultValue: '#767676'
     type: color
   proton-left--color:
     defaultValue: '#d4af37'
@@ -65,7 +65,7 @@ styles:
     defaultValue: 1
     type: range
   icosaWireframe--color:
-    defaultValue: '#ff33ff'
+    defaultValue: '#ffbb33'
     type: color
   icosaWireframe--opacity:
     defaultValue: '1'
@@ -104,7 +104,7 @@ styles:
     defaultValue: 1
     type: range
   dodecaWireframe--color:
-    defaultValue: '#00ffff'
+    defaultValue: '#00d5ff'
     type: color
   dodecaWireframe--opacity:
     defaultValue: 1
@@ -176,10 +176,10 @@ styles:
     defaultValue: 0.3
     type: range
   tetraWireframe--linewidth:
-    defaultValue: 1
+    defaultValue: '2.6'
     type: range
   tetraVertexid--opacity:
-    defaultValue: 0.3
+    defaultValue: '0'
     type: range
   tetraVertexids--scale:
     defaultValue: 1
@@ -250,26 +250,26 @@ styles:
   camera--position--x:
     defaultValue:
       - 0
-      - 1000
+      - 300
       - -1000
     type: position
   camera--position--y:
     defaultValue:
       - 0
-      - 1000
+      - 300
       - -1000
     type: position
   camera--position--z:
     defaultValue:
       - 0
-      - 1000
+      - 300
       - -1000
     type: position
   renderer--color:
-    defaultValue: '#fcf3ff'
+    defaultValue: '#778d97'
     type: color
   plane--color:
-    defaultValue: '#cccccc'
+    defaultValue: '#6a6a6a'
     type: color
   plane--opacity:
     defaultValue: 1
@@ -478,4 +478,103 @@ styles:
   hexaAxes--linewidth:
     defaultValue: 1
     type: range
+  proton-ghost--color:
+    defaultValue: '#d4af37'
+    type: color
+  proton-vattach--color:
+    defaultValue: '#be81be'
+    type: color
+  proton-iattach--color:
+    defaultValue: '#55dddd'
+    type: color
+  proton-valence--color:
+    defaultValue: '#55965d'
+    type: color
+  proton-decalet--color:
+    defaultValue: '#4f53ac'
+    type: color
+  proton-isotope--color:
+    defaultValue: '#875552'
+    type: color
+  proton-neutron--color:
+    defaultValue: '#dd66dd'
+    type: color
+  proton-nucleon--color:
+    defaultValue: '#dd66dd'
+    type: color
+  proton-proton--color:
+    defaultValue: '#dd66dd'
+    type: color
+  tetraFaces--color:
+    defaultValue: '#88cccc'
+    type: color
+  tetraFaces--opacity:
+    defaultValue: '0'
+    type: range
+  tetraFaceid--opacity:
+    defaultValue: 0
+    type: range
+  tetraFaceids--scale:
+    defaultValue: '1.33'
+    type: range
+  deca--scale:
+    defaultValue: 1
+    type: range
+  decaWireframe--color:
+    defaultValue: '#00ff15'
+    type: color
+  decaWireframe--opacity:
+    defaultValue: 1
+    type: range
+  decaWireframe--linewidth:
+    defaultValue: '2'
+    type: range
+  decaVertexid--opacity:
+    defaultValue: 0
+    type: range
+  decaVertexids--scale:
+    defaultValue: 1
+    type: range
+  decaFaces--color:
+    defaultValue: '#88cccc'
+    type: color
+  decaFaces--opacity:
+    defaultValue: '0'
+    type: range
+  decaFaceid--opacity:
+    defaultValue: 0
+    type: range
+  decaFaceids--scale:
+    defaultValue: 1
+    type: range
+  decaAxes--color:
+    defaultValue: '#aabb99'
+    type: color
+  decaAxes--opacity:
+    defaultValue: 0
+    type: range
+  decaAxes--scale:
+    defaultValue: 2
+    type: range
+  decaAxes--linewidth:
+    defaultValue: 1
+    type: range
+  decahedron--position--x:
+    defaultValue: 0
+    type: position
+  decahedron--position--y:
+    defaultValue: 0
+    type: position
+  decahedron--position--z:
+    defaultValue: 0
+    type: position
+  decahedron--rotation--x:
+    defaultValue: 0
+    type: rotation
+  decahedron--rotation--y:
+    defaultValue: 0
+    type: rotation
+  decahedron--rotation--z:
+    defaultValue: 0
+    type: rotation
 filepath: config/style/builder/base.yml

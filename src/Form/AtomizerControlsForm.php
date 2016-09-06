@@ -62,14 +62,14 @@ class AtomizerControlsForm extends FormBase {
     );
   }
 
-  public function createControlBlock($blockName, $blockConf, &$styleSet, $showTitle) {
+  public function createControlBlock($type, $blockName, $blockConf, &$styleSet, $showTitle) {
 
     // Create a container for the block
     $block[$blockName] = array(
       '#type' => 'container',
       '#attributes' => array(
-        'id' => 'control-' . $blockName,
-        'class' => array('control-block')
+        'id' => $type . '-' . $blockName,
+        'class' => array('control-block'),
       ),
     );
     if ($showTitle && !empty($blockConf['title'])) {
@@ -287,28 +287,44 @@ class AtomizerControlsForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, $controlSet = array()) {
 
-    // Create Styler Select list
-    foreach ($controlSet['styler'] as $blockName => $block) {
-      $options[$blockName] = $block['title'];
-    }
-    $form['styler'] = array(
-      '#type' => 'select',
-      '#options' => $options,
-    );
-
+    ////////// Create empty style set
     $styleSet = array(
       'name' => 'Default',
       'description' => 'Initial style set',
       'styles' => array(),
     );
 
-    // Add block controls
-    $form['controls'] = array(
-      '#type' => 'container',
-      '#attributes' => array('id' => 'controls'),
-    );
-    foreach ($controlSet['styler'] as $blockName => $block) {
-      $form['controls'][$blockName] = $this->createControlBlock($blockName, $block, $styleSet['styles'], false);
+    ////////// Create static controls at top of control form
+    if (isset($controlSet['static'])) {
+      // Add the statis blocks
+      $form['static'] = array(
+        '#type' => 'container',
+        '#attributes' => array('id' => 'static-controls'),
+      );
+      foreach ($controlSet['static'] as $blockName => $block) {
+        $form['static'][$blockName] = $this->createControlBlock('static', $blockName, $block, $styleSet['styles'], false);
+      }
+    }
+
+    ////////// Create Styler select list for control blocks
+    if (isset($controlSet['styler'])) {
+      // Create Styler Select list
+      foreach ($controlSet['styler'] as $blockName => $block) {
+        $options[$blockName] = $block['title'];
+      }
+      $form['styler'] = array(
+        '#type' => 'select',
+        '#options' => $options,
+      );
+
+      // Add the styler blocks
+      $form['controls'] = array(
+        '#type' => 'container',
+        '#attributes' => array('id' => 'styler-controls'),
+      );
+      foreach ($controlSet['styler'] as $blockName => $block) {
+        $form['controls'][$blockName] = $this->createControlBlock('control', $blockName, $block, $styleSet['styles'], false);
+      }
     }
 
     $form['#attributes'] = array('name' => 'atomizer-controls-form');

@@ -1,0 +1,190 @@
+name: carbon
+position: {x: 0, y: 0, z: 0}
+rotation: {x: 0, y: 0, z: 0}
+allowmove: false
+geoGroups:
+  protons:
+    allowrotate: false
+    rotation:
+      y: 31.7
+    geometries:
+      framework:
+        shape: icosahedron
+        scale: 1.9
+        protons:
+          0:
+            type: valence
+          1:
+            type: isotope
+          2:
+            type: valence
+          3:
+            type: isotope
+          4:
+            type: decalet
+          5:
+            type: decalet
+          6:
+            type: decalet
+          7:
+            type: decalet
+          8:
+            type: isotope
+          9:
+            type: valence
+          10:
+            type: isotope
+          11:
+            type: valence
+  icosa:
+    allowrotate: false
+    rotation:
+      y: 31.7
+    geometries:
+      solid:
+        shape: icosahedron
+        scale: 1.745
+        wireframe: true
+        attachFaces: true
+        faces:
+          0:
+            type: valence
+            attach: deca-left
+            location: top-front
+          1:
+            type: isotope
+            attach: deca-left
+            location: top-middle
+          2:
+            type: isotope
+            attach: deca-right
+            location: top-middle
+          3:
+            type: valence
+            attach: deca-right
+            location: top-rear
+          4:
+            type: valence
+          5:
+            type: valence
+            attach: deca-left
+            location: top-rear
+          6:
+            type: valence
+            attach: deca-left
+            location: bottom-front
+          7:
+            type: valence
+          8:
+            type: valence
+            attach: deca-right
+            location: bottom-rear
+          9:
+            type: valence
+            attach: deca-right
+            location: top-front
+          10:
+            type: valence
+          11:
+            type: isotope
+          12:
+            type: isotope
+          13:
+            type: valence
+          14:
+            type: valence
+          15:
+            type: valence
+            attach: deca-left
+            location: bottom-rear
+          16:
+            type: valence
+          17:
+            type: valence
+          18:
+            type: valence
+            attach: deca-right
+            location: bottom-front
+          19:
+            type: valence
+      axes:
+        shape: icosahedron
+        axes:
+          scale: 3
+          vertices:
+            - [0, 11]
+            - [1,  8]
+            - [2,  9]
+            - [3, 10]
+            - [4,  6]
+            - [5,  7]
+      vertexids:
+        shape: icosahedron
+        scale: 1.55
+        vertexids: true
+      faceids:
+        shape: icosahedron
+        scale: 1.3
+        faceids: true
+
+  dodeca:
+    allowrotate: false
+    rotation:
+      y: -58.3
+    geometries:
+      solid:
+        shape: dodecahedron
+        scale: 1.27
+        wireframe: true
+        faces: true
+      axes:
+        shape: dodecahedron
+        axes:
+          scale: 3
+          vertices:
+            - [0, 13]
+            - [1, 12]
+            - [2, 11]
+            - [3, 10]
+            - [4, 14]
+            - [5, 17]
+            - [6, 18]
+            - [7, 19]
+            - [8, 15]
+            - [9, 16]
+      vertexids:
+        shape: dodecahedron
+        scale: 1.3
+        vertexids: true
+      faceids:
+        shape: dodecahedron
+        scale: 1.5
+        faceids: true
+
+  octa:
+    allowrotate: true
+    rotation: {y: -58.3}
+    geometries:
+      framework:
+        shape: octahedron
+        scale: 1.25
+        electrons: 
+          - default
+          - default
+          - default
+          - default
+          - default
+          - default
+        wireframe: true
+      axes:
+        shape: octahedron
+        axes:
+          scale: 3
+          vertices:
+            - [0, 1]
+            - [2, 3]
+            - [4, 5]
+      vertexids:
+        shape: octahedron
+        scale: 1.3
+        vertexids: true

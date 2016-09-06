@@ -22,10 +22,10 @@ Drupal.atomizer.producers.platonicsolidsC = function (_viewer) {
           ]
         };
         break;
-      case 'pentalet':
+      case 'decalet':
         var nucletConf = {
           position: 1,
-          type: 'pentalet',
+          type: 'decalet',
           numProtons: 7,
           protons: [
             {present: true},
@@ -94,12 +94,12 @@ Drupal.atomizer.producers.platonicsolidsC = function (_viewer) {
     viewer.scene.add(createObject('icosalet', {x: 0, y: 92, z:  200}));
 
 //  viewer.scene.add(createObject('icosalet', {x: 0, y: 92, z: -300}));
-//  viewer.scene.add(createObject('octolet', {x: 0, y: 92, z: 0}));
+//  viewer.scene.add(createObject('octolet',  {x: 0, y: 92, z: 0}));
 //  viewer.scene.add(createObject('icosalet', {x: 0, y: 92, z: 300}));
 
-//  viewer.scene.add(createObject('pentalet', {x: -300, y: 67, z: -300}));
-//  viewer.scene.add(createObject('pentalet', {x: -300, y: 67, z: 0}));
-//  viewer.scene.add(createObject('pentalet', {x: -300, y: 67, z: 300}));
+//  viewer.scene.add(createObject('decalet',  {x: -300, y: 67, z: -300}));
+//  viewer.scene.add(createObject('decalet',  {x: -300, y: 67, z: 0}));
+//  viewer.scene.add(createObject('decalet',  {x: -300, y: 67, z: 300}));
 
 //  viewer.scene.add(createObject('tetralet', {x: 300, y: 67, z: -300}));
 //  viewer.scene.add(createObject('tetralet', {x: 300, y: 67, z: 0}));

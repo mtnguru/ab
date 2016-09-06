@@ -205,12 +205,14 @@ Drupal.atomizer.shapesC = function (_viewer) {
   cubeGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   cubeGeometry.prototype.constructor = cubeGeometry;
 
-  var getGeometry = function (type, radius, detail) {
+  var getGeometry = function (type, radius, height, detail) {
     switch (type) {
       case 'icosahedron':
         return new icosahedronGeometry(radius, detail);
       case 'dodecahedron':
         return new dodecahedronGeometry(radius, detail);
+      case 'decahedron':
+        return createBiPyramid(5, radius, height, detail);
       case 'hexahedron':
         return new cubeGeometry(radius, detail);
     }
