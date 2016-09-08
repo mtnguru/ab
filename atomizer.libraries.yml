@@ -13,9 +13,10 @@ atomizer-js:
     js/atomizer_shapes.js: {}
     js/atomizer_nuclet.js: {}
     js/atomizer_nucleus.js: {}
-    js/producers/atom_builder.js: {}
-    js/producers/workbench.js: {}
-    js/producers/platonicsolids.js: {}
+    js/producers/prod_atom.js: {}
+    js/producers/prod_backbone.js: {}
+    js/producers/prod_workbench.js: {}
+    js/producers/prod_solids.js: {}
     js/atomizer.js: {}
   css:
     component:

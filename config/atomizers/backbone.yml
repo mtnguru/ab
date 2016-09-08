@@ -1,0 +1,9 @@
+name:  Backbone
+defaultView: backbone
+styleSetDirectory: config/style/backbone
+views:
+  backbone:
+    name: Backbone Builder
+    producer: backbone_builder
+    defaultNucleus: backbone.yml
+    styleSetPath: config/style/builder/backbone.yml

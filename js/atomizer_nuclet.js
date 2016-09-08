@@ -284,7 +284,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
   }
 
 
-
   function createGeometry(shape, scale, height, detail) {
     switch (shape) {
       case 'icosahedron':
@@ -560,7 +559,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
     makeObject: makeObject,
     makeProton: makeProton,
     create: createNuclet,
-    objects: objects
+    createGeometryWireframe: createGeometryWireframe,
+    createGeometryFaces: createGeometryFaces,
+    objects: objects,
+    protonRadius: protonRadius
   };
 };
 

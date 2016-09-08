@@ -8,7 +8,7 @@ geoGroups:
     geometries:
       framework:
         shape: tetrahedron
-        scale: 1.23
+        scale: 1.22
         protons:
           0:
             type: valence
@@ -23,7 +23,7 @@ geoGroups:
     geometries:
       solid:
         shape: tetrahedron
-        scale: 1.715
+        scale: 1.094
         wireframe: true
         attachFaces: true
         faces:

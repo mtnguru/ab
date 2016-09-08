@@ -1,50 +1,14 @@
-name: Base
-description: 'Initial style set'
+name: Backbone
+description: 'Backbone builder'
 styles:
   proton--radius:
     type: range
-    defaultValue: 5
+    defaultValue: 50
   electron--radius:
     type: range
-    defaultValue: .5
-  nucleus--position--x:
-    defaultValue:
-      - 0
-      - 0
-      - 0
-    type: position
-  nucleus--position--y:
-    defaultValue:
-      - 0
-      - 0
-      - 0
-    type: position
-  nucleus--position--z:
-    defaultValue:
-      - 0
-      - 0
-      - 0
-    type: position
-  nucleus--rotation--x:
-    defaultValue:
-      - 0
-      - 0
-      - 0
-    type: rotation
-  nucleus--rotation--y:
-    defaultValue:
-      - 0
-      - 0
-      - 0
-    type: rotation
-  nucleus--rotation--z:
-    defaultValue:
-      - 0
-      - 0
-      - 0
-    type: rotation
+    defaultValue: 5
   proton-default--color:
-    defaultValue: '#767676'
+    defaultValue: '#7b6565'
     type: color
   proton-left--color:
     defaultValue: '#d4af37'
@@ -56,7 +20,7 @@ styles:
     defaultValue: '#55dddd'
     type: color
   proton--opacity:
-    defaultValue: '1'
+    defaultValue: '0.76'
     type: range
   proton--scale:
     defaultValue: '1'
@@ -170,13 +134,13 @@ styles:
     defaultValue: 1
     type: range
   tetraWireframe--color:
-    defaultValue: '#ff5555'
+    defaultValue: '#faff1f'
     type: color
   tetraWireframe--opacity:
-    defaultValue: 0.3
+    defaultValue: '1'
     type: range
   tetraWireframe--linewidth:
-    defaultValue: '2.6'
+    defaultValue: '1.2'
     type: range
   tetraVertexid--opacity:
     defaultValue: '0'
@@ -245,25 +209,25 @@ styles:
     defaultValue: 0.3
     type: range
   camera--perspective:
-    defaultValue: 30
+    defaultValue: 25
     type: range
   camera--position--x:
     defaultValue:
       - 0
-      - 30
-      - -100
+      - 300
+      - -1000
     type: position
   camera--position--y:
     defaultValue:
       - 0
-      - 30
-      - -100
+      - 300
+      - -1000
     type: position
   camera--position--z:
     defaultValue:
       - 0
-      - 30
-      - -100
+      - 300
+      - -1000
     type: position
   renderer--color:
     defaultValue: '#778d97'
@@ -275,10 +239,10 @@ styles:
     defaultValue: 1
     type: range
   plane--width:
-    defaultValue: 85
+    defaultValue: 850
     type: range
   plane--depth:
-    defaultValue: 85
+    defaultValue: 850
     type: range
   plane--position--x:
     defaultValue:
@@ -317,7 +281,7 @@ styles:
       - 1
     type: rotation
   ambient--color:
-    defaultValue: '#777777'
+    defaultValue: '#b2b2b2'
     type: color
   spotlight-1--color:
     defaultValue: '#664466'
@@ -335,52 +299,31 @@ styles:
       - -500
     type: position
   spotlight-1--position--z:
-    defaultValue:
-      - -500
-      - 800
-      - -500
+    defaultValue: '-588'
     type: position
   spotlight-2--color:
-    defaultValue: '#446644'
+    defaultValue: '#73ba73'
     type: color
   spotlight-2--position--x:
-    defaultValue:
-      - 800
-      - 800
-      - -200
+    defaultValue: '415'
     type: position
   spotlight-2--position--y:
-    defaultValue:
-      - 800
-      - 800
-      - -200
+    defaultValue: '805'
     type: position
   spotlight-2--position--z:
-    defaultValue:
-      - 800
-      - 800
-      - -200
+    defaultValue: '-365'
     type: position
   spotlight-3--color:
-    defaultValue: '#000000'
+    defaultValue: '#a97f7f'
     type: color
   spotlight-3--position--x:
-    defaultValue:
-      - -500
-      - 800
-      - -500
+    defaultValue: '20'
     type: position
   spotlight-3--position--y:
-    defaultValue:
-      - -500
-      - 800
-      - -500
+    defaultValue: '-187'
     type: position
   spotlight-3--position--z:
-    defaultValue:
-      - -500
-      - 800
-      - -500
+    defaultValue: '25'
     type: position
   electron--color:
     defaultValue: '#ffff33'
@@ -485,7 +428,7 @@ styles:
     defaultValue: '#be81be'
     type: color
   proton-iattach--color:
-    defaultValue: '#55dddd'
+    defaultValue: '#38a8a8'
     type: color
   proton-valence--color:
     defaultValue: '#55965d'
@@ -506,10 +449,10 @@ styles:
     defaultValue: '#dd66dd'
     type: color
   tetraFaces--color:
-    defaultValue: '#88cccc'
+    defaultValue: '#09ffed'
     type: color
   tetraFaces--opacity:
-    defaultValue: '0'
+    defaultValue: '0.11'
     type: range
   tetraFaceid--opacity:
     defaultValue: 0
@@ -577,4 +520,31 @@ styles:
   decahedron--rotation--z:
     defaultValue: 0
     type: rotation
-filepath: config/style/builder/base.yml
+  ghostTetrahedron--scale:
+    defaultValue: 1
+    type: range
+  ghostWireframe--color:
+    defaultValue: '#ffff33'
+    type: color
+  ghostWireframe--linewidth:
+    defaultValue: '2.5'
+    type: range
+  ghostWireframe--line:
+    defaultValue: 1
+    type: range
+  ghostWireframe--opacity:
+    defaultValue: 1
+    type: range
+  ghostWireframe--scale:
+    defaultValue: 1
+    type: range
+  ghostFaces--color:
+    defaultValue: '#de3fff'
+    type: color
+  ghostFaces--opacity:
+    defaultValue: 1
+    type: range
+  ghostFaces--scale:
+    defaultValue: 1
+    type: range
+filepath: config/style/builder/backbone.yml

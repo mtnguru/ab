@@ -42,6 +42,9 @@ Drupal.atomizer.viewerC = function (atomizer) {
     viewer.canvasWidth = window.innerWidth - 273;
     viewer.canvasHeight = window.innerHeight / window.innerWidth * viewer.canvasWidth;
 
+    // Create the producer for the current view and create it.
+    viewer.producer = Drupal.atomizer.producers[viewer.view.producer + 'C'](viewer);
+
     // Create and position the scene
 //  viewer.scene = new THREE.Scene();
     viewer.scene = new Physijs.Scene();
@@ -112,9 +115,6 @@ Drupal.atomizer.viewerC = function (atomizer) {
       }
     ));
 
-    // Create the producer for the current view and create it.
-    var producerC = Drupal.atomizer.producers[viewer.view.producer + 'C'];
-    viewer.producer = producerC(viewer);
     viewer.producer.createView();
 
     // Render the image
