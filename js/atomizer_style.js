@@ -1,5 +1,5 @@
 /**
- * @file - atomizerstyle.js
+ * @file - atomizer_style.js
  *
  * Class to manage and apply styles
  * Sets the color, position, opacity, linewidth, or rendered items.
@@ -14,7 +14,11 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   var styleSetDirectory = viewer.atomizer.styleSetDirectory;
   var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'decalet'];
 
-
+  /**
+   * Load a style yml file and make it the current style set.
+   *
+   * @param results
+   */
   var loadYml = function (results) {
     results[0].ymlContents.filepath = results[0].data.filepath;
     defaultSet = results[0].ymlContents;
@@ -34,6 +38,12 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     }
   };
 
+  /**
+   * The current style set was saved, now re-list the style set directory with AJAX.
+   *
+   * @param response
+   */
+// The current style set has been saved,
   var savedYml = function (response) {
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/listDirectory',
@@ -45,14 +55,20 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     );
   };
 
+  /**
+   * Update the style select widget.
+   *
+   * @param response
+   */
   var updateStyleSelect = function updateStyleSelect(response) {
     var select = document.getElementById('style--selectyml').querySelector('select');
-    // Remove current options
+
+    // Remove current options from style select widget
     while (select.hasChildNodes()) {
       select.removeChild(select.lastChild);
     }
 
-    // Create the new option list
+    // Create and append the new select option list
     for (var file in response[0].filelist) {
       var opt = document.createElement('option');
       opt.appendChild( document.createTextNode(response[0].filelist[file]));
@@ -60,7 +76,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
       select.appendChild(opt);
     }
 
-    // Set select to new file
+    // Set select to the currently selected file
     select.value = response[0].filepath;
 
     // Clear the Name and File name fields
@@ -69,6 +85,11 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     inputs[1].value = '';
   };
 
+  /**
+   * Save the current styles to a yml file.
+   *
+   * @param styles
+   */
   var saveYml = function (styles) {
     // Verify they entered a name.  If not popup an alert. return
     currentSet.name = styles.name;
@@ -84,6 +105,11 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     return;
   };
 
+  /**
+   * Overwrite the current style set.
+   *
+   * @param styles
+   */
   var overwriteYml = function (styles) {
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
@@ -97,6 +123,12 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     return;
   };
 
+  /**
+   * Reset the current styles to the default.
+   *
+   * @param controlsOnly - only update the controls, not the objects in the scene.
+   * @param updateAll - update everything to the current style even if current == default.
+   */
   var reset = function reset(controlsOnly, updateAll) {
     var def;
     for (var id in currentSet.styles) {
@@ -137,17 +169,23 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     }
   };
 
-  // Reset the camera location
-
+  /**
+   * Reset the camera to the starting position.
+   */
   var cameraReset = function cameraReset() {
     viewer.camera.position.x = viewer.style.get('camera--position', 'x');
     viewer.camera.position.y = viewer.style.get('camera--position', 'y');
     viewer.camera.position.z = viewer.style.get('camera--position', 'z');
     viewer.camera.lookAt(viewer.scene.position);
     viewer.render();
-    return;
-  }
+  };
 
+  /**
+   * Apply a control setting to the proper scene elements.
+   *
+   * @param id
+   * @param value
+   */
   var applyControl = function applyControl(id, value) {
     var args = id.split("--");
     var argNames = args[0].split("-");
@@ -287,6 +325,16 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     viewer.render();
   };
 
+  /**
+   * Set the style of an element externally
+   *
+   * Used when initializing controls - creates a default style set with all values,
+   * The set initially loaded may be incomplete due to changes and not have a default value.
+   *
+   * @param value
+   * @param id
+   * @param type
+   */
   var setStyle = function setStyle(value, id, type) {
     var index;
     if (index == null) {
@@ -303,6 +351,13 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     }
   };
 
+  /**
+   * Get the style for an element
+   *
+   * @param id
+   * @param index
+   * @returns {*}
+   */
   var getStyle = function getStyle(id, index) {
     if (index == null) {
       if (currentSet.styles[id]) {
@@ -320,10 +375,18 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     }
   };
 
+  /**
+   * Return the entire current style set.
+   *
+   * @TODO - is this used, it should be deleted.
+   *
+   * @returns {*}
+   */
   var getCurrentControls = function() {
     return currentSet.styles;
   };
 
+  /// Load the default style set.
   Drupal.atomizer.base.doAjax(
     '/ajax-ab/loadYml',
     { filepath: viewer.view.styleSetPath,
@@ -332,6 +395,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     loadYml
   );
 
+  // Return references to functions available for external use.
   return {
     reset: reset,
     cameraReset: cameraReset,

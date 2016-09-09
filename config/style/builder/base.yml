@@ -3,10 +3,10 @@ description: 'Initial style set'
 styles:
   proton--radius:
     type: range
-    defaultValue: 5
+    defaultValue: 50
   electron--radius:
     type: range
-    defaultValue: .5
+    defaultValue: 5
   nucleus--position--x:
     defaultValue:
       - 0
@@ -245,25 +245,25 @@ styles:
     defaultValue: 0.3
     type: range
   camera--perspective:
-    defaultValue: 30
+    defaultValue: 25
     type: range
   camera--position--x:
     defaultValue:
       - 0
-      - 30
-      - -100
+      - 300
+      - -1000
     type: position
   camera--position--y:
     defaultValue:
       - 0
-      - 30
-      - -100
+      - 300
+      - -1000
     type: position
   camera--position--z:
     defaultValue:
       - 0
-      - 30
-      - -100
+      - 300
+      - -1000
     type: position
   renderer--color:
     defaultValue: '#778d97'
@@ -275,10 +275,10 @@ styles:
     defaultValue: 1
     type: range
   plane--width:
-    defaultValue: 85
+    defaultValue: 850
     type: range
   plane--depth:
-    defaultValue: 85
+    defaultValue: 850
     type: range
   plane--position--x:
     defaultValue:

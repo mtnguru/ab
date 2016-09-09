@@ -18,6 +18,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     vattach: viewer.style.get('proton-vattach--color'),
     iattach: viewer.style.get('proton-iattach--color')
   };
+  var protonId = 0;
 
   var protonRadius = viewer.style.get('proton--radius');
   var electronRadius = viewer.style.get('electron--radius');
@@ -327,6 +328,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       }
     );
     proton.name = 'proton-' + protonType;
+    proton.protonId = protonId++;
     return proton;
   }
 

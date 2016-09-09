@@ -7,16 +7,22 @@ static:
       style--reset:            ['Reset Style',      'button']
 
       hr1: ['null', hr]
+
 styler:
+
   backbone:
     title:               Backbone
     controls:
       hr1:                     [ null,              'hr']
-      nucleus--savelabel:      ['Save backbone', 'header']
-      nucleus--saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_save']
+      backbone--loadlabel:     ['Select backbone file',   'header']
+      backbone--selectyml:     [ null,              'selectyml', 'backbone.yml', 'nucleus', 'config/backbone',    'atomizer.ajax_yml_load']
       hr2:                     [ null,              'hr']
-      nucleus--position:       ['Position',         'position', [0, 0, 0], [-50, 50, 1]]
-      nucleus--rotation:       ['Rotation',         'rotation', [0, 0, 0], [-36, 36, 1]]
+      backbone--savelabel:     ['Save backbone', 'header']
+      backbone--saveyml:       [ null,              'saveyml',   'backbone.yml', 'backbone', 'config/backbone',   'atomizer.ajax_yml_save']
+      hr3:                     [ null,              'hr']
+      nucleus--position:       ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
+      nucleus--rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
+
   style:
     title:               Styles
     controls:

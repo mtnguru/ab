@@ -16,7 +16,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
 
   // Variables for detecting items mouse is hovering over.
   var raycaster;
-  var mouse = new THREE.Vector2(0, 0);
+  var mouse = new THREE.Vector2(-1000, -1000);
   var intersected = null;
   var highlightedFace = null;
   var highlightedNuclet = null;
@@ -182,6 +182,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
             viewer.style.set(control.defaultValue, id, control.type);
             break;
           case 'saveyml':
+            var elem = document.getElementById(id + '--button');
             document.getElementById(id + '--button').addEventListener("click", buttonClicked);
             break;
           case 'selectyml':
