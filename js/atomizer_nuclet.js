@@ -1,8 +1,15 @@
 /**
  * @file - atomizer_nuclet.js
  *
+ * Functions to create a nuclet.
  */
 
+/**
+ * Creates an instance of a nucletC - does not really do anything except define function to call.
+ *
+ * @param _viewer
+ * @returns {{makeObject: makeObject, makeProton: makeProton, create: createNuclet, createGeometryWireframe: createGeometryWireframe, createGeometryFaces: createGeometryFaces, objects: {}, protonRadius: *}}
+ */
 Drupal.atomizer.nucletC = function (_viewer) {
   var viewer = _viewer;
   var visibleThresh = .03;
@@ -41,6 +48,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
 		}
 	} */
 
+  /**
+   * Create the axis lines for a nuclet.
+   *
+   * @param name
+   * @param conf
+   * @param geometry
+   * @returns {THREE.LineSegments}
+   */
   function createAxes(name, conf, geometry) {
     var axisGeometry = new THREE.Geometry();
     for (var i = 0; i < conf.vertices.length; i++) {
@@ -66,6 +81,19 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return axes;
   }
 
+  /**
+   * Create a wireframe for a geometry using the standard three.js wireframes.
+   *
+   * This creates the three.js default wireframes.  These draw triangles.  To create
+   * a wireframe for the cube (square) and pentagon (dodecahedron) use the createGeometryLines function.
+   *
+   * @param id
+   * @param scale
+   * @param geometry
+   * @param rotation
+   * @param offsetY
+   * @returns {THREE.Mesh}
+   */
   function createGeometryWireframe(id, scale, geometry, rotation, offsetY) {
 
     var opacity = viewer.style.get(id + '--opacity');
@@ -96,8 +124,22 @@ Drupal.atomizer.nucletC = function (_viewer) {
     }
     addObject(id, wireframe);
     return wireframe;
-  }
+  };
 
+  /**
+   * Create a wireframe of lines.
+   *
+   * The three.js library creates wireframes that draw triangles.
+   * This function draw individual lines and is useful for non-triangular faces like those found in the
+   * cube and dodecahedron.
+   *
+   * @param id
+   * @param scale
+   * @param geometry
+   * @param rotation
+   * @param offsetY
+   * @returns {THREE.Group}
+   */
   function createGeometryLines(id, scale, geometry, rotation, offsetY) {
 
     var opacity = viewer.style.get(id + '--opacity');
@@ -145,6 +187,16 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return lines;
   }
 
+  /**
+   * Create the faces for a geometry.
+   *
+   * @param id
+   * @param scale
+   * @param geometry
+   * @param rotation
+   * @param offset
+   * @returns {THREE.Mesh|*}
+   */
   function createGeometryFaces(id, scale, geometry, rotation, offset) {
 
     // add one random mesh to each scene
@@ -158,7 +210,12 @@ Drupal.atomizer.nucletC = function (_viewer) {
       metalness: 0,
 //    shading: THREE.FlatShading
     } );
-    faces = new THREE.Mesh(geometry, material);
+    var faces = new THREE.Mesh(geometry, material);
+//  for (var i = 0; i < faces.geometry.faces.length; i++) {
+//    var face = faces.geometry.faces[i];
+//    face.azid = ''
+//    continue;
+//  }
     faces.scale.set(scale, scale, scale);
     faces.init_scale = scale;
     faces.name = id;
@@ -182,6 +239,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return faces;
   }
 
+  /**
+   * Make an object - sphere, tetrahedron, line, etc.
+   *
+   * @param name
+   * @param mat
+   * @param geo
+   * @param pos
+   * @returns {*}
+   */
   function makeObject(name, mat, geo, pos) {
     // Set the geometry
     var geometry;
@@ -284,7 +350,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return object;
   }
 
-
+  /**
+   * Create a geometry for the primary shapes - icosahedron, dodecahedron, tetrahedron, line, etc.
+   *
+   * @param shape
+   * @param scale
+   * @param height
+   * @param detail
+   * @returns {*}
+   */
   function createGeometry(shape, scale, height, detail) {
     switch (shape) {
       case 'icosahedron':
@@ -310,6 +384,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
     }
   }
 
+  /**
+   * Make one proton.
+   *
+   * @param protonType
+   * @param opacity
+   * @param pos
+   * @returns {*}
+   */
   function makeProton(protonType, opacity, pos) {
     var proton = makeObject('proton',
       {
@@ -332,6 +414,12 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return proton;
   }
 
+  /**
+   * Create a nuclet as per a nucletConf array.
+   *
+   * @param nucletConf
+   * @returns {THREE.Group}
+   */
   function createNuclet(nucletConf) {
     var nuclet = new THREE.Group();
     nuclet.name = nucletConf.type;
@@ -491,6 +579,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return nuclet;
   }
 
+  /**
+   * Create an n-sided pyramid.
+   *
+   * @param n
+   * @param rad
+   * @param len
+   * @returns {THREE.Geometry}
+   */
   function createPyramid(n, rad, len) {
     var len2 = len / 2;
     var geom = new THREE.Geometry();
@@ -521,8 +617,17 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return geom;
   }
 
+  /**
+   * Create an n-sided bi pyramid.
+   *
+   * @param n
+   * @param rad
+   * @param len
+   * @returns {THREE.Geometry}
+   */
   function createBiPyramid(n, rad, len) {
-    var geom = new THREE.Geometry();
+    var geom = new THREE.Geometry();mesth
+
 
     // Create the apexes
     geom.vertices.push(new THREE.Vector3(0, len, 0));
@@ -548,6 +653,12 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return geom;
   }
 
+  /**
+   * Add an object to the objects array.
+   *
+   * @param name
+   * @param object
+   */
   function addObject(name, object) {
     if (objects[name]) {
       objects[name].push(object);
@@ -556,7 +667,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     }
   }
 
-
+  // Return references to class functions - makes this into a pseudo-class.
   return {
     makeObject: makeObject,
     makeProton: makeProton,
