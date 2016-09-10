@@ -92,10 +92,12 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 
 		var opacity = viewer.style.get(name + 'Vertexid--opacity')
 
+		var id = (name == 'proton') ? 'Vertexid--color' : 'Wireframe--color';
+		id = name + id;
 		var parameters = {
 			fontsize: 60,
 			color: '#000000',
-			backgroundColor: viewer.style.get(name + 'Wireframe--color'),
+			backgroundColor: viewer.style.get(id),
 			opacity: opacity,
 			transparent: (opacity <.97) ? true : false,
 	    visible: (opacity >.03) ? true : false

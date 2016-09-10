@@ -51,9 +51,14 @@ styler:
       proton--scale:           ['Scale',        'range',     1, [0, 2, .01]]
 
       hr1:                     [ null,          'hr']
+      protonVertexid--color:   ['Proton IDs',   'color',    '#ff00ff']
+      protonVertexid--opacity: ['Opacity',      'range',    1, [0, 1, .01]]
+      protonVertexid--scale:   ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                     [ null,          'hr']
       electron--color:         ['Electrons',    'color',    '#ffff33']
-      electron--opacity:       ['Opacity',      'range',     1, [0, 1, .01]]
-      electron--scale:         ['Scale',        'range',     1, [0, 2, .01]]
+      electron--opacity:       ['Opacity',      'range',    1, [0, 1, .01]]
+      electron--scale:         ['Scale',        'range',    1, [0, 2, .01]]
 
   ghosts:
     title:               Ghosts

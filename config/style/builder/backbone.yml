@@ -565,4 +565,13 @@ styles:
   nucleus--rotation--z:
     defaultValue: 0
     type: rotation
+  protonVertexid--color:
+    defaultValue: '#ffc300'
+    type: color
+  protonVertexid--opacity:
+    defaultValue: 1
+    type: range
+  protonVertexid--scale:
+    defaultValue: 1
+    type: range
 filepath: config/style/builder/backbone.yml

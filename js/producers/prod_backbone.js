@@ -9,6 +9,7 @@
 
 Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
 
+  var build = false;
   var viewer = _viewer;
   viewer.nuclet = Drupal.atomizer.nucletC(viewer);
   viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
@@ -18,6 +19,9 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   var highlightedFace;
   var highlightedNuclet;
   var intersectList = [];
+  var protonRadius = viewer.style.get('proton--radius');
+  var tetrahedronId = 0;
+  var protonId = 0;
 
   var nucleusConf;
   var nucleus = new THREE.Group();
@@ -44,7 +48,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     var tetrahedron = new THREE.Group();
     tetrahedron.name = 'tetrahedron';
     tetrahedron.protons = [];
-    tetrahedron.protonRadius = viewer.style.get('proton--radius');
+    tetrahedron.protonRadius = protonRadius;
 
     var geometry = new THREE.TetrahedronGeometry(viewer.nuclet.protonRadius * 1.222);
     geometry.dynamic = true;
@@ -245,7 +249,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   var saveYml = function saveYml(data) {
     var nuclet = {
       name: data.name,
-      protonRadius: viewer.style.get('proton--radius'),
+      protonRadius: protonRadius,
       protons: {},
       geometries: {}
     };
@@ -328,6 +332,114 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
    * @param results
    */
   var createNucleus = function createNucleus (results) {
+
+    function createNuclet(num) {
+      // Use the proton configuration information to create a geometry.
+      var geometry = new THREE.Geometry();
+      for (var pid in nucleusConf.protons) {
+        var protonConf = nucleusConf.protons[pid];
+        geometry.vertices.push(new THREE.Vector3(
+          protonConf.position['x'],
+          protonConf.position['y'],
+          protonConf.position['z']
+        ));
+      }
+
+      if (build) {
+        // Do translations to initial geometry
+        geometry.applyMatrix(new THREE.Matrix4().makeRotationY(Math.PI / 4));
+        geometry.applyMatrix(new THREE.Matrix4().makeTranslation(-geometry.vertices[8].x, -geometry.vertices[8].y, 0));
+        geometry.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI));
+        geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(-Math.PI / 2.125));
+        geometry.verticesNeedUpdate = true;
+        viewer.render();
+        if (num == 1) {
+          geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI));
+          geometry.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI));
+        }
+        geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, -geometry.vertices[6].y, 0));
+      }
+
+      //  Create Protons
+      var p = 0;
+      for (var pid in nucleusConf.protons) {
+        var protonConf = nucleusConf.protons[pid];
+        var position = geometry.vertices[p];
+        var proton = viewer.nuclet.makeProton(
+          'default',
+          viewer.style.get('proton--opacity'),
+          {
+            x: position['x'],
+            y: position['y'],
+            z: position['z']
+          }
+        );
+        proton.azid = 'p' + protonId++;
+        nucleus.az.protons[proton.azid] = proton;
+        nucleus.add(proton);
+        p++;
+      }
+      var verticeIds = viewer.sprites.createVerticeIds ('proton', geometry);
+      nucleus.add(verticeIds);
+
+      // Create Tetrahedrons
+      for (var tid in nucleusConf.geometries) {
+        var geometryConf = nucleusConf.geometries[tid];
+        if (geometryConf.geometry == 'tetrahedron') {
+          // Add the first tetrahedrons
+          var tetrahedron = createTetrahedron('tetra');
+          tetrahedron.azid = 't' + tetrahedronId++;
+          intersectList.push(tetrahedron.children[1]); // Attach the faces Mesh
+          nucleus.az.tetrahedrons[tetrahedron.azid] = tetrahedron;
+
+          // Set 4 vertices of tetrahedron
+          tetrahedron.children[1].geometry.protons = [];
+          for (var v = 0; v < 4; v++) {
+            var pid;
+            if (num == 1) {
+              var pid2 = parseInt(geometryConf.protons[v].replace('p', '')) + 10;
+              pid = 'p' + pid2.toString();
+              if (pid == 'p09') pid = 'p9';
+            } else {
+              pid = geometryConf.protons[v];
+            }
+            var proton = nucleusConf.protons[pid];
+            tetrahedron.children[0].geometry.vertices[v].x = nucleus.az.protons[pid].position.x;
+            tetrahedron.children[0].geometry.vertices[v].y = nucleus.az.protons[pid].position.y;
+            tetrahedron.children[0].geometry.vertices[v].z = nucleus.az.protons[pid].position.z;
+
+            tetrahedron.children[1].geometry.vertices[v].x = nucleus.az.protons[pid].position.x;
+            tetrahedron.children[1].geometry.vertices[v].y = nucleus.az.protons[pid].position.y;
+            tetrahedron.children[1].geometry.vertices[v].z = nucleus.az.protons[pid].position.z;
+
+            // Save the proton list in tetrafaces mesh
+            tetrahedron.protons[v] = nucleus.az.protons[pid];
+          }
+
+  //      tetrahedron.children[0].geometry.verticesNeedUpdate = true;
+  //      tetrahedron.children[0].geometry.normalsNeedUpdate = true;
+  //      tetrahedron.children[0].geometry.elementsNeedUpdate = true;
+  //      tetrahedron.children[0].geometry.uvsNeedUpdate = true;
+  //      tetrahedron.children[0].geometry.tangentsNeedUpdate = true;
+  //      tetrahedron.children[0].geometry.computeFaceNormals();
+  //      tetrahedron.children[0].geometry.computeVertexNormals();
+
+  //      tetrahedron.children[1].geometry.verticesNeedUpdate = true;
+  //      tetrahedron.children[1].geometry.normalsNeedUpdate = true;
+  //      tetrahedron.children[1].geometry.elementsNeedUpdate = true;
+  //      tetrahedron.children[1].geometry.uvsNeedUpdate = true;
+  //      tetrahedron.children[1].geometry.tangentsNeedUpdate = true;
+  //      tetrahedron.children[1].geometry.computeFaceNormals();
+  //      tetrahedron.children[1].geometry.computeVertexNormals();
+
+          nucleus.add(tetrahedron);
+        }
+      }
+    } // end function createNuclet()
+
+    tetrahedronId = 0;
+    protonId = 0;
+
     if (nucleus) {
       viewer.scene.remove(nucleus);
     }
@@ -336,74 +448,45 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     localStorage.setItem('atomizer_builder_backbone', results[0].data.filepath.replace(/^.*[\\\/]/, ''));
 
     nucleus = new THREE.Group();
+    nucleus.add(new THREE.AxisHelper(500));
     nucleus.name = 'nucleus';
     nucleus.az = {
       protons: [],
       tetrahedrons: []
     }
 
-    //  Create Protons
-    for (var pid in nucleusConf.protons) {
-      var protonConf = nucleusConf.protons[pid];
-      var proton = viewer.nuclet.makeProton(
-        'default',
-        viewer.style.get('proton--opacity'),
-        {
-          x: protonConf.position['x'],
-          y: protonConf.position['y'],
-          z: protonConf.position['z']
-        }
-      );
-      proton.azid = pid;
-      nucleus.az.protons[pid] = proton;
-      nucleus.add(proton);
+    for (var i = 0; i < 2; i++) {
+      if (!build && i == 1) {
+
+      } else {
+        createNuclet(i);
+      }
     }
 
-    // Create Tetrahedrons
-    for (var tid in nucleusConf.geometries) {
-      var geometryConf = nucleusConf.geometries[tid];
-      if (geometryConf.geometry == 'tetrahedron') {
-        // Add the first tetrahedrons
-        var tetrahedron = createTetrahedron('tetra');
-        tetrahedron.azid = tid;
-        intersectList.push(tetrahedron.children[1]); // Attach the faces Mesh
-        nucleus.az.tetrahedrons[tid] = tetrahedron;
+    if (build) {
+      var proton;
+      x = 0;
+      y = -80.25;
+      z = 50;
+      // Create ghost proton
+      proton = viewer.nuclet.makeProton(
+        'default',
+        viewer.style.get('proton--opacity'),
+        {x: x, y: y, z: z}
+      );
+      proton.azid = 'p18';
+      nucleus.az.protons['p18'] = proton;
+      nucleus.add(proton);
 
-        // Set 4 vertices of tetrahedron
-        tetrahedron.children[1].geometry.protons = [];
-        for (var v = 0; v < 4; v++) {
-          var pid = geometryConf.protons[v];
-          var proton = nucleusConf.protons[pid];
-          tetrahedron.children[0].geometry.vertices[v].x = proton.position.x;
-          tetrahedron.children[0].geometry.vertices[v].y = proton.position.y;
-          tetrahedron.children[0].geometry.vertices[v].z = proton.position.z;
-
-          tetrahedron.children[1].geometry.vertices[v].x = proton.position.x;
-          tetrahedron.children[1].geometry.vertices[v].y = proton.position.y;
-          tetrahedron.children[1].geometry.vertices[v].z = proton.position.z;
-
-          // Save the proton list in tetrafaces mesh
-          tetrahedron.protons[v] = nucleus.az.protons[pid];
-        }
-
-        tetrahedron.children[0].geometry.verticesNeedUpdate = true;
-        tetrahedron.children[0].geometry.normalsNeedUpdate = true;
-        tetrahedron.children[0].geometry.elementsNeedUpdate = true;
-        tetrahedron.children[0].geometry.uvsNeedUpdate = true;
-        tetrahedron.children[0].geometry.tangentsNeedUpdate = true;
-        tetrahedron.children[0].geometry.computeFaceNormals();
-        tetrahedron.children[0].geometry.computeVertexNormals();
-
-        tetrahedron.children[1].geometry.verticesNeedUpdate = true;
-        tetrahedron.children[1].geometry.normalsNeedUpdate = true;
-        tetrahedron.children[1].geometry.elementsNeedUpdate = true;
-        tetrahedron.children[1].geometry.uvsNeedUpdate = true;
-        tetrahedron.children[1].geometry.tangentsNeedUpdate = true;
-        tetrahedron.children[1].geometry.computeFaceNormals();
-        tetrahedron.children[1].geometry.computeVertexNormals();
-
-        nucleus.add(tetrahedron);
-      }
+      // Create ghost proton
+      proton = viewer.nuclet.makeProton(
+        'default',
+        viewer.style.get('proton--opacity'),
+        {x: x, y: y, z: -z}
+      );
+      proton.azid = 'p19';
+      nucleus.az.protons['p19'] = proton;
+      nucleus.add(proton);
     }
 
     // Add the nucleus to the scene and render it.
@@ -429,13 +512,19 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       {x: 300, y: 50, z: 0}
     );
 
+
     // Create ghost Tetrahedron
     var tetrahedron = createTetrahedron('ghost');
     tetrahedron.protons = [];
     viewer.view.ghostTetrahedron = tetrahedron;
 
     // Start loading the default nucleus.
-    loadNucleus('config/backbone/backbone.yml');
+//  loadNucleus('config/backbone/half_backbone.yml');
+    if (build) {
+      loadNucleus('config/backbone/half_backbone.yml');
+    } else {
+      loadNucleus('config/backbone/back.yml');
+    }
   };
 
   // Set functions to return for external use - makes this into a pseudo class.

@@ -5,5 +5,5 @@ views:
   backbone:
     name: Backbone Builder
     producer: backbone_builder
-    defaultNucleus: backbone.yml
+    defaultNucleus: half_backbone.yml
     styleSetPath: config/style/builder/backbone.yml
