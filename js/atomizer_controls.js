@@ -286,7 +286,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     var controls = createControls();
     styler = document.getElementById('edit-styler');
     changeMode(viewer.style.get('mouse--mode'));
-    viewer.producer.setDefaults();
+    if (viewer.producer.setDefaults) viewer.producer.setDefaults();
 
     // Set up raycaster and projector for selecting objects with mouse.
     raycaster = new THREE.Raycaster();

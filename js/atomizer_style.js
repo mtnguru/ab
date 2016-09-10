@@ -141,8 +141,13 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
           if (!controlsOnly) {
             applyControl(id, def);
           }
-          document.getElementById(id + '--az-slider').value = def;
-          document.getElementById(id + '--az-value').value = def;
+          var element;
+
+          element = document.getElementById(id + '--az-slider');
+          if (element) element.value = def;
+
+          element = document.getElementById(id + '--az-value');
+          if (element) element.value = def;
         }
       // else defaultValue is not an array, set the one value
       } else {
