@@ -7,9 +7,6 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var viewer = _viewer;
   var abc = ['a', 'b', 'c'];
 
-  viewer.nuclet = Drupal.atomizer.nucletC(viewer);
-  viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
-
   var nucleus;
   var nucleusFile;
   var userNucleusFile;
@@ -105,6 +102,9 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   }
 
   var createView = function () {
+
+    viewer.nuclet = Drupal.atomizer.nucletC(viewer);
+    viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
 
     // Load and display the default nucleus.
     userNucleusFile = localStorage.getItem('atomizer_builder_nucleus');

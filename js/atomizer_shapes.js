@@ -17,16 +17,34 @@ Drupal.atomizer.shapesC = function (_viewer) {
    */
   function icosahedronGeometry ( radius, detail ) {
     var t = ( 1 + Math.sqrt( 5 ) ) / 2;
+
     var vertices = [
-      t,  0,  1,    1,  t,  0,    t,  0, -1,   1, -t,  0,
-      0, -1,  t,    0,  1,  t,    0,  1, -t,   0, -1, -t,
-     -1, -t,  0,   -t,  0,  1,   -1,  t,  0,  -t,  0, -1
+      0,  1,  t,    0, -1,  t,    0,  1, -t,   0, -1, -t,
+      t,  0,  1,    t,  0, -1,   -t,  0, -1,  -t,  0,  1,
+      1,  t,  0,   -1,  t,  0,    1, -t,  0,  -1, -t,  0
     ];
+
     var indices = [
-     10,  9,  5,   10,  5,  1,   10,  1,  6,   10,  6, 11,   10, 11,  9,
-      1,  5,  0,    5,  9,  4,    9, 11,  8,   11,  6,  7,    6,  1,  2,
-      3,  0,  4,    3,  4,  8,    3,  8,  7,    3,  7,  2,    3,  2,  0,
-      4,  0,  5,    8,  4,  9,    7,  8, 11,    2,  7,  6,    0,  2,  1
+      9,  0,  8,
+      9,  8,  2,
+      10,  1, 11,
+      10, 11,  3,
+      8,  0,  4,
+      1,  4,  0,
+      10,  4,  1,
+      4,  5,  8,
+      10,  5,  4,
+      2,  8,  5,
+      5,  3,  2,
+      10,  3,  5,
+      9,  2,  6,
+      6,  2,  3,
+      3, 11,  6,
+      9,  6,  7,
+      7,  6, 11,
+      9,  7,  0,
+      0,  7,  1,
+      11,  1, 7
     ];
 
     THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
@@ -35,6 +53,79 @@ Drupal.atomizer.shapesC = function (_viewer) {
   }
   icosahedronGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   icosahedronGeometry.prototype.constructor = icosahedronGeometry;
+
+  /**
+   * Create the backbone geometry.
+   *
+   * This geometry was created manually adding protons one at a time using tetrahedrons to position them
+   *
+   * @param radius
+   * @param detail
+   */
+
+  function backboneGeometry ( radius, detail ) {
+    var vertices = [
+      67.923760686217, 51.806863949014, 0,
+      77.129917809368, -47.543388109656, 0,
+      -67.923760686217, 51.806863949014, 0,
+      -77.129917809368, -47.543388109656, 0,
+      -49.521762490082, 0, -82.561411195164,
+      49.521762490082, 0, -82.561411195164,
+      -49.521762490082, 0, 82.561411195164,
+      49.521762490082, 0, 82.561411195164,
+      0, 83.749782693255, -64.568586645086,
+      0, 83.749782693255, 64.568586645086,
+      0, -80.25, -50,
+      0, -80.25, 50,
+      95.985319537216, 87.155108797328, 88.25590206511,
+      142.77807739337, 8.6414741615371, 49.887940240888,
+      142.77807739337, 8.6414741615371, -49.887940240888,
+      95.985319537216, 87.155108797328, -88.25590206511,
+      -95.985319537216, 87.155108797328, -88.25590206511,
+      -142.77807739337, 8.6414741615371, -49.887940240888,
+      -142.77807739337, 8.6414741615371, 49.887940240888,
+      -95.985319537216, 87.155108797328, 88.25590206511
+    ];
+
+    var numVertices = vertices.length / 3;
+    this.vertices = [];
+    for (var v = 0; v < numVertices; v++) {
+      var offset = v * 3;
+      this.vertices.push(new THREE.Vector3(
+        vertices[offset],
+        vertices[offset + 1],
+        vertices[offset + 2]
+      ));
+    }
+
+    var indices = [
+      9,  0,  8,
+      9,  8,  2,
+      10,  1, 11,
+      10, 11,  3,
+      8,  0,  4,
+      1,  4,  0,
+      10,  4,  1,
+      4,  5,  8,
+      10,  5,  4,
+      2,  8,  5,
+      5,  3,  2,
+      10,  3,  5,
+      9,  2,  6,
+      6,  2,  3,
+      3, 11,  6,
+      9,  6,  7,
+      7,  6, 11,
+      9,  7,  0,
+      0,  7,  1,
+      11,  1, 7
+    ];
+
+    this.type = 'BackboneGeometry';
+    this.parameters = { radius: radius, detail: detail };
+  }
+  backboneGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
+  backboneGeometry.prototype.constructor = backboneGeometry;
 
   /**
    * Create the Dodecahedron geometry.
@@ -215,6 +306,8 @@ Drupal.atomizer.shapesC = function (_viewer) {
         return createBiPyramid(5, radius, height, detail);
       case 'hexahedron':
         return new cubeGeometry(radius, detail);
+      case 'backbone':
+        return new backboneGeometry(radius, detail);
     }
   };
 

@@ -1,16 +1,15 @@
-name: carbon
+name: backbone
 position: {x: 0, y: 0, z: 0}
 rotation: {x: 0, y: 0, z: 0}
 allowmove: false
 geoGroups:
   protons:
     allowrotate: false
-    rotation:
-      y: 90
     geometries:
       framework:
-        shape: icosahedron
+        shape: backbone
         scale: 1.9
+        protonids: true
         protons:
           0:
             type: grow
@@ -36,6 +35,26 @@ geoGroups:
             type: polar
           11:
             type: polar
+          12:
+            type: lithium
+          13:
+            type: lithium
+          14:
+            type: lithium
+          15:
+            type: lithium
+          16:
+            type: lithium
+          17:
+            type: lithium
+          18:
+            type: lithium
+          19:
+            type: lithium
+      protonids:
+        shape: backbone
+        scale: 1.9
+        protonids: true
   icosa:
     allowrotate: false
     rotation:

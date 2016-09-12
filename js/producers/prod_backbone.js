@@ -9,10 +9,8 @@
 
 Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
 
-  var build = false;
+  var buildInitialBackbone = false;
   var viewer = _viewer;
-  viewer.nuclet = Drupal.atomizer.nucletC(viewer);
-  viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
 
   var abc = ['a', 'b', 'c'];
 
@@ -257,6 +255,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     for (var pid in nucleus.az.protons) {
       var proton = nucleus.az.protons[pid];
       nuclet.protons[pid] = {
+//      position: proton.position.multiplyScalar(1 / protonRadius),
         position: proton.position,
         attachments: []
       };
@@ -280,6 +279,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/saveYml',
       { name: data.name,
+        source: 'backbone_builder',
         component: 'style',
         filepath: data.filepath,
         ymlContents: nuclet
@@ -338,14 +338,15 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       var geometry = new THREE.Geometry();
       for (var pid in nucleusConf.protons) {
         var protonConf = nucleusConf.protons[pid];
-        geometry.vertices.push(new THREE.Vector3(
+        var pos = new THREE.Vector3(
           protonConf.position['x'],
           protonConf.position['y'],
           protonConf.position['z']
-        ));
+        );
+        geometry.vertices.push(pos);
       }
 
-      if (build) {
+      if (buildInitialBackbone) {
         // Do translations to initial geometry
         geometry.applyMatrix(new THREE.Matrix4().makeRotationY(Math.PI / 4));
         geometry.applyMatrix(new THREE.Matrix4().makeTranslation(-geometry.vertices[8].x, -geometry.vertices[8].y, 0));
@@ -432,6 +433,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   //      tetrahedron.children[1].geometry.computeFaceNormals();
   //      tetrahedron.children[1].geometry.computeVertexNormals();
 
+//        tetrahedron.scale.set(5, 5, 5);
           nucleus.add(tetrahedron);
         }
       }
@@ -456,14 +458,14 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     }
 
     for (var i = 0; i < 2; i++) {
-      if (!build && i == 1) {
+      if (!buildInitialBackbone && i == 1) {
 
       } else {
         createNuclet(i);
       }
     }
 
-    if (build) {
+    if (buildInitialBackbone) {
       var proton;
       x = 0;
       y = -80.25;
@@ -498,6 +500,9 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
    * Create the initial view.
    */
   var createView = function () {
+    viewer.nuclet = Drupal.atomizer.nucletC(viewer);
+    viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
+
     // model after the nucleus - read in the file and build it.
     viewer.backbone = {
       getYmlDirectory: function () { return 'config/backbone'; },
@@ -520,7 +525,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
 
     // Start loading the default nucleus.
 //  loadNucleus('config/backbone/half_backbone.yml');
-    if (build) {
+    if (buildInitialBackbone) {
       loadNucleus('config/backbone/half_backbone.yml');
     } else {
       loadNucleus('config/backbone/back.yml');

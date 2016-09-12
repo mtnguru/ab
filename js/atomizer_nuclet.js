@@ -17,13 +17,17 @@ Drupal.atomizer.nucletC = function (_viewer) {
   var axes = ['x', 'y', 'z'];
   var objects = {};
   var protonColors = {
-    default: viewer.style.get('proton-default--color'),
-    ghost:   viewer.style.get('proton-ghost--color'),
-    valence: viewer.style.get('proton-valence--color'),
-    isotope: viewer.style.get('proton-isotope--color'),
-    decalet: viewer.style.get('proton-decalet--color'),
-    vattach: viewer.style.get('proton-vattach--color'),
-    iattach: viewer.style.get('proton-iattach--color')
+    default:    viewer.style.get('proton-default--color'),
+    ghost:      viewer.style.get('proton-ghost--color'),
+    valence:    viewer.style.get('proton-valence--color'),
+    isotope:    viewer.style.get('proton-isotope--color'),
+    grow:       viewer.style.get('proton-grow--color'),
+    polar:      viewer.style.get('proton-polar--color'),
+    lithium:    viewer.style.get('proton-lithium--color'),
+    newneutron: viewer.style.get('proton-newneutron--color'),
+    newproton:  viewer.style.get('proton-newproton--color'),
+    vattach:    viewer.style.get('proton-vattach--color'),
+    iattach:    viewer.style.get('proton-iattach--color')
   };
 
   var protonRadius = viewer.style.get('proton--radius');
@@ -326,6 +330,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
       object = new THREE.SceneUtils.createMultiMaterialObject(geometry, materials);
     }
 
+    // Set scale
+    if (geo.scale) {
+      object.scale.set(geo.scale, geo.scale, geo.scale);
+    }
+
     // Set rotation
     if (pos.rotation) {
       if (pos.rotation.x) {
@@ -380,6 +389,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
         return new THREE.OctahedronGeometry(scale, detail);
       case 'hexahedron':
         return viewer.shapes.getGeometry('hexahedron', scale, null, detail);
+      case 'backbone':
+        return viewer.shapes.getGeometry('backbone', scale, null, detail);
     }
   }
 
@@ -401,7 +412,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
           visible: (opacity > visibleThresh)
         }
       },
-      {radius: protonRadius},
+      {
+        scale: viewer.style.get('proton--scale'),
+        radius: protonRadius
+      },
       {
         x: pos.x,
         y: pos.y,
@@ -456,6 +470,12 @@ Drupal.atomizer.nucletC = function (_viewer) {
         var geo = groupConf.geometries[geoName];
         var geometry = createGeometry(geo.shape, (geo.scale || 1) * protonRadius, (geo.scaleHeight || 1) * protonRadius);
 
+        // Set scale for geometry here
+        var scale = viewer.style.get(groupName + '--scale');
+        if (scale) {
+//        nuclet.scale.set(scale,scale,scale);
+        }
+
         //// Add Protons
         if (geo.protons) {
           var opacity = viewer.style.get('proton--opacity') || 1;
@@ -486,7 +506,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
                   visible: (opacity > visibleThresh)
                 }
               },
-              {radius: electronRadius},
+              {
+                scale: viewer.style.get('proton--scale'),
+                radius: electronRadius
+              },
               {
                 x: vertice.x * geo.scale,
                 y: vertice.y * geo.scale,
@@ -549,6 +572,9 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
         if (geo.faceids) {
           nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
+        }
+        if (geo.protonids) {
+          nucletGroup.add(viewer.sprites.createVerticeIds('proton', geometry));
         }
 
         viewer.render();
@@ -670,6 +696,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     makeObject: makeObject,
     makeProton: makeProton,
     create: createNuclet,
+    createGeometry: createGeometry,
     createGeometryWireframe: createGeometryWireframe,
     createGeometryFaces: createGeometryFaces,
     objects: objects,

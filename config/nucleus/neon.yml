@@ -6,10 +6,12 @@ numProtons: 20
 nuclets:
   1:
     position: 1
-    type: carbon
-    numProtons: 12
-    num_nuclear_electrons: 6
+    type: backbone
+    numProtons: 20
+    num_nuclear_electrons: 10
     protons:
+      0:
+        present: true
       1:
         present: true
       2:
@@ -33,5 +35,19 @@ nuclets:
       11:
         present: true
       12:
+        present: true
+      13:
+        present: true
+      14:
+        present: true
+      15:
+        present: true
+      16:
+        present: true
+      17:
+        present: true
+      18:
+        present: true
+      19:
         present: true
 

@@ -31,6 +31,46 @@ class AtomizerController extends ControllerBase {
   public function saveYml() {
     $data = json_decode(file_get_contents("php://input"), true);
 
+    $xref = [
+      2,
+      0,
+      12,
+      10,
+      6,
+      14,
+      16,
+      4,
+      9,
+      8,
+      19,
+      18,
+      5,
+      3,
+      1,
+      7,
+      15,
+      13,
+      11,
+      17,
+    ];
+
+    if ($data['source'] == 'backbone_builder') {
+      // Open file
+      $posfile = fopen('/home/atom/tmp/pos.yml', 'w');
+
+      $protons = $data['ymlContents']['protons'];
+      $p = 0;
+      for ($p = 0; $p < 20; $p++) {
+        $proton = $protons['p' . $xref[$p]];
+        fwrite($posfile,
+          $proton['position']['x'] . ", " .
+          $proton['position']['y'] . ", " .
+          $proton['position']['z'] . ",\n"
+        );
+      }
+      fclose($posfile);
+    }
+
     $response = new AjaxResponse();
     file_put_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath'], Yaml::encode($data['ymlContents']));
 

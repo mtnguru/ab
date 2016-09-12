@@ -46,20 +46,11 @@ styles:
   proton-default--color:
     defaultValue: '#767676'
     type: color
-  proton-left--color:
-    defaultValue: '#d4af37'
-    type: color
-  proton-right--color:
-    defaultValue: '#dd66dd'
-    type: color
-  proton-marker--color:
-    defaultValue: '#55dddd'
-    type: color
   proton--opacity:
     defaultValue: '1'
     type: range
   proton--scale:
-    defaultValue: '1'
+    defaultValue: '0.91'
     type: range
   icosaWireframe--scale:
     defaultValue: 1
@@ -389,16 +380,16 @@ styles:
     defaultValue: 1
     type: range
   electron--scale:
-    defaultValue: 1
+    defaultValue: '1'
     type: range
   icosa--scale:
-    defaultValue: 1
+    defaultValue: '1.19'
     type: range
   dodeca--scale:
-    defaultValue: 1
+    defaultValue: '0.83'
     type: range
   octa--scale:
-    defaultValue: 1
+    defaultValue: '0.8'
     type: range
   octa--rotation--x:
     defaultValue: '0'
@@ -478,33 +469,6 @@ styles:
   hexaAxes--linewidth:
     defaultValue: 1
     type: range
-  proton-ghost--color:
-    defaultValue: '#d4af37'
-    type: color
-  proton-vattach--color:
-    defaultValue: '#be81be'
-    type: color
-  proton-iattach--color:
-    defaultValue: '#55dddd'
-    type: color
-  proton-valence--color:
-    defaultValue: '#55965d'
-    type: color
-  proton-decalet--color:
-    defaultValue: '#4f53ac'
-    type: color
-  proton-isotope--color:
-    defaultValue: '#875552'
-    type: color
-  proton-neutron--color:
-    defaultValue: '#dd66dd'
-    type: color
-  proton-nucleon--color:
-    defaultValue: '#dd66dd'
-    type: color
-  proton-proton--color:
-    defaultValue: '#dd66dd'
-    type: color
   tetraFaces--color:
     defaultValue: '#88cccc'
     type: color
@@ -577,4 +541,40 @@ styles:
   decahedron--rotation--z:
     defaultValue: 0
     type: rotation
+  proton-valence--color:
+    defaultValue: '#4e3f43'
+    type: color
+  proton-grow--color:
+    defaultValue: '#546756'
+    type: color
+  proton-polar--color:
+    defaultValue: '#444455'
+    type: color
+  proton-lithium--color:
+    defaultValue: '#7f6491'
+    type: color
+  proton-newproton--color:
+    defaultValue: '#555599'
+    type: color
+  proton-newneutron--color:
+    defaultValue: '#559955'
+    type: color
+  proton-vattach--color:
+    defaultValue: '#4ea44e'
+    type: color
+  proton-iattach--color:
+    defaultValue: '#338585'
+    type: color
+  proton-ghost--color:
+    defaultValue: '#aa55aa'
+    type: color
+  protonVertexid--color:
+    defaultValue: '#ff00ff'
+    type: color
+  protonVertexid--opacity:
+    defaultValue: '0'
+    type: range
+  protonVertexid--scale:
+    defaultValue: 1
+    type: range
 filepath: config/style/builder/base.yml

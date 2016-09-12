@@ -38,22 +38,29 @@ styler:
   particles:
     title:               Protons, Electrons
     controls:
-      proton--label:           ['Protons', 'header']
-      proton-default--color:   ['Default',      'color',    '#777777']
-      proton-decalet--color:   ['Decalet',     'color',    '#4f53ac']
-      proton-isotope--color:   ['Isotope',      'color',    '#ac534f']
-      proton-valence--color:   ['Valence',      'color',    '#dd66dd']
-      proton-neutron--color:   ['New Neutron',  'color',    '#dd66dd']
-      proton-nucleon--color:   ['New Nucleon',  'color',    '#dd66dd']
-      proton-proton--color:    ['New Proton',   'color',    '#dd66dd']
-      proton-vattach--color:   ['Val Attach',   'color',    '#66dd66']
-      proton-iattach--color:   ['Isotope',      'color',    '#55dddd']
-      proton--opacity:         ['Opacity',      'range',    .9, [0, 1, .01]]
-      proton--scale:           ['Scale',        'range',     1, [0, 2, .01]]
+      proton--label:             ['Protons', 'header']
+      proton-default--color:     ['Default',      'color',    '#777777']
+      proton-grow--color:        ['Grow',         'color',    '#559999']
+      proton-valence--color:     ['Valence',      'color',    '#995599']
+      proton-polar--color:       ['Polar',        'color',    '#999955']
+      proton-lithium--color:     ['Lithium',      'color',    '#995555']
+      proton-newproton--color:   ['New Proton',   'color',    '#555599']
+      proton-newneutron--color:  ['New Neutron',  'color',    '#559955']
+      proton-vattach--color:     ['Val Attach',   'color',    '#66dd66']
+      proton-iattach--color:     ['Isotope',      'color',    '#55dddd']
+      proton-ghost--color:       ['ghost',        'color',    '#aa55aa']
+      proton--opacity:           ['Opacity',      'range',    .9, [0, 1, .01]]
+      proton--scale:             ['Scale',        'range',     1, [0, 2, .01]]
+
       hr1:                     [ null,          'hr']
-      electron--color:         ['Electrons',    'color',    '#ffff33']
-      electron--opacity:       ['Opacity',      'range',     1, [0, 1, .01]]
-      electron--scale:         ['Scale',        'range',     1, [0, 2, .01]]
+      protonVertexid--color:   ['Proton IDs',   'color',    '#ff00ff']
+      protonVertexid--opacity: ['Opacity',      'range',    1, [0, 1, .01]]
+      protonVertexid--scale:   ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                       [ null,          'hr']
+      electron--color:           ['Electrons',    'color',    '#ffff33']
+      electron--opacity:         ['Opacity',      'range',     1, [0, 1, .01]]
+      electron--scale:           ['Scale',        'range',     1, [0, 2, .01]]
 
   icosa:
 
@@ -241,6 +248,7 @@ styler:
       isotope--opacity:        ['Isotope',       'range',    .3, [0, 1, .01]]
 
   scene:
+
     title:               Scene
     controls:
       header--camera:          ['Camera',        'header']
@@ -257,7 +265,9 @@ styler:
       plane--depth:            ['Depth',         'range',    850, [500, 1500, 1]]
       plane--position:         ['Position',      'position', [0, -200, 0], [-600, 800, 1]]
       plane--rotation:         ['Rotation',      'rotation', [0, -180, 1], [-180, 180, 1]]
+
   lighting:
+
     title:               Lighting
     controls:
       ambient--color:          ['Ambient',       'color',    '#777777']
@@ -270,7 +280,9 @@ styler:
       hr3:                     [ null, 'hr']
       spotlight-3--color:      ['Spotlight 3',   'color',    '#000000']
       spotlight-3--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
+
   mouse:
+
     title: Mouse
     controls:
       mouse--mode:

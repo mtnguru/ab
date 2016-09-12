@@ -59,7 +59,7 @@ styles:
     defaultValue: '0'
     type: range
   proton--scale:
-    defaultValue: '1'
+    defaultValue: '.92'
     type: range
   icosaWireframe--scale:
     defaultValue: 1

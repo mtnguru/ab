@@ -321,8 +321,8 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         return element.value;
       }
     } else {
-      alert('controls - element not found - ' + id);
-      return 0;
+      console.log('atomizer_controls.js - default for element not found - ' + id);
+      return null;
     }
   };
 

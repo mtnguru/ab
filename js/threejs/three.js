@@ -2192,7 +2192,7 @@ THREE.Vector3.prototype = {
 
 	applyMatrix4: function ( m ) {
 
-		// input: THREE.Matrix4 affine matrix
+		// input: THREE.Matrix4 affine matri.x
 
 		var x = this.x, y = this.y, z = this.z;
 		var e = m.elements;
