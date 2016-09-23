@@ -1,15 +1,11 @@
-name: backbone
-position: {x: 0, y: 0, z: 0}
-rotation: {x: 0, y: 0, z: 0}
-allowmove: false
+name: Backbone Initial
+weight: 7
 geoGroups:
   protons:
-    allowrotate: false
     geometries:
       framework:
         shape: backbone
-        scale: 1.9
-        protonids: true
+        particleids: proton
         protons:
           0:
             type: grow
@@ -35,22 +31,51 @@ geoGroups:
             type: polar
           11:
             type: polar
+#         12:
+#           type: lithium
+#         13:
+#           type: lithium
+#         14:
+#           type: lithium
+#         15:
+#           type: lithium
+#         16:
+#           type: lithium
+#         17:
+#           type: lithium
+#         18:
+#           type: lithium
+#         19:
+#           type: lithium
+        tetrahedrons:
+          0:
+            vertices: [1, 14, 0, 13]
+          1:
+            vertices: [13, 0, 1, 7]
+          2:
+            vertices: [7, 13, 0, 12]
+          3:
+            vertices: [14, 1, 0, 4]
+          4:
+            vertices: [4, 0, 14, 15]
+          5:
+            vertices: [12, 0, 7, 9]
+          6:
+            vertices: [15, 4, 0, 8]
+          7:
+            vertices: [3, 18, 2, 17]
+          8:
+            vertices: [17, 2, 3, 5]
+          9:
+            vertices: [5, 17, 2, 16]
+          10:
+            vertices: [18, 3, 2, 6]
+          11:
+            vertices: [6, 2, 18, 19]
           12:
-            type: lithium
+            vertices: [16, 2, 5, 8]
           13:
-            type: lithium
-          14:
-            type: lithium
-          15:
-            type: lithium
-          16:
-            type: lithium
-          17:
-            type: lithium
-          18:
-            type: lithium
-          19:
-            type: lithium
+            vertices: [19, 6, 2, 9]
       protonids:
         shape: backbone
         scale: 1.9
@@ -131,12 +156,12 @@ geoGroups:
         axes:
           scale: 3
           vertices:
-            - [0, 11]
-            - [1,  8]
-            - [2,  9]
-            - [3, 10]
-            - [4,  6]
-            - [5,  7]
+            - [0, 3]
+            - [1, 2]
+            - [4, 7]
+            - [5, 6]
+            - [8, 11]
+            - [9, 10]
       vertexids:
         shape: icosahedron
         scale: 1.55

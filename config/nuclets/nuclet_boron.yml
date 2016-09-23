@@ -1,27 +1,33 @@
-name: Lithium
-weight: 3
+name: Boron
+weight: 5
+position: {x: 0, y: 0, z: 0}
+rotation: {x: 0, y: 0, z: 0}
+allowmove: false
 geoGroups:
   protons:
-    rotation:
-      y: 90
+    allowrotate: false
     geometries:
       framework:
-        scale: 1.9
-        shape: lithium
+        shape: decahedron
+        scale: 1.698
+        scaleHeight: 1.05
         protons:
+          0:
+            type: lithium
           1:
-            type: grow
+            type: lithium
+          2:
+            type: lithium
           3:
-            type: grow
+            type: lithium
           4:
-            type: valence
+            type: lithium
           5:
-            type: valence
-          9:
-            type: polar
-          11:
-            type: polar
+            type: lithium
+          6:
+            type: lithium
   deca:
+    allowrotate: false
     geometries:
       solid:
         shape: decahedron

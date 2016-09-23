@@ -1,13 +1,11 @@
-name: Carbon
-weight: 6
+name: Backbone Final
+weight: 8 
 geoGroups:
   protons:
-    rotation:
-      y: 90
     geometries:
       framework:
-        shape: icosahedron
-        scale: 1.9
+        shape: backbone
+        particleids: proton
         protons:
           0:
             type: grow
@@ -33,7 +31,57 @@ geoGroups:
             type: polar
           11:
             type: polar
+#         12:
+#           type: lithium
+#         13:
+#           type: lithium
+#         14:
+#           type: lithium
+#         15:
+#           type: lithium
+#         16:
+#           type: lithium
+#         17:
+#           type: lithium
+#         18:
+#           type: lithium
+#         19:
+#           type: lithium
+        tetrahedrons:
+          0:
+            vertices: [1, 14, 0, 13]
+          1:
+            vertices: [13, 0, 1, 7]
+          2:
+            vertices: [7, 13, 0, 12]
+          3:
+            vertices: [14, 1, 0, 4]
+          4:
+            vertices: [4, 0, 14, 15]
+          5:
+            vertices: [12, 0, 7, 9]
+          6:
+            vertices: [15, 4, 0, 8]
+          7:
+            vertices: [3, 18, 2, 17]
+          8:
+            vertices: [17, 2, 3, 5]
+          9:
+            vertices: [5, 17, 2, 16]
+          10:
+            vertices: [18, 3, 2, 6]
+          11:
+            vertices: [6, 2, 18, 19]
+          12:
+            vertices: [16, 2, 5, 8]
+          13:
+            vertices: [19, 6, 2, 9]
+      protonids:
+        shape: backbone
+        scale: 1.9
+        protonids: true
   icosa:
+    allowrotate: false
     rotation:
       y: 90
     geometries:
@@ -108,12 +156,12 @@ geoGroups:
         axes:
           scale: 3
           vertices:
-            - [0, 11]
-            - [1,  8]
-            - [2,  9]
-            - [3, 10]
-            - [4,  6]
-            - [5,  7]
+            - [0, 3]
+            - [1, 2]
+            - [4, 7]
+            - [5, 6]
+            - [8, 11]
+            - [9, 10]
       vertexids:
         shape: icosahedron
         scale: 1.55
@@ -124,6 +172,7 @@ geoGroups:
         faceids: true
 
   dodeca:
+    allowrotate: false
     geometries:
       solid:
         shape: dodecahedron
@@ -155,6 +204,7 @@ geoGroups:
         faceids: true
 
   octa:
+    allowrotate: true
     geometries:
       framework:
         shape: octahedron

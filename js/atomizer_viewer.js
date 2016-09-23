@@ -16,7 +16,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
   Physijs.scripts.ammo =   '/modules/custom/atomizer/js/libs/ammo.js';
 
   var render = function render () {
-    viewer.scene.simulate();
+//  viewer.scene.simulate();
     viewer.renderer.render(viewer.scene, viewer.camera);
   }
   /**

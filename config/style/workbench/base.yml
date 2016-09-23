@@ -47,7 +47,7 @@ styles:
     defaultValue: '#767676'
     type: color
   proton--opacity:
-    defaultValue: '1'
+    defaultValue: '0'
     type: range
   proton--scale:
     defaultValue: '1'
@@ -308,10 +308,10 @@ styles:
       - 1
     type: rotation
   ambient--color:
-    defaultValue: '#888888'
+    defaultValue: '#777777'
     type: color
   spotlight-1--color:
-    defaultValue: '#775577'
+    defaultValue: '#664466'
     type: color
   spotlight-1--position--x:
     defaultValue:
@@ -332,7 +332,7 @@ styles:
       - -500
     type: position
   spotlight-2--color:
-    defaultValue: '#557777'
+    defaultValue: '#446644'
     type: color
   spotlight-2--position--x:
     defaultValue:
@@ -353,7 +353,7 @@ styles:
       - -200
     type: position
   spotlight-3--color:
-    defaultValue: '#777755'
+    defaultValue: '#000000'
     type: color
   spotlight-3--position--x:
     defaultValue:
@@ -473,7 +473,7 @@ styles:
     defaultValue: '#00fcff'
     type: color
   tetraFaces--opacity:
-    defaultValue: '.45'
+    defaultValue: '0.68'
     type: range
   tetraFaceid--opacity:
     defaultValue: 0
@@ -578,10 +578,10 @@ styles:
     defaultValue: 1
     type: range
   nucletAxes--opacity:
-    defaultValue: '1'
+    defaultValue: 1
     type: range
   nucletAxes--scale:
-    defaultValue: 4
+    defaultValue: 1
     type: range
   backbone-2--position--x:
     defaultValue: 0
@@ -605,7 +605,7 @@ styles:
     defaultValue: 0
     type: position
   innerbackbone-2--position--y:
-    defaultValue: '12'
+    defaultValue: 0
     type: position
   innerbackbone-2--position--z:
     defaultValue: 0
@@ -614,7 +614,7 @@ styles:
     defaultValue: 0
     type: rotation
   innerbackbone-2--rotation--y:
-    defaultValue: '-21'
+    defaultValue: '-1'
     type: rotation
   innerbackbone-2--rotation--z:
     defaultValue: 0
@@ -637,61 +637,4 @@ styles:
   outerbackbone-2--rotation--z:
     defaultValue: 0
     type: rotation
-  nucletAxes--linewidth:
-    defaultValue: 1
-    type: range
-  backbone-1--position--x:
-    defaultValue: 0
-    type: position
-  backbone-1--position--y:
-    defaultValue: 0
-    type: position
-  backbone-1--position--z:
-    defaultValue: 0
-    type: position
-  backbone-1--rotation--x:
-    defaultValue: 0
-    type: rotation
-  backbone-1--rotation--y:
-    defaultValue: 0
-    type: rotation
-  backbone-1--rotation--z:
-    defaultValue: 0
-    type: rotation
-  nucletInnerAxes--opacity:
-    defaultValue: '1'
-    type: range
-  nucletInnerAxes--scale:
-    defaultValue: 3
-    type: range
-  nucletInnerAxes--linewidth:
-    defaultValue: 3
-    type: range
-  nucletOuterAxes--opacity:
-    defaultValue: '1'
-    type: range
-  nucletOuterAxes--scale:
-    defaultValue: 2
-    type: range
-  nucletOuterAxes--linewidth:
-    defaultValue: 5
-    type: range
-  outerlithium-1--position--x:
-    defaultValue: 0
-    type: position
-  outerlithium-1--position--y:
-    defaultValue: 0
-    type: position
-  outerlithium-1--position--z:
-    defaultValue: 0
-    type: position
-  outerlithium-1--rotation--x:
-    defaultValue: 0
-    type: rotation
-  outerlithium-1--rotation--y:
-    defaultValue: 0
-    type: rotation
-  outerlithium-1--rotation--z:
-    defaultValue: 0
-    type: rotation
-filepath: config/style/builder/base.yml
+filepath: config/style/workbench/base.yml

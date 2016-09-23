@@ -78,30 +78,30 @@ styler:
     title:               Icosahedron
     controls:
 
-      icosa--scale:                ['Scale',        'range',    1,  [0, 2, .01]]
+      icosa--scale:                 ['Scale',        'range',    1,  [0, 2, .01]]
 
-      hr1:                         [ null, 'hr']
-      icosaWireframe--color:       ['Wireframe',    'color',    '#ff33ff']
-      icosaWireframe--opacity:     ['Opacity',      'range',     1, [0, 1, .01]]
-      icosaWireframe--linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+      hr1:                          [ null, 'hr']
+      icosaWireframe--color:        ['Wireframe',    'color',    '#ff33ff']
+      icosaWireframe--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
+      icosaWireframe--linewidth:    ['Linewidth',    'range',     1, [0, 5, .1]]
 
-      icosaVertexid--label:        ['IDs',          'label']
-      icosaVertexid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
-      icosaVertexids--scale:       ['Scale',        'range',     1,  [0, 2, .01]]
+      icosaVertexid--label:         ['IDs',          'label']
+      icosaVertexid--opacity:       ['Opacity',      'range',     0,  [0, 1, .01]]
+      icosaVertexids--scale:        ['Scale',        'range',     1,  [0, 2, .01]]
 
-      hr2:                         [ null, 'hr']
-      icosaFaces--color:           ['Faces',        'color',    '#88cccc']
-      icosaFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+      hr2:                          [ null, 'hr']
+      icosaFaces--color:            ['Faces',        'color',    '#88cccc']
+      icosaFaces--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
 
-      icosaFaceid--label:          ['IDs',          'label']
-      icosaFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
-      icosaFaceids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
+      icosaFaceid--label:           ['IDs',          'label']
+      icosaFaceid--opacity:         ['Opacity',      'range',     0,  [0, 1, .01]]
+      icosaFaceids--scale:          ['Scale',        'range',     1,  [0, 2, .01]]
 
-      hr4:                         [ null, 'hr']
-      icosaAxes--color:            ['Axis',         'color',    '#ffbbcc']
-      icosaAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
-      icosaAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
-      icosaAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+      hr4:                          [ null, 'hr']
+      icosaAxes--color:             ['Axis',         'color',    '#ffbbcc']
+      icosaAxes--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
+      icosaAxes--scale:             ['Scale',        'range',     2, [0, 5, .01]]
+      icosaAxes--linewidth:         ['Linewidth',    'range',     1, [0, 5, .1]]
 
 
   deca:
@@ -170,25 +170,25 @@ styler:
 
     title:               Octahedron
     controls:
-      octa--scale:                 ['Scale',        'range',    1,  [0, 2, .01]]
+      octa--scale:                  ['Scale',        'range',    1,  [0, 2, .01]]
 
-      hr1:                         [ null, 'hr']
-      octaWireframe--color:        ['Wireframe',    'color',    '#ff00ff']
-      octaWireframe--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
-      octaWireframe--linewidth:    ['Linewidth',    'range',     1, [0, 5, .1]]
+      hr1:                          [ null, 'hr']
+      octaWireframe--color:         ['Wireframe',    'color',    '#ff00ff']
+      octaWireframe--opacity:       ['Opacity',      'range',     1, [0, 1, .01]]
+      octaWireframe--linewidth:     ['Linewidth',    'range',     1, [0, 5, .1]]
 
-      octaVertexid--label:         ['IDs',          'label']
-      octaVertexid--opacity:       ['Opacity',      'range',    0,  [0, 1, .01]]
-      octaVertexids--scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+      octaVertexid--label:          ['IDs',          'label']
+      octaVertexid--opacity:        ['Opacity',      'range',    0,  [0, 1, .01]]
+      octaVertexids--scale:         ['Scale',        'range',    1,  [0, 2, .01]]
 
-      hr3:                         [ null, 'hr']
-      octaAxes--color:             ['Axis',         'color',    '#ffbbcc']
-      octaAxes--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
-      octaAxes--scale:             ['Scale',        'range',     2, [0, 5, .01]]
-      octaAxes--linewidth:         ['Linewidth',    'range',     1, [0, 5, .1]]
+      hr3:                          [ null, 'hr']
+      octaAxes--color:              ['Axis',         'color',    '#ffbbcc']
+      octaAxes--opacity:            ['Opacity',      'range',     0, [0, 1, .01]]
+      octaAxes--scale:              ['Scale',        'range',     2, [0, 5, .01]]
+      octaAxes--linewidth:          ['Linewidth',    'range',     1, [0, 5, .1]]
 
-      hr4:                         [null, 'hr']
-      octa--rotation:              ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+      hr4:                          [null, 'hr']
+      octa--rotation:               ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
 
   tetrahedron:
 

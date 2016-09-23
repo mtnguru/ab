@@ -7,23 +7,82 @@ static:
       style--reset:            ['Reset Style',      'button']
 
       hr1: ['null', hr]
+hidden:
+  nuclet:
+    title:               Nuclet Hidden
+    controls:
+      nuclet--state:
+        - State
+        - radios
+        - initial
+        -
+          initial: 2-3 Initial
+          neutral: 4-5 Neutral
+          lithium: 6 Lithium
+          beryllium: 8 Beryllium
+          boron: 10 Boron
+          carbon: 11 Carbon
+          backbone-initial: Initial Backbone
+          backbone-final: Final Backbone
+      nuclet--attachAngle:     ['Angle',          'range',   1,  [1, 5, 1]]
+      nuclet--attachProton:    ['Attach Pt',      'radios',  10, {10: '10', 11: '11'}]
+      nuclet--grow-label:      ['Grow Points',    'label']
+      nuclet--grow-0:          ['&nbsp;&nbsp;0',  'html',    '--']
+      nuclet--grow-1:          ['&nbsp;&nbsp;1',  'html',    '--']
+      nuclet--delete:          ['Delete',         'button']
 styler:
   nucleus:
     title:               Nucleus
     controls:
-      nucleus--loadlabel:      ['Select nucleus',   'header']
-      nucleus--selectyml:      [ null,              'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
-      nucleus--popupNucleus:   ['Popup Nucleus',    'popup',     'carbon_12',  'nucleus']
-      hr1:                     [ null,              'hr']
-      nucleus--savelabel:      ['Save new nucleus', 'header']
-      nucleus--saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_save']
-      hr2:                     [ null,              'hr']
-      nucleus--position:       ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
-      nucleus--rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
-  build:
-    title:               Build Atom
+#     hr1:                     [ null,            'hr']
+      nucleus--loadlabel:      ['Select nucleus', 'header']
+      nucleus--selectyml:      [ null,            'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
+      nucleus--information:    [ null,            'container']
+      hr2:                     [ null,            'hr']
+      nucleus--nuclets-label:  ['Nuclets',        'header']
+      nucleus--nuclets:        [ null,            'container']
+      hr3:                     [ null,            'hr']
+      nucleus--new:            ['Save New',       'button']
+      nucleus--overwrite:      ['Overwrite',      'button']
+      nucleus--reset:          ['Reset',          'button']
+      nucleus--delete:         ['Delete',         'button']
+  nuclet-debug:
+    title:               Nuclet Debug
     controls:
-      text:                    ['Display nuclets here, plus other controls needed to build atoms', 'label']
+      hr1:                        [ null,              'hr']
+      nuclet-N00--label:          ['Nuclet',     'label']
+      nuclet-N00--position:       ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
+      nuclet-N00--rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
+      hr2:                        [ null,              'hr']
+      nucletInner-N00--label:     ['Inner Nuclet Shell',     'header']
+      nucletInner-N00--position:  ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
+      nucletInner-N00--rotation:  ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
+      hr3:                        [ null,              'hr']
+      nucletOuter-N00--label:     ['Outer Nuclet Shell',     'header']
+      nucletOuter-N00--position:  ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
+      nucletOuter-N00--rotation:  ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
+  axes:
+    title:               Axes
+    controls:
+      hr1:                        [ null,              'hr']
+      nuclet--label:              ['Nuclet',           'header']
+      nucletAxes--opacity:        ['Opacity',          'range',    0, [0, 1, .01]]
+      nucletAxes--scale:          ['Scale',            'range',    4, [0, 3, .01]]
+      nucletAxes--linewidth:      ['Linewidth',    'range',        1, [0, 5, .1]]
+      hr2:                        [ null,              'hr']
+      nucletInnerAxes--label:     ['Inner Nuclet Shell',     'header']
+      nucletInnerAxes--opacity:   ['Opacity',          'range',    0, [0, 1, .01]]
+      nucletInnerAxes--scale:     ['Scale',            'range',    3, [0, 3, .01]]
+      nucletInnerAxes--linewidth: ['Linewidth',    'range',        3, [0, 5, .1]]
+      hr3:                        [ null,              'hr']
+      nucletOuterAxes--label:     ['Outer Nuclet Shell',     'header']
+      nucletOuterAxes--opacity:   ['Opacity',          'range',    0, [0, 1, .01]]
+      nucletOuterAxes--scale:     ['Scale',            'range',    2, [0, 3, .01]]
+      nucletOuterAxes--linewidth: ['Linewidth',    'range',        5, [0, 5, .1]]
+# build:
+#   title:               Build Atom
+#   controls:
+#     text:                    ['Display nuclets here, plus other controls needed to build atoms', 'label']
   style:
     title:               Styles
     controls:
@@ -50,24 +109,24 @@ styler:
       proton-iattach--color:     ['Isotope',      'color',    '#55dddd']
       proton-ghost--color:       ['ghost',        'color',    '#aa55aa']
       proton--opacity:           ['Opacity',      'range',    .9, [0, 1, .01]]
-      proton--scale:             ['Scale',        'range',     1, [0, 2, .01]]
+      proton--scale:             ['Scale',        'range',     1, [0, 3, .01]]
 
-      hr1:                     [ null,          'hr']
-      protonVertexid--color:   ['Proton IDs',   'color',    '#ff00ff']
-      protonVertexid--opacity: ['Opacity',      'range',    1, [0, 1, .01]]
-      protonVertexid--scale:   ['Scale',        'range',    1,  [0, 2, .01]]
+      hr1:                       [ null,          'hr']
+      protonVertexid--color:     ['Proton IDs',   'color',    '#ff00ff']
+      protonVertexid--opacity:   ['Opacity',      'range',    1, [0, 1, .01]]
+      protonVertexid--scale:     ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr2:                       [ null,          'hr']
       electron--color:           ['Electrons',    'color',    '#ffff33']
       electron--opacity:         ['Opacity',      'range',     1, [0, 1, .01]]
-      electron--scale:           ['Scale',        'range',     1, [0, 2, .01]]
+      electron--scale:           ['Scale',        'range',     1, [0, 3, .01]]
 
   icosa:
 
     title:               Icosahedron
     controls:
 
-      icosa--scale:                ['Scale',        'range',    1,  [0, 2, .01]]
+      icosa--scale:                ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr1:                         [ null, 'hr']
       icosaWireframe--color:       ['Wireframe',    'color',    '#ff33ff']
@@ -76,7 +135,7 @@ styler:
 
       icosaVertexid--label:        ['IDs',          'label']
       icosaVertexid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
-      icosaVertexids--scale:       ['Scale',        'range',     1,  [0, 2, .01]]
+      icosaVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr2:                         [ null, 'hr']
       icosaFaces--color:           ['Faces',        'color',    '#88cccc']
@@ -84,7 +143,7 @@ styler:
 
       icosaFaceid--label:          ['IDs',          'label']
       icosaFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
-      icosaFaceids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
+      icosaFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr4:                         [ null, 'hr']
       icosaAxes--color:            ['Axis',         'color',    '#ffbbcc']
@@ -97,7 +156,7 @@ styler:
 
     title:               Decahedron
     controls:
-      deca--scale:                  ['Scale',        'range',    1,  [0, 2, .01]]
+      deca--scale:                  ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr1:                          [ null, 'hr']
       decaWireframe--color:         ['Wireframe',    'color',    '#00ffff']
@@ -106,7 +165,7 @@ styler:
 
       decaVertexid--label:          ['IDs',          'label']
       decaVertexid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
-      decaVertexids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
+      decaVertexids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr2:                          [ null, 'hr']
       decaFaces--color:             ['Faces',        'color',    '#88cccc']
@@ -114,7 +173,7 @@ styler:
 
       decaFaceid--label:            ['IDs',          'label']
       decaFaceid--opacity:          ['Opacity',      'range',     0,  [0, 1, .01]]
-      decaFaceids--scale:           ['Scale',        'range',     1,  [0, 2, .01]]
+      decaFaceids--scale:           ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr4:                          [ null, 'hr']
       decaAxes--color:              ['Axis',         'color',    '#aabb99']
@@ -130,7 +189,7 @@ styler:
 
     title:               Dodecahedron
     controls:
-      dodeca--scale:                ['Scale',        'range',    .8,  [0, 2, .01]]
+      dodeca--scale:                ['Scale',        'range',    .8,  [0, 3, .01]]
 
       hr1:                          [ null, 'hr']
       dodecaWireframe--color:       ['Wireframe',    'color',    '#00ffff']
@@ -139,7 +198,7 @@ styler:
 
       dodecaVertexid--label:        ['IDs',          'label']
       dodecaVertexid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
-      dodecaVertexids--scale:       ['Scale',        'range',     1,  [0, 2, .01]]
+      dodecaVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr2:                          [ null, 'hr']
       dodecaFaces--color:           ['Faces',        'color',    '#88cccc']
@@ -147,7 +206,7 @@ styler:
 
       dodecaFaceid--label:          ['IDs',          'label']
       dodecaFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
-      dodecaFaceids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
+      dodecaFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr4:                          [ null, 'hr']
       dodecaAxes--color:            ['Axis',         'color',    '#aabb99']
@@ -159,7 +218,7 @@ styler:
 
     title:               Octahedron
     controls:
-      octa--scale:                 ['Scale',        'range',    1,  [0, 2, .01]]
+      octa--scale:                 ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr1:                         [ null, 'hr']
       octaWireframe--color:        ['Wireframe',    'color',    '#ff00ff']
@@ -168,7 +227,7 @@ styler:
 
       octaVertexid--label:         ['IDs',          'label']
       octaVertexid--opacity:       ['Opacity',      'range',    0,  [0, 1, .01]]
-      octaVertexids--scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+      octaVertexids--scale:        ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr3:                         [ null, 'hr']
       octaAxes--color:             ['Axis',         'color',    '#ffbbcc']
@@ -183,7 +242,7 @@ styler:
 
     title:               Tetrahedron
     controls:
-      tetraWireframe--scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+      tetraWireframe--scale:       ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr1:                         [ null, 'hr']
       tetraWireframe--color:       ['Wireframe',    'color',    '#ff5555']
@@ -192,7 +251,7 @@ styler:
 
       tetraVertexid--label:        ['IDs',          'label']
       tetraVertexid--opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
-      tetraVertexids--scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+      tetraVertexids--scale:       ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr2:                         [ null, 'hr']
       tetraFaces--color:           ['Faces',        'color',    '#88cccc']
@@ -200,7 +259,7 @@ styler:
 
       tetraFaceid--label:          ['IDs',          'label']
       tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
-      tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 2, .01]]
+      tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr3:                         [ null, 'hr']
       tetraAxes--color:            ['Axis',         'color',    '#ffbbcc']
@@ -212,7 +271,7 @@ styler:
 
     title:               Hexahedron
     controls:
-      hexaWireframe--scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+      hexaWireframe--scale:        ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr1:                         [ null, 'hr']
       hexaWireframe--color:        ['Wireframe',    'color',    '#55ff55']
@@ -221,7 +280,7 @@ styler:
 
       hexaVertexid--label:         ['IDs',          'label']
       hexaVertexid--opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
-      hexaVertexids--scale:        ['Scale',        'range',     1,  [0, 2, .01]]
+      hexaVertexids--scale:        ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr2:                         [ null, 'hr']
       hexaFace--color:             ['Faces',        'color',     '#88cccc']
@@ -229,7 +288,7 @@ styler:
 
       hexaFaceid--label:          ['IDs',          'label']
       hexaFaceid--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
-      hexaFaceids--scale:          ['Scale',        'range',     1,  [0, 2, .01]]
+      hexaFaceids--scale:          ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr4:                         [ null, 'hr']
       hexaAxes--color:             ['Axis',         'color',    '#ffbbcc']
@@ -253,7 +312,7 @@ styler:
     controls:
       header--camera:          ['Camera',        'header']
       camera--perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
-      camera--position:        ['Position',      'position', [0, 0, -1000], [-3000, 3000, 1]]
+      camera--position:        ['Position',      'position', [0, 0, -1500], [-3000, 3000, 1]]
 
       hr1:                     [ null, 'hr']
       renderer--color:         ['Background',    'color',    '#fcf3ff']
@@ -261,8 +320,8 @@ styler:
       hr2:                     [ null, 'hr']
       plane--color:            ['Plane',         'color',    '#cccccc']
       plane--opacity:          ['Opacity',       'range',    1, [0, 1, .01]]
-      plane--width:            ['Width',         'range',    850, [500, 1500, 1]]
-      plane--depth:            ['Depth',         'range',    850, [500, 1500, 1]]
+      plane--width:            ['Width',         'range',    1200, [500, 1500, 1]]
+      plane--depth:            ['Depth',         'range',    1200, [500, 1500, 1]]
       plane--position:         ['Position',      'position', [0, -200, 0], [-600, 800, 1]]
       plane--rotation:         ['Rotation',      'rotation', [0, -180, 1], [-180, 180, 1]]
 
@@ -272,13 +331,13 @@ styler:
     controls:
       ambient--color:          ['Ambient',       'color',    '#777777']
       hr1:                     [ null, 'hr']
-      spotlight-1--color:      ['Spotlight 1',   'color',    '#664466']
+      spotlight-1--color:      ['Spotlight 1',   'color',    '#885555']
       spotlight-1--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
       hr2:                     [ null, 'hr']
-      spotlight-2--color:      ['Spotlight 2',   'color',    '#446644']
+      spotlight-2--color:      ['Spotlight 2',   'color',    '#558855']
       spotlight-2--position:   ['Position',      'position', [ 800, 800, -200], [-1000, 1000, 1]]
       hr3:                     [ null, 'hr']
-      spotlight-3--color:      ['Spotlight 3',   'color',    '#000000']
+      spotlight-3--color:      ['Spotlight 3',   'color',    '#555588']
       spotlight-3--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
 
   mouse:

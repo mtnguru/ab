@@ -1,0 +1,18 @@
+name: 12 0 Magnesium
+element: Magnesium
+isotope: 0
+numProtons: 24
+nuclets:
+  N0:
+    state: backbone-final
+    numProtons: 12
+    num_nuclear_electrons: 6
+  N00:
+    state: lithium
+    numProtons: 6
+    numInnerElectrons: 3
+  N01:
+    state: lithium
+    numProtons: 6
+    numInnerElectrons: 3
+

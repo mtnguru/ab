@@ -4,9 +4,8 @@ isotope: 0
 valence: 0
 numProtons: 7
 nuclets:
-  1:
-    position: 1
-    type: lithium
+  N0:
+    state: lithium
     numProtons: 7
     num_nuclear_electrons: 0
     protons:

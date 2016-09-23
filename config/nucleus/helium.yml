@@ -4,9 +4,8 @@ isotope: 0
 variant: 0
 numProtons: 4
 nuclets:
-  1:
-    position: 1
-    type: helium
+  N0:
+    state: helium
     numProtons: 4
     num_nuclear_electrons: 0
     protons:

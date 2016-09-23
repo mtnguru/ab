@@ -4,9 +4,8 @@ isotope: 0
 variant: 0
 numProtons: 14
 nuclets:
-  1:
-    location: 1
-    type: carbon
+  N0:
+    state: carbon
     numProtons: 12
     numNuclearElectrons: 6
     protons:
@@ -47,17 +46,7 @@ nuclets:
         present: true
       5:
         present: true
-  2:
-    location: 2
-    position:
-      x: -80
-      y: 80
-      z: -140
-    rotation:
-      x: -45
-      y: 0
-      z: 20
-    type: lithium
+  N00:
     numProtons: 2
     numNuclearElectrons: 7
     protons:

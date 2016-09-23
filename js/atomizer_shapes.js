@@ -63,67 +63,57 @@ Drupal.atomizer.shapesC = function (_viewer) {
    * @param detail
    */
 
-  function backboneGeometry ( radius, detail ) {
+  function backboneGeometry ( state, radius, detail ) {
     var vertices = [
-      67.923760686217, 51.806863949014, 0,
-      77.129917809368, -47.543388109656, 0,
-      -67.923760686217, 51.806863949014, 0,
-      -77.129917809368, -47.543388109656, 0,
-      -49.521762490082, 0, -82.561411195164,
-      49.521762490082, 0, -82.561411195164,
-      -49.521762490082, 0, 82.561411195164,
-      49.521762490082, 0, 82.561411195164,
-      0, 83.749782693255, -64.568586645086,
-      0, 83.749782693255, 64.568586645086,
-      0, -80.25, -50,
-      0, -80.25, 50,
-      95.985319537216, 87.155108797328, 88.25590206511,
-      142.77807739337, 8.6414741615371, 49.887940240888,
-      142.77807739337, 8.6414741615371, -49.887940240888,
-      95.985319537216, 87.155108797328, -88.25590206511,
-      -95.985319537216, 87.155108797328, -88.25590206511,
-      -142.77807739337, 8.6414741615371, -49.887940240888,
-      -142.77807739337, 8.6414741615371, 49.887940240888,
-      -95.985319537216, 87.155108797328, 88.25590206511
+      1.3584752137243,1.0361372789803,0,
+      1.5425983561874,-0.95086776219312,0,
+      -1.3584752137243,1.0361372789803,0,
+      -1.5425983561874,-0.95086776219312,0,
+      0.99043524980164,0,-1.6512282239033,
+      -0.99043524980164,0,-1.6512282239033,
+      -0.99043524980164,0,1.6512282239033,
+      0.99043524980164,0,1.6512282239033,
+      0,1.6749956538651,-1.2913717329017,
+      0,1.6749956538651,1.2913717329017,
+      0,-1.605,-1,
+      0,-1.605,1,
+      1.9197063907443,1.7431021759466,1.7651180413022,
+      2.8555615478674,0.17282948323074,0.99775880481776,
+      2.8555615478674,0.17282948323074,-0.99775880481776,
+      1.9197063907443,1.7431021759466,-1.7651180413022,
+      -1.9197063907443,1.7431021759466,-1.7651180413022,
+      -2.8555615478674,0.17282948323074,-0.99775880481776,
+      -2.8555615478674,0.17282948323074,0.99775880481776,
+      -1.9197063907443,1.7431021759466,1.7651180413022
     ];
 
+    var percent = .095;
+
+    // Set geometry vertices
     var numVertices = vertices.length / 3;
     this.vertices = [];
     for (var v = 0; v < numVertices; v++) {
       var offset = v * 3;
-      this.vertices.push(new THREE.Vector3(
-        vertices[offset],
-        vertices[offset + 1],
-        vertices[offset + 2]
-      ));
-    }
+      var x = vertices[offset] * radius;
+      var y = vertices[offset + 1] * radius;
+      var z = vertices[offset + 2] * radius;
 
-    var indices = [
-      9,  0,  8,
-      9,  8,  2,
-      10,  1, 11,
-      10, 11,  3,
-      8,  0,  4,
-      1,  4,  0,
-      10,  4,  1,
-      4,  5,  8,
-      10,  5,  4,
-      2,  8,  5,
-      5,  3,  2,
-      10,  3,  5,
-      9,  2,  6,
-      6,  2,  3,
-      3, 11,  6,
-      9,  6,  7,
-      7,  6, 11,
-      9,  7,  0,
-      0,  7,  1,
-      11,  1, 7
-    ];
+      // When completing the lithium ring, the carbon ring is squeezed and the gap is changed.{
+      if (state == 'final') {
+        if (v == 0 || v == 2) {
+          x = x * (1 - percent);
+        }
+        if (v == 8 || v == 9) {
+          z = z * (1 + percent);
+        }
+      }
+      this.vertices.push(new THREE.Vector3(x, y, z));
+    }
 
     this.type = 'BackboneGeometry';
     this.parameters = { radius: radius, detail: detail };
-  }
+  };
+
   backboneGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   backboneGeometry.prototype.constructor = backboneGeometry;
 
@@ -296,7 +286,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
   cubeGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   cubeGeometry.prototype.constructor = cubeGeometry;
 
-  var getGeometry = function (type, radius, height, detail) {
+  var getGeometry = function (type, state, radius, height, detail) {
     switch (type) {
       case 'icosahedron':
         return new icosahedronGeometry(radius, detail);
@@ -307,7 +297,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
       case 'hexahedron':
         return new cubeGeometry(radius, detail);
       case 'backbone':
-        return new backboneGeometry(radius, detail);
+        return new backboneGeometry(state, radius, detail);
     }
   };
 

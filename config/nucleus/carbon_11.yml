@@ -4,9 +4,8 @@ isotope: 0
 variant: 0
 numProtons: 12
 nuclets:
-  1:
-    position: 1
-    type: carbon
+  N0:
+    state: carbon
     numProtons: 12
     numNuclearElectrons: 6
     protons:

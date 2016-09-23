@@ -1,0 +1,20 @@
+name: 18 0 Argon
+element: Argon
+isotope: 0
+numProtons: 36
+nuclets:
+  N0:
+    state: backbone-final
+    numProtons: 12
+    numInnerElectrons: 6
+  N00:
+    state: backbone-final
+    attachAngle: 2
+    numProtons: 12
+    numInnerElectrons: 6
+  N01:
+    state: carbon
+    attachAngle: 5
+    numProtons: 12
+    numInnerElectrons: 6
+

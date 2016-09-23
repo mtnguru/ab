@@ -367,12 +367,13 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @param detail
    * @returns {*}
    */
-  function createGeometry(shape, scale, height, detail) {
+  function createGeometry(shape, state, scale, height, detail) {
     switch (shape) {
+      case 'lithium':
       case 'icosahedron':
-        return viewer.shapes.getGeometry('icosahedron', scale, null, detail);
+        return viewer.shapes.getGeometry('icosahedron', 'final', scale, null, detail);
       case 'decahedron':
-        return viewer.shapes.getGeometry('decahedron', scale, height, detail);
+        return viewer.shapes.getGeometry('decahedron', 'final', scale, height, detail);
         break;
       case 'line':
         var lineGeometry = new THREE.Geometry();
@@ -384,13 +385,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
       case 'tetrahedron':
         return new THREE.TetrahedronGeometry(scale, detail);
       case 'dodecahedron':
-        return viewer.shapes.getGeometry('dodecahedron', scale, null, detail);
+      case 'hexahedron':
+      case 'backbone':
+        return viewer.shapes.getGeometry(shape, state, scale, null, detail);
       case 'octahedron':
         return new THREE.OctahedronGeometry(scale, detail);
-      case 'hexahedron':
-        return viewer.shapes.getGeometry('hexahedron', scale, null, detail);
-      case 'backbone':
-        return viewer.shapes.getGeometry('backbone', scale, null, detail);
     }
   }
 
@@ -400,6 +399,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @param protonType
    * @param opacity
    * @param pos
+   *
    * @returns {*}
    */
   function makeProton(protonType, opacity, pos) {
@@ -427,75 +427,132 @@ Drupal.atomizer.nucletC = function (_viewer) {
   }
 
   /**
-   * Create a nuclet as per a nucletConf array.
+   * Create the helper XYZ axes.
+   *
+   * @param name
+   * @param length
+   * @param linewidth
+   *
+   * @returns {THREE.AxisHelper}
+   */
+  function createHelperAxes(name, length, linewidth) {
+    var opacity = viewer.style.get(name + '--opacity');
+    var axis = new THREE.AxisHelper(length);
+    axis.material.linewidth = linewidth;
+    axis.material.opacity     = opacity;
+    axis.material.visible     = (opacity >.02);
+    axis.material.transparent = (opacity < .97);
+    return axis;
+  }
+
+  /**
+   * Create a nuclet as defined in the nucletConf array.
    *
    * @param nucletConf
+   *
    * @returns {THREE.Group}
    */
   function createNuclet(nucletConf) {
     var nuclet = new THREE.Group();
-    nuclet.name = nucletConf.type;
-    nuclet.protonRadius = protonRadius;
+    if (nucletConf.nucletId) {
+      nuclet.name = 'nuclet-' + nucletConf.nucletId;
+      nuclet.nucletId = nucletConf.nucletId;
+    } else {
+      nuclet.name = 'nuclet';
+    }
+    nuclet.az = {
+      protonRadius: protonRadius,
+      conf: nucletConf
+    };
 
-    var nucletGeo = drupalSettings.atomizer_config.nuclets[nucletConf.type];
-    nuclet.geo = drupalSettings.atomizer_config.nuclets[nucletConf.type];
-    for (var groupName in nucletGeo.geoGroups) {
-      var groupConf = nucletGeo.geoGroups[groupName];
+    nuclet.geo = drupalSettings.atomizer_config.nuclets[nucletConf.state.replace('-', '_')];
+
+    // Loop through each of the Geometry Groups - Ex: Proton framework, icosahedron, dodecahedron, etc.
+    for (var groupName in nuclet.geo.geoGroups) {
+      var geoGroup = nuclet.geo.geoGroups[groupName];
       var nucletGroup = new THREE.Group();
       nuclet.add(nucletGroup);
       nucletGroup.name = groupName;
 
-      //// Set rotation for this group
-      if (groupConf.rotation) {
-        var radians;
-        if (groupConf.rotation.x) {
-          radians = groupConf.rotation.x / 360 * 2 * Math.PI;
-          nucletGroup.rotation.init_x = radians;
-          nucletGroup.rotation.x = radians;
-        }
-        if (groupConf.rotation.y) {
-          radians = groupConf.rotation.y / 360 * 2 * Math.PI;
-          nucletGroup.rotation.init_y = radians;
-          nucletGroup.rotation.y = radians;
-        }
-        if (groupConf.rotation.z) {
-          radians = groupConf.rotation.z / 360 * 2 * Math.PI;
-          nucletGroup.rotation.init_z = radians;
-          nucletGroup.rotation.z = radians;
-        }
-      }
+      // Loop through each of the geometries for this group
+      for (var geoName in geoGroup.geometries) {
+        var geo = geoGroup.geometries[geoName];
+        var geometry = createGeometry(
+          geo.shape,
+          nucletConf.state || '',
+          (geo.scale || 1) * protonRadius,
+          (geo.scaleHeight || 1) * protonRadius
+        );
 
-      // Loop through the groups of geometries
-      for (var geoName in groupConf.geometries) {
-        var geo = groupConf.geometries[geoName];
-        var geometry = createGeometry(geo.shape, (geo.scale || 1) * protonRadius, (geo.scaleHeight || 1) * protonRadius);
+        if (geoGroup.rotation) {
+          if (geoGroup.rotation.x) {
+            var radians = geoGroup.rotation['x'] / 360 * 2 * Math.PI;
+            geometry.applyMatrix(new THREE.Matrix4().makeRotationX(radians));
+          }
+          if (geoGroup.rotation.y) {
+            var radians = geoGroup.rotation['y'] / 360 * 2 * Math.PI;
+            geometry.applyMatrix(new THREE.Matrix4().makeRotationY(radians));
+          }
+          if (geoGroup.rotation.z) {
+            var radians = geoGroup.rotation['z'] / 360 * 2 * Math.PI;
+            geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(radians));
+          }
+        }
 
-        // Set scale for geometry here
+        // Scale the geometry
         var scale = viewer.style.get(groupName + '--scale');
         if (scale) {
 //        nuclet.scale.set(scale,scale,scale);
         }
 
-        //// Add Protons
+        // Add Protons
         if (geo.protons) {
           var opacity = viewer.style.get('proton--opacity') || 1;
           nuclet.protons = [];
-          for (var key in nucletConf.protons) {
-            if (nucletConf.protons[key].present == false) continue;
-            var vertice = geometry.vertices[key];
-            var protonType = geo.protons[key].type;
+          for (var p in geo.protons) {
+            var vertice = geometry.vertices[p];
+            var protonType = geo.protons[p].type;
             var proton = makeProton(protonType, opacity, vertice);
             addObject('protons', proton);
             nucletGroup.add(proton);
-            nuclet.protons.push(proton);
+            nuclet.protonGeometry = geometry;
+            nuclet.protons[p] = proton;
           }
         }
 
-        //// Add Electrons
+        // Add Tetrahedrons
+        if (geo.tetrahedrons) {
+          nuclet.tetrahedrons = [];
+          for (var i in geo.tetrahedrons) {
+            var tetrahedron = createTetrahedron('tetra');
+            tetrahedron.azid = 't' + i;
+//          intersectList.push(tetrahedron.children[1]); // Attach the faces Mesh
+            nuclet.tetrahedrons.push[tetrahedron.azid] = tetrahedron;
+            nuclet.add(tetrahedron);
+
+            // Set 4 vertices of tetrahedron
+            tetrahedron.children[1].geometry.protons = [];
+            for (var v = 0; v < 4; v++) {
+
+              var p = geo.tetrahedrons[i].vertices[v];
+              tetrahedron.children[0].geometry.vertices[v].x = geometry.vertices[p].x;
+              tetrahedron.children[0].geometry.vertices[v].y = geometry.vertices[p].y;
+              tetrahedron.children[0].geometry.vertices[v].z = geometry.vertices[p].z;
+
+              tetrahedron.children[1].geometry.vertices[v].x = geometry.vertices[p].x;
+              tetrahedron.children[1].geometry.vertices[v].y = geometry.vertices[p].y;
+              tetrahedron.children[1].geometry.vertices[v].z = geometry.vertices[p].z;
+
+              // Save the proton list in tetrafaces mesh
+              tetrahedron.protons[v] = nuclet.protons[p];
+            }
+          }
+        }
+
+        // Add Electrons
         if (geo.electrons) {
           var opacity = viewer.style.get('electron--opacity') || 1;
-          for (var key in nucletConf.electrons) {
-            if (nucletConf.electrons[key].present == false) continue;
+          for (var key = 0; key < nucletConf.numInnerElectrons; key++) {
             var vertice = geometry.vertices[key];
             var electron = makeObject('electron',
               {
@@ -522,12 +579,12 @@ Drupal.atomizer.nucletC = function (_viewer) {
           }
         }
 
-        //// Create axes
+        // Create axes
         if (geo.axes) {
           nucletGroup.add(createAxes(groupName, geo.axes, geometry));
         }
 
-        //// Create geometry wireframe
+        // Create geometry wireframe
         if (geo.wireframe) {
           var name = groupName + 'Wireframe';
           if (geo.shape == 'dodecahedron' || geo.shape == 'hexahedron') {
@@ -549,7 +606,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
           }
         }
 
-        //// Create geometry faces
+        // Create geometry faces
         if (geo.faces) {
           var name = groupName + 'Faces';
           var faces =createGeometryFaces(
@@ -566,27 +623,27 @@ Drupal.atomizer.nucletC = function (_viewer) {
           }
         }
 
+        // Create vertexids
         if (geo.vertexids) {
           nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
         }
 
+        // Create faceids
         if (geo.faceids) {
           nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
         }
-        if (geo.protonids) {
-          nucletGroup.add(viewer.sprites.createVerticeIds('proton', geometry));
+
+        // Create particle ids
+        if (geo.particleids) {
+          nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
         }
 
         viewer.render();
       }
     }
 
-    //// Set the nuclet position
-    if (nucletConf.position) {
-      nuclet.position.x = nucletConf.position.x || 0;
-      nuclet.position.y = nucletConf.position.y || 0;
-      nuclet.position.z = nucletConf.position.z || 0;
-    }
+    // Create nuclet helper axes.
+    nuclet.add(createHelperAxes('nucletAxes', protonRadius * 6, 1));
 
     //// Set the nuclet rotation
     if (nucletConf.rotation) {
@@ -600,7 +657,30 @@ Drupal.atomizer.nucletC = function (_viewer) {
       }
     }
 
-    return nuclet;
+    //// Create inner shell
+    var innerShell = new THREE.Object3D();
+    innerShell.name = 'nucletInner-' + nucletConf.nucletId;
+    innerShell.add(nuclet);
+
+    // Create helper axis
+    innerShell.add(createHelperAxes('nucletInnerAxes', protonRadius * 5, 3));
+
+    //// Create outer shell
+    var outerShell = new THREE.Object3D();
+    outerShell.name = 'nucletOuter-' + nucletConf.nucletId;
+    outerShell.add(innerShell);
+
+    // Create helper axis
+    outerShell.add(createHelperAxes('nucletOuterAxes', protonRadius * 4, 5));
+
+    //// Set the nucletShell position
+    if (nucletConf.position) {
+      outerShell.position.x = nucletConf.position.x || 0;
+      outerShell.position.y = nucletConf.position.y || 0;
+      outerShell.position.z = nucletConf.position.z || 0;
+    }
+
+    return outerShell;
   }
 
   /**
@@ -678,6 +758,43 @@ Drupal.atomizer.nucletC = function (_viewer) {
   }
 
   /**
+   * Create the ghost proton and wireframe that appear when hovering over a valid face to add a proton.
+   *
+   * @param type
+   * @returns {THREE.Group}
+   */
+  var createTetrahedron = function createTetrahedron(type) {
+    // Create a new ghost wireframe
+    var tetrahedron = new THREE.Group();
+    tetrahedron.name = 'tetrahedron';
+    tetrahedron.protons = [];
+    tetrahedron.protonRadius = protonRadius;
+
+    var geometry = new THREE.TetrahedronGeometry(viewer.nuclet.protonRadius * 1.222);
+    geometry.dynamic = true;
+
+    // Create Wireframe
+    tetrahedron.add(viewer.nuclet.createGeometryWireframe(
+      type + 'Wireframe',
+      1,
+      geometry,
+      null,
+      null
+    ));
+
+    // Create faces
+    tetrahedron.add(viewer.nuclet.createGeometryFaces(
+      type + 'Faces',
+      1,
+      geometry,
+      null,
+      null
+    ));
+
+    return tetrahedron;
+  };
+
+  /**
    * Add an object to the objects array.
    *
    * @param name
@@ -695,7 +812,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
   return {
     makeObject: makeObject,
     makeProton: makeProton,
-    create: createNuclet,
+    createNuclet: createNuclet,
     createGeometry: createGeometry,
     createGeometryWireframe: createGeometryWireframe,
     createGeometryFaces: createGeometryFaces,

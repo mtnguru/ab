@@ -1,6 +1,7 @@
 /**
- * @file - atomizercontrols.js
+ * @file - atomizer_controls.js
  *
+ * Initialize controls.  Listen for events and deliver them to the appropriate modules.
  */
 
 Drupal.atomizer.controlsC = function (_viewer, controlSet) {
@@ -11,16 +12,17 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   var cameraTrackballControls;
   var objectTrackballControls;
   var mouseMode = 'none';
-  var styler;
   var styler = document.getElementById('edit-styler');
 
   // Variables for detecting items mouse is hovering over.
   var raycaster;
   var mouse = new THREE.Vector2(-1000, -1000);
-  var intersected = null;
-  var highlightedFace = null;
-  var highlightedNuclet = null;
 
+  /**
+   * Change the mouse mode - builder, move camera, none, etc.
+   *
+   * @param newMode
+   */
   function changeMode(newMode) {
 
     switch (mouseMode) {
@@ -65,6 +67,10 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     }
   }
 
+  /**
+   * One of the styling controls has changed, get the value of the control and apply control through the style module.
+   * @param event
+   */
   function controlChanged(event) {
     var args = this.id.split("--");
     if (this.className.indexOf('az-slider') > -1) {
@@ -75,6 +81,10 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     viewer.style.applyControl(this.id, event.target.value);
   }
 
+  /**
+   * A control to select a new yml file has changed - execute the AJAX call to load a new one.
+   * @param event
+   */
   function selectYmlChanged(event) {
     var args = this.id.split("--");
     Drupal.atomizer.base.doAjax(
@@ -85,6 +95,12 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     );
   }
 
+  /**
+   * The user has pressed a button, do something with it.
+   *
+   * @param event
+   * @returns {boolean}
+   */
   function buttonClicked(event) {
 
     var args = this.id.split("--");
@@ -120,8 +136,10 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     return false;
   }
 
+  /**
+   * Display the currently selected block - hide the rest
+   */
   function showStylerBlock() {
-    // Display the currently selected block - hide the rest
     for (var i=0; i < styler.length; i++) {
       document.getElementById('control-' + styler[i].value).style.display = (styler[i].selected) ? 'block' : 'none';
     }
@@ -129,13 +147,13 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   }
 
   /**
-   * Create the controls in the upper right corner of screen.
+   * Initialize controls
    *
-   * Uses the dat.gui.js library.
+   * Set defaults as per the current style.  Add Event listeners
    *
    * @returns {controls|*}
    */
-  function createControls() {
+  function initializeControls() {
 
     var form = document.forms['atomizer-controls-form'];
 
@@ -187,7 +205,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
             break;
           case 'selectyml':
             element.addEventListener("change", selectYmlChanged);
-            document.getElementById(id + '--button').addEventListener("click", buttonClicked);
+//          document.getElementById(id + '--button').addEventListener("click", buttonClicked);
             break;
           case 'link':
           case 'button':
@@ -241,6 +259,11 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     return controls;
   }
 
+  /**
+   * Find intersection with mouse and the producers list of intersection objects.
+   *
+   * @returns {*}
+   */
   function findIntersects() {
     var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
     vector.unproject(viewer.camera);
@@ -251,23 +274,29 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     return raycaster.intersectObjects(viewer.producer.intersectObjects());
   }
 
+  /**
+   * Save the current mouse position - X, Y
+   * @param event
+   */
   function onDocumentMouseHoverFaces(event) {
     var y;
+    /*  The imager modules way of finding X, Y location.
     var x = event.offsetX || (event.pageX - viewer.canvasContainer.offsetLeft);
     if (event.offsetY) {
       y = event.offsetY || (event.pageY - viewer.canvasContainer.offsetTop);
     } else {
       y = event.layerY + viewer.canvasContainer.offsetTop;
     }
+     */
 
-//  mouse.x =  (x / viewer.canvasWidth) * 2 - 1;
-//  mouse.y = -(y / viewer.canvasHeight) * 2 + 1;
     mouse.x =  (event.offsetX / viewer.canvasWidth) * 2 - 1;
     mouse.y = -(event.offsetY / viewer.canvasHeight) * 2 + 1;
-//  mouse.x =  (event.clientX / viewer.canvasWidth) * 2 - 1;
-//  mouse.y = -(event.clientY / viewer.canvasHeight) * 2 + 1;
   }
 
+  /**
+   * When user clicks mouse button, call the producers mouseClick function if it exists.
+   * @param event
+   */
   function onDocumentMouseDown(event) {
     if (viewer.producer.mouseClick) {
       event.preventDefault();
@@ -275,25 +304,21 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     }
   }
 
+  /**
+   * When the user moves the mouse, if the producer has a intersected handler,
+   * then * build a list of intersected objects and call the producers intersected handler.
+   */
   function mouseMove() {
     if (viewer.producer.intersected) {
       viewer.producer.intersected(findIntersects(viewer.producer.intersectObjects()));
     }
   }
 
-  var init = function init() {
-    cameraTrackballControls = createCameraTrackballControls();
-    var controls = createControls();
-    styler = document.getElementById('edit-styler');
-    changeMode(viewer.style.get('mouse--mode'));
-    if (viewer.producer.setDefaults) viewer.producer.setDefaults();
-
-    // Set up raycaster and projector for selecting objects with mouse.
-    raycaster = new THREE.Raycaster();
-    raycaster.ray.direction.set(0,-1,0);
-    viewer.controls.projector = new THREE.Projector();
-  };
-
+  /**
+   * Perform animations.
+   *
+   * @TODO - make this only executed when the mouse has been moved or clicked recently - otherwise deactivate it.
+   */
   var animate = function animate() {
     requestAnimationFrame(animate);
     if (cameraTrackballControls) {
@@ -306,6 +331,15 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     mouseMove();
   };
 
+  /**
+   * Get the default setting for a control.
+   *
+   * Used when the current style does not define a valid default.
+   *
+   * @param id
+   * @param index
+   * @returns {*}
+   */
   var getDefault = function getDefault(id, index) {
     var element = document.getElementById(id);
     if (element) {
@@ -326,6 +360,31 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     }
   };
 
+  /**
+   * Initialize all controls.
+   */
+  var init = function init() {
+    cameraTrackballControls = createCameraTrackballControls();
+    initializeControls();
+
+    // Find the styler block.  @TODO this needs to be smarter.  Not all controls will have styler blocks
+    styler = document.getElementById('edit-styler');
+
+    // Set the current mouse mode.
+    changeMode(viewer.style.get('mouse--mode'));
+
+    // Set any default values the producer may have.
+    if (viewer.producer.setDefaults) viewer.producer.setDefaults();
+
+    // Set up raycaster and projector for selecting objects with mouse.
+    raycaster = new THREE.Raycaster();
+    raycaster.ray.direction.set(0,-1,0);
+    viewer.controls.projector = new THREE.Projector();
+  };
+
+  /**
+   * Interface to this module.
+   */
   return {
     init: init,
     animate: animate,

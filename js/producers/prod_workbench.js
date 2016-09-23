@@ -5,7 +5,6 @@
 
 Drupal.atomizer.producers.workbenchC = function (_viewer) {
   var viewer = _viewer;
-  viewer.nuclet = Drupal.atomizer.nucletC(viewer);
 
   var createObject = function createObject (type, position) {
     switch (type) {
@@ -80,11 +79,29 @@ Drupal.atomizer.producers.workbenchC = function (_viewer) {
       y: position.y,
       z: position.z
     };
-    return nuclet = viewer.nuclet.create(nucletConf);
+    return nuclet = viewer.nuclet.createNuclet(nucletConf);
   };
 
 
+  var setDefaults = function setDefaults() {
+
+  };
+
+  var intersectObjects = function intersectObjects() {
+    return [];
+  };
+
+  var intersected = function intersected() {
+
+  };
+
+  var mouseClick = function mouseClick() {
+
+  };
+
   var createView = function () {
+    viewer.nuclet = Drupal.atomizer.nucletC(viewer);
+    viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
     var nuclet = viewer.nuclet;
 
     var octolet = createObject('octolet',  {x: 0, y: 92, z: -200});
@@ -109,6 +126,10 @@ Drupal.atomizer.producers.workbenchC = function (_viewer) {
   };
 
   return {
-    createView: createView
+    createView: createView,
+    setDefaults: setDefaults,
+    intersectObjects: intersectObjects,
+    intersected: intersected,
+    mouseClick: mouseClick
   };
 };

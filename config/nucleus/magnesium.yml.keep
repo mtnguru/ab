@@ -1,13 +1,13 @@
-name: 10 0 Neon
-element: Neon
+name: 12 0 Magnesium
+element: Magnesium
 isotope: 0
 variant: 0
-numProtons: 20
+numProtons: 24
 nuclets:
   N0:
-    state: backbone-initial
-    numProtons: 12
-    num_nuclear_electrons: 10
+    state: backbone-final
+    numProtons: 24
+    num_nuclear_electrons: 12
     protons:
       0:
         present: true
@@ -33,6 +33,22 @@ nuclets:
         present: true
       11:
         present: true
+      12:
+        present: false
+      13:
+        present: false
+      14:
+        present: false
+      15:
+        present: false
+      16:
+        present: false
+      17:
+        present: false
+      18:
+        present: false
+      19:
+        present: false
     electrons:
       0:
         present: true
@@ -46,15 +62,17 @@ nuclets:
         present: true
       5:
         present: true
-  N00:
-    state: neutral
+  1:
+    state: lithium
+    numProtons: 6
+    num_nuclear_electrons: 3
     protons:
       0:
-        present: false
-      1:
         present: true
-      2:
+      1:
         present: false
+      2:
+        present: true
       3:
         present: true
       4:
@@ -62,26 +80,25 @@ nuclets:
       5:
         present: true
       6:
-        present: false
-      7:
-        present: false
-      8:
-        present: false
-      9:
-        present: false
-      10:
-        present: false
-      11:
-        present: false
-  N01:
-    state: neutral
-    protons:
+        present: true
+    electrons:
       0:
-        present: false
+        present: true
       1:
         present: true
       2:
+        present: true
+  2:
+    state: lithium
+    numProtons: 6
+    num_nuclear_electrons: 3
+    protons:
+      0:
+        present: true
+      1:
         present: false
+      2:
+        present: true
       3:
         present: true
       4:
@@ -89,16 +106,12 @@ nuclets:
       5:
         present: true
       6:
-        present: false
-      7:
-        present: false
-      8:
-        present: false
-      9:
+        present: trie
+    electrons:
+      0:
         present: true
-      10:
-        present: false
-      11:
-        present: false
-
-
+      1:
+        present: true
+      2:
+        present: true
+ 

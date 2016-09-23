@@ -116,7 +116,7 @@
         popup.dialogCreate);
     };
 
-    // Load the popup using AJAX.
+    // Popup is loaded, create it.
     popup.dialogCreate = function dialogCreate(response, $callingElement) {
       Drupal.imager.$wrapper.append(response['data']);
       popup.spec.$elem = $('#' + popup.spec.cssId);
@@ -146,6 +146,7 @@
         popup.settings = {};
       }
     };
+
     // Open the popup if it exists, otherwise create it.
     popup.dialogOpen = function dialogOpen(settings) {
       $.extend(popup.settings, settings);
@@ -162,6 +163,7 @@
         popup.dialogLoad();
       }
     };
+
     // Toggle the dialog if it exists, otherwise create it.
     popup.dialogToggle = function dialogToggle(settings) {
       $.extend(popup.settings, settings);
