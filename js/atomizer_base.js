@@ -4,6 +4,13 @@
  * File that generates nuclets  proton, helium, lithium, helium - 1, 4, 7, 11
  */
 
+Array.prototype.contains = function ( needle ) {
+  for (var i in this) {
+    if (this[i] == needle) return true;
+  }
+  return false;
+};
+
 Drupal.atomizer = {};
 
 Drupal.atomizer.baseC = function () {
@@ -33,7 +40,28 @@ Drupal.atomizer.baseC = function () {
     });
   }
 
+  /**
+   * Align the axis of an object to another axis.
+   *
+   * @param object
+   * @param objectAxis
+   * @param finalAxis
+   * @param negate
+   */
+  function alignObjectToAxis(object, objectAxis, finalAxis, negate) {
+    // Find the rotation axis.
+    var rotationAxis = new THREE.Vector3();
+    rotationAxis.crossVectors( objectAxis, finalAxis ).normalize();
+
+    // calculate the angle between the element axis vector and rotation vector
+    radians = Math.acos(objectAxis.dot(finalAxis) );
+
+    // set the quaternion
+    object.quaternion.setFromAxisAngle(rotationAxis, (negate) ? -radians : radians);
+  }
+
   return {
-    doAjax: doAjax
+    doAjax: doAjax,
+    alignObjectToAxis: alignObjectToAxis
   };
 };

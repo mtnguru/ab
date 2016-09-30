@@ -7,19 +7,5 @@ nuclets:
   N0:
     state: lithium
     numProtons: 7
-    num_nuclear_electrons: 0
-    protons:
-      0:
-        present: true
-      1:
-        present: true
-      2:
-        present: true
-      3:
-        present: false
-      4:
-        present: true
-      5:
-        present: true
-      6:
-        present: true
+    numInnerElectrons: 3
+    protons: [10, 1, 4, 3, 11, 9]

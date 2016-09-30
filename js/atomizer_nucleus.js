@@ -45,26 +45,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
   };
 
   /**
-   * Align the axis of an object to another axis.
-   *
-   * @param object
-   * @param objectAxis
-   * @param finalAxis
-   * @param negate
-   */
-  function alignObjectToAxis(object, objectAxis, finalAxis, negate) {
-    // Find the rotation axis.
-    var rotationAxis = new THREE.Vector3();
-    rotationAxis.crossVectors( objectAxis, finalAxis ).normalize();
-
-    // calculate the angle between the element axis vector and rotation vector
-    radians = Math.acos(objectAxis.dot(finalAxis) );
-
-    // set the quaternion
-    object.quaternion.setFromAxisAngle(rotationAxis, (negate) ? -radians : radians);
-  }
-
-  /**
    * Align an object to an internal axis (x, y or z) and then align that axis
    * to an external axis in the scene.
    *
@@ -81,7 +61,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     finalAxis.normalize();
 
     // Align nuclets Y axis to the attach point normal
-    alignObjectToAxis(
+    Drupal.atomizer.base.alignObjectToAxis(
       object.children[0],
       initialAxis,
       alignAxis,
@@ -89,7 +69,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     );
 
     // Align nuclets Y axis to the grow point normal
-    alignObjectToAxis(
+    Drupal.atomizer.base.alignObjectToAxis(
       object,
       alignAxis,
       finalAxis,
@@ -138,9 +118,11 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     nucletDivEdit = nucletDiv;
 
     // Set the state of the nuclet
-    document.getElementById("nuclet--state--" + nuclet.az.conf.state).checked = true;
-    nucletAngleSlider.value = nuclet.az.conf.attachAngle || 1;
-    nucletAngleValue.value = nuclet.az.conf.attachAngle || 1;
+    if (nuclet.az.conf.state != 'hydrogen' && nuclet.az.conf.state != 'helium') {
+      document.getElementById("nuclet--state--" + nuclet.az.conf.state).checked = true;
+      nucletAngleSlider.value = nuclet.az.conf.attachAngle || 1;
+      nucletAngleValue.value = nuclet.az.conf.attachAngle || 1;
+    }
 
     // Initialize Nuclet grow point 0
     var nucletItem = document.getElementById('edit-nuclet-grow-0');
@@ -287,7 +269,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
       var alignAxis = new THREE.Vector3(0, 1, 0).normalize();
 
       // Align the axis through the attach vertice to the y axis.
-      alignObjectToAxis(
+      Drupal.atomizer.base.alignObjectToAxis(
         nuclet,
         initialAxis,
         alignAxis,
@@ -295,7 +277,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
       );
 
       // Align the new y axis to the grow point axis.
-      alignObjectToAxis(
+      Drupal.atomizer.base.alignObjectToAxis(
         nucletOuterShell,
         alignAxis,
         finalAxis.clone().multiplyScalar(-1).normalize(),

@@ -7,11 +7,5 @@ nuclets:
   N0:
     state: hydrogen
     numProtons: 1
-    num_nuclear_electrons: 0
-    protons:
-      0:
-        present: false
-      1:
-        present: true
-      2:
-        present: false
+    numInnerElectrons: 0
+    protons: [1]

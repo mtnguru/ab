@@ -578,7 +578,7 @@ styles:
     defaultValue: 1
     type: range
   nucletAxes--opacity:
-    defaultValue: '1'
+    defaultValue: '0'
     type: range
   nucletAxes--scale:
     defaultValue: 4
@@ -659,7 +659,7 @@ styles:
     defaultValue: 0
     type: rotation
   nucletInnerAxes--opacity:
-    defaultValue: '1'
+    defaultValue: '0'
     type: range
   nucletInnerAxes--scale:
     defaultValue: 3
@@ -668,7 +668,7 @@ styles:
     defaultValue: 3
     type: range
   nucletOuterAxes--opacity:
-    defaultValue: '1'
+    defaultValue: '0'
     type: range
   nucletOuterAxes--scale:
     defaultValue: 2

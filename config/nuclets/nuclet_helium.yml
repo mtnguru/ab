@@ -11,13 +11,13 @@ geoGroups:
         scale: 1.22
         protons:
           0:
-            type: valence
+            type: default
           1:
-            type: isotope
+            type: default
           2:
-            type: valence
+            type: default
           3:
-            type: isotope
+            type: default
   tetra:
     allowrotate: false
     geometries:

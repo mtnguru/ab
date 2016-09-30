@@ -7,7 +7,7 @@ nuclets:
   N0:
     state: backbone-final
     numProtons: 24
-    num_nuclear_electrons: 12
+    numInnerElectrons: 12
     protons:
       0:
         present: true
@@ -65,7 +65,7 @@ nuclets:
   1:
     state: lithium
     numProtons: 6
-    num_nuclear_electrons: 3
+    numInnerElectrons: 3
     protons:
       0:
         present: true
@@ -91,7 +91,7 @@ nuclets:
   2:
     state: lithium
     numProtons: 6
-    num_nuclear_electrons: 3
+    numInnerElectrons: 3
     protons:
       0:
         present: true

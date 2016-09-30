@@ -1,8 +1,6 @@
 name: Neutral
 weight: 2
 order:
-position: {x: 0, y: 0, z: 0}
-rotation: {x: 0, y: 0, z: 0}
 allowmove: false
 geoGroups:
   protons:
@@ -19,5 +17,5 @@ geoGroups:
           5:
             type: neutral
           9:
-            type: isotope
+            type: neutral
 

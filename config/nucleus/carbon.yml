@@ -7,32 +7,8 @@ nuclets:
   N0:
     state: carbon
     numProtons: 12
-    numNuclearElectrons: 6
-    protons:
-      0:
-        present: true
-      1:
-        present: true
-      2:
-        present: true
-      3:
-        present: true
-      4:
-        present: true
-      5:
-        present: true
-      6:
-        present: true
-      7:
-        present: true
-      8:
-        present: true
-      9:
-        present: true
-      10:
-        present: true
-      11:
-        present: true
+    numInnerElectrons: 6
+    protons: [0,1,2,3,4,5,6,7,8,9,10,11]
     electrons:
       0:
         present: true

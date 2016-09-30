@@ -19,9 +19,15 @@ geoGroups:
             type: valence
           9:
             type: polar
+          10:
+            type: polar
           11:
             type: polar
   deca:
+    alignyaxis:
+      vertices: [9,10]
+      attachPt: -.400
+      rotatey: 18
     geometries:
       solid:
         shape: decahedron

@@ -61,13 +61,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
    */
   function createAxes(name, conf, geometry) {
     var axisGeometry = new THREE.Geometry();
-    for (var i = 0; i < conf.vertices.length; i++) {
-      var vertice;
-      vertice = geometry.vertices[conf.vertices[i][0]];
-      axisGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
-      vertice = geometry.vertices[conf.vertices[i][1]];
-      axisGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
-    }
     var opacity = viewer.style.get(name + 'Axes--opacity');
     var lineMaterial = new THREE.LineBasicMaterial({
       color: viewer.style.get(name + 'Axes--color'),
@@ -76,12 +69,47 @@ Drupal.atomizer.nucletC = function (_viewer) {
       visible:     (opacity > visibleThresh),
       linewidth: 2
     });
+    for (var i = 0; i < conf.vertices.length; i++) {
+      var vertice;
+      vertice = geometry.vertices[conf.vertices[i][0]];
+      axisGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
+      vertice = geometry.vertices[conf.vertices[i][1]];
+      axisGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
+    }
     var axes = new THREE.LineSegments(axisGeometry, lineMaterial);
     if (conf.scale) {
       axes.scale.set(conf.scale, conf.scale, conf.scale);
     }
     axes.name = name + 'Axes';
     return axes;
+  }
+
+  /**
+   * Create a line anywhere in 3d space
+   *
+   * @param name
+   * @param conf
+   * @param geometry
+   * @returns {THREE.LineSegments}
+   */
+  function createLine(name, vertices) {
+    var lineGeometry = new THREE.Geometry();
+//  var opacity = viewer.style.get(name + 'Axes--opacity');
+    var opacity = 1;
+    var lineMaterial = new THREE.LineBasicMaterial({
+      color: 0xff00ff,
+      opacity: opacity,
+      transparent: (opacity < transparentThresh),
+      visible:     (opacity > visibleThresh),
+      linewidth: 2
+    });
+    for (var i = 0; i < vertices.length; i++) {
+      var vertice = vertices[i];
+      lineGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
+    }
+    var lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+    lines.name = name + 'Lines';
+    return lines;
   }
 
   /**
@@ -160,7 +188,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       var face = geometry.azfaces[f];
       var lineGeometry = new THREE.Geometry();
       var vertex;
-      for (var v in face.indices) {
+      for (var v = 0; v < face.indices.length; v++) {
         vertex = geometry.vertices[face.indices[v]];
         lineGeometry.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
       }
@@ -369,6 +397,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
    */
   function createGeometry(shape, state, scale, height, detail) {
     switch (shape) {
+      case 'neutral':
       case 'lithium':
       case 'icosahedron':
         return viewer.shapes.getGeometry('icosahedron', 'final', scale, null, detail);
@@ -438,6 +467,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
   function createHelperAxes(name, length, linewidth) {
     var opacity = viewer.style.get(name + '--opacity');
     var axis = new THREE.AxisHelper(length);
+    axis.name = name;
     axis.material.linewidth = linewidth;
     axis.material.opacity     = opacity;
     axis.material.visible     = (opacity >.02);
@@ -469,6 +499,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     // Loop through each of the Geometry Groups - Ex: Proton framework, icosahedron, dodecahedron, etc.
     for (var groupName in nuclet.geo.geoGroups) {
+      if (!nuclet.geo.geoGroups.hasOwnProperty(groupName)) continue;
       var geoGroup = nuclet.geo.geoGroups[groupName];
       var nucletGroup = new THREE.Group();
       nuclet.add(nucletGroup);
@@ -476,6 +507,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
       // Loop through each of the geometries for this group
       for (var geoName in geoGroup.geometries) {
+        if (!geoGroup.geometries.hasOwnProperty(geoName)) continue;
         var geo = geoGroup.geometries[geoName];
         var geometry = createGeometry(
           geo.shape,
@@ -508,22 +540,65 @@ Drupal.atomizer.nucletC = function (_viewer) {
         // Add Protons
         if (geo.protons) {
           var opacity = viewer.style.get('proton--opacity') || 1;
+
+          // Move nucleons to a new location
+          switch (nucletConf.state) {
+            case 'neutral':
+              geometry.vertices[9].set(
+                0,
+                protonRadius * 0.1616236535868876,
+                protonRadius * .0998889113026354
+              );
+              break;
+            case 'lithium':
+              // Move the top center proton to the correct position.
+              geometry.vertices[9].set(
+                0,
+                protonRadius * 0.1616236535868876,
+                protonRadius * .0998889113026354
+              );
+              break;
+          }
+
           nuclet.protons = [];
+          nuclet.protonGeometry = geometry;
           for (var p in geo.protons) {
+            if (!geo.protons.hasOwnProperty(p)) continue;
+            if (!nucletConf.protons.contains(p)) continue;
             var vertice = geometry.vertices[p];
             var protonType = geo.protons[p].type;
             var proton = makeProton(protonType, opacity, vertice);
             addObject('protons', proton);
             nucletGroup.add(proton);
-            nuclet.protonGeometry = geometry;
             nuclet.protons[p] = proton;
           }
+        }
+
+        if (geoGroup.alignyaxis) {
+//        var vertice1 = nuclet.protons[geoGroup.alignyaxis.vertices[0]].position;
+//        var vertice2 = nuclet.protons[geoGroup.alignyaxis.vertices[1]].position;
+          var vertice1 = nuclet.protonGeometry.vertices[geoGroup.alignyaxis.vertices[0]];
+          var vertice2 = nuclet.protonGeometry.vertices[geoGroup.alignyaxis.vertices[1]];
+          var newAxis = vertice1.clone().sub(vertice2);
+          Drupal.atomizer.base.alignObjectToAxis(
+            nucletGroup,
+            new THREE.Vector3(0,1,0),
+            newAxis.clone().normalize(),
+            false
+          );
+          var origin = new THREE.Vector3(0,0,0);
+          var attachPt = origin.add(newAxis).multiplyScalar(geoGroup.alignyaxis.attachPt);
+          nucletGroup.position.set(attachPt.x, attachPt.y, attachPt.z);
+  
+          var radians = geoGroup.alignyaxis.rotatey / 360 * 2 * Math.PI;
+          nucletGroup.rotation['y'] = radians;
+          radians
         }
 
         // Add Tetrahedrons
         if (geo.tetrahedrons) {
           nuclet.tetrahedrons = [];
-          for (var i in geo.tetrahedrons) {
+          for (var i = 0; i < geo.tetrahedrons.length; i++) {
             var tetrahedron = createTetrahedron('tetra');
             tetrahedron.azid = 't' + i;
 //          intersectList.push(tetrahedron.children[1]); // Attach the faces Mesh
@@ -640,6 +715,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
         viewer.render();
       }
+
     }
 
     // Create nuclet helper axes.
@@ -656,6 +732,23 @@ Drupal.atomizer.nucletC = function (_viewer) {
         }
       }
     }
+
+    //// Add attachAxis line
+
+    var geometry = createGeometry(
+      'icosahedron',
+      '',
+      protonRadius,
+      1
+    );
+    var radians = 90 / 360 * 2 * Math.PI;
+    geometry.applyMatrix(new THREE.Matrix4().makeRotationY(radians));
+    var line = createLine('attach',
+      [geometry.vertices[9], geometry.vertices[10]]
+    );
+    line.scale.set(5, 5, 5);
+    nuclet.add(line);
+//  nuclet.protons[9].position.set(0, 0, 0);
 
     //// Create inner shell
     var innerShell = new THREE.Object3D();

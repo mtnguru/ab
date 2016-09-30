@@ -7,13 +7,5 @@ nuclets:
   N0:
     state: helium
     numProtons: 4
-    num_nuclear_electrons: 0
-    protons:
-      0:
-        present: true
-      1:
-        present: true
-      2:
-        present: true
-      3:
-        present: true
+    numInnerElectrons: 0
+    protons: [0, 1, 2, 3]

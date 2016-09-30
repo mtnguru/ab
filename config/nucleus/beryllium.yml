@@ -7,7 +7,7 @@ nuclets:
   N0:
     state: carbon
     numProtons: 8
-    num_nuclear_electrons: 4
+    numInnerElectrons: 4
     protons:
       0:
         present: true

@@ -64,20 +64,25 @@ styler:
   axes:
     title:               Axes
     controls:
+      hr0:                        [ null,              'hr']
+      attachLines--label:         ['Attach Axes',      'header']
+      attachLines--opacity:       ['Opacity',          'range',    0, [0, 1, .01]]
+      attachLines--scale:         ['Scale',            'range',    4, [0, 6, .01]]
+      attachLines--linewidth:     ['Linewidth',    'range',        1, [0, 5, .1]]
       hr1:                        [ null,              'hr']
       nuclet--label:              ['Nuclet',           'header']
       nucletAxes--opacity:        ['Opacity',          'range',    0, [0, 1, .01]]
-      nucletAxes--scale:          ['Scale',            'range',    4, [0, 3, .01]]
+      nucletAxes--scale:          ['Scale',            'range',    4, [0, 6, .01]]
       nucletAxes--linewidth:      ['Linewidth',    'range',        1, [0, 5, .1]]
       hr2:                        [ null,              'hr']
       nucletInnerAxes--label:     ['Inner Nuclet Shell',     'header']
       nucletInnerAxes--opacity:   ['Opacity',          'range',    0, [0, 1, .01]]
-      nucletInnerAxes--scale:     ['Scale',            'range',    3, [0, 3, .01]]
+      nucletInnerAxes--scale:     ['Scale',            'range',    3, [0, 6, .01]]
       nucletInnerAxes--linewidth: ['Linewidth',    'range',        3, [0, 5, .1]]
       hr3:                        [ null,              'hr']
       nucletOuterAxes--label:     ['Outer Nuclet Shell',     'header']
       nucletOuterAxes--opacity:   ['Opacity',          'range',    0, [0, 1, .01]]
-      nucletOuterAxes--scale:     ['Scale',            'range',    2, [0, 3, .01]]
+      nucletOuterAxes--scale:     ['Scale',            'range',    2, [0, 6, .01]]
       nucletOuterAxes--linewidth: ['Linewidth',    'range',        5, [0, 5, .1]]
 # build:
 #   title:               Build Atom

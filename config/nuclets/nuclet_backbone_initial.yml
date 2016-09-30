@@ -31,22 +31,22 @@ geoGroups:
             type: polar
           11:
             type: polar
-#         12:
-#           type: lithium
-#         13:
-#           type: lithium
-#         14:
-#           type: lithium
-#         15:
-#           type: lithium
-#         16:
-#           type: lithium
-#         17:
-#           type: lithium
-#         18:
-#           type: lithium
-#         19:
-#           type: lithium
+          12:
+            type: lithium
+          13:
+            type: lithium
+          14:
+            type: lithium
+          15:
+            type: lithium
+          16:
+            type: lithium
+          17:
+            type: lithium
+          18:
+            type: lithium
+          19:
+            type: lithium
         tetrahedrons:
           0:
             vertices: [1, 14, 0, 13]

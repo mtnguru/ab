@@ -6,33 +6,9 @@ numProtons: 20
 nuclets:
   N0:
     state: backbone-initial
-    numProtons: 12
-    num_nuclear_electrons: 10
-    protons:
-      0:
-        present: true
-      1:
-        present: true
-      2:
-        present: true
-      3:
-        present: true
-      4:
-        present: true
-      5:
-        present: true
-      6:
-        present: true
-      7:
-        present: true
-      8:
-        present: true
-      9:
-        present: true
-      10:
-        present: true
-      11:
-        present: true
+    numProtons: 20
+    numInnerElectrons: 6
+    protons: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
     electrons:
       0:
         present: true
@@ -46,59 +22,4 @@ nuclets:
         present: true
       5:
         present: true
-  N00:
-    state: neutral
-    protons:
-      0:
-        present: false
-      1:
-        present: true
-      2:
-        present: false
-      3:
-        present: true
-      4:
-        present: true
-      5:
-        present: true
-      6:
-        present: false
-      7:
-        present: false
-      8:
-        present: false
-      9:
-        present: false
-      10:
-        present: false
-      11:
-        present: false
-  N01:
-    state: neutral
-    protons:
-      0:
-        present: false
-      1:
-        present: true
-      2:
-        present: false
-      3:
-        present: true
-      4:
-        present: true
-      5:
-        present: true
-      6:
-        present: false
-      7:
-        present: false
-      8:
-        present: false
-      9:
-        present: true
-      10:
-        present: false
-      11:
-        present: false
-
 
