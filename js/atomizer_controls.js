@@ -162,12 +162,12 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     styler.addEventListener("change", showStylerBlock);
 
     // Initialize the Mouse Mode radio buttons
-    var radios = document.forms["atomizer-controls-form"].elements["mouse--mode"];
-    for(var i = 0, max = radios.length; i < max; i++) {
-      radios[i].onclick = function (event) {
-        changeMode(event.target.value);
-      }
-    }
+//  var radios = document.forms["atomizer-controls-form"].elements["mouse--mode"];
+//  for(var i = 0, max = radios.length; i < max; i++) {
+//    radios[i].onclick = function (event) {
+//      changeMode(event.target.value);
+//    }
+//  }
 
     // Initialize all the sliders, buttons and color fields in the styler blocks
     for (var controlId in viewer.atomizer.styleSet.styles) {

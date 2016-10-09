@@ -482,17 +482,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
    *
    * @returns {THREE.Group}
    */
-  function createNuclet(nucletConf) {
+  function createNuclet(id, nucletConf) {
     var nuclet = new THREE.Group();
-    if (nucletConf.nucletId) {
-      nuclet.name = 'nuclet-' + nucletConf.nucletId;
-      nuclet.nucletId = nucletConf.nucletId;
-    } else {
-      nuclet.name = 'nuclet';
-    }
+    nuclet.name = 'nuclet-' + id;
     nuclet.az = {
       protonRadius: protonRadius,
-      conf: nucletConf
+      conf: nucletConf,
+      id: id,
+      state: nucletConf.state
     };
 
     nuclet.geo = drupalSettings.atomizer_config.nuclets[nucletConf.state.replace('-', '_')];
@@ -557,7 +554,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
                 protonRadius * 0.1616236535868876,
                 protonRadius * .0998889113026354
               );
+              nucletConf.protons = [1, 4, 5, 3, 11, 9];
               break;
+            case 'carbon':
+              nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,11];
           }
 
           nuclet.protons = [];
@@ -700,17 +700,17 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
         // Create vertexids
         if (geo.vertexids) {
-          nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
+//        nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
         }
 
         // Create faceids
         if (geo.faceids) {
-          nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
+//        nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
         }
 
         // Create particle ids
         if (geo.particleids) {
-          nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
+//        nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
         }
 
         viewer.render();
@@ -752,7 +752,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     //// Create inner shell
     var innerShell = new THREE.Object3D();
-    innerShell.name = 'nucletInner-' + nucletConf.nucletId;
+    innerShell.name = 'nucletInner-' + id;
     innerShell.add(nuclet);
 
     // Create helper axis
@@ -760,7 +760,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     //// Create outer shell
     var outerShell = new THREE.Object3D();
-    outerShell.name = 'nucletOuter-' + nucletConf.nucletId;
+    outerShell.name = 'nucletOuter-' + id;
     outerShell.add(innerShell);
 
     // Create helper axis

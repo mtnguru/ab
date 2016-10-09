@@ -1,5 +1,7 @@
 $color-controls: #fff5e0;
 $color-nuclet-edit: #f0e0c0;
+$color-grey-light: #999;
+$color-grey-lighter: #ccc;
 $color-button: #006688;
 $color-text: #555;
 
@@ -15,7 +17,7 @@ $color-text: #555;
 
 // Atom Builder Controls form
 .block-atomizer-controls {
-  padding: 10px;
+  padding: 8px;
   vertical-align: top;
   display: inline-flex;
   width: 200px;
@@ -70,25 +72,37 @@ $color-text: #555;
     label {
       margin: 0;
     }
-    #edit-nuclet-grow-0,
-    #edit-nuclet-grow-1 {
-      .form-item-value {
-        input {
-          background: $color-button;
-          margin: 1px;
-          padding: 1px 5px;
-          color: white;
-          border-radius: 8px;
+  }
+  #nucleus--nuclets {
+    .nuclet-list {
+      padding: 2px 0 0;
+      font-weight: bold;
+      padding: 0 5px;
+      &.nuclet-selected {
+        padding: -5px;
+        background: $color-nuclet-edit;
+        margin-top: 3px;
+        .nuclet-list-button {
+          background: $color-grey-light;
+          color: $color-grey-lighter;
         }
       }
     }
-  }
-  .nuclet-list {
-    padding: 5px 5px 0;
-    font-weight: bold;
-    > div,
-    .fieldset-legend {
+    .nuclet-list-label {
+      font-size: 12px;
+    }
+    .nuclet-list-button {
+      padding: 1px 5px 0;
+      margin-left: 10px;
       font-weight: normal;
+      font-size: 10px;
+      border-radius: 4px;
+      border: 0;
+      background: $color-button;
+      color: white;
+    }
+    input:after {
+      clear: both;
     }
   }
   #edit-nuclet-attachproton--wrapper {
@@ -102,9 +116,6 @@ $color-text: #555;
   #nuclet--attachProton {
     padding: 2px 4px;
   }
-  .nuclet-selected {
-    background: $color-nuclet-edit;
-  }
   .form-item-styler {
     margin: 0 0 10px;
     select {
@@ -117,11 +128,12 @@ $color-text: #555;
   .link-button {
     color: white;
     background: $color_button;
-    border-radius: 8px;
-    padding: 6px 10px;
+    border-radius: 6px;
+    padding: 2px 0;
     font-weight: bold;
     text-align: center;
-    width: 100%;
+    margin: 3px 10%;
+    width: 80%;
   }
   .styler-controls .control-block {
     display: none;
