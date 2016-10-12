@@ -484,6 +484,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
    */
   function createNuclet(id, nucletConf) {
     var nuclet = new THREE.Group();
+    addObject('nuclets', nuclet);
     nuclet.name = 'nuclet-' + id;
     nuclet.az = {
       protonRadius: protonRadius,

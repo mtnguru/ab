@@ -29,7 +29,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
       case 'builder':
         cameraTrackballControls.dispose();
         delete cameraTrackballControls;
-        viewer.canvasContainer.removeEventListener('mousemove', onDocumentMouseHoverFaces);
+        viewer.canvasContainer.removeEventListener('mousemove', onMouseMove);
         break;
       case 'camera':
         cameraTrackballControls.dispose();
@@ -40,7 +40,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         delete objectTrackballControls;
         break;
       case 'attach':
-        viewer.canvasContainer.removeEventListener('mousemove', onDocumentMouseHoverFaces);
+        viewer.canvasContainer.removeEventListener('mousemove', onMouseMove);
         break;
       case 'none':
         break;
@@ -50,8 +50,8 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     switch (mouseMode) {
       case 'builder':
         cameraTrackballControls = createCameraTrackballControls();
-        viewer.canvasContainer.addEventListener('mousemove', onDocumentMouseHoverFaces, false);
-        viewer.canvasContainer.addEventListener('mousedown', onDocumentMouseDown, false);
+        viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
+        viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
         break;
       case 'camera':
         cameraTrackballControls = createCameraTrackballControls();
@@ -60,7 +60,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         objectTrackballControls = createObjectTrackballControls(Drupal.atomizer.octolet);
         break;
       case 'attach':
-        viewer.canvasContainer.addEventListener('mousemove', onDocumentMouseHoverFaces, false);
+        viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
         break;
       case 'none':
         break;
@@ -264,43 +264,35 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    *
    * @returns {*}
    */
-  function findIntersects() {
+  function findIntersects(objects) {
     var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
     vector.unproject(viewer.camera);
 
     var raycaster = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
-//  raycaster.setFromCamera( mouse, viewer.camera );
     viewer.render();
-    return raycaster.intersectObjects(viewer.producer.intersectObjects());
+    return raycaster.intersectObjects(objects);
   }
 
   /**
    * Save the current mouse position - X, Y
    * @param event
    */
-  function onDocumentMouseHoverFaces(event) {
-    var y;
-    /*  The imager modules way of finding X, Y location.
-    var x = event.offsetX || (event.pageX - viewer.canvasContainer.offsetLeft);
-    if (event.offsetY) {
-      y = event.offsetY || (event.pageY - viewer.canvasContainer.offsetTop);
-    } else {
-      y = event.layerY + viewer.canvasContainer.offsetTop;
-    }
-     */
-
+  function onMouseMove(event) {
     mouse.x =  (event.offsetX / viewer.canvasWidth) * 2 - 1;
     mouse.y = -(event.offsetY / viewer.canvasHeight) * 2 + 1;
+    animate();
   }
 
   /**
    * When user clicks mouse button, call the producers mouseClick function if it exists.
    * @param event
    */
-  function onDocumentMouseDown(event) {
+  function onMouseDown(event) {
+    mouse.x =  (event.offsetX / viewer.canvasWidth) * 2 - 1;
+    mouse.y = -(event.offsetY / viewer.canvasHeight) * 2 + 1;
     if (viewer.producer.mouseClick) {
       event.preventDefault();
-      viewer.producer.mouseClick(findIntersects(viewer.producer.intersectObjects()));
+      viewer.producer.mouseClick(event, mouse);
     }
   }
 
@@ -308,10 +300,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    * When the user moves the mouse, if the producer has a intersected handler,
    * then * build a list of intersected objects and call the producers intersected handler.
    */
-  function mouseMove() {
-    if (viewer.producer.intersected) {
-      viewer.producer.intersected(findIntersects(viewer.producer.intersectObjects()));
-    }
+  function onMouseAnimate() {
   }
 
   /**
@@ -320,15 +309,18 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    * @TODO - make this only executed when the mouse has been moved or clicked recently - otherwise deactivate it.
    */
   var animate = function animate() {
-    requestAnimationFrame(animate);
+//  requestAnimationFrame(animate);
     if (cameraTrackballControls) {
       cameraTrackballControls.update();
     }
-    if (objectTrackballControls) {
-      objectTrackballControls.update();
-    }
+//  if (objectTrackballControls) {
+//    objectTrackballControls.update();
+//  }
+    // Enable this if highlighting on hover, otherwise the mouseclick is sufficient.
+//  if (viewer.producer.intersected) {
+//    viewer.producer.intersected(findIntersects(viewer.producer.intersectObjects()));
+//  }
     viewer.render();
-    mouseMove();
   };
 
   /**
@@ -371,7 +363,8 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     styler = document.getElementById('edit-styler');
 
     // Set the current mouse mode.
-    changeMode(viewer.style.get('mouse--mode'));
+//  changeMode(viewer.style.get('mouse--mode'));
+    changeMode('builder');
 
     // Set any default values the producer may have.
     if (viewer.producer.setDefaults) viewer.producer.setDefaults();
@@ -388,6 +381,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   return {
     init: init,
     animate: animate,
-    getDefault: getDefault
+    getDefault: getDefault,
+    findIntersects: findIntersects
   }
 };

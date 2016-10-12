@@ -1,5 +1,5 @@
 /**
- * @file - atomizer.js
+ * @file - prod_molecule_builder.js
  *
  */
 
