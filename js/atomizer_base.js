@@ -60,8 +60,105 @@ Drupal.atomizer.baseC = function () {
     object.quaternion.setFromAxisAngle(rotationAxis, (negate) ? -radians : radians);
   }
 
+  /**
+  var mouseX,mouseY,windowWidth,windowHeight;
+  var  popupLeft,popupTop;
+
+    $(document).mousemove(function(e){
+      mouseX = e.pageX;
+      mouseY = e.pageY;
+      //To Get the relative position
+      if( this.offsetLeft !=undefined)
+        mouseX = e.pageX - this.offsetLeft;
+      if( this.offsetTop != undefined)
+        mouseY = e.pageY; - this.offsetTop;
+
+      if(mouseX < 0)
+        mouseX =0;
+      if(mouseY < 0)
+        mouseY = 0;
+
+      windowWidth  = $(window).width()+$(window).scrollLeft();
+      windowHeight = $(window).height()+$(window).scrollTop();
+    });
+
+    $('html').click(function(){
+      $('div').show();
+      var popupWidth  = $('div').outerWidth();
+      var popupHeight =  $('div').outerHeight();
+
+      if(mouseX+popupWidth > windowWidth)
+        popupLeft = mouseX-popupWidth;
+      else
+        popupLeft = mouseX;
+
+      if(mouseY+popupHeight > windowHeight)
+        popupTop = mouseY-popupHeight;
+      else
+        popupTop = mouseY;
+
+      if( popupLeft < $(window).scrollLeft()){
+        popupLeft = $(window).scrollLeft();
+      }
+
+      if( popupTop < $(window).scrollTop()){
+        popupTop = $(window).scrollTop();
+      }
+
+      if(popupLeft < 0 || popupLeft == undefined)
+        popupLeft = 0;
+      if(popupTop < 0 || popupTop == undefined)
+        popupTop = 0;
+
+      $('div').offset({top:popupTop,left:popupLeft});
+    });
+  **/
+
+  function initDraggable($elem,name,initLeft,initTop) {
+    /*
+    var left;
+    var top;
+    var ww = window.innerWidth;
+    var wh = window.innerHeight;
+    var dw = ($elem.outerWidth() < 40) ? 200 : $elem.outerWidth();
+    var dh = ($elem.outerHeight() < 40) ? 100 : $elem.outerHeight();
+    if (localStorage[name]) {
+      var pt = localStorage[name].split(",");
+      left = parseInt(pt[0]);
+      top  = parseInt(pt[1]);
+      if (left + dw > ww) {
+        left = ww - dw;
+      }
+      if (top + dh > wh) {
+        top = wh - dh;
+      }
+    } else {
+      left = initLeft;
+      top  = initTop;
+      if (initLeft < 0) {
+        left = ww - dw + initLeft;
+      }
+      if (initTop < 0) {
+        top = wh - dh + initTop;
+      }
+    }
+    jQuery.elem.css({'left': left,
+      'top':  top});
+    jQuery.elem.draggable({
+      stop: function(evt,ui) {
+        var left = $(this).css('left');
+        var top = $(this).css('top');
+        if (parseInt(top) < 0)  top  = "0px";
+        if (parseInt(left) < 0) left = "0px";
+        localStorage[name] = left + ',' + top;
+      }
+    });
+    */
+  }
+
   return {
     doAjax: doAjax,
-    alignObjectToAxis: alignObjectToAxis
+    alignObjectToAxis: alignObjectToAxis,
+    initDraggable: initDraggable
   };
 };

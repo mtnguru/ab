@@ -1,5 +1,5 @@
 /**
- * @file - prod_backbone.js
+ * @file - prod_backbone_builder.js
  *
  * Viewer to create the initial backbone nuclet geometry.
  * Allows a user to add protons one at a time to a helium nuclet.

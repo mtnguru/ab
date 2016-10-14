@@ -117,12 +117,10 @@ Drupal.atomizer.viewerC = function (atomizer) {
 
     viewer.producer.createView();
 
-    // Render the image
+    // Render the initial image
     render();
-    // Start any animation and trackball controls tracking.
-    viewer.controls.animate();
+//  viewer.controls.animate();
   }
-
 
   // Attach functions for external use
   viewer.render = render;

@@ -1,5 +1,6 @@
 $color-controls: #fff5e0;
 $color-nuclet-edit: #f0e0c0;
+$color-border: #541;
 $color-grey-light: #999;
 $color-grey-lighter: #ccc;
 $color-button: #006688;
@@ -49,18 +50,20 @@ $color-text: #555;
     color: $color-text;
   }
   #hidden-controls {
-    .control-block {
-      display: none;
-    }
+//  .control-block {
+//    display: none;
+//  }
   }
   #hidden-nuclet {
+    position: fixed;
     padding: 5px;
     background: $color-nuclet-edit;
+    border: solid 2px $color-border;
+    border-radius: 8px;
     .form-item {
       margin: 0;
     }
     .az-name {
-      font-size: 14px;
       font-weight: normal;
     }
     .az-slider {
@@ -72,37 +75,18 @@ $color-text: #555;
     label {
       margin: 0;
     }
-  }
-  #nucleus--nuclets {
-    .nuclet-list {
-      padding: 2px 0 0;
-      font-weight: bold;
-      padding: 0 5px;
-      &.nuclet-selected {
-        padding: -5px;
-        background: $color-nuclet-edit;
-        margin-top: 3px;
-        .nuclet-list-button {
-          background: $color-grey-light;
-          color: $color-grey-lighter;
-        }
+    #edit-nuclet-grow-0,
+    #edit-nuclet-grow-1 {
+      label {
+        margin: 0 10px 0 5px;
       }
-    }
-    .nuclet-list-label {
-      font-size: 12px;
-    }
-    .nuclet-list-button {
-      padding: 1px 5px 0;
-      margin-left: 10px;
-      font-weight: normal;
-      font-size: 10px;
-      border-radius: 4px;
-      border: 0;
-      background: $color-button;
-      color: white;
-    }
-    input:after {
-      clear: both;
+      .nuclet-list-button {
+        margin: 1px 0px;
+        padding: 1px 5px;
+        background: $color-button;
+        color: white;
+        border-radius: 6px;
+      }
     }
   }
   #edit-nuclet-attachproton--wrapper {
@@ -139,6 +123,7 @@ $color-text: #555;
     display: none;
   }
   .control-block {
+    font-size: 12px;
     hr {
       margin: 10px 0 15px;
       border-top: 1px solid #bbb;
@@ -161,7 +146,6 @@ $color-text: #555;
   .az-control-position,
   .az-control-rotation,
   .az-control-range {
-    font-size: 12px;
     .az-name {
       vertical-align: middle;
       display: inline-flex;
@@ -211,7 +195,7 @@ $color-text: #555;
     label {
       display: inline-block;
       vertical-align: top;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
       width: 60%;
       margin: 0px 0 0;
@@ -233,7 +217,6 @@ $color-text: #555;
   }
   .form-type-radio {
     label {
-      font-size: 13px;
     }
     .form-radio {
       margin: 0 0 0 15px;
@@ -264,34 +247,4 @@ $color-text: #555;
   }
 }
 
-/*
-output {
-  position: absolute;
-  background-image: linear-gradient(top, #444444, #999999);
-  width: 40px; 
-  height: 30px; 
-  text-align: center; 
-  color: white; 
-  border-radius: 10px; 
-  display: inline-block; 
-  font: bold 15px/30px Georgia;
-  bottom: 175%;
-  left: 0;
-  margin-left: -1%;
-}
 
-
-output:after { 
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-top: 10px solid #999999;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  margin-top: -1px;
-}
-*/

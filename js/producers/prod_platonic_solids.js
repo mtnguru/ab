@@ -1,9 +1,9 @@
 /**
- * @file - platonicsolids.js
+ * @file - prod_platonic_solids.js
  *
  */
 
-Drupal.atomizer.producers.platonicsolidsC = function (_viewer) {
+Drupal.atomizer.producers.platonic_solidsC = function (_viewer) {
   var viewer = _viewer;
   viewer.nuclet = Drupal.atomizer.nucletC(viewer);
   viewer.nucleus = Drupal.atomizer.nucleusC(viewer);

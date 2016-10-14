@@ -10,22 +10,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
   var nucleus;
   var nucleusConf;
 
-  var editNuclet;
-  var nucletEditForm =    document.getElementById('hidden-nuclet');
-  var hiddenControls =    document.getElementById('hidden-controls');
-
-  var nucletAngle =       document.getElementById('nuclet--attachAngle');
-  var nucletAngleSlider = document.getElementById('nuclet--attachAngle--az-slider');
-  var nucletAngleValue =  document.getElementById('nuclet--attachAngle--az-value');
-  var nucletList =        document.getElementById('nucleus--nuclets');
-  var nucletDelete =      document.getElementById('nuclet--delete');
-  var nucletAttachPt =    document.getElementById('edit-nuclet-attachproton--wrapper');
-
-
-  // Add Event Listener to attachAngle slider
-  nucletAngleSlider.addEventListener('input', onAngleChanged);
-  nucletDelete.addEventListener('click', onNucletDelete);
-
   /**
    * Initiate the AJAX call to load a nucleus.
    *
@@ -82,25 +66,16 @@ Drupal.atomizer.nucleusC = function (_viewer) {
    *
    * @param value
    */
-  function changeNucletState(name, value) {
-    var az = editNuclet.az;
-    var parent = editNuclet.parent.parent.parent;
-    parent.remove(editNuclet.parent.parent);
+  function changeNucletState(nuclet, state) {
+    var az = nuclet.az;
+    viewer.nuclet.deleteNuclet(nuclet);
 
-    az.conf.state = value;
+    az.conf.state = state;
     var nucletOuterShell = createNuclet(az.id, az.conf, parent);
-    var nuclet = nucletOuterShell.children[0].children[0];
-//  nuclet.az.stateName = name;
+    nuclet = nucletOuterShell.children[0].children[0];
     nucleus.az.nuclets[nuclet.az.id] = nuclet;
 
-    editNuclet = nuclet;
-
-    var oldItem = nucleus.az.nucletEditList[az.id]
-    var newItem = createNucletButton (az.id, 'Edit', az.conf.state);
-    oldItem.parentNode.replaceChild(newItem, oldItem);
-    setEditNuclet(az.id);
-
-    viewer.render();
+    return nuclet;
   }
 
   /**
@@ -116,81 +91,14 @@ Drupal.atomizer.nucleusC = function (_viewer) {
         state: 'carbon'
       };
     }
+    // Find the parent nuclet PID
     var pid = id.slice(0, -1);
+
+    // Create the new nuclet
     var nucletOuterShell = createNuclet(id, conf, nucleus.az.nuclets[pid]);
     var nuclet = nucletOuterShell.children[0].children[0];
     nucleus.az.nuclets[nuclet.az.id] = nuclet;
-    setEditNuclet(id);
-
-    editNuclet = nuclet;
-
-    var oldItem = nucleus.az.nucletEditList[id]
-    var newItem = createNucletButton (id, 'Edit', conf.state);
-    oldItem.parentNode.replaceChild(newItem, oldItem);
-    setEditNuclet(id);
-
-    viewer.render();
-    return;
-
-  }
-
-  /**
-   * Carry out the selection of a new nuclet to edit.
-   *
-   * @param nuclet
-   */
-  function setEditNuclet(id) {
-    if (editNuclet) {
-      nucleus.az.nucletEditList[editNuclet.az.id].classList.remove('nuclet-selected');
-    }
-
-    if (!id) {
-      hiddenControls.appendChild(nucletEditForm);
-      return;
-    }
-
-    var nuclet = nucleus.az.nuclets[id];
-    editNuclet = nuclet;
-
-    var listItem = nucleus.az.nucletEditList[id];
-    listItem.appendChild(nucletEditForm);
-    listItem.classList.add('nuclet-selected');
-
-    // Set the state of the nuclet
-    if (editNuclet.az.conf.state != 'hydrogen' && editNuclet.az.conf.state != 'helium') {
-      document.getElementById("nuclet--state--" + editNuclet.az.conf.state).checked = true;
-      nucletAngleSlider.value = editNuclet.az.conf.attachAngle || 1;
-      nucletAngleValue.value = editNuclet.az.conf.attachAngle || 1;
-    }
-
-    // Show/Hide the delete, angle and attach points
-    if (editNuclet.az.id == 'N0') {
-      nucletDelete.classList.add('az-hidden');
-      nucletAngle.classList.add('az-hidden');
-      nucletAttachPt.classList.add('az-hidden');
-    } else {
-      nucletDelete.classList.remove('az-hidden');
-      nucletAngle.classList.remove('az-hidden');
-      nucletAttachPt.classList.remove('az-hidden');
-    }
-  }
-
-  /**
-   * User has selected a different nuclet to edit.
-   *
-   * @param event
-   */
-  function onNucletButton(event) {
-    var segments = event.target.id.split('-');
-    if (event.target.classList.contains('nuclet-list-button')) {
-      var segments = event.target.id.split('-');
-      if (event.target.value == 'Edit') {
-        setEditNuclet(segments[1]);
-      }
-      if (event.target.value == 'Add') {
-        addNuclet(segments[1]);
-      }
-    };
+    return nuclet;
   }
 
   /**
@@ -198,41 +106,10 @@ Drupal.atomizer.nucleusC = function (_viewer) {
    *
    * @param event
    */
-  function onAngleChanged(event) {
-    editNuclet.parent.rotation.y = (editNuclet.parent.initial_rotation_y + ((event.target.value - 1) * 72)) / 180 *Math.PI;
-    editNuclet.az.conf.attachAngle = event.target.value;
-    viewer.render();
-    return;
-  }
-
-  function onNucletDelete(event) {
-    var id = editNuclet.az.id;
-
-    // Remove nuclet from the nucleus
-    editNuclet.parent.parent.parent.remove(editNuclet.parent.parent);
-    viewer.render();
-
-    var listItem;
-
-    listItem = nucleus.az.nucletEditList[id];
-    var newListLabel = createNucletItemLabel(id, null);
-    var listItemLabel = listItem.getElementsByTagName('SPAN')[0];
-    listItemLabel.parentNode.replaceChild(newListLabel, listItemLabel);
-    listItem.getElementsByTagName('INPUT')[0].value = 'Add';
-
-    listItem = nucleus.az.nucletEditList[id + '0'];
-    if (listItem) {
-      listItem.parentNode.removeChild(listItem);
-    }
-
-    listItem = nucleus.az.nucletEditList[id + '1'];
-    if (listItem) {
-      listItem.parentNode.removeChild(listItem);
-    }
-
-    setEditNuclet(null);
-    // Replace the edit form with the Add button
-    return;
+  function changeNucletAngle(id, angle) {
+    var nuclet = nucleus.az.nuclets[id];
+    nuclet.parent.rotation.y = (nuclet.parent.initial_rotation_y + ((angle - 1) * 72)) / 180 *Math.PI;
+    nuclet.az.conf.attachAngle = angle;
   }
 
   /**
@@ -274,7 +151,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
 //      nucletInnerShell.initial_rotation_y = -162;
       }
 
-      var growProton = nucleus.children[0].children[0].children[0].protons[growId];
+      var growProton = nucleus.children[0].children[0].children[0].az.protons[growId];
       var growPt = growProton.position.clone();
 
       // Create normalized axis of vector to rotate to.
@@ -284,7 +161,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
       growPt.y = growPt.y + 11;
       var attachScale = 2.42;
 
-      var attachVertice = nuclet.protonGeometry.vertices[attachId];
+      var attachVertice = nuclet.az.protonGeometry.vertices[attachId];
       var initialAxis = attachVertice.clone().normalize();
       var alignAxis = new THREE.Vector3(0, 1, 0);
       var attachAxis = angleOrigin.clone().sub(growPt);
@@ -326,60 +203,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     return nucletOuterShell;
   }
 
-  function createNucletItemLabel(id, state) {
-    var label = document.createElement('SPAN');
-    var spacing = '';
-    for (var i = 0; i < id.length - 2; i++) {
-//    spacing += "&ndash;";
-//    spacing += "&nbsp;";
-      spacing += "-";
-    }
-    label.innerHTML = spacing + ' ' + id;
-    if (state) {
-      label.innerHTML += ' ' + state;
-    }
-    label.classList.add('nuclet-list-label');
-    return label;
-  }
-
-  function createNucletButton (id, value, state) {
-    // Create the div listing this nuclet in the control panel.
-    var item = document.createElement('DIV');
-    item.id = 'nuclet-' + id;
-    item.classList.add('nuclet-list');
-    item.appendChild(createNucletItemLabel(id,state));
-    nucleus.az.nucletEditList[id] = item;
-
-
-    var button= document.createElement('input');
-    button.setAttribute('type','button');
-    button.setAttribute('name','nuclet-' + value + '-' + id + '-button');
-    button.setAttribute('value',value);
-    button.classList.add('nuclet-list-button');
-    button.id = 'nuclet-' + id;
-    button.addEventListener('click',onNucletButton);
-    item.appendChild(button);
-
-    return item;
-  }
-
-  function createNucletEditList(id) {
-    var button;
-    var item;
-    if (nucleus.az.nuclets[id]) {
-      var nuclet = nucleus.az.nuclets[id];
-      item = createNucletButton(id, 'Edit', nuclet.az.state);
-      nucletList.appendChild(item);
-      if (id.length < 5) {
-        createNucletEditList(id + '0');
-        createNucletEditList(id + '1');
-      }
-    } else {
-      item = createNucletButton(id, 'Add');
-      nucletList.appendChild(item);
-    }
-  }
-
   /**
    * Create a nucleus
    *
@@ -390,6 +213,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
    */
   var createNucleus = function createNucleus (results) {
     var az;
+    viewer.objects = {};
     if (nucleus) {
       // Remove any nucleus's currently displayed
       viewer.scene.remove(nucleus);
@@ -400,9 +224,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
         nucletEditList: {}
       }
     }
-    // Move the nucletEditForm into the hiddenControls div
-    hiddenControls.appendChild(nucletEditForm);
-    nucletList.innerHTML = '';
     nucleusConf = results[0].ymlContents;
     nucleusConf['filepath'] = results[0].data.filepath;
     localStorage.setItem('atomizer_builder_nucleus', results[0].data.filepath.replace(/^.*[\\\/]/, ''));
@@ -412,11 +233,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     nucleus.name = 'nucleus';
     nucleus.az = az;
     createNuclet('N0', nucleusConf.nuclets['N0'], nucleus);
-
-    // Create the nuclet edit list
-    var id = 'N0';
-    createNucletEditList(id);
-    setEditNuclet(id);
 
     viewer.scene.add(nucleus);
     viewer.render();
@@ -478,16 +294,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     );
   };
 
-  var radios = document.forms["atomizer-controls-form"].elements["nuclet--state"];
-  for(var i = radios.length - 1; i > 0; i--) {
-    radios[i].onclick = function (event) {
-      if (event.target.tagName == 'INPUT') {
-        changeNucletState(event.target.parentElement.innerHTML, event.target.value);
-      }
-    }
-    radios[i].id = radios[i].id + '--' + radios[i].value;
-  }
-
   /**
    * Interface to this nucleusC.
    */
@@ -496,7 +302,11 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     saveYml: saveYml,
     overwriteYml: overwriteYml,
     loadNucleus: loadNucleus,
+    changeNucletState: changeNucletState,
+    changeNucletAngle: changeNucletAngle,
+    az: function () { return nucleus.az; },
     addProton: addProton,
+    addNuclet: addNuclet,
     getYmlDirectory: function () { return 'config/nucleus'; }
   };
 };

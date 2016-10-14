@@ -15,7 +15,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
   var visibleThresh = .03;
   var transparentThresh = .97;
   var axes = ['x', 'y', 'z'];
-  var objects = {};
   var protonColors = {
     default:    viewer.style.get('proton-default--color'),
     ghost:      viewer.style.get('proton-ghost--color'),
@@ -295,8 +294,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       case 'sphere':
         geometry = new THREE.SphereGeometry(
           geo.radius || viewer.style.get('proton--radius'),
-          geo.widthSegments || 50,
-          geo.heightSegments || 50
+          geo.widthSegments || 30,
+          geo.heightSegments || 30
         );
         break;
       case 'electron':
@@ -560,8 +559,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
               nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,11];
           }
 
-          nuclet.protons = [];
-          nuclet.protonGeometry = geometry;
+          nuclet.az.protons = [];
+          nuclet.az.protonGeometry = geometry;
           for (var p in geo.protons) {
             if (!geo.protons.hasOwnProperty(p)) continue;
             if (!nucletConf.protons.contains(p)) continue;
@@ -570,15 +569,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
             var proton = makeProton(protonType, opacity, vertice);
             addObject('protons', proton);
             nucletGroup.add(proton);
-            nuclet.protons[p] = proton;
+            nuclet.az.protons[p] = proton;
           }
         }
 
         if (geoGroup.alignyaxis) {
-//        var vertice1 = nuclet.protons[geoGroup.alignyaxis.vertices[0]].position;
-//        var vertice2 = nuclet.protons[geoGroup.alignyaxis.vertices[1]].position;
-          var vertice1 = nuclet.protonGeometry.vertices[geoGroup.alignyaxis.vertices[0]];
-          var vertice2 = nuclet.protonGeometry.vertices[geoGroup.alignyaxis.vertices[1]];
+//        var vertice1 = nuclet.az.protons[geoGroup.alignyaxis.vertices[0]].position;
+//        var vertice2 = nuclet.az.protons[geoGroup.alignyaxis.vertices[1]].position;
+          var vertice1 = nuclet.az.protonGeometry.vertices[geoGroup.alignyaxis.vertices[0]];
+          var vertice2 = nuclet.az.protonGeometry.vertices[geoGroup.alignyaxis.vertices[1]];
           var newAxis = vertice1.clone().sub(vertice2);
           Drupal.atomizer.base.alignObjectToAxis(
             nucletGroup,
@@ -619,7 +618,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
               tetrahedron.children[1].geometry.vertices[v].z = geometry.vertices[p].z;
 
               // Save the proton list in tetrafaces mesh
-              tetrahedron.protons[v] = nuclet.protons[p];
+              tetrahedron.protons[v] = nuclet.az.protons[p];
             }
           }
         }
@@ -693,7 +692,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
           );
           nucletGroup.add(faces);
           if (geo.attachFaces) {
-            objects['selectFace'] = [faces];
+            viewer.objects['selectFace'] = [faces];
             nuclet.attachFaces = geo.faces;
           }
         }
@@ -748,7 +747,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     );
     line.scale.set(5, 5, 5);
     nuclet.add(line);
-//  nuclet.protons[9].position.set(0, 0, 0);
+//  nuclet.az.protons[9].position.set(0, 0, 0);
 
     //// Create inner shell
     var innerShell = new THREE.Object3D();
@@ -775,6 +774,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     return outerShell;
   }
+
+  function deleteNuclet(nuclet) {
+    for (var i = 0; i < nuclet.az.protons.length; i++) {
+      viewer.nuclet.objects.protons = viewer.nuclet.objects.protons.filter(function(e) { return e !== nuclet.az.protons[i]; })
+    }
+    // Remove nuclet from the nucleus
+    nuclet.parent.parent.parent.remove(nuclet.parent.parent);
+  }
+
 
   /**
    * Create an n-sided pyramid.
@@ -894,10 +902,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @param object
    */
   function addObject(name, object) {
-    if (objects[name]) {
-      objects[name].push(object);
+    if (viewer.objects[name]) {
+      viewer.objects[name].push(object);
     } else {
-      objects[name] = [object];
+      viewer.objects[name] = [object];
     }
   }
 
@@ -906,10 +914,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
     makeObject: makeObject,
     makeProton: makeProton,
     createNuclet: createNuclet,
+    deleteNuclet: deleteNuclet,
     createGeometry: createGeometry,
     createGeometryWireframe: createGeometryWireframe,
     createGeometryFaces: createGeometryFaces,
-    objects: objects,
     protonRadius: protonRadius
   };
 };

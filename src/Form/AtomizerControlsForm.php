@@ -54,6 +54,7 @@ class AtomizerControlsForm extends FormBase {
       );
       foreach ($controlSet['hidden'] as $blockName => $block) {
         $form['hidden'][$blockName] = AtomizerControlBlock::create('hidden', $blockName, $block, $styleSet['styles'], false);
+        $form['hidden'][$blockName][$blockName]['#attributes']['class'][] = 'az-hidden';
       }
     }
 

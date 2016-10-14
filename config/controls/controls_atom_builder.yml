@@ -11,8 +11,9 @@ hidden:
   nuclet:
     title:               Nuclet Hidden
     controls:
+      nuclet--id:              ['Id',             'container']
       nuclet--state:
-        - State
+        - 'State:'
         - radios
         - initial
         -
@@ -26,9 +27,9 @@ hidden:
           backbone-final: Final Backbone
       nuclet--attachAngle:     ['Angle',          'range',   1,  [1, 5, 1]]
       nuclet--attachProton:    ['Attach Pt',      'radios',  10, {10: '10', 11: '11'}]
-#     nuclet--grow-label:      ['Grow Points',    'label']
-#     nuclet--grow-0:          ['&nbsp;&nbsp;0',  'html',    '--']
-#     nuclet--grow-1:          ['&nbsp;&nbsp;1',  'html',    '--']
+      nuclet--grow-label:      ['Grow Points',    'label']
+      nuclet--grow-0:          ['&nbsp;&nbsp;0',  'html',    '--']
+      nuclet--grow-1:          ['&nbsp;&nbsp;1',  'html',    '--']
       nuclet--delete:          ['Delete',         'button']
 styler:
   nucleus:
@@ -38,9 +39,6 @@ styler:
       nucleus--loadlabel:      ['Select nucleus', 'header']
       nucleus--selectyml:      [ null,            'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
       nucleus--information:    [ null,            'container']
-      hr2:                     [ null,            'hr']
-      nucleus--nuclets-label:  ['Nuclets',        'header']
-      nucleus--nuclets:        [ null,            'container']
       hr3:                     [ null,            'hr']
       nucleus--new:            ['Save New',       'button']
       nucleus--overwrite:      ['Overwrite',      'button']
