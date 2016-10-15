@@ -40,8 +40,8 @@ styler:
       nucleus--selectyml:      [ null,            'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
       nucleus--information:    [ null,            'container']
       hr3:                     [ null,            'hr']
-      nucleus--new:            ['Save New',       'button']
-      nucleus--overwrite:      ['Overwrite',      'button']
+      nucleus--new:            ['Save New',       'button',  'atomizer.ajax_loadNucleusForm']
+      nucleus--overwrite:      ['Overwrite',      'button',  'atomizer.ajax_loadNucleusForm']
       nucleus--reset:          ['Reset',          'button']
       nucleus--delete:         ['Delete',         'button']
   axes:

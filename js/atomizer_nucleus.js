@@ -88,7 +88,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     var conf = nucleusConf.nuclets[id];
     if (!conf) {
       conf = {
-        state: 'carbon'
+        state: 'backbone-final'
       };
     }
     // Find the parent nuclet PID

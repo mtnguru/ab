@@ -9,44 +9,40 @@ geoGroups:
         protons:
           0:
             type: grow
+            required: true
           1:
             type: grow
+            required: true
           2:
             type: grow
+            required: true
           3:
             type: grow
+            required: true
           4:
             type: valence
+            required: true
           5:
             type: valence
+            required: true
           6:
             type: valence
+            required: true
           7:
             type: valence
+            required: true
           8:
             type: polar
+            required: true
           9:
             type: polar
+            required: true
           10:
             type: polar
+            required: true
           11:
             type: polar
-#         12:
-#           type: lithium
-#         13:
-#           type: lithium
-#         14:
-#           type: lithium
-#         15:
-#           type: lithium
-#         16:
-#           type: lithium
-#         17:
-#           type: lithium
-#         18:
-#           type: lithium
-#         19:
-#           type: lithium
+            required: true
         tetrahedrons:
           0:
             vertices: [1, 14, 0, 13]
@@ -93,40 +89,24 @@ geoGroups:
         faces:
           0:
             type: valence
-            attach: deca-left
-            location: top-front
           1:
             type: isotope
-            attach: deca-left
-            location: top-middle
           2:
             type: isotope
-            attach: deca-right
-            location: top-middle
           3:
             type: valence
-            attach: deca-right
-            location: top-rear
           4:
             type: valence
           5:
             type: valence
-            attach: deca-left
-            location: top-rear
           6:
             type: valence
-            attach: deca-left
-            location: bottom-front
           7:
             type: valence
           8:
             type: valence
-            attach: deca-right
-            location: bottom-rear
           9:
             type: valence
-            attach: deca-right
-            location: top-front
           10:
             type: valence
           11:
@@ -139,16 +119,12 @@ geoGroups:
             type: valence
           15:
             type: valence
-            attach: deca-left
-            location: bottom-rear
           16:
             type: valence
           17:
             type: valence
           18:
             type: valence
-            attach: deca-right
-            location: bottom-front
           19:
             type: valence
       axes:

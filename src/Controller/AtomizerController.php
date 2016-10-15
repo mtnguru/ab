@@ -48,4 +48,16 @@ class AtomizerController extends ControllerBase {
     $response->addCommand(new ListDirectoryCommand($data, $filelist));
     return $response;
   }
+
+  public function loadNucleusForm() {
+    $data = json_decode(file_get_contents("php://input"), true);
+    $form = \Drupal::formBuilder()->getForm('node-nucleus-form');
+    $form = \Drupal::formBuilder()->getForm($this);
+    $markup = \Drupal::service('renderer')->renderRoot($form);
+
+    return;
+    // Load the nucleus form and return
+
+//  return $response;
+  }
 }

@@ -33,20 +33,28 @@ geoGroups:
             type: polar
           12:
             type: lithium
+            required: false
           13:
             type: lithium
+            required: false
           14:
             type: lithium
+            required: false
           15:
             type: lithium
+            required: false
           16:
             type: lithium
+            required: false
           17:
             type: lithium
+            required: false
           18:
             type: lithium
+            required: false
           19:
             type: lithium
+            required: false
         tetrahedrons:
           0:
             vertices: [1, 14, 0, 13]
