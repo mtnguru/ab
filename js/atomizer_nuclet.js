@@ -553,20 +553,31 @@ Drupal.atomizer.nucletC = function (_viewer) {
                 protonRadius * 0.1616236535868876,
                 protonRadius * .0998889113026354
               );
-              nucletConf.protons = [1, 4, 5, 3, 11, 9];
+              nucletConf.protons = [10, 1, 4, 5, 3, 11, 9];
+              if (id != 'N0') {
+                nucletConf.protons[10] = undefined;
+              }
+              break;
+            case 'backbone-initial':
+              nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+              if (id != 'N0') {
+                nucletConf.protons[10] = undefined;
+              }
               break;
             case 'carbon':
-              nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,11];
+            case 'backbone-final':
+              nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,10,11];
+              if (id != 'N0') {
+                nucletConf.protons[10] = undefined;
+              }
           }
 
           nuclet.az.protons = [];
           nuclet.az.protonGeometry = geometry;
           for (var p in geo.protons) {
             if (!geo.protons.hasOwnProperty(p)) continue;
-            if (!nucletConf.protons.contains(p)) continue;
-            var vertice = geometry.vertices[p];
-            var protonType = geo.protons[p].type;
-            var proton = makeProton(protonType, opacity, vertice);
+//          if (!nucletConf.protons.contains(p)) continue;
+            var proton = makeProton(geo.protons[p].type, opacity, geometry.vertices[p]);
             addObject('protons', proton);
             nucletGroup.add(proton);
             nuclet.az.protons[p] = proton;
@@ -776,8 +787,17 @@ Drupal.atomizer.nucletC = function (_viewer) {
   }
 
   function deleteNuclet(nuclet) {
+    if (viewer.nucleus.az().nuclets[nuclet.az.id + '0']) {
+      deleteNuclet(viewer.nucleus.az().nuclets[nuclet.az.id + '0'])
+    }
+    if (viewer.nucleus.az().nuclets[nuclet.az.id + '1']) {
+      deleteNuclet(viewer.nucleus.az().nuclets[nuclet.az.id + '1'])
+    }
+
     for (var i = 0; i < nuclet.az.protons.length; i++) {
-      viewer.nuclet.objects.protons = viewer.nuclet.objects.protons.filter(function(e) { return e !== nuclet.az.protons[i]; })
+      if (nuclet.az.protons[i]) {
+        viewer.objects.protons = viewer.objects.protons.filter(function(e) { return e !== nuclet.az.protons[i]; })
+      }
     }
     // Remove nuclet from the nucleus
     nuclet.parent.parent.parent.remove(nuclet.parent.parent);

@@ -16,9 +16,3 @@ geoGroups:
             type: default
           2:
             type: default
-#     axes:
-#       shape: line
-#       axes:
-#         scale: 2
-#         vertices:
-#           - [0, 2]

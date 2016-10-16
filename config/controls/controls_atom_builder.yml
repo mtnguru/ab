@@ -17,8 +17,6 @@ hidden:
         - radios
         - initial
         -
-          initial: 2-3 Initial
-          neutral: 4-5 Neutral
           lithium: 6 Lithium
           beryllium: 8 Beryllium
           boron: 10 Boron

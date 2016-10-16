@@ -35,8 +35,8 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
 
   function onNucletDelete(event) {
     // Delete the protons from the
-    viewer.nucleus.deleteNuclet(editNuclet.az.id);
-//  editN
+    delete viewer.nucleus.az().nuclets[editNuclet.az.id];
+    viewer.nuclet.deleteNuclet(editNuclet);
     nucletEditForm.classList.add('az-hidden');
     viewer.render();
   }

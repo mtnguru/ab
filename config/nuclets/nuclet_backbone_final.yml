@@ -9,40 +9,28 @@ geoGroups:
         protons:
           0:
             type: grow
-            required: true
           1:
             type: grow
-            required: true
           2:
             type: grow
-            required: true
           3:
             type: grow
-            required: true
           4:
             type: valence
-            required: true
           5:
             type: valence
-            required: true
           6:
             type: valence
-            required: true
           7:
             type: valence
-            required: true
           8:
             type: polar
-            required: true
           9:
             type: polar
-            required: true
           10:
             type: polar
-            required: true
           11:
             type: polar
-            required: true
         tetrahedrons:
           0:
             vertices: [1, 14, 0, 13]

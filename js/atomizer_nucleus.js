@@ -21,12 +21,15 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/loadYml',
       { component: 'nucleus',
-        settings: {fart: 'cool'},
         filepath: filepath
       },
       createNucleus
     );
   };
+
+  var deleteNucleus = function deleteNucleus () {
+    // Have to delete everything and remove it from the scene.
+  }
 
   /**
    * Align an object to an internal axis (x, y or z) and then align that axis
@@ -68,6 +71,8 @@ Drupal.atomizer.nucleusC = function (_viewer) {
    */
   function changeNucletState(nuclet, state) {
     var az = nuclet.az;
+    var parent = nuclet.parent.parent.parent;
+    delete nucleus.az.nuclets[nuclet.az.id];
     viewer.nuclet.deleteNuclet(nuclet);
 
     az.conf.state = state;
@@ -302,6 +307,7 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     saveYml: saveYml,
     overwriteYml: overwriteYml,
     loadNucleus: loadNucleus,
+    deleteNucleus: deleteNucleus,
     changeNucletState: changeNucletState,
     changeNucletAngle: changeNucletAngle,
     az: function () { return nucleus.az; },
