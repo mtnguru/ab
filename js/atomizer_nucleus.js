@@ -27,10 +27,6 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     );
   };
 
-  var deleteNucleus = function deleteNucleus () {
-    // Have to delete everything and remove it from the scene.
-  }
-
   /**
    * Align an object to an internal axis (x, y or z) and then align that axis
    * to an external axis in the scene.
@@ -299,6 +295,85 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     );
   };
 
+  function dialogDisplayed(value) {
+    return;
+  }
+
+  var buttonClicked = function buttonClicked(id) {
+    location.href = 'ajax-ab/loadNucleusForm';
+    /*
+    if (id == 'nucleus--new') {
+      Drupal.atomizer.base.doAjax(
+        '/ajax-ab/loadNucleusForm',
+        { component: 'nucleus'
+        },
+        dialogDisplayed  // function to call on completion.
+      );
+      // Run AJAX command to popup node-nucleus-form
+    }
+    */
+  };
+
+  Drupal.behaviors.atomizer_nucleus = {
+    attach: function (context, settings) {
+      var value = '';
+
+      function addNuclet(id, spacing) {
+        var nuclet = nucleus.az.nuclets[id];
+        value += spacing + id + ':\n';
+        spacing += '  ';
+        value += spacing + 'state: ' + nuclet.az.state + '\n';
+        value += spacing + 'attachAngle: ' + nuclet.az.conf.attachAngle + '\n';
+
+        value += spacing + 'protons: ['
+        for (var i = 0; i < nuclet.az.protons.length; i++) {
+          if (nuclet.az.protons[i]) {
+            value += i;
+            if (i != nuclet.az.protons.length - 1) {
+              value += ', ' ;
+            }
+          }
+        }
+        value += ']\n';
+
+        var grow0 = nucleus.az.nuclets[id + '0'];
+        var grow1 = nucleus.az.nuclets[id + '1'];
+        if (grow0 || grow1) {
+          value += spacing + 'nuclets:\n';
+          if (grow0) {
+            addNuclet(id + '0', spacing + '  ');
+          }
+          if (grow1) {
+            addNuclet(id + '1', spacing + '  ');
+          }
+        }
+      }
+
+      var nodeForm = document.getElementsByClassName('node-nucleus-form')[0];
+      if (nodeForm) {
+        var atomicStructure = nodeForm.getElementsByClassName('field--name-field-atomic-structure')[0];
+        var textarea = atomicStructure.getElementsByTagName('textarea')[0];
+        addNuclet('N0', '');
+        textarea.value = value;
+      }
+    }
+  }
+
+  /*
+  (function ($) {
+    Drupal.behaviors.atomizer_nucleus = {
+      attach: function (context, settings) {
+        var nodeForm = document.getElementsByClassName('node-nucleus-form')[0];
+        if (nodeForm) {
+          var $nodeForm = $('.field--name-field-atomic-structure textarea');
+          $nodeForm.val('shit');
+        }
+        return;
+      }
+    };
+  })(jQuery);
+  */
+
   /**
    * Interface to this nucleusC.
    */
@@ -307,12 +382,12 @@ Drupal.atomizer.nucleusC = function (_viewer) {
     saveYml: saveYml,
     overwriteYml: overwriteYml,
     loadNucleus: loadNucleus,
-    deleteNucleus: deleteNucleus,
     changeNucletState: changeNucletState,
     changeNucletAngle: changeNucletAngle,
     az: function () { return nucleus.az; },
     addProton: addProton,
     addNuclet: addNuclet,
+    buttonClicked: buttonClicked,
     getYmlDirectory: function () { return 'config/nucleus'; }
   };
 };

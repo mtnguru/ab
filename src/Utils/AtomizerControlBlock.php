@@ -2,8 +2,10 @@
 
 namespace Drupal\atomizer\Utils;
 
-use Drupal\Component\Serialization\Yaml;
-use Drupal\atomizer\Utils\AtomizerFiles;
+use Drupal\core\Url;
+use Drupal\Component\Serialization\Json;
+// use Drupal\Component\Serialization\Yaml;
+//use Drupal\atomizer\Utils\AtomizerFiles;
 
 /**
  * Class AtomizerControlBlock.
@@ -139,22 +141,30 @@ class AtomizerControlBlock {
           break;
 
         case 'link':
-          $options = array(
-            'component' => $controlConf[3],
-            'directory' => drupal_get_path('module', 'atomizer') . '/' . $controlConf[4],
-            'filename' => $controlConf[2],
-          );
-          $control = array(
+//        $fart = 1;
+//        $router = \Drupal::service('router.no_access_checks');
+//        $result = $router->match('/views/select_nuclei');
+          $control = [
             '#type' => 'container',
-            'link' => array(
+            'link' => [
               '#type' => 'link',
               '#title' => $controlConf[0],
-              '#url' => Url::fromRoute($controlConf[2], $options),
-              '#attributes' => array('class' => array('use-ajax')),
-              '#suffix' => '<br />',
-            ),
-          );
-          $addValue = true;
+//            '#url' => $
+              '#url' => Url::fromRoute('node.add', ['node_type' => 'nucleus']),
+//            '#url' => Url::fromRoute('views.view_select_nuclei.page_1'),
+//            '#url' => Url::fromInternalUri('internal:/node/add'),
+//            '#url' => '/node/add',
+              '#attributes' => [
+                'class' => ['use-ajax'],
+                'data-dialog-type' => 'modal',
+                'data-dialog-options' => Json::encode([
+                  'width' => 'auto',
+                  'draggable' => true,
+                  'autoResize' => true,
+                ]),
+              ],
+            ],
+          ];
           break;
 
         case 'button':

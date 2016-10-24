@@ -1,0 +1,37 @@
+
+.node-nucleus-form {
+  font-size: 13px;
+  .book-outline-form,
+  .menu-link-form,
+  .field--name-field-atomic-structure {
+//  display: none;
+    textarea {
+      font-family: monospace;
+    }
+  }
+  .form-autocomplete {
+    width: 200px;
+  }
+  .form-item {
+    margin: 5px 0;
+  }
+  label {
+    width: 125px;
+  }
+  .form-type-radio {
+    margin-left: 3em;
+  }
+  .form-type-number {
+    input {
+      padding: 3px 6px;
+    }
+  }
+  .field--name-body {
+    label {
+      width: auto;
+    }
+  }
+  .form-composite > legend {
+    font-weight: normal;
+  }
+}

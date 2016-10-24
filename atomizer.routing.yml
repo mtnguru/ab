@@ -36,8 +36,6 @@ atomizer.listDirectory:
 atomizer.loadNucleusForm:
   path: '/ajax-ab/loadNucleusForm'
   defaults:
-    _form: 'Drupal\atomizer\Form\loadNucleusForm'
-    _title: 'Load the save nucleus form into a popup'
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadNucleusForm'
   requirements:
     _permission: 'access content'

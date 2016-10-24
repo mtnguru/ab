@@ -357,21 +357,21 @@ styles:
     type: color
   spotlight-3--position--x:
     defaultValue:
-      - -500
-      - 800
-      - -500
+      - 0
+      - -800
+      - 0
     type: position
   spotlight-3--position--y:
     defaultValue:
-      - -500
-      - 800
-      - -500
+      - 0
+      - -800
+      - 0
     type: position
   spotlight-3--position--z:
     defaultValue:
-      - -500
-      - 800
-      - -500
+      - 0
+      - -800
+      - 0
     type: position
   electron--color:
     defaultValue: '#ffff33'

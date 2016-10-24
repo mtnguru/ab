@@ -71,7 +71,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    * One of the styling controls has changed, get the value of the control and apply control through the style module.
    * @param event
    */
-  function controlChanged(event) {
+  function onControlChanged(event) {
     var args = this.id.split("--");
     if (this.className.indexOf('az-slider') > -1) {
       document.getElementById(args[0] + '--' + args[1] + '--' + args[2] + '--az-value').value = event.target.value;
@@ -101,7 +101,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    * @param event
    * @returns {boolean}
    */
-  function buttonClicked(event) {
+  function onButtonClicked(event) {
 
     var args = this.id.split("--");
     switch (args[1]) {
@@ -121,7 +121,10 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
             filename += '.yml';
           }
           // Save the yml file
-          viewer[args[0]].saveYml({name: name, filepath: viewer[args[0]].getYmlDirectory() + '/' + filename.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_')});
+          viewer[args[0]].saveYml({
+            name: name,
+            filepath: viewer[args[0]].getYmlDirectory() + '/' + filename.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_')
+          });
         }
         break;
       case 'reset':
@@ -131,7 +134,11 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
           viewer[args[0]].reset();
         }
         break;
-
+      default:
+        if (viewer[args[0]].buttonClicked) {
+          viewer[args[0]].buttonClicked(event.target.id);
+        }
+        break;
     }
     return false;
   }
@@ -177,39 +184,39 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
       if (element || control.type == 'rotation' || control.type == 'position') {
         switch (control.type) {
           case 'color':
-            element.addEventListener("input", controlChanged);
+            element.addEventListener("input", onControlChanged);
             viewer.style.set(control.defaultValue, id, control.type);
             break;
           case 'range':
-            element.addEventListener("input", controlChanged);
+            element.addEventListener("input", onControlChanged);
             viewer.style.set(control.defaultValue, id, control.type);
             break;
           case 'rotation':
           case 'position':
             var sid;
             sid = id + '--az-slider';
-            document.getElementById(sid).addEventListener("input", controlChanged);
+            document.getElementById(sid).addEventListener("input", onControlChanged);
             viewer.style.set(control.defaultValue, id, control.type);
 
             sid = id + '--az-slider';
-            document.getElementById(sid).addEventListener("input", controlChanged);
+            document.getElementById(sid).addEventListener("input", onControlChanged);
             viewer.style.set(control.defaultValue, id, control.type);
 
             sid = id + '--az-slider';
-            document.getElementById(sid).addEventListener("input", controlChanged);
+            document.getElementById(sid).addEventListener("input", onControlChanged);
             viewer.style.set(control.defaultValue, id, control.type);
             break;
           case 'saveyml':
             var elem = document.getElementById(id + '--button');
-            document.getElementById(id + '--button').addEventListener("click", buttonClicked);
+            document.getElementById(id + '--button').addEventListener("click", onButtonClicked);
             break;
           case 'selectyml':
             element.addEventListener("change", selectYmlChanged);
-//          document.getElementById(id + '--button').addEventListener("click", buttonClicked);
+//          document.getElementById(id + '--button').addEventListener("click", onButtonClicked);
             break;
           case 'link':
           case 'button':
-            element.addEventListener("click", buttonClicked);
+            element.addEventListener("click", onButtonClicked);
             break;
         }
         // Make sure that style has default values for all controls

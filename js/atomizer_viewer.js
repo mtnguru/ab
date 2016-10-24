@@ -84,7 +84,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
     ambient.name = 'ambient';
     viewer.scene.add(ambient);
 
-    for (var i = 1; i < 3; i++) {
+    for (var i = 1; i < 4; i++) {
       spotlights[i] = makeSpotLight('spotlight-' + i, {
         c: viewer.style.get('spotlight-' + i + '--color'),
         x: viewer.style.get('spotlight-' + i + '--position', 'x'),

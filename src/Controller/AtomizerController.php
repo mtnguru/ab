@@ -3,12 +3,19 @@
 namespace Drupal\atomizer\Controller;
 
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
+
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Ajax\AddCommand;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\FormBuilderInterface;
+
+use Drupal\Component\Serialization\Yaml;
+
 use Drupal\atomizer\Ajax\LoadYmlCommand;
 use Drupal\atomizer\Ajax\ListDirectoryCommand;
 use Drupal\atomizer\Ajax\SaveYmlCommand;
-use Drupal\Component\Serialization\Yaml;
+
 // use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -50,14 +57,28 @@ class AtomizerController extends ControllerBase {
   }
 
   public function loadNucleusForm() {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $form = \Drupal::formBuilder()->getForm('node-nucleus-form');
-    $form = \Drupal::formBuilder()->getForm($this);
-    $markup = \Drupal::service('renderer')->renderRoot($form);
+    $node = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->create(array('type' => 'nucleus'));
 
-    return;
-    // Load the nucleus form and return
+    $form = \Drupal::entityTypeManager()
+      ->getFormObject('node', 'default')
+      ->setEntity($node);
+    $content = \Drupal::formBuilder()->getForm($form, 'popup');
 
-//  return $response;
+    $response = new AjaxResponse();
+    $title = 'Nucleus Edit Form';
+    $html = drupal_render($content);
+
+    $is_modal = true;
+    if ($is_modal) {
+      $dialog = new OpenModalDialogCommand($title, $html);
+      $response->addCommand($dialog);
+    }
+    else {
+      $selector = '#ajax-test-dialog-wrapper-1';
+      $response->addCommand(new OpenDialogCommand($selector, $title, $html));
+    }
+    return $response;
   }
 }

@@ -5,6 +5,7 @@
  * Contains atomizer.module..
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -21,4 +22,45 @@ function atomizer_help($route_name, RouteMatchInterface $route_match) {
 
     default:
   }
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alter the node_nucleus_form.
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function atomizer_form_node_nucleus_form_alter(&$form, FormStateInterface $form_state) {
+//$form['field_atomic_structure']['#access'] = false;
+  $form['actions']['preview']['#access'] = false;
+  $form['actions']['submit']['#access'] = true;
+  $form['actions']['publish']['#value'] = t('Create New');
+  $form['actions']['unpublish']['#access'] = false;
+
+  $form['title']['widget'][0]['value']['#title'] = t('Nucleus Name');
+
+  unset($form['field__inner_electrons']['widget'][0]['value']['#description']);
+  unset($form['field__outer_electrons']['widget'][0]['value']['#description']);
+  unset($form['field__p']['widget'][0]['value']['#description']);
+  unset($form['field_element']['widget'][0]['target_id']['#description']);
+  unset($form['field_stability']['widget']['#description']);
+  unset($form['field_isotope']['widget'][0]['value']['#description']);
+
+  $form['path']['#access'] = false;
+
+  // Remove the vertical tabs
+  global $user;
+  if ($user->uid != 1){
+    unset($form['advanced']);
+    foreach ($form as $key => $value) {
+      if (is_array($form[$key]) && isset($form[$key]['#group'])) {
+        unset($form[$key]);
+      }
+    }
+  }
+
+  return;
 }

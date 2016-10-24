@@ -1,0 +1,26 @@
+@import "variables.scss";
+
+.az-hidden {
+  display: none;
+}
+
+// Atom Builder Viewer Block
+.block-atomizer-viewer {
+  display: inline-flex;
+  width: calc(100% - 240px);
+}
+
+.ui-dialog {
+  .ui-dialog-titlebar {
+  }
+  .ui-dialog-titlebar-close {
+    color: black;
+  }
+  #drupal-modal {
+    background: $color-controls;
+  }
+}
+
+.ui-dialog-buttonpane .form-actions .form-submit {
+  background: $color-button;
+}
