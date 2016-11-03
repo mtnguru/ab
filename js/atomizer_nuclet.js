@@ -579,6 +579,9 @@ Drupal.atomizer.nucletC = function (_viewer) {
 //          if (!nucletConf.protons.contains(p)) continue;
             var proton = makeProton(geo.protons[p].type, opacity, geometry.vertices[p]);
             addObject('protons', proton);
+            if (geo.protons[p].optional && geo.protons[p].optional == true) {
+              addObject('optionalProtons', proton);
+            }
             nucletGroup.add(proton);
             nuclet.az.protons[p] = proton;
           }

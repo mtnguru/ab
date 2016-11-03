@@ -11,13 +11,13 @@ nuclets:
     nuclets:
       N00:
         state: lithium
-        attachAngle: 5
+        attachAngle: 3
         numProtons: 6
         numInnerElectrons: 3
         protons: [1, 4, 5, 3, 11, 9]
       N01:
         state: lithium
-        attachAngle: 5
+        attachAngle: 3
         numProtons: 6
         numInnerElectrons: 3
         protons: [1, 4, 5, 3, 11, 9]

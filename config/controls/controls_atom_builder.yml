@@ -38,9 +38,9 @@ styler:
       nucleus--selectyml:      [ null,            'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
       nucleus--information:    [ null,            'container']
       hr3:                     [ null,            'hr']
-      nucleus--select:         ['Select',         'link',    'views/nuclei']
-      nucleus--new:            ['New',           'link',    'node/add/nucleus']
-      nucleus--edit:           ['Edit',           'link',    'node/48/edit']
+      nucleus--select:         ['Select',         'link',      view.az_nucleus.select_nuclei]
+      nucleus--new:            ['New',            'link',      'node.add',    {node_type: nucleus}]
+#     nucleus--edit:           ['Edit',           'link',      'node/48/edit']
       nucleus--reset:          ['Reset',          'button']
   nuclet-debug:
     title:               Nuclet Debug
@@ -106,7 +106,7 @@ styler:
       proton-iattach--color:     ['Isotope',      'color',    '#55dddd']
       proton-ghost--color:       ['ghost',        'color',    '#aa55aa']
       proton--opacity:           ['Opacity',      'range',    .9, [0, 1, .01]]
-      protons--scale:            ['Scale',        'range',     1, [0, 3, .01]]
+      proton--scale:            ['Scale',        'range',     1, [0, 3, .01]]
 
       hr1:                       [ null,          'hr']
       protonVertexid--color:     ['Proton IDs',   'color',    '#ff00ff']

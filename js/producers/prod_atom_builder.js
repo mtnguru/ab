@@ -48,6 +48,50 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     viewer.render();
   }
 
+  var hoverObjects = function hoverObjects() {
+    return viewer.objects.optionalProtons;
+
+  };
+
+  var highlightedProton;
+  /**
+   * User has hovered over a proton, set transparency to .5.
+   *
+   * @param event
+   */
+  var hovered = function hovered(protons) {
+    if (protons.length) {
+      if (highlightedProton) {
+        if (highlightedProton == protons[0])
+          return;
+        highlightedProton.object.material.opacity = 1;
+        highlightedProton.object.material.transparent = false;
+        highlightedProton.object.material.visible = true;
+      }
+      highlightedProton = protons[0];
+      highlightedProton.object.material.opacity = .7;
+      highlightedProton.object.material.visible = true;
+      highlightedProton.object.material.transparent = true;
+    } else {
+      if (highlightedProton) {
+        highlightedProton.object.material.opacity = 1;
+        highlightedProton.object.material.visible = true;
+        highlightedProton.object.material.transparent = false;
+        highlightedProton = undefined;
+      }
+    }
+    viewer.render();
+  };
+
+  /**
+   * User has clicked somewhere in the scene with the mouse.
+   *
+   * If they right clicked on a proton, find the parent nuclet and popup the nuclet edit form.
+   * If they right clicked anywhere else, pop down the nuclet edit form.
+   *
+   * @param event
+   * @returns {boolean}
+   */
   var mouseClick = function mouseClick(event) {
     if (event.which == 3) { // right mouse button
       event.preventDefault();
@@ -173,7 +217,9 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   return {
     createView: createView,
     setDefaults: setDefaults,
-    mouseClick: mouseClick
+    mouseClick: mouseClick,
+    hoverObjects: hoverObjects,
+    hovered: hovered
   };
 };
 

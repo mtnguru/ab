@@ -141,17 +141,18 @@ class AtomizerControlBlock {
           break;
 
         case 'link':
-//        $fart = 1;
-//        $router = \Drupal::service('router.no_access_checks');
-//        $result = $router->match('/views/select_nuclei');
+          if (empty($controlConf[3])) {
+            $controlConf[3] = [];
+          }
           $control = [
             '#type' => 'container',
             'link' => [
               '#type' => 'link',
               '#title' => $controlConf[0],
 //            '#url' => $
-              '#url' => Url::fromRoute('node.add', ['node_type' => 'nucleus']),
-//            '#url' => Url::fromRoute('views.view_select_nuclei.page_1'),
+//            '#url' => Url::fromRoute('node.add', ['node_type' => 'nucleus']),
+//            '#url' => Url::fromRoute('view.view_select_nuclei.select_nuclei'),
+              '#url' => Url::fromRoute($controlConf[2], $controlConf[3]),
 //            '#url' => Url::fromInternalUri('internal:/node/add'),
 //            '#url' => '/node/add',
               '#attributes' => [

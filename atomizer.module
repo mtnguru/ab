@@ -52,8 +52,9 @@ function atomizer_form_node_nucleus_form_alter(&$form, FormStateInterface $form_
   $form['path']['#access'] = false;
 
   // Remove the vertical tabs
-  global $user;
-  if ($user->uid != 1){
+  if (!\Drupal::currentUser()->hasPermission('atomizer display structure')) {
+    $form['field_atomic_structure']['#access'] == false;
+
     unset($form['advanced']);
     foreach ($form as $key => $value) {
       if (is_array($form[$key]) && isset($form[$key]['#group'])) {
@@ -62,5 +63,60 @@ function atomizer_form_node_nucleus_form_alter(&$form, FormStateInterface $form_
     }
   }
 
+  return;
+}
+
+function atomizer_form_atomizer_controls_form_alter (&$form, FormStateInterface $form_state) {
+  return;
+}
+
+function atomizer_form_views_exposed_form_alter (&$form, FormStateInterface $form_state) {
+  if ($form['#id'] == 'views-exposed-form-view-select-nuclei-select-nuclei') {
+
+    /***
+    $form['col1'] = [
+      '#type' => 'container',
+      '#title' => t('stuff'),
+//    '#tree' => true,
+    ];
+    $form['col1']['field_family_target_id'] = $form['field_family_target_id'];
+    unset($form['field_family_target_id']);
+
+    $form['col1']['field_isotope_value'] = $form['field_isotope_value'];
+    unset($form['field_isotope_value']);
+
+    $form['col1']['field_stability_target_id'] = $form['field_stability_target_id'];
+    unset($form['field_stability_target_id']);
+
+    $form['col2'] = [
+      '#type' => 'container',
+      '#title' => t('stuff 2'),
+//    '#collapsible' => true,
+//    '#collapsed' => true,
+//    '#tree' => true,
+    ];
+    $form['col2']['field__p_value'] = $form['field__p_value'];
+    unset($form['field__p_value']);
+
+    $form['col2']['field__inner_electrons_value'] = $form['field__inner_electrons_value'];
+    unset($form['field__inner_electrons_value']);
+
+    $form['col2']['field__outer_electrons_value'] = $form['field__outer_electrons_value'];
+    unset($form['field__outer_electrons_value']);
+    ****/
+
+  }
+  return;
+}
+
+function atomizer_form_alter (&$form, FormStateInterface $form_state) {
+  return;
+}
+
+function atomizer_views_pre_render($view) {
+  return;
+}
+
+function atomizer_views_post_render($view, &$output, $cache) {
   return;
 }

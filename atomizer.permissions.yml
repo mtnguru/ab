@@ -1,0 +1,4 @@
+atomizer display structure:
+  title: 'Atomizer Display Structure'
+  description: 'Display the structure of the nucleus on the Nucleus edit form.'
+  restrict access: TRUE

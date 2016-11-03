@@ -276,19 +276,26 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     vector.unproject(viewer.camera);
 
     var raycaster = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
-//  raycaster.setFromCamera( mouse, viewer.camera );
     viewer.render();
-    return raycaster.intersectObjects(objects);
+    var intersectedObjects = raycaster.intersectObjects(objects);
+    if (intersectedObjects.length) {
+      var dude = 1;
+    }
+    return intersectedObjects;
   }
 
   /**
    * Save the current mouse position - X, Y
+   * When the user moves the mouse, if the producer has a intersected handler,
+   * then * build a list of intersected objects and call the producers intersected handler.
    * @param event
    */
   function onMouseMove(event) {
     mouse.x =  (event.offsetX / viewer.canvasWidth) * 2 - 1;
     mouse.y = -(event.offsetY / viewer.canvasHeight) * 2 + 1;
-    animate();
+    if (viewer.producer.hoverObjects) {
+      viewer.producer.hovered(findIntersects(viewer.producer.hoverObjects()));
+    }
   }
 
   /**
@@ -302,16 +309,6 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
       event.preventDefault();
       return viewer.producer.mouseClick(event);
     }
-  }
-
-  /**
-   * When the user moves the mouse, if the producer has a intersected handler,
-   * then * build a list of intersected objects and call the producers intersected handler.
-   */
-  function mouseMove() {
-//  if (viewer.producer.intersected) {
-//    viewer.producer.intersected(findIntersects(viewer.producer.intersectObjects()));
-//  }
   }
 
   /**
