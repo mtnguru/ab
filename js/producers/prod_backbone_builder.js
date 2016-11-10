@@ -21,10 +21,10 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   var tetrahedronId = 0;
   var protonId = 0;
 
-  var nucleusConf;
-  var nucleus = new THREE.Group();
-  nucleus.name = 'nucleus';
-  nucleus.az = {
+  var atomConf;
+  var atom = new THREE.Group();
+  atom.name = 'atom';
+  atom.az = {
     protons: {},
     tetrahedrons: {}
   };
@@ -111,14 +111,14 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
 
       intersectList.push(tetrahedron.children[1]);
 
-      // Add proton to nucleus list and tetrahedron list
-      proton.azid = 'p' + Object.keys(nucleus.az.protons).length;
-      nucleus.az.protons[proton.azid] = proton;   // Add proton to list of protons
+      // Add proton to atom list and tetrahedron list
+      proton.azid = 'p' + Object.keys(atom.az.protons).length;
+      atom.az.protons[proton.azid] = proton;   // Add proton to list of protons
       tetrahedron.protons[3] = proton;    // Add proton to tetrahedron
 
-      // Add tetrahedron to nucleus list
-      tetrahedron.azid = 't' + Object.keys(nucleus.az.tetrahedrons).length;
-      nucleus.az.tetrahedrons[tetrahedron.azid] = tetrahedron;
+      // Add tetrahedron to atom list
+      tetrahedron.azid = 't' + Object.keys(atom.az.tetrahedrons).length;
+      atom.az.tetrahedrons[tetrahedron.azid] = tetrahedron;
 
       highlightedFace = null;
       highlightedNuclet = null;
@@ -241,7 +241,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   };
 
   /**
-   * Create an array for the protons and faces of the current nucleus.  Save to YAML file.
+   * Create an array for the protons and faces of the current atom.  Save to YAML file.
    * @param data
    */
   var saveYml = function saveYml(data) {
@@ -252,8 +252,8 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       geometries: {}
     };
 
-    for (var pid in nucleus.az.protons) {
-      var proton = nucleus.az.protons[pid];
+    for (var pid in atom.az.protons) {
+      var proton = atom.az.protons[pid];
       nuclet.protons[pid] = {
 //      position: proton.position.multiplyScalar(1 / protonRadius),
         position: proton.position,
@@ -261,8 +261,8 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       };
     }
 
-    for (var tid in nucleus.az.tetrahedrons) {
-      var tetrahedron = nucleus.az.tetrahedrons[tid];
+    for (var tid in atom.az.tetrahedrons) {
+      var tetrahedron = atom.az.tetrahedrons[tid];
       var list = [];
       for (var i = 0; i < tetrahedron.protons.length; i++) {
         var pid = tetrahedron.protons[i].azid;
@@ -290,7 +290,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   };
 
   /**
-   * The nucleus was saved, display a message.
+   * The atom was saved, display a message.
    *
    * @param response
    */
@@ -305,16 +305,16 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
    * @param results
    */
   var loadYml = function (results) {
-    createNucleus(results);
+    createAtom(results);
   };
 
   /**
-   * Start the AJAX load of a new nucleus.
+   * Start the AJAX load of a new atom.
    *
    * @param filepath
    * @param settings
    */
-  var loadNucleus = function loadNucleus (filepath, settings) {
+  var loadAtom = function loadAtom (filepath, settings) {
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/loadYml',
@@ -322,22 +322,22 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
         settings: {fart: 'cool'},
         filepath: filepath
       },
-      createNucleus
+      createAtom
     );
   };
 
   /**
-   * A new nucleus has been successfully loaded, create it and render it.
+   * A new atom has been successfully loaded, create it and render it.
    *
    * @param results
    */
-  var createNucleus = function createNucleus (results) {
+  var createAtom = function createAtom (results) {
 
     function createNuclet(num) {
       // Use the proton configuration information to create a geometry.
       var geometry = new THREE.Geometry();
-      for (var pid in nucleusConf.protons) {
-        var protonConf = nucleusConf.protons[pid];
+      for (var pid in atomConf.protons) {
+        var protonConf = atomConf.protons[pid];
         var pos = new THREE.Vector3(
           protonConf.position['x'],
           protonConf.position['y'],
@@ -363,8 +363,8 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
 
       //  Create Protons
       var p = 0;
-      for (var pid in nucleusConf.protons) {
-        var protonConf = nucleusConf.protons[pid];
+      for (var pid in atomConf.protons) {
+        var protonConf = atomConf.protons[pid];
         var position = geometry.vertices[p];
         var proton = viewer.nuclet.makeProton(
           'default',
@@ -376,22 +376,22 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
           }
         );
         proton.azid = 'p' + protonId++;
-        nucleus.az.protons[proton.azid] = proton;
-        nucleus.add(proton);
+        atom.az.protons[proton.azid] = proton;
+        atom.add(proton);
         p++;
       }
       var verticeIds = viewer.sprites.createVerticeIds ('proton', geometry);
-      nucleus.add(verticeIds);
+      atom.add(verticeIds);
 
       // Create Tetrahedrons
-      for (var tid in nucleusConf.geometries) {
-        var geometryConf = nucleusConf.geometries[tid];
+      for (var tid in atomConf.geometries) {
+        var geometryConf = atomConf.geometries[tid];
         if (geometryConf.geometry == 'tetrahedron') {
           // Add the first tetrahedrons
           var tetrahedron = createTetrahedron('tetra');
           tetrahedron.azid = 't' + tetrahedronId++;
           intersectList.push(tetrahedron.children[1]); // Attach the faces Mesh
-          nucleus.az.tetrahedrons[tetrahedron.azid] = tetrahedron;
+          atom.az.tetrahedrons[tetrahedron.azid] = tetrahedron;
 
           // Set 4 vertices of tetrahedron
           tetrahedron.children[1].geometry.protons = [];
@@ -404,17 +404,17 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
             } else {
               pid = geometryConf.protons[v];
             }
-            var proton = nucleusConf.protons[pid];
-            tetrahedron.children[0].geometry.vertices[v].x = nucleus.az.protons[pid].position.x;
-            tetrahedron.children[0].geometry.vertices[v].y = nucleus.az.protons[pid].position.y;
-            tetrahedron.children[0].geometry.vertices[v].z = nucleus.az.protons[pid].position.z;
+            var proton = atomConf.protons[pid];
+            tetrahedron.children[0].geometry.vertices[v].x = atom.az.protons[pid].position.x;
+            tetrahedron.children[0].geometry.vertices[v].y = atom.az.protons[pid].position.y;
+            tetrahedron.children[0].geometry.vertices[v].z = atom.az.protons[pid].position.z;
 
-            tetrahedron.children[1].geometry.vertices[v].x = nucleus.az.protons[pid].position.x;
-            tetrahedron.children[1].geometry.vertices[v].y = nucleus.az.protons[pid].position.y;
-            tetrahedron.children[1].geometry.vertices[v].z = nucleus.az.protons[pid].position.z;
+            tetrahedron.children[1].geometry.vertices[v].x = atom.az.protons[pid].position.x;
+            tetrahedron.children[1].geometry.vertices[v].y = atom.az.protons[pid].position.y;
+            tetrahedron.children[1].geometry.vertices[v].z = atom.az.protons[pid].position.z;
 
             // Save the proton list in tetrafaces mesh
-            tetrahedron.protons[v] = nucleus.az.protons[pid];
+            tetrahedron.protons[v] = atom.az.protons[pid];
           }
 
   //      tetrahedron.children[0].geometry.verticesNeedUpdate = true;
@@ -434,7 +434,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   //      tetrahedron.children[1].geometry.computeVertexNormals();
 
 //        tetrahedron.scale.set(5, 5, 5);
-          nucleus.add(tetrahedron);
+          atom.add(tetrahedron);
         }
       }
     } // end function createNuclet()
@@ -442,17 +442,17 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     tetrahedronId = 0;
     protonId = 0;
 
-    if (nucleus) {
-      viewer.scene.remove(nucleus);
+    if (atom) {
+      viewer.scene.remove(atom);
     }
-    nucleusConf = results[0].ymlContents;
-    nucleusConf['filepath'] = results[0].data.filepath;
+    atomConf = results[0].ymlContents;
+    atomConf['filepath'] = results[0].data.filepath;
     localStorage.setItem('atomizer_builder_backbone', results[0].data.filepath.replace(/^.*[\\\/]/, ''));
 
-    nucleus = new THREE.Group();
-    nucleus.add(new THREE.AxisHelper(500));
-    nucleus.name = 'nucleus';
-    nucleus.az = {
+    atom = new THREE.Group();
+    atom.add(new THREE.AxisHelper(500));
+    atom.name = 'atom';
+    atom.az = {
       protons: [],
       tetrahedrons: []
     }
@@ -477,8 +477,8 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
         {x: x, y: y, z: z}
       );
       proton.azid = 'p18';
-      nucleus.az.protons['p18'] = proton;
-      nucleus.add(proton);
+      atom.az.protons['p18'] = proton;
+      atom.add(proton);
 
       // Create ghost proton
       proton = viewer.nuclet.makeProton(
@@ -487,12 +487,12 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
         {x: x, y: y, z: -z}
       );
       proton.azid = 'p19';
-      nucleus.az.protons['p19'] = proton;
-      nucleus.add(proton);
+      atom.az.protons['p19'] = proton;
+      atom.add(proton);
     }
 
-    // Add the nucleus to the scene and render it.
-    viewer.scene.add(nucleus);
+    // Add the atom to the scene and render it.
+    viewer.scene.add(atom);
     viewer.render();
   };
 
@@ -501,9 +501,9 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
    */
   var createView = function () {
     viewer.nuclet = Drupal.atomizer.nucletC(viewer);
-    viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
+    viewer.atom = Drupal.atomizer.atomC(viewer);
 
-    // model after the nucleus - read in the file and build it.
+    // model after the atom - read in the file and build it.
     viewer.backbone = {
       getYmlDirectory: function () { return 'config/backbone'; },
       saveYml: saveYml,
@@ -523,12 +523,12 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     tetrahedron.protons = [];
     viewer.view.ghostTetrahedron = tetrahedron;
 
-    // Start loading the default nucleus.
-//  loadNucleus('config/backbone/half_backbone.yml');
+    // Start loading the default atom.
+//  loadAtom('config/backbone/half_backbone.yml');
     if (buildInitialBackbone) {
-      loadNucleus('config/backbone/half_backbone.yml');
+      loadAtom('config/backbone/half_backbone.yml');
     } else {
-      loadNucleus('config/backbone/back.yml');
+      loadAtom('config/backbone/back.yml');
     }
   };
 

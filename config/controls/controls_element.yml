@@ -1,16 +1,16 @@
 name: Element Viewer
 mouse:
 styler:
-  nucleus:
-    title:               Nucleus
+  atom:
+    title:               Atom
     controls:
-      nucleus--loadlabel:      ['Select nucleus',   'header']
-      nucleus--selectyml:      [ null,              'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
+      atom--loadlabel:      ['Select atom',   'header']
+      atom--selectyml:      [ null,              'selectyml', 'carbon.yml', 'atom', 'config/atom',       'atomizer.ajax_yml_load']
       hr1:                     [ null,              'hr']
-      nucleus--savelabel:      ['Save new nucleus', 'header']
-      nucleus--saveyml:        [ null,              'saveyml',   'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_save']
+      atom--savelabel:      ['Save new atom', 'header']
+      atom--saveyml:        [ null,              'saveyml',   'carbon.yml', 'atom', 'config/atom',       'atomizer.ajax_yml_save']
       hr2:                     [ null,              'hr']
-      nucleus--position:       ['Position',         'position', [0, 0, 0], [-1000, 1000, 1]]
+      atom--position:       ['Position',         'position', [0, 0, 0], [-1000, 1000, 1]]
   build:
     title:               Build Atom
     controls:

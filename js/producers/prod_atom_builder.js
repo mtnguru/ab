@@ -7,9 +7,9 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var viewer = _viewer;
   var abc = ['a', 'b', 'c'];
 
-  var nucleus;
-  var nucleusFile;
-  var userNucleusFile;
+  var atom;
+  var atomNid;
+  var userAtomNid;
 
   var editNuclet;
   var nucletEditForm =    document.getElementById('hidden-nuclet');
@@ -29,13 +29,13 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   nucletDelete.addEventListener('click', onNucletDelete);
 
   function onAngleChanged(event) {
-    viewer.nucleus.changeNucletAngle(editNuclet.az.id, event.target.value);
+    viewer.atom.changeNucletAngle(editNuclet.az.id, event.target.value);
     viewer.render();
   }
 
   function onNucletDelete(event) {
     // Delete the protons from the
-    delete viewer.nucleus.az().nuclets[editNuclet.az.id];
+    delete viewer.atom.az().nuclets[editNuclet.az.id];
     viewer.nuclet.deleteNuclet(editNuclet);
     nucletEditForm.classList.add('az-hidden');
     viewer.render();
@@ -43,13 +43,17 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
 
   function onNucletAddButton(event) {
     var id = event.target.id.split('-',2)[1];
-    var nuclet = viewer.nucleus.addNuclet(id);
+    var nuclet = viewer.atom.addNuclet(id);
     setEditNuclet(nuclet);
     viewer.render();
   }
 
   var hoverObjects = function hoverObjects() {
-    return viewer.objects.optionalProtons;
+    if (viewer.objects.optionalProtons) {
+      return viewer.objects.optionalProtons;
+    } else {
+      return [];
+    }
 
   };
 
@@ -106,8 +110,10 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
         editNuclet = intersects[0].object.parent.parent;
         nucletEditForm.classList.remove('az-hidden');
         setEditNuclet(editNuclet);
-        nucletEditForm.style.top =  (event.clientY - 250) + 'px';
-        nucletEditForm.style.left = (event.clientX - 300)+ 'px';
+//      nucletEditForm.style.top =  (event.clientY - 250) + 'px';
+//      nucletEditForm.style.left = (event.clientX - 300)+ 'px';
+        nucletEditForm.style.top =  10  +'px';
+        nucletEditForm.style.left = 214 + 'px';
         return false;
       }
     }
@@ -119,8 +125,8 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
 
     label.innerHTML = id;
 
-    if (viewer.nucleus.az().nuclets[id]) {
-      div.innerHTML = viewer.nucleus.az().nuclets[id].az.state;
+    if (viewer.atom.az().nuclets[id]) {
+      div.innerHTML = viewer.atom.az().nuclets[id].az.state;
     } else {
       div.innerHTML = '';
       var button = document.createElement('input');
@@ -171,12 +177,12 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   }
 
   function setDefaults() {
-    userNucleusFile = localStorage.getItem('atomizer_builder_nucleus');
-    if (userNucleusFile && userNucleusFile != 'undefined') {
-      var selectyml = document.getElementById('nucleus--selectyml');
+    userAtomFile = localStorage.getItem('atomizer_builder_atom');
+    if (userAtomFile && userAtomFile != 'undefined') {
+      var selectyml = document.getElementById('atom--selectyml');
       if (selectyml) {
         select = selectyml.querySelector('select');
-        select.value = userNucleusFile;
+        select.value = userAtomFile;
       }
       return;
     }
@@ -185,16 +191,19 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var createView = function () {
 
     viewer.nuclet = Drupal.atomizer.nucletC(viewer);
-    viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
+    viewer.atom = Drupal.atomizer.atomC(viewer);
 
-    // Load and display the default nucleus.
-    userNucleusFile = localStorage.getItem('atomizer_builder_nucleus');
-    nucleusFile = (userNucleusFile && userNucleusFile != 'undefined') ? userNucleusFile : viewer.view.defaultNucleus;
+    // Load and display the default atom
+    userAtomNid = localStorage.getItem('atomizer_builder_atom_nid');
+    if (userAtomNid == 'undefined') {
+      // Use the backbone.
+      atomNid = 73;
+    } else {
+      atomNid = (userAtomNid && userAtomNid != 'undefined') ? userAtomNid : 39;
 
-    viewer.view.nucleus = viewer.nucleus.loadNucleus(
-      'config/nucleus/' + nucleusFile,
-      {position: {x: 0, y: 0, z: 0}}
-    );
+    }
+
+    viewer.view.atom = viewer.atom.loadAtom(atomNid);
 
     // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
     viewer.view.ghostProton = viewer.nuclet.makeProton('ghost', 1, {x: 300, y: 50, z: 0});
@@ -206,7 +215,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   for(var i = radios.length - 1; i > 0; i--) {
     radios[i].onclick = function (event) {
       if (event.target.tagName == 'INPUT') {
-        editNuclet = viewer.nucleus.changeNucletState(editNuclet, event.target.value);
+        editNuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
         viewer.render();
       }
     }

@@ -1,0 +1,59 @@
+@import "variables";
+
+#views-exposed-form-az-atom-select-nuclei {
+
+  font-size: 12px;
+  .js-form-item {
+    clear: both;
+    margin: 1px 0;
+  }
+  label {
+    display: inline-block;
+    vertical-align: top;
+    font-weight: bold;
+    width: 10em;
+    font-size: 12px;
+    text-align: right;
+    margin: 8px 15px 0 0;
+  }
+  input {
+    padding: 2px 6px;
+    width: 12em;
+  }
+}
+
+.view-content {
+
+  table.views-table {
+    font-size: 13px;
+    th {
+      font-weight: normal;
+      font-size: 100%;
+      border: solid 1px $color-border;
+      background: $color-button;
+      a {
+        color: white;
+      }
+      &.views-field-field-atomic-number,
+      &.views-field-field__p {
+        text-align: center;
+      }
+    }
+    td {
+      border: solid 1px $az-color-border;
+      &.is-active {
+        background: $color-active;
+      }
+      &.views-field-field-atomic-number,
+      &.views-field-field__p {
+        text-align: center;
+      }
+    }
+  }
+}
+
+body#landing_page-atom-builder {
+  .ui-widget-overlay {
+    background: none;
+  }
+}

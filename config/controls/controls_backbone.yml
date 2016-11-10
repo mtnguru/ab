@@ -15,13 +15,13 @@ styler:
     controls:
       hr1:                     [ null,              'hr']
       backbone--loadlabel:     ['Select backbone file',   'header']
-      backbone--selectyml:     [ null,              'selectyml', 'backbone.yml', 'nucleus', 'config/backbone',    'atomizer.ajax_yml_load']
+      backbone--selectyml:     [ null,              'selectyml', 'backbone.yml', 'atom', 'config/backbone',    'atomizer.ajax_yml_load']
       hr2:                     [ null,              'hr']
       backbone--savelabel:     ['Save backbone', 'header']
       backbone--saveyml:       [ null,              'saveyml',   'backbone.yml', 'backbone', 'config/backbone',   'atomizer.ajax_yml_save']
       hr3:                     [ null,              'hr']
-      nucleus--position:       ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
-      nucleus--rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
+      atom--position:       ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
+      atom--rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
 
   style:
     title:               Styles

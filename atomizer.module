@@ -28,19 +28,19 @@ function atomizer_help($route_name, RouteMatchInterface $route_match) {
 /**
  * Implements hook_form_FORM_ID_alter().
  *
- * Alter the node_nucleus_form.
+ * Alter the node_atom_form.
  *
  * @param $form
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  */
-function atomizer_form_node_nucleus_form_alter(&$form, FormStateInterface $form_state) {
+function atomizer_form_node_atom_form_alter(&$form, FormStateInterface $form_state) {
 //$form['field_atomic_structure']['#access'] = false;
   $form['actions']['preview']['#access'] = false;
   $form['actions']['submit']['#access'] = true;
   $form['actions']['publish']['#value'] = t('Create New');
   $form['actions']['unpublish']['#access'] = false;
 
-  $form['title']['widget'][0]['value']['#title'] = t('Nucleus Name');
+  $form['title']['widget'][0]['value']['#title'] = t('Atom Name');
 
   unset($form['field__inner_electrons']['widget'][0]['value']['#description']);
   unset($form['field__outer_electrons']['widget'][0]['value']['#description']);

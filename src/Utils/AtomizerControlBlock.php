@@ -86,18 +86,18 @@ class AtomizerControlBlock {
               '#default_value' => $controlConf[2],
               '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/' . $controlConf[4], '/\.yml/'),
             ),
-            'overwrite_button' => array(
+/*          'overwrite_button' => array(
               '#type' => 'item',
               '#prefix' => '<div id="' . $id . '--button" class="button-wrapper">',
               '#suffix' => '</div>',
               '#markup' => t('Overwrite'),
-            ),
-            'overwrite_message' => array(
+            ), */
+/*          'overwrite_message' => array(
               '#type' => 'item',
               '#prefix' => '<div id="' . $id . '--message" class="message-wrapper">',
               '#suffix' => '</div>',
               '#markup' => t(''),
-            )
+            ) */
           );
           $addValue = true;
           break;
@@ -106,24 +106,24 @@ class AtomizerControlBlock {
           $control = array(
             '#type' => 'container',
             '#attributes' => array('class' => array('saveyml')),
-            'name' => array(
+/*          'name' => array(
               '#type' => 'textfield',
               '#maxlength' => 24,
               '#title' => 'Name',
-            ),
-            'filename' => array(
+            ), */
+/*          'filename' => array(
               '#type' => 'textfield',
               '#maxlength' => 16,
               '#title' => 'File name',
               '#description' => t('Only characters, numbers, and underscores allowed - Leave blank to have it automatically generated.'),
-            ),
-            /*          'description' => array(
-                          '#type' => 'textarea',
-                          '#maxlength' => 30,
-                          '#title' => 'Description',
-                          '#maxlength' => 64,
-                          '#rows' => 4,
-                        ), */
+            ), */
+/*          'description' => array(
+              '#type' => 'textarea',
+              '#maxlength' => 30,
+              '#title' => 'Description',
+              '#maxlength' => 64,
+              '#rows' => 4,
+            ), */
             'save_button' => array(
               '#type' => 'item',
               '#prefix' => '<div id="' . $id . '--button" class="button-wrapper">',
@@ -141,27 +141,25 @@ class AtomizerControlBlock {
           break;
 
         case 'link':
-          if (empty($controlConf[3])) {
-            $controlConf[3] = [];
+          if (empty($controlConf[4])) {
+            $controlConf[4] = [];
           }
           $control = [
             '#type' => 'container',
             'link' => [
               '#type' => 'link',
               '#title' => $controlConf[0],
-//            '#url' => $
-//            '#url' => Url::fromRoute('node.add', ['node_type' => 'nucleus']),
-//            '#url' => Url::fromRoute('view.view_select_nuclei.select_nuclei'),
-              '#url' => Url::fromRoute($controlConf[2], $controlConf[3]),
-//            '#url' => Url::fromInternalUri('internal:/node/add'),
-//            '#url' => '/node/add',
+              '#url' => Url::fromRoute($controlConf[3], $controlConf[4]),
+              '#attached' => ['library' => ['core/drupal.dialog.ajax']],
               '#attributes' => [
                 'class' => ['use-ajax'],
-                'data-dialog-type' => 'modal',
+                'data-dialog-type' => $controlConf[2],
                 'data-dialog-options' => Json::encode([
+                  'dialogClass' => 'az-dialog',
                   'width' => 'auto',
-                  'draggable' => true,
-                  'autoResize' => true,
+                  'draggable' => TRUE,
+                  'autoResize' => FALSE,
+                  'position' => ['my' => 'right top', 'at' => 'right-10 top-10'],
                 ]),
               ],
             ],
@@ -171,7 +169,7 @@ class AtomizerControlBlock {
         case 'button':
           $control = array(
             '#type' => 'button',
-            '#attributes' => array('onclick' => 'return (false);'),
+//          '#attributes' => array('onclick' => 'return (false);'),
             '#value' => $controlConf[0],
           );
           $addValue = true;
@@ -180,7 +178,6 @@ class AtomizerControlBlock {
         case 'range':
           $control = AtomizerControlBlock::makeRangeControl(
             $id,
-//          '&nbsp;&nbsp;' . $controlConf[0],
             $controlConf[0],
             $defaultValue,
             $controlConf[3][0],

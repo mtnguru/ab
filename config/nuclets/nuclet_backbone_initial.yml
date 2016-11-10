@@ -95,7 +95,7 @@ geoGroups:
     geometries:
       solid:
         shape: icosahedron
-        scale: 1.745
+        scale: 1.37
         wireframe: true
         attachFaces: true
         faces:
@@ -184,7 +184,7 @@ geoGroups:
     geometries:
       solid:
         shape: dodecahedron
-        scale: 1.10
+        scale: 1.31
         wireframe: true
         faces: true
       axes:
@@ -216,7 +216,7 @@ geoGroups:
     geometries:
       framework:
         shape: octahedron
-        scale: 1.06
+        scale: 1.25
         electrons: 
           - default
           - default

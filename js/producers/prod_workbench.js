@@ -101,7 +101,7 @@ Drupal.atomizer.producers.workbenchC = function (_viewer) {
 
   var createView = function () {
     viewer.nuclet = Drupal.atomizer.nucletC(viewer);
-    viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
+    viewer.atom = Drupal.atomizer.atomC(viewer);
     var nuclet = viewer.nuclet;
 
     var octolet = createObject('octolet',  {x: 0, y: 92, z: -200});

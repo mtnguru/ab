@@ -6,13 +6,13 @@
 Drupal.atomizer.producers.platonic_solidsC = function (_viewer) {
   var viewer = _viewer;
   viewer.nuclet = Drupal.atomizer.nucletC(viewer);
-  viewer.nucleus = Drupal.atomizer.nucleusC(viewer);
-  var nucleusFilename;
+  viewer.atom = Drupal.atomizer.atomC(viewer);
+  var atomFilename;
 
   var createView = function () {
-    nucleusFilename = viewer.view.defaultNucleus;
-    viewer.nucleus.loadNucleus(
-      'config/nucleus/' + nucleusFilename,
+    atomFilename = viewer.view.defaultAtom;
+    viewer.atom.loadAtom(
+      'config/atom/' + atomFilename,
       {
         position: {
           x: 0,

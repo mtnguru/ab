@@ -103,6 +103,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    */
   function onButtonClicked(event) {
 
+    event.preventDefault();
     var args = this.id.split("--");
     switch (args[1]) {
       case 'selectyml':
@@ -125,13 +126,6 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
             name: name,
             filepath: viewer[args[0]].getYmlDirectory() + '/' + filename.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_')
           });
-        }
-        break;
-      case 'reset':
-        if (args[0] == 'camera') {
-          viewer.style.cameraReset();
-        } else {
-          viewer[args[0]].reset();
         }
         break;
       default:
@@ -168,7 +162,6 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     showStylerBlock();
     styler.addEventListener("change", showStylerBlock);
 
-    // Initialize the Mouse Mode radio buttons
 //  var radios = document.forms["atomizer-controls-form"].elements["mouse--mode"];
 //  for(var i = 0, max = radios.length; i < max; i++) {
 //    radios[i].onclick = function (event) {
@@ -212,7 +205,6 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
             break;
           case 'selectyml':
             element.addEventListener("change", selectYmlChanged);
-//          document.getElementById(id + '--button').addEventListener("click", onButtonClicked);
             break;
           case 'link':
           case 'button':

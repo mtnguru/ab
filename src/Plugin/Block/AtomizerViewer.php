@@ -53,7 +53,7 @@ class AtomizerViewer extends BlockBase {
     $menu = [
       // Nuclet
       //   These will be dynamic - changes take effect immediately - no need to submit a form.
-      //   Pressing save nucleus will save everything at once.  So just make these controls like the controls file.
+      //   Pressing save atom will save everything at once.  So just make these controls like the controls file.
       //   They can be in a form - Do I need a file to define them?  Not really - but maybe I could use the current control block.
       //   I need to extract the buildControl block thingy to a separate file - I can make it it's own class?
       //   These can be buttons run through the controls module

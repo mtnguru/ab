@@ -33,10 +33,16 @@ atomizer.listDirectory:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::listDirectory'
   requirements:
     _permission: 'access content'
-atomizer.loadNucleusForm:
-  path: '/ajax-ab/loadNucleusForm'
+atomizer.loadAtomForm:
+  path: '/ajax-ab/loadAtomForm'
   defaults:
-    _controller: '\Drupal\atomizer\Controller\AtomizerController::loadNucleusForm'
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::loadAtomForm'
+  requirements:
+    _permission: 'access content'
+atomizer.loadAtom:
+  path: '/ajax-ab/loadAtom'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::loadAtom'
   requirements:
     _permission: 'access content'
 

@@ -3,7 +3,8 @@
 // Atom Builder Controls form
 .block-atomizer-controls {
   #hidden-nuclet {
-    position: fixed;
+    position: absolute;
+    z-index: 100;
     padding: 5px;
     background: $color-nuclet-edit;
     border: solid 2px $color-border;
@@ -22,6 +23,9 @@
     }
     label {
       margin: 0;
+    }
+    textarea#edit-field-atomic-structure-0-value {
+      font-family: "New Courier";
     }
     #edit-nuclet-grow-0,
     #edit-nuclet-grow-1 {

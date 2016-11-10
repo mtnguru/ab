@@ -12,7 +12,10 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   var currentSet = {};
   var defaultSet = {};
   var styleSetDirectory = viewer.atomizer.styleSetDirectory;
-  var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'decalet'];
+  var currentStyleName = '';
+//var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'decalet'];
+  var saveMessage = document.getElementById('style--saveMessage');
+  var saveNewMessage = document.getElementById('style--saveNewMessage');
 
   /**
    * Load a style yml file and make it the current style set.
@@ -45,6 +48,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
    */
 // The current style set has been saved,
   var savedYml = function (response) {
+    saveNewMessage.innerHTML = '.... Loading Style list';
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/listDirectory',
       {
@@ -61,7 +65,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
    * @param response
    */
   var updateStyleSelect = function updateStyleSelect(response) {
-    var select = document.getElementById('style--selectyml').querySelector('select');
+    var select = document.getElementById('edit-selectyml');
 
     // Remove current options from style select widget
     while (select.hasChildNodes()) {
@@ -77,32 +81,13 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     }
 
     // Set select to the currently selected file
-    select.value = response[0].filepath;
+    select.value = currentSet.filepath.replace(/^.*[\\\/]/, '');
 
     // Clear the Name and File name fields
-    var inputs = document.getElementById('style--saveyml').querySelectorAll('input');
-    inputs[0].value = '';
-    inputs[1].value = '';
-  };
+    var inputs = document.getElementById('style--saveNewName').value = '';
 
-  /**
-   * Save the current styles to a yml file.
-   *
-   * @param styles
-   */
-  var saveYml = function (styles) {
-    // Verify they entered a name.  If not popup an alert. return
-    currentSet.name = styles.name;
-    currentSet.filepath = styles.filepath;
-    Drupal.atomizer.base.doAjax(
-      '/ajax-ab/saveYml',
-      { name: styles.name,
-        component: 'style',
-        filepath: styles.filepath,
-        ymlContents: currentSet },
-      savedYml
-    );
-    return;
+    saveNewMessage.innerHTML = 'Style saved successfully';
+    setTimeout(function () { saveNewMessage.innerHTML = ''; }, 3000);
   };
 
   /**
@@ -110,15 +95,15 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
    *
    * @param styles
    */
-  var overwriteYml = function (styles) {
+  var saveStyle = function (styleSet) {
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/saveYml',
-      { name: currentSet.name,
+      { name: styleSet.name,
         component: 'style',
-        filepath: currentSet.filepath,
-        ymlContents: currentSet },
-      null  // TODO: Put in useful error codes and have them be displayed.
+        filepath: styleSet.filepath,
+        ymlContents: styleSet },
+      savedYml
     );
     return;
   };
@@ -175,17 +160,6 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   /**
-   * Reset the camera to the starting position.
-   */
-  var cameraReset = function cameraReset() {
-    viewer.camera.position.x = viewer.style.get('camera--position', 'x');
-    viewer.camera.position.y = viewer.style.get('camera--position', 'y');
-    viewer.camera.position.z = viewer.style.get('camera--position', 'z');
-    viewer.camera.lookAt(viewer.scene.position);
-    viewer.render();
-  };
-
-  /**
    * Apply a control setting to the proper scene elements.
    *
    * @param id
@@ -222,8 +196,8 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
         viewer.scene.traverse(function (node) {
           var nodeNames = node.name.split("-");
           var ok = false;
-          if (args[0] == 'nucleus') {
-            if (nodeNames[0] == 'nucleus') {
+          if (args[0] == 'atom') {
+            if (nodeNames[0] == 'atom') {
               ok = true;
             }
           } else if (args[0] == 'decahedron') {
@@ -297,12 +271,15 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                   if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
                     for (var i = 0; i < node.children.length; i++) {
                       node.children[i].material.linewidth = value;
+                      node.children[i].material.visible = (value >.05);
                     }
                   } else {
+                    node.material.visible = (value >.05);
                     node.material.wireframeLinewidth = value;
                   }
                 } else {
                   node.material.linewidth = value;
+                  node.material.visible = (value >.05);
                 }
                 break;
 
@@ -341,18 +318,13 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
    * @param type
    */
   var setStyle = function setStyle(value, id, type) {
-    var index;
-    if (index == null) {
-      if (!currentSet.styles[id]) {
-        currentSet.styles[id] = {
-          'defaultValue': value,
-          'type': type
-        }
+    if (!currentSet.styles[id]) {
+      currentSet.styles[id] = {
+        'defaultValue': value,
+        'type': type
       }
     } else {
-      if (!currentSet.styles[id] && !currentSet.styles[id][index]) {
-        currentSet.styles[id]['defaultValue'][index] = value;
-      }
+//    currentSet.styles[id]['defaultValue'] = value;
     }
   };
 
@@ -380,15 +352,44 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     }
   };
 
-  /**
-   * Return the entire current style set.
-   *
-   * @TODO - is this used, it should be deleted.
-   *
-   * @returns {*}
-   */
-  var getCurrentControls = function() {
-    return currentSet.styles;
+  var buttonClicked = function buttonClicked (id) {
+    switch (id) {
+      case 'style--saveButton':
+        saveStyle(currentSet);
+        break;
+      case 'style--saveNewButton':
+        var name = document.getElementById('style--saveNewName').value;
+        if (name.length) {
+          var filename = name.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_');
+          if (filename.indexOf('.yml') == -1) {
+            filename += '.yml';
+          }
+          // Save the yml file
+
+          currentSet.name = name;
+          currentSet.filepath = styleSetDirectory + '/' + filename;
+          saveNewMessage.classList.remove('az-error');
+          saveNewMessage.innerHTML = '.... Saving style';
+
+          saveStyle(currentSet);
+
+          setTimeout(function () { saveNewMessage.innerHTML = '' }, 3000)
+        } else {
+          saveNewMessage.innerHTML = 'Please enter a Name....';
+          saveNewMessage.classList.add('az-error');
+        }
+        break;
+      case 'style--reset':
+        reset();
+        break;
+      case 'style--cameraReset':
+        viewer.camera.position.x = viewer.style.get('camera--position', 'x');
+        viewer.camera.position.y = viewer.style.get('camera--position', 'y');
+        viewer.camera.position.z = viewer.style.get('camera--position', 'z');
+        viewer.camera.lookAt(viewer.scene.position);
+        viewer.render();
+        break;
+    }
   };
 
   /// Load the default style set.
@@ -402,15 +403,12 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
 
   // Return references to functions available for external use.
   return {
-    reset: reset,
-    cameraReset: cameraReset,
+    buttonClicked: buttonClicked,
     applyControl: applyControl,
     loadYml: loadYml,
-    saveYml: saveYml,
-    overwriteYml: overwriteYml,
     get: getStyle,
     set: setStyle,
-    getCurrentControls: getCurrentControls,
-    getYmlDirectory: function () { return styleSetDirectory; }
+    getCurrentControls: function() { return currentSet.styles; },
+    getYmlDirectory:    function () { return styleSetDirectory; }
   };
 };

@@ -1,4 +1,4 @@
 atomizer display structure:
   title: 'Atomizer Display Structure'
-  description: 'Display the structure of the nucleus on the Nucleus edit form.'
+  description: 'Display the structure of the atom on the Atom edit form.'
   restrict access: TRUE

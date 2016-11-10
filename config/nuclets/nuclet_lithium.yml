@@ -31,8 +31,8 @@ geoGroups:
     geometries:
       solid:
         shape: decahedron
-        scale: 1.70
-        scaleHeight: 1.25
+        scale: 1.30
+        scaleHeight: .85
         wireframe: true
         attachFaces: true
         faces:

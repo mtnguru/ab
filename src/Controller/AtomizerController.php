@@ -6,6 +6,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\node\Entity\Node;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\FormBuilderInterface;
@@ -13,8 +14,8 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Component\Serialization\Yaml;
 
 use Drupal\atomizer\Ajax\LoadYmlCommand;
+use Drupal\atomizer\Ajax\LoadAtomCommand;
 use Drupal\atomizer\Ajax\ListDirectoryCommand;
-use Drupal\atomizer\Ajax\SaveYmlCommand;
 
 // use Symfony\Component\Yaml\Yaml;
 
@@ -25,6 +26,11 @@ use Drupal\atomizer\Ajax\SaveYmlCommand;
  */
 class AtomizerController extends ControllerBase {
 
+  /**
+   * Load a YML file.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
   public function loadYml() {
     $data = json_decode(file_get_contents("php://input"), true);
 
@@ -35,6 +41,10 @@ class AtomizerController extends ControllerBase {
     return $response;
   }
 
+  /**
+   * Save a YML file.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
   public function saveYml() {
     $data = json_decode(file_get_contents("php://input"), true);
 
@@ -44,6 +54,11 @@ class AtomizerController extends ControllerBase {
     return $response;
   }
 
+  /**
+   * List the contents of a directory.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
   public function listDirectory() {
     $data = json_decode(file_get_contents("php://input"), true);
 
@@ -56,10 +71,15 @@ class AtomizerController extends ControllerBase {
     return $response;
   }
 
-  public function loadNucleusForm() {
+  /**
+   * Load the atom edit form.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
+  public function loadAtomForm() {
     $node = \Drupal::entityTypeManager()
       ->getStorage('node')
-      ->create(array('type' => 'nucleus'));
+      ->create(array('type' => 'atom'));
 
     $form = \Drupal::entityTypeManager()
       ->getFormObject('node', 'default')
@@ -67,7 +87,7 @@ class AtomizerController extends ControllerBase {
     $content = \Drupal::formBuilder()->getForm($form, 'popup');
 
     $response = new AjaxResponse();
-    $title = 'Nucleus Edit Form';
+    $title = 'Atom Edit Form';
     $html = drupal_render($content);
 
     $is_modal = true;
@@ -79,6 +99,32 @@ class AtomizerController extends ControllerBase {
       $selector = '#ajax-test-dialog-wrapper-1';
       $response->addCommand(new OpenDialogCommand($selector, $title, $html));
     }
+    return $response;
+  }
+
+  /**
+   * Load a atom.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
+  public function loadAtom() {
+    $response = new AjaxResponse();
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    $node = Node::load($data['nid']);
+
+    // Render the node/atom using teaser view mode.
+    $data['teaser'] = render(\Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser'));
+
+    // Get the atomic structure field.
+    $field = $node->field_atomic_structure;
+    if (!empty($field)) {
+      $data['atomConf'] = Yaml::decode($field->value);
+    } else {
+      $data['atomConf'] = 'Atom not found';
+    }
+
+    $response->addCommand(new LoadAtomCommand($data));
     return $response;
   }
 }

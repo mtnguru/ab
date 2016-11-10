@@ -547,22 +547,22 @@ styles:
   ghostFaces--scale:
     defaultValue: 1
     type: range
-  nucleus--position--x:
+  atom--position--x:
     defaultValue: 0
     type: position
-  nucleus--position--y:
+  atom--position--y:
     defaultValue: 0
     type: position
-  nucleus--position--z:
+  atom--position--z:
     defaultValue: 0
     type: position
-  nucleus--rotation--x:
+  atom--rotation--x:
     defaultValue: 0
     type: rotation
-  nucleus--rotation--y:
+  atom--rotation--y:
     defaultValue: 0
     type: rotation
-  nucleus--rotation--z:
+  atom--rotation--z:
     defaultValue: 0
     type: rotation
   protonVertexid--color:

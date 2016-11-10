@@ -1,5 +1,5 @@
 
-.node-nucleus-form {
+.node-atom-form {
   font-size: 13px;
   .book-outline-form,
   .menu-link-form,
@@ -9,11 +9,14 @@
       font-family: monospace;
     }
   }
+  input[type='text'] {
+    padding: 3px 0;
+  }
   .form-autocomplete {
     width: 200px;
   }
   .form-item {
-    margin: 5px 0;
+    margin: 3px 0;
   }
   label {
     width: 125px;

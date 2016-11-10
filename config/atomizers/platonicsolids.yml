@@ -5,5 +5,5 @@ views:
   atoms:
     name: Platonic solids
     producer: platonicsolids
-    defaultNucleus: carbon.yml
+    defaultAtom: carbon.yml
     styleSetPath: config/style/platonicsolids/base.yml

@@ -19,14 +19,9 @@ Drupal.atomizer.nucletC = function (_viewer) {
     default:    viewer.style.get('proton-default--color'),
     ghost:      viewer.style.get('proton-ghost--color'),
     valence:    viewer.style.get('proton-valence--color'),
-    isotope:    viewer.style.get('proton-isotope--color'),
     grow:       viewer.style.get('proton-grow--color'),
     polar:      viewer.style.get('proton-polar--color'),
     lithium:    viewer.style.get('proton-lithium--color'),
-    newneutron: viewer.style.get('proton-newneutron--color'),
-    newproton:  viewer.style.get('proton-newproton--color'),
-    vattach:    viewer.style.get('proton-vattach--color'),
-    iattach:    viewer.style.get('proton-iattach--color')
   };
 
   var protonRadius = viewer.style.get('proton--radius');
@@ -91,10 +86,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @param geometry
    * @returns {THREE.LineSegments}
    */
-  function createLine(name, vertices) {
+  function createLine(name, vertices, opacity) {
     var lineGeometry = new THREE.Geometry();
-//  var opacity = viewer.style.get(name + 'Axes--opacity');
-    var opacity = 1;
     var lineMaterial = new THREE.LineBasicMaterial({
       color: 0xff00ff,
       opacity: opacity,
@@ -553,30 +546,24 @@ Drupal.atomizer.nucletC = function (_viewer) {
                 protonRadius * 0.1616236535868876,
                 protonRadius * .0998889113026354
               );
-              nucletConf.protons = [10, 1, 4, 5, 3, 11, 9];
-              if (id != 'N0') {
-                nucletConf.protons[10] = undefined;
-              }
+//            nucletConf.protons = [10, 1, 4, 5, 3, 11, 9];
               break;
             case 'backbone-initial':
-              nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
-              if (id != 'N0') {
-                nucletConf.protons[10] = undefined;
-              }
+//            nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
               break;
             case 'carbon':
             case 'backbone-final':
-              nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,10,11];
-              if (id != 'N0') {
-                nucletConf.protons[10] = undefined;
-              }
+//            nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,10,11];
+          }
+          if (id != 'N0') {
+            nucletConf.protons[10] = undefined;
           }
 
           nuclet.az.protons = [];
           nuclet.az.protonGeometry = geometry;
           for (var p in geo.protons) {
             if (!geo.protons.hasOwnProperty(p)) continue;
-//          if (!nucletConf.protons.contains(p)) continue;
+            if (!nucletConf.protons.contains(p)) continue;
             var proton = makeProton(geo.protons[p].type, opacity, geometry.vertices[p]);
             addObject('protons', proton);
             if (geo.protons[p].optional && geo.protons[p].optional == true) {
@@ -748,20 +735,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     //// Add attachAxis line
 
-    var geometry = createGeometry(
-      'icosahedron',
-      '',
-      protonRadius,
-      1
-    );
-    var radians = 90 / 360 * 2 * Math.PI;
-    geometry.applyMatrix(new THREE.Matrix4().makeRotationY(radians));
-    var line = createLine('attach',
-      [geometry.vertices[9], geometry.vertices[10]]
-    );
+    var geometry = createGeometry('icosahedron', '', protonRadius, 1);
+    geometry.applyMatrix(new THREE.Matrix4().makeRotationY(90 / 360 * 2 * Math.PI));
+    var line = createLine('attach', [geometry.vertices[9], geometry.vertices[10]], viewer.style.get('attachLines--opacity'));
     line.scale.set(5, 5, 5);
     nuclet.add(line);
-//  nuclet.az.protons[9].position.set(0, 0, 0);
 
     //// Create inner shell
     var innerShell = new THREE.Object3D();
@@ -790,11 +768,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
   }
 
   function deleteNuclet(nuclet) {
-    if (viewer.nucleus.az().nuclets[nuclet.az.id + '0']) {
-      deleteNuclet(viewer.nucleus.az().nuclets[nuclet.az.id + '0'])
+    if (viewer.atom.az().nuclets[nuclet.az.id + '0']) {
+      deleteNuclet(viewer.atom.az().nuclets[nuclet.az.id + '0'])
     }
-    if (viewer.nucleus.az().nuclets[nuclet.az.id + '1']) {
-      deleteNuclet(viewer.nucleus.az().nuclets[nuclet.az.id + '1'])
+    if (viewer.atom.az().nuclets[nuclet.az.id + '1']) {
+      deleteNuclet(viewer.atom.az().nuclets[nuclet.az.id + '1'])
     }
 
     for (var i = 0; i < nuclet.az.protons.length; i++) {
@@ -802,7 +780,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
         viewer.objects.protons = viewer.objects.protons.filter(function(e) { return e !== nuclet.az.protons[i]; })
       }
     }
-    // Remove nuclet from the nucleus
+    // Remove nuclet from the atom
     nuclet.parent.parent.parent.remove(nuclet.parent.parent);
   }
 

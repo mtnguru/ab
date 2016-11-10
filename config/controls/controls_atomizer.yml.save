@@ -31,21 +31,21 @@ hidden:
 #     nuclet--grow-1:          ['&nbsp;&nbsp;1',  'html',    '--']
       nuclet--delete:          ['Delete',         'button']
 styler:
-  nucleus:
-    title:               Nucleus
+  atom:
+    title:               Atom
     controls:
 #     hr1:                     [ null,            'hr']
-      nucleus--loadlabel:      ['Select nucleus', 'header']
-      nucleus--selectyml:      [ null,            'selectyml', 'carbon.yml', 'nucleus', 'config/nucleus',       'atomizer.ajax_yml_load']
-      nucleus--information:    [ null,            'container']
+      atom--loadlabel:      ['Select atom', 'header']
+      atom--selectyml:      [ null,            'selectyml', 'carbon.yml', 'atom', 'config/atom',       'atomizer.ajax_yml_load']
+      atom--information:    [ null,            'container']
       hr2:                     [ null,            'hr']
-      nucleus--nuclets-label:  ['Nuclets',        'header']
-      nucleus--nuclets:        [ null,            'container']
+      atom--nuclets-label:  ['Nuclets',        'header']
+      atom--nuclets:        [ null,            'container']
       hr3:                     [ null,            'hr']
-      nucleus--new:            ['Save New',       'button']
-      nucleus--overwrite:      ['Overwrite',      'button']
-      nucleus--reset:          ['Reset',          'button']
-      nucleus--delete:         ['Delete',         'button']
+      atom--new:            ['Save New',       'button']
+      atom--overwrite:      ['Overwrite',      'button']
+      atom--reset:          ['Reset',          'button']
+      atom--delete:         ['Delete',         'button']
   nuclet-debug:
     title:               Nuclet Debug
     controls:

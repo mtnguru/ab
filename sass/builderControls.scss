@@ -33,11 +33,6 @@
   legend {
     color: $color-text;
   }
-  #hidden-controls {
-//  .control-block {
-//    display: none;
-//  }
-  }
   .form-item-styler {
     margin: 0 0 10px;
     select {
@@ -72,15 +67,22 @@
     width: 80%;
 
   }
-  .styler-controls .control-block {
-    display: none;
-  }
   .control-block {
     font-size: 12px;
     hr {
       margin: 10px 0 15px;
       border-top: 1px solid #bbb;
     }
+  }
+  #styler-controls {
+    .control-block {
+      display: none;
+    }
+  }
+  #hidden-controls {
+    //  .control-block {
+    //    display: none;
+    //  }
   }
 
   .az-header {
@@ -139,6 +141,10 @@
   #style--name {
     width: 100%;
   }
+  #style--newfilename {
+    width: 132px;
+    margin-left: 10px;
+  }
   .form-type-color {
     margin: 10px 0 2px;
     &not:first-child {
@@ -160,6 +166,11 @@
       padding: 0;
       border: 0;
       -webkit-box-shadow: 0 0 0 0;
+    }
+  }
+  #control-particles {
+    .form-type-color {
+      margin: 2px 0;
     }
   }
   .form-type-checkbox {

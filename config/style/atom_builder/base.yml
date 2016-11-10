@@ -7,37 +7,37 @@ styles:
   electron--radius:
     type: range
     defaultValue: 5
-  nucleus--position--x:
+  atom--position--x:
     defaultValue:
       - 0
       - 0
       - 0
     type: position
-  nucleus--position--y:
+  atom--position--y:
     defaultValue:
       - 0
       - 0
       - 0
     type: position
-  nucleus--position--z:
+  atom--position--z:
     defaultValue:
       - 0
       - 0
       - 0
     type: position
-  nucleus--rotation--x:
+  atom--rotation--x:
     defaultValue:
       - 0
       - 0
       - 0
     type: rotation
-  nucleus--rotation--y:
+  atom--rotation--y:
     defaultValue:
       - 0
       - 0
       - 0
     type: rotation
-  nucleus--rotation--z:
+  atom--rotation--z:
     defaultValue:
       - 0
       - 0
@@ -47,22 +47,22 @@ styles:
     defaultValue: '#767676'
     type: color
   proton--opacity:
-    defaultValue: '1'
+    defaultValue: '0.6'
     type: range
   proton--scale:
-    defaultValue: '1'
+    defaultValue: 1
     type: range
   icosaWireframe--scale:
     defaultValue: 1
     type: range
   icosaWireframe--color:
-    defaultValue: '#ffbb33'
+    defaultValue: '#fe4545'
     type: color
   icosaWireframe--opacity:
-    defaultValue: '1'
+    defaultValue: 1
     type: range
   icosaWireframe--linewidth:
-    defaultValue: '2.2'
+    defaultValue: '2'
     type: range
   icosaVertexid--opacity:
     defaultValue: 0
@@ -113,10 +113,10 @@ styles:
     defaultValue: '#000000'
     type: color
   dodecaFaces--opacity:
-    defaultValue: '0.61'
+    defaultValue: '0.35'
     type: range
   dodecaFaceid--opacity:
-    defaultValue: '0'
+    defaultValue: 0
     type: range
   dodecaFaceids--scale:
     defaultValue: 1
@@ -134,7 +134,7 @@ styles:
     defaultValue: 1
     type: range
   octaWireframe--color:
-    defaultValue: '#ffff33'
+    defaultValue: '#ffff00'
     type: color
   octaWireframe--opacity:
     defaultValue: 1
@@ -143,7 +143,7 @@ styles:
     defaultValue: '2'
     type: range
   octaVertexid--opacity:
-    defaultValue: '0'
+    defaultValue: 0
     type: range
   octaVertexids--scale:
     defaultValue: 1
@@ -158,19 +158,19 @@ styles:
     defaultValue: 1
     type: range
   tetraWireframe--scale:
-    defaultValue: '1.02'
+    defaultValue: 1
     type: range
   tetraWireframe--color:
-    defaultValue: '#c73eff'
+    defaultValue: '#0034ff'
     type: color
   tetraWireframe--opacity:
     defaultValue: '1'
     type: range
   tetraWireframe--linewidth:
-    defaultValue: '2.6'
+    defaultValue: '2'
     type: range
   tetraVertexid--opacity:
-    defaultValue: '0'
+    defaultValue: 0
     type: range
   tetraVertexids--scale:
     defaultValue: 1
@@ -227,12 +227,6 @@ styles:
     defaultValue: '#ff00ff'
     type: color
   valence--opacity:
-    defaultValue: 0.3
-    type: range
-  isotope--color:
-    defaultValue: '#0000ff'
-    type: color
-  isotope--opacity:
     defaultValue: 0.3
     type: range
   camera--perspective:
@@ -380,19 +374,19 @@ styles:
     defaultValue: 1
     type: range
   electron--scale:
-    defaultValue: '1'
+    defaultValue: 1
     type: range
   icosa--scale:
-    defaultValue: '1.19'
+    defaultValue: 1
     type: range
   dodeca--scale:
-    defaultValue: '0.83'
+    defaultValue: 1
     type: range
   octa--scale:
-    defaultValue: '0.8'
+    defaultValue: '1.04'
     type: range
   octa--rotation--x:
-    defaultValue: '0'
+    defaultValue: 0
     type: rotation
   octa--rotation--y:
     defaultValue: 0
@@ -473,7 +467,7 @@ styles:
     defaultValue: '#00fcff'
     type: color
   tetraFaces--opacity:
-    defaultValue: '.45'
+    defaultValue: '0.1'
     type: range
   tetraFaceid--opacity:
     defaultValue: 0
@@ -503,7 +497,7 @@ styles:
     defaultValue: '#88cccc'
     type: color
   decaFaces--opacity:
-    defaultValue: '0'
+    defaultValue: 0
     type: range
   decaFaceid--opacity:
     defaultValue: 0
@@ -572,13 +566,13 @@ styles:
     defaultValue: '#fc78fc'
     type: color
   protonVertexid--opacity:
-    defaultValue: '0'
+    defaultValue: 0
     type: range
   protonVertexid--scale:
     defaultValue: 1
     type: range
   nucletAxes--opacity:
-    defaultValue: '0'
+    defaultValue: 0
     type: range
   nucletAxes--scale:
     defaultValue: 4
@@ -659,7 +653,7 @@ styles:
     defaultValue: 0
     type: rotation
   nucletInnerAxes--opacity:
-    defaultValue: '0'
+    defaultValue: 0
     type: range
   nucletInnerAxes--scale:
     defaultValue: 3
@@ -668,7 +662,7 @@ styles:
     defaultValue: 3
     type: range
   nucletOuterAxes--opacity:
-    defaultValue: '0'
+    defaultValue: 0
     type: range
   nucletOuterAxes--scale:
     defaultValue: 2
@@ -694,4 +688,70 @@ styles:
   outerlithium-1--rotation--z:
     defaultValue: 0
     type: rotation
-filepath: config/style/builder/base.yml
+  nuclet--attachAngle:
+    defaultValue: 1
+    type: range
+  attachLines--opacity:
+    defaultValue: 0
+    type: range
+  attachLines--scale:
+    defaultValue: 3
+    type: range
+  attachLines--linewidth:
+    defaultValue: 1
+    type: range
+  nuclet-N00--position--x:
+    defaultValue: 0
+    type: position
+  nuclet-N00--position--y:
+    defaultValue: 0
+    type: position
+  nuclet-N00--position--z:
+    defaultValue: 0
+    type: position
+  nuclet-N00--rotation--x:
+    defaultValue: 0
+    type: rotation
+  nuclet-N00--rotation--y:
+    defaultValue: 0
+    type: rotation
+  nuclet-N00--rotation--z:
+    defaultValue: 0
+    type: rotation
+  nucletInner-N00--position--x:
+    defaultValue: 0
+    type: position
+  nucletInner-N00--position--y:
+    defaultValue: 0
+    type: position
+  nucletInner-N00--position--z:
+    defaultValue: 0
+    type: position
+  nucletInner-N00--rotation--x:
+    defaultValue: 0
+    type: rotation
+  nucletInner-N00--rotation--y:
+    defaultValue: 0
+    type: rotation
+  nucletInner-N00--rotation--z:
+    defaultValue: 0
+    type: rotation
+  nucletOuter-N00--position--x:
+    defaultValue: 0
+    type: position
+  nucletOuter-N00--position--y:
+    defaultValue: 0
+    type: position
+  nucletOuter-N00--position--z:
+    defaultValue: 0
+    type: position
+  nucletOuter-N00--rotation--x:
+    defaultValue: 0
+    type: rotation
+  nucletOuter-N00--rotation--y:
+    defaultValue: 0
+    type: rotation
+  nucletOuter-N00--rotation--z:
+    defaultValue: 0
+    type: rotation
+filepath: config/style/atom_builder/base.yml

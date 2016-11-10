@@ -62,7 +62,9 @@ class AtomizerControlsForm extends FormBase {
     if (isset($controlSet['styler'])) {
       // Create Styler Select list
       foreach ($controlSet['styler'] as $blockName => $block) {
-        $options[$blockName] = $block['title'];
+        if (empty($block['hidden'])) {
+          $options[$blockName] = $block['title'];
+        }
       }
       $form['styler'] = array(
         '#type' => 'select',
