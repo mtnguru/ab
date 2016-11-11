@@ -31,6 +31,26 @@ geoGroups:
             type: polar
           11:
             type: polar
+          12:
+            type: lithium
+          13:
+            type: lithium
+          14:
+            type: lithium
+          15:
+            type: lithium
+          16:
+            type: lithium
+          17:
+            type: lithium
+          18:
+            type: lithium
+          19:
+            type: lithium
+          20:
+            type: lithium
+          21:
+            type: lithium
         tetrahedrons:
           0:
             vertices: [1, 14, 0, 13]
@@ -174,12 +194,18 @@ geoGroups:
         shape: octahedron
         scale: 1.25
         electrons: 
-          - default
-          - default
-          - default
-          - default
-          - default
-          - default
+          0:
+            type: normal
+          1:
+            type: normal
+          2:
+            type: normal
+          3:
+            type: normal
+          4:
+            type: normal
+          5:
+            type: normal
         wireframe: true
       axes:
         shape: octahedron

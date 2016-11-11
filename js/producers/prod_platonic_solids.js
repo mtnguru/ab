@@ -25,7 +25,16 @@ Drupal.atomizer.producers.platonic_solidsC = function (_viewer) {
     return;
   };
 
+  var setDefaults = function () {};
+  var mouseClick = function () {};
+//var hoverObjects = function () {};
+  var hovered = function () {};
+
   return {
-    createView: createView
+    createView: createView,
+    setDefaults: setDefaults,
+    mouseClick: mouseClick,
+//  hoverObjects: hoverObjects,
+    hovered: hovered
   };
 };

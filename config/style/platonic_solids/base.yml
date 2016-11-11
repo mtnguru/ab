@@ -778,4 +778,4 @@ styles:
   caxis--linewidth:
     defaultValue: 1
     type: range
-filepath: config/style/platonicsolids/base.yml
+filepath: config/style/platonic_solids/base.yml

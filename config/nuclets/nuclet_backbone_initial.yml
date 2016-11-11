@@ -218,12 +218,18 @@ geoGroups:
         shape: octahedron
         scale: 1.25
         electrons: 
-          - default
-          - default
-          - default
-          - default
-          - default
-          - default
+          0:
+            type: normal
+          1:
+            type: normal
+          2:
+            type: normal
+          3:
+            type: normal
+          4:
+            type: normal
+          5:
+            type: normal
         wireframe: true
       axes:
         shape: octahedron

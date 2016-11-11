@@ -448,6 +448,23 @@ Drupal.atomizer.nucletC = function (_viewer) {
   }
 
   /**
+   * Delete a proton
+   *
+   * @param proton
+   */
+  function deleteProton(proton) {
+    // Remove the proton from the viewer.objects.protons array
+    if (viewer.objects.protons) {
+      viewer.objects.protons = viewer.objects.protons.filter(function (e) {return e !== proton;})
+    }
+
+    // Remove the proton from the viewer.objects.optionalProtons array
+    if (viewer.objects.optionalProtons) {
+      viewer.objects.optionalProtons = viewer.objects.optionalProtons.filter(function(e) { return e !== proton; })
+    }
+  }
+
+  /**
    * Create the helper XYZ axes.
    *
    * @param name
@@ -627,8 +644,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
         // Add Electrons
         if (geo.electrons) {
           var opacity = viewer.style.get('electron--opacity') || 1;
-          for (var key = 0; key < nucletConf.numInnerElectrons; key++) {
-            var vertice = geometry.vertices[key];
+          for (var e in geo.electrons) {
+            if (!geo.electrons.hasOwnProperty(e)) continue;
+            if (!nucletConf.electrons.contains(e)) continue;
+            var vertice = geometry.vertices[e];
             var electron = makeObject('electron',
               {
                 phong: {
@@ -768,16 +787,20 @@ Drupal.atomizer.nucletC = function (_viewer) {
   }
 
   function deleteNuclet(nuclet) {
+    // If there is a '0' nuclet, delete it recursively
     if (viewer.atom.az().nuclets[nuclet.az.id + '0']) {
       deleteNuclet(viewer.atom.az().nuclets[nuclet.az.id + '0'])
     }
+
+    // If there is a '1' nuclet, delete it recursively
     if (viewer.atom.az().nuclets[nuclet.az.id + '1']) {
       deleteNuclet(viewer.atom.az().nuclets[nuclet.az.id + '1'])
     }
 
+    // Delete protons
     for (var i = 0; i < nuclet.az.protons.length; i++) {
       if (nuclet.az.protons[i]) {
-        viewer.objects.protons = viewer.objects.protons.filter(function(e) { return e !== nuclet.az.protons[i]; })
+        deleteProton(nuclet.az.protons[i]);
       }
     }
     // Remove nuclet from the atom
@@ -914,6 +937,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
   return {
     makeObject: makeObject,
     makeProton: makeProton,
+    deleteProton: deleteProton,
     createNuclet: createNuclet,
     deleteNuclet: deleteNuclet,
     createGeometry: createGeometry,

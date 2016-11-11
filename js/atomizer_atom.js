@@ -54,6 +54,15 @@ Drupal.atomizer.atomC = function (_viewer) {
     delete atom.az.nuclets[nuclet.az.id];
     viewer.nuclet.deleteNuclet(nuclet);
 
+    switch (state) {
+      case 'lithium':
+      case 'backbone-final':
+      case 'backbone-initial':
+      case 'backbone-beryllium':
+      case 'backbone-boron':
+      case 'backbone-final':
+        break;
+    }
     az.conf.state = state;
     var nucletOuterShell = createNuclet(az.id, az.conf, parent);
     nuclet = nucletOuterShell.children[0].children[0];

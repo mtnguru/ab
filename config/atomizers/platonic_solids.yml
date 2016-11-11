@@ -1,0 +1,8 @@
+name: Platonic Solids
+defaultView: solids
+styleSetDirectory: config/style/platonic_solids
+views:
+  atoms:
+    name: Platonic solids
+    producer: platonic_solids
+    styleSetPath: config/style/platonic_solids/base.yml

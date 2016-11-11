@@ -47,7 +47,7 @@ styles:
     defaultValue: '#767676'
     type: color
   proton--opacity:
-    defaultValue: '0.6'
+    defaultValue: '1'
     type: range
   proton--scale:
     defaultValue: 1

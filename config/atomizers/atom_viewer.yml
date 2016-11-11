@@ -1,0 +1,9 @@
+name: Atom Viewer
+defaultView: viewer
+styleSetDirectory: config/style/atom_viewer
+views:
+  builder:
+    name: Atom Viewer
+    producer: atom_viewer
+    defaultAtom: carbon.yml
+    styleSetPath: config/style/atom_viewer/base.yml
