@@ -54,16 +54,11 @@ Drupal.atomizer.atomC = function (_viewer) {
     delete atom.az.nuclets[nuclet.az.id];
     viewer.nuclet.deleteNuclet(nuclet);
 
-    switch (state) {
-      case 'lithium':
-      case 'backbone-final':
-      case 'backbone-initial':
-      case 'backbone-beryllium':
-      case 'backbone-boron':
-      case 'backbone-final':
-        break;
-    }
-    az.conf.state = state;
+    az.conf = {
+      state: state,
+      attachAngle: az.attachAngle
+    };
+
     var nucletOuterShell = createNuclet(az.id, az.conf, parent);
     nuclet = nucletOuterShell.children[0].children[0];
     atom.az.nuclets[nuclet.az.id] = nuclet;
@@ -78,22 +73,42 @@ Drupal.atomizer.atomC = function (_viewer) {
    * @param event
    */
   function addNuclet(id) {
-    var conf = atomConf[id];
-    if (!conf) {
-      conf = {
-        state: 'backbone-final',
-        nucletAngle: 1,
-        protons: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
-      };
+    conf = {
+      state: 'backbone-final',
+      nucletAngle: 3,
+      protons: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
+      electrons: [0,1,2,3,4,5]
+    };
+
+    // Find the parent nuclet
+    var parent = atom.az.nuclets[id.slice(0, -1)];
+
+    // Deactivate the neutral ending protons.
+    var np = (id.charAt(id.length-1) == '0') ? [12,13,14,15,20] : [16,17,18,19,21];
+    for (var p = 0; p < np.length; p++) {
+      parent.az.protons[np[p]].material.visible = false;
+      parent.az.protons[np[p]].az.active = false;
     }
-    // Find the parent nuclet PID
-    var pid = id.slice(0, -1);
 
     // Create the new nuclet
-    var nucletOuterShell = createNuclet(id, conf, atom.az.nuclets[pid]);
+    var nucletOuterShell = createNuclet(id, conf, parent);
     var nuclet = nucletOuterShell.children[0].children[0];
     atom.az.nuclets[nuclet.az.id] = nuclet;
     return nuclet;
+  }
+
+  function deleteNuclet(id) {
+    var nuclet = viewer.objects.nuclets[id];
+    var parent = atom.az.nuclets[id.slice(0, -1)];
+
+    viewer.nuclet.deleteNuclet(nuclet);
+
+    // Activate the neutral ending protons.
+    var np = (id.charAt(id.length-1) == '0') ? [12,13,14,15,20] : [16,17,18,19,21];
+    for (var p = 0; p < np.length; p++) {
+      parent.az.protons[np[p]].material.visible = false;
+      parent.az.protons[np[p]].az.active = false;
+    }
   }
 
   /**
@@ -213,7 +228,12 @@ Drupal.atomizer.atomC = function (_viewer) {
       if (result.command == 'loadAtomCommand') {
         document.getElementById('atom--information').innerHTML = result.data.teaser;
 
-        viewer.objects = {};
+        viewer.objects = {
+          protons: [],
+          hiddenProtons: [],
+          optionalProtons: [],
+          electrons: []
+        };
         if (atom) {
           // Remove any atom's currently displayed
           viewer.scene.remove(atom);
@@ -236,11 +256,41 @@ Drupal.atomizer.atomC = function (_viewer) {
         atom.az = az;
         createNuclet('N0', atomConf['N0'], atom);
 
+        setValenceRings();
+
         viewer.scene.add(atom);
         viewer.render();
       }
     }
   };
+
+  /**
+   * Check all valence rings and color active/inactive rings - count total Active and update atom information.
+   */
+  function setValenceRings() {
+    var numActive = 0;
+    var activeColor = viewer.style.get('valence-active--color');
+    var inactiveColor = viewer.style.get('valence-inactive--color');
+    for (var n in atom.az.nuclets) {
+      var nuclet = atom.az.nuclets[n];
+      if (nuclet.az.state === 'backbone-initial' || nuclet.az.state === 'backbone-final') {
+        for (var r in nuclet.az.rings) {
+          if (!nuclet.az.rings.hasOwnProperty(r)) continue;
+          var ring = nuclet.az.rings[r];
+          var gid = nuclet.az.id + ring.az.grow;
+          var color = activeColor;
+          if (atom.az.nuclets[nuclet.az.id + ring.az.grow] ||
+              (nuclet.az.protons[ring.az.lock[0]].az.visible && nuclet.az.protons[ring.az.lock[1]].az.visible)) {
+            color = inactiveColor;
+          } else {
+            numActive++;
+          }
+          ring.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
+        }
+      }
+    }
+    return;
+  }
 
   /**
    * Add a single proton to the current atom.
@@ -339,14 +389,20 @@ Drupal.atomizer.atomC = function (_viewer) {
       var out = spacing + id + ':\n';
       spacing += '  ';
       out += spacing + 'state: ' + nuclet.az.state + '\n';
-      out += spacing + 'attachAngle: ' + nuclet.az.conf.attachAngle + '\n';
+      if (id !== 'N0') {
+        out += spacing + 'attachAngle: ' + nuclet.az.conf.attachAngle + '\n';
+      }
 
       out += spacing + 'protons: ['
+      var np = 0;
       for (var i = 0; i < nuclet.az.protons.length; i++) {
         if (nuclet.az.protons[i]) {
-          out += i;
-          if (i != nuclet.az.protons.length - 1) {
-            out += ', ' ;
+          var proton = nuclet.az.protons[i];
+          if (proton.az.active && proton.az.visible) {
+            if (np++) {
+              out += ', ' ;
+            }
+            out += i;
           }
         }
       }

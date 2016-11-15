@@ -12,8 +12,7 @@
  */
 Drupal.atomizer.nucletC = function (_viewer) {
   var viewer = _viewer;
-  var visibleThresh = .03;
-  var transparentThresh = .97;
+  var constants = Drupal.atomizer.base.constants;
   var axes = ['x', 'y', 'z'];
   var protonColors = {
     default:    viewer.style.get('proton-default--color'),
@@ -21,7 +20,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     valence:    viewer.style.get('proton-valence--color'),
     grow:       viewer.style.get('proton-grow--color'),
     polar:      viewer.style.get('proton-polar--color'),
-    lithium:    viewer.style.get('proton-lithium--color'),
+    neutral:    viewer.style.get('proton-neutral--color'),
   };
 
   var protonRadius = viewer.style.get('proton--radius');
@@ -59,8 +58,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
     var lineMaterial = new THREE.LineBasicMaterial({
       color: viewer.style.get(name + 'Axes--color'),
       opacity: opacity,
-      transparent: (opacity < transparentThresh),
-      visible:     (opacity > visibleThresh),
+      transparent: (opacity < constants.transparentThresh),
+      visible:     (opacity > constants.visibleThresh),
       linewidth: 2
     });
     for (var i = 0; i < conf.vertices.length; i++) {
@@ -91,8 +90,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
     var lineMaterial = new THREE.LineBasicMaterial({
       color: 0xff00ff,
       opacity: opacity,
-      transparent: (opacity < transparentThresh),
-      visible:     (opacity > visibleThresh),
+      transparent: (opacity < constants.transparentThresh),
+      visible:     (opacity > constants.visibleThresh),
       linewidth: 2
     });
     for (var i = 0; i < vertices.length; i++) {
@@ -123,8 +122,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
     var wireframe = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
       color: viewer.style.get(id + '--color'),
       opacity: opacity,
-      transparent: (opacity < transparentThresh),
-      visible:     (opacity > visibleThresh),
+      transparent: (opacity < constants.transparentThresh),
+      visible:     (opacity > constants.visibleThresh),
       wireframe: true,
       wireframeLinewidth: viewer.style.get(id + '--linewidth')
     }));
@@ -169,8 +168,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
     var material = new THREE.LineBasicMaterial({
       color: viewer.style.get(id + '--color'),
       opacity: opacity,
-      transparent: (opacity < transparentThresh),
-      visible:     (opacity > visibleThresh),
+      transparent: (opacity < constants.transparentThresh),
+      visible:     (opacity > constants.visibleThresh),
       linewidth: viewer.style.get(id + '--linewidth')
     });
 
@@ -227,8 +226,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
     var material = new THREE.MeshStandardMaterial( {
       color: viewer.style.get(id + '--color'),
       opacity: opacity,
-      transparent: (opacity < transparentThresh),
-      visible:     (opacity > visibleThresh),
+      transparent: (opacity < constants.transparentThresh),
+      visible:     (opacity > constants.visibleThresh),
       roughness: 0.5,
       metalness: 0,
 //    shading: THREE.FlatShading
@@ -417,20 +416,34 @@ Drupal.atomizer.nucletC = function (_viewer) {
   /**
    * Make one proton.
    *
-   * @param protonType
+   * @param protonConf
    * @param opacity
    * @param pos
    *
    * @returns {*}
    */
-  function makeProton(protonType, opacity, pos) {
+  function makeProton(conf, opacity, pos) {
+    conf.type = conf.type || 'default';
+    conf.visible = ('visible' in conf) ? conf.visible : true;
+    conf.optional = conf.optional || false;
+    conf.active = conf.active || true;
+
+    var opacity = viewer.style.get('proton--opacity');
+
+    var visible;
+    if (conf.active === false) {
+      visible = false;
+    }  else {
+      visible = (conf.visible === false) ? false : (opacity > constants.visibleThresh);
+    }
+
     var proton = makeObject('proton',
       {
         phong: {
-          color: protonColors[protonType],
+          color: protonColors[conf.type],
           opacity: opacity,
-          transparent: (opacity < transparentThresh),
-          visible: (opacity > visibleThresh)
+          transparent: (opacity < constants.transparentThresh),
+          visible: visible,
         }
       },
       {
@@ -443,7 +456,9 @@ Drupal.atomizer.nucletC = function (_viewer) {
         z: pos.z
       }
     );
-    proton.name = 'proton-' + protonType;
+    proton.material.visible = visible;
+    proton.name = 'proton-' + conf.type;
+    proton.az = conf;
     return proton;
   }
 
@@ -452,15 +467,40 @@ Drupal.atomizer.nucletC = function (_viewer) {
    *
    * @param proton
    */
-  function deleteProton(proton) {
+  function deleteProtons(protons) {
     // Remove the proton from the viewer.objects.protons array
-    if (viewer.objects.protons) {
+    for (var p = 0; p < protons.length; p++) {
+      var proton = protons[p];
+      // Remove protons from the protons, optionalProtons and hiddenProtons arrays.
       viewer.objects.protons = viewer.objects.protons.filter(function (e) {return e !== proton;})
-    }
-
-    // Remove the proton from the viewer.objects.optionalProtons array
-    if (viewer.objects.optionalProtons) {
       viewer.objects.optionalProtons = viewer.objects.optionalProtons.filter(function(e) { return e !== proton; })
+      viewer.objects.hiddenProtons = viewer.objects.hiddenProtons.filter(function(e) { return e !== proton; })
+    }
+  }
+
+  /**
+   * Show or hide a list of protons
+   *
+   * @param proton
+   */
+  function showProtons(nuclet, show, protons) {
+    // Remove the proton from the viewer.objects.protons array
+    for (var p = 0; p < protons.length; p++) {
+      var proton = nuclet.az.protons[protons[p]];
+      if (show) {
+        if (viewer.objects.protons.indexOf(proton) === -1) viewer.objects.protons.push(proton);
+        viewer.objects.hiddenProtons = viewer.objects.hiddenProtons.filter(function (e) {return e !== proton;});
+        proton.material.visible = true;
+        proton.material.opacity = 1;
+        proton.material.transparent = false;
+      } else {
+        if (viewer.objects.hiddenProtons.indexOf(proton) === -1) viewer.objects.hiddenProtons.push(proton);
+        viewer.objects.protons = viewer.objects.protons.filter(function (e) { return e !== proton; });
+        proton.material.visible = false;
+        proton.material.opacity = 0;
+        proton.material.transparent = true;
+      }
+      var darn = 5;
     }
   }
 
@@ -503,6 +543,34 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     nuclet.geo = drupalSettings.atomizer_config.nuclets[nucletConf.state.replace('-', '_')];
 
+    var protons;
+    var electrons;
+    switch (nucletConf.state) {
+      case 'neutral':
+        protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+        electrons = [0,1,2,3,4,5];
+        break;
+      case 'lithium':
+        protons = [10, 1, 4, 5, 3, 11, 9];
+        electrons = [0,1,2];
+        break;
+      case 'backbone-initial':
+      case 'backbone-final':
+        protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+        electrons = [0,1,2,3,4,5];
+        break;
+      case 'carbon':
+        protons = [0,1,2,3,4,5,6,7,8,9,10,11];
+        electrons = [0,1,2,3,4,5];
+    }
+
+    // Remove the attach proton if this isn't 'N0'
+    if (id != 'N0' && protons[10]) protons[10] = undefined;
+
+    // If the configuration for protons and electrons is not set then use the default values set above.
+    if (!nucletConf.protons) nucletConf.protons = protons;
+    if (!nucletConf.electrons) nucletConf.electrons = electrons;
+
     // Loop through each of the Geometry Groups - Ex: Proton framework, icosahedron, dodecahedron, etc.
     for (var groupName in nuclet.geo.geoGroups) {
       if (!nuclet.geo.geoGroups.hasOwnProperty(groupName)) continue;
@@ -543,11 +611,13 @@ Drupal.atomizer.nucletC = function (_viewer) {
 //        nuclet.scale.set(scale,scale,scale);
         }
 
+
         // Add Protons
         if (geo.protons) {
-          var opacity = viewer.style.get('proton--opacity') || 1;
 
-          // Move nucleons to a new location
+          // Move to a new location
+          var protons;
+          var electrons;
           switch (nucletConf.state) {
             case 'neutral':
               geometry.vertices[9].set(
@@ -563,37 +633,63 @@ Drupal.atomizer.nucletC = function (_viewer) {
                 protonRadius * 0.1616236535868876,
                 protonRadius * .0998889113026354
               );
-//            nucletConf.protons = [10, 1, 4, 5, 3, 11, 9];
               break;
             case 'backbone-initial':
-//            nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+            case 'backbone-final':
               break;
             case 'carbon':
-            case 'backbone-final':
-//            nucletConf.protons = [0,1,2,3,4,5,6,7,8,9,10,11];
-          }
-          if (id != 'N0') {
-            nucletConf.protons[10] = undefined;
           }
 
+          // Create protons
           nuclet.az.protons = [];
           nuclet.az.protonGeometry = geometry;
           for (var p in geo.protons) {
             if (!geo.protons.hasOwnProperty(p)) continue;
-            if (!nucletConf.protons.contains(p)) continue;
-            var proton = makeProton(geo.protons[p].type, opacity, geometry.vertices[p]);
+            geo.protons[p].visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
+            var proton = makeProton(geo.protons[p], opacity, geometry.vertices[p]);
             addObject('protons', proton);
-            if (geo.protons[p].optional && geo.protons[p].optional == true) {
-              addObject('optionalProtons', proton);
-            }
             nucletGroup.add(proton);
             nuclet.az.protons[p] = proton;
           }
         }
 
+        if (geo.valence) {
+          var color = viewer.style.get('valence-active--color');
+          var opacity = viewer.style.get('valence--opacity');
+          var radius = viewer.style.get('valence--scale') * protonRadius;
+          var diameter = viewer.style.get('valence--diameter') * protonRadius;
+
+          nuclet.az.rings = [];
+          for (var v in geo.valence) {
+            var ringConf = geo.valence[v];
+
+            var torusGeometry = new THREE.TorusGeometry(radius, diameter, 10, 40);
+            var material = new THREE.MeshPhongMaterial({
+              color: color,
+              opacity: opacity,
+              transparent: (opacity < constants.transparentThresh),
+              visible: (opacity > constants.visibleThresh)
+            });
+            var ring = new THREE.Mesh(torusGeometry, material);
+            ring.name = 'valence-active';
+            ring.az = ringConf;
+            nuclet.az.rings[v] = ring;
+            if (ringConf.rotation) {
+              if (ringConf.rotation.x) {
+                ring.rotation.x = ringConf.rotation.x / 360 * 2 * Math.PI;
+              }
+              if (ringConf.rotation.y) {
+                ring.rotation.y = ringConf.rotation.y / 360 * 2 * Math.PI;
+              }
+              if (ringConf.rotation.z) {
+                ring.rotation.z = ringConf.rotation.z / 360 * 2 * Math.PI;
+              }
+            }
+            nuclet.az.protons[parseInt(v)].add(ring);
+          }
+        }
+
         if (geoGroup.alignyaxis) {
-//        var vertice1 = nuclet.az.protons[geoGroup.alignyaxis.vertices[0]].position;
-//        var vertice2 = nuclet.az.protons[geoGroup.alignyaxis.vertices[1]].position;
           var vertice1 = nuclet.az.protonGeometry.vertices[geoGroup.alignyaxis.vertices[0]];
           var vertice2 = nuclet.az.protonGeometry.vertices[geoGroup.alignyaxis.vertices[1]];
           var newAxis = vertice1.clone().sub(vertice2);
@@ -646,15 +742,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
           var opacity = viewer.style.get('electron--opacity') || 1;
           for (var e in geo.electrons) {
             if (!geo.electrons.hasOwnProperty(e)) continue;
-            if (!nucletConf.electrons.contains(e)) continue;
+            if (nucletConf.electrons && !nucletConf.electrons.contains(e)) continue;
             var vertice = geometry.vertices[e];
             var electron = makeObject('electron',
               {
                 phong: {
                   color: viewer.style.get('electron--color'),
                   opacity: opacity,
-                  transparent: (opacity < transparentThresh),
-                  visible: (opacity > visibleThresh)
+                  transparent: (opacity < constants.transparentThresh),
+                  visible: (opacity > constants.visibleThresh)
                 }
               },
               {
@@ -729,7 +825,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
         // Create particle ids
         if (geo.particleids) {
-//        nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
+          nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
         }
 
         viewer.render();
@@ -800,7 +896,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     // Delete protons
     for (var i = 0; i < nuclet.az.protons.length; i++) {
       if (nuclet.az.protons[i]) {
-        deleteProton(nuclet.az.protons[i]);
+        deleteProtons([nuclet.az.protons[i]]);
       }
     }
     // Remove nuclet from the atom
@@ -937,7 +1033,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
   return {
     makeObject: makeObject,
     makeProton: makeProton,
-    deleteProton: deleteProton,
+    showProtons: showProtons,
     createNuclet: createNuclet,
     deleteNuclet: deleteNuclet,
     createGeometry: createGeometry,

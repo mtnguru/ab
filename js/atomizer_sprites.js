@@ -86,7 +86,6 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 	}
 
 	var createVerticeIds = function createVerticeIds (name, geometry) {
-//geometry.mergeVertices();
 		var verticeIds = new THREE.Group();
 		verticeIds.name = name + 'Vertexids';
 

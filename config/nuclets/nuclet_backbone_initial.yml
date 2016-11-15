@@ -32,29 +32,50 @@ geoGroups:
           11:
             type: polar
           12:
-            type: lithium
+            type: neutral
             optional: true
           13:
-            type: lithium
+            type: neutral
             optional: true
           14:
-            type: lithium
+            type: neutral
             optional: true
           15:
-            type: lithium
+            type: neutral
             optional: true
           16:
-            type: lithium
+            type: neutral
             optional: true
           17:
-            type: lithium
+            type: neutral
             optional: true
           18:
-            type: lithium
+            type: neutral
             optional: true
           19:
-            type: lithium
+            type: neutral
             optional: true
+          20:
+            type: neutral
+            optional: true
+            visible: false
+          21:
+            type: neutral
+            optional: true
+            visible: false
+        valence:
+          4:
+            lock: [14, 15]
+            rotation: {y: -36}
+          5:
+            lock: [16, 17]
+            rotation: {y: 36}
+          6:
+            lock: [18, 19]
+            rotation: {y: -36}
+          7:
+            lock: [12, 13]
+            rotation: {y: 36}
         tetrahedrons:
           0:
             vertices: [1, 14, 0, 13]

@@ -9,6 +9,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   var abc = ['a', 'b', 'c'];
 
   var viewer = _viewer;
+  var constants = Drupal.atomizer.base.constants;
   var cameraTrackballControls;
   var objectTrackballControls;
   var mouseMode = 'none';

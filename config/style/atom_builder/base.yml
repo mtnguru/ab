@@ -50,7 +50,7 @@ styles:
     defaultValue: '1'
     type: range
   proton--scale:
-    defaultValue: 1
+    defaultValue: '1'
     type: range
   icosaWireframe--scale:
     defaultValue: 1
@@ -62,7 +62,7 @@ styles:
     defaultValue: 1
     type: range
   icosaWireframe--linewidth:
-    defaultValue: '2'
+    defaultValue: '1'
     type: range
   icosaVertexid--opacity:
     defaultValue: 0
@@ -101,7 +101,7 @@ styles:
     defaultValue: 1
     type: range
   dodecaWireframe--linewidth:
-    defaultValue: '2.3'
+    defaultValue: '0.4'
     type: range
   dodecaVertexid--opacity:
     defaultValue: 0
@@ -140,7 +140,7 @@ styles:
     defaultValue: 1
     type: range
   octaWireframe--linewidth:
-    defaultValue: '2'
+    defaultValue: '0.1'
     type: range
   octaVertexid--opacity:
     defaultValue: 0
@@ -167,7 +167,7 @@ styles:
     defaultValue: '1'
     type: range
   tetraWireframe--linewidth:
-    defaultValue: '2'
+    defaultValue: '0.8'
     type: range
   tetraVertexid--opacity:
     defaultValue: 0
@@ -223,31 +223,25 @@ styles:
   hexaAxis--linewidth:
     defaultValue: 1
     type: range
-  valence--color:
-    defaultValue: '#ff00ff'
-    type: color
-  valence--opacity:
-    defaultValue: 0.3
-    type: range
   camera--perspective:
     defaultValue: 25
     type: range
   camera--position--x:
     defaultValue:
       - 0
-      - 500
+      - 700
       - -1600
     type: position
   camera--position--y:
     defaultValue:
       - 0
-      - 500
+      - 700
       - -1600
     type: position
   camera--position--z:
     defaultValue:
       - 0
-      - 500
+      - 700
       - -1600
     type: position
   renderer--color:
@@ -374,7 +368,7 @@ styles:
     defaultValue: 1
     type: range
   electron--scale:
-    defaultValue: 1
+    defaultValue: '0.59'
     type: range
   icosa--scale:
     defaultValue: 1
@@ -383,7 +377,7 @@ styles:
     defaultValue: 1
     type: range
   octa--scale:
-    defaultValue: '1.04'
+    defaultValue: '1.02'
     type: range
   octa--rotation--x:
     defaultValue: 0
@@ -544,8 +538,8 @@ styles:
   proton-polar--color:
     defaultValue: '#444455'
     type: color
-  proton-lithium--color:
-    defaultValue: '#7f6491'
+  proton-neutral--color:
+    defaultValue: '#6a5776'
     type: color
   proton-newproton--color:
     defaultValue: '#555599'
@@ -670,24 +664,6 @@ styles:
   nucletOuterAxes--linewidth:
     defaultValue: 5
     type: range
-  outerlithium-1--position--x:
-    defaultValue: 0
-    type: position
-  outerlithium-1--position--y:
-    defaultValue: 0
-    type: position
-  outerlithium-1--position--z:
-    defaultValue: 0
-    type: position
-  outerlithium-1--rotation--x:
-    defaultValue: 0
-    type: rotation
-  outerlithium-1--rotation--y:
-    defaultValue: 0
-    type: rotation
-  outerlithium-1--rotation--z:
-    defaultValue: 0
-    type: rotation
   nuclet--attachAngle:
     defaultValue: 1
     type: range

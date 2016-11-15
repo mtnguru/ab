@@ -107,7 +107,7 @@ styler:
       proton-grow--color:        ['Grow',         'color',    '#559999']
       proton-valence--color:     ['Valence',      'color',    '#995599']
       proton-polar--color:       ['Polar',        'color',    '#999955']
-      proton-lithium--color:     ['Lithium',      'color',    '#995555']
+      proton-neutral--color:     ['Neutral',      'color',    '#995555']
       proton-newproton--color:   ['New Proton',   'color',    '#555599']
       proton-newneutron--color:  ['New Neutron',  'color',    '#559955']
       proton-vattach--color:     ['Val Attach',   'color',    '#66dd66']

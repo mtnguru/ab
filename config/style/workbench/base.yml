@@ -550,20 +550,8 @@ styles:
   proton-polar--color:
     defaultValue: '#444455'
     type: color
-  proton-lithium--color:
+  proton-neutral--color:
     defaultValue: '#7f6491'
-    type: color
-  proton-newproton--color:
-    defaultValue: '#555599'
-    type: color
-  proton-newneutron--color:
-    defaultValue: '#559955'
-    type: color
-  proton-vattach--color:
-    defaultValue: '#4ea44e'
-    type: color
-  proton-iattach--color:
-    defaultValue: '#338585'
     type: color
   proton-ghost--color:
     defaultValue: '#aa55aa'

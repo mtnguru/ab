@@ -33,6 +33,19 @@ geoGroups:
             type: polar
           11:
             type: polar
+        valence:
+          4:
+            lock: [14, 15]
+            rotation: {y: -36}
+          5:
+            lock: [16, 17]
+            rotation: {y: 36}
+          6:
+            lock: [18, 19]
+            rotation: {y: -36}
+          7:
+            lock: [12, 13]
+            rotation: {y: 36}
   icosa:
     rotation:
       y: 90

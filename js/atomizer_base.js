@@ -159,6 +159,10 @@ Drupal.atomizer.baseC = function () {
   return {
     doAjax: doAjax,
     alignObjectToAxis: alignObjectToAxis,
-    initDraggable: initDraggable
+    initDraggable: initDraggable,
+    constants: {
+      visibleThresh: .03,
+      transparentThresh: .97
+    }
   };
 };

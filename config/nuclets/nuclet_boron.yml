@@ -13,19 +13,19 @@ geoGroups:
         scaleHeight: 1.05
         protons:
           0:
-            type: lithium
+            type: neutral
           1:
-            type: lithium
+            type: neutral
           2:
-            type: lithium
+            type: neutral
           3:
-            type: lithium
+            type: neutral
           4:
-            type: lithium
+            type: neutral
           5:
-            type: lithium
+            type: neutral
           6:
-            type: lithium
+            type: neutral
   deca:
     allowrotate: false
     geometries:
