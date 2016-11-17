@@ -470,6 +470,7 @@ Drupal.atomizer.atomC = function (_viewer) {
     az: function () { return atom.az; },
     addProton: addProton,
     addNuclet: addNuclet,
+    setValenceRings: setValenceRings,
     buttonClicked: buttonClicked,
     getYmlDirectory: function () { return 'config/atom'; }
   };

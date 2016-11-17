@@ -112,6 +112,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
           if (proton.az.optional) {
             proton.az.visible = !proton.az.visible;
             proton.material.visible = proton.az.visible;
+            viewer.atom.setValenceRings();
             viewer.render();
           }
         }
