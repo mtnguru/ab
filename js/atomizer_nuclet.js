@@ -390,6 +390,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
     switch (shape) {
       case 'neutral':
       case 'lithium':
+      case 'boron':
+      case 'beryllium':
       case 'icosahedron':
         return viewer.shapes.getGeometry('icosahedron', 'final', scale, null, detail);
       case 'decahedron':
@@ -554,6 +556,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
         protons = [10, 1, 4, 5, 3, 11, 9];
         electrons = [0,1,2];
         break;
+      case 'boron':
+        protons = [0, 2, 10, 1, 4, 5, 3, 11, 9, 6, 7];
+        electrons = [0,1,2];
+        break;
+      case 'beryllium':
+        protons = [10, 1, 4, 5, 3, 11, 9, 6, 7];
+        electrons = [0,1,2];
+        break;
       case 'backbone-initial':
       case 'backbone-final':
         protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
@@ -624,6 +634,31 @@ Drupal.atomizer.nucletC = function (_viewer) {
                 0,
                 protonRadius * 0.1616236535868876,
                 protonRadius * .0998889113026354
+              );
+              break;
+            case 'beryllium':
+              geometry.vertices[9].set(
+                0,
+                protonRadius * 0.4,
+                protonRadius * 0.0
+              );
+              break;
+            case 'boron':
+              geometry.vertices[0].set(
+                geometry.vertices[0].x * 1.2,
+                geometry.vertices[0].y * 1.0,
+                geometry.vertices[0].z * 1.0,
+                protonRadius * 0.0
+              );
+              geometry.vertices[2].set(
+                geometry.vertices[2].x * 1.2,
+                geometry.vertices[2].y * 1.0,
+                geometry.vertices[2].z * 1.0
+              );
+              geometry.vertices[9].set(
+                0,
+                protonRadius * 0.8,
+                protonRadius * 0.0
               );
               break;
             case 'lithium':

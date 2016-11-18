@@ -130,8 +130,8 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
           editNuclet = intersects[0].object.parent.parent;
           nucletEditForm.classList.remove('az-hidden');
           setEditNuclet(editNuclet);
-//      nucletEditForm.style.top =  (event.clientY - 250) + 'px';
-//      nucletEditForm.style.left = (event.clientX - 300)+ 'px';
+//        nucletEditForm.style.top =  (event.clientY - 250) + 'px';
+//        nucletEditForm.style.left = (event.clientX - 300)+ 'px';
           nucletEditForm.style.top =  10  +'px';
           nucletEditForm.style.left = 214 + 'px';
           return false;
