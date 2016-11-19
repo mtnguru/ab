@@ -628,6 +628,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
           // Move to a new location
           var protons;
           var electrons;
+          var pids;
+          var p;
           switch (nucletConf.state) {
             case 'neutral':
               geometry.vertices[9].set(
@@ -637,29 +639,23 @@ Drupal.atomizer.nucletC = function (_viewer) {
               );
               break;
             case 'beryllium':
-              geometry.vertices[9].set(
-                0,
-                protonRadius * 0.4,
-                protonRadius * 0.0
-              );
+              vids = [0,2];
+              for (p = 0; p < vids.length; p++) {
+                geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.2;
+              }
+              geometry.vertices[9].set(0, protonRadius * 0.2, 0);
               break;
             case 'boron':
-              geometry.vertices[0].set(
-                geometry.vertices[0].x * 1.2,
-                geometry.vertices[0].y * 1.0,
-                geometry.vertices[0].z * 1.0,
-                protonRadius * 0.0
-              );
-              geometry.vertices[2].set(
-                geometry.vertices[2].x * 1.2,
-                geometry.vertices[2].y * 1.0,
-                geometry.vertices[2].z * 1.0
-              );
-              geometry.vertices[9].set(
-                0,
-                protonRadius * 0.8,
-                protonRadius * 0.0
-              );
+              vids = [0,2];
+              for (p = 0; p < vids.length; p++) {
+                geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.25;
+                geometry.vertices[vids[p]].y = geometry.vertices[vids[p]].y * 0.95;
+              }
+              vids = [4,5,6,7];
+              for (p = 0; p < vids.length; p++) {
+                geometry.vertices[vids[p]].z = geometry.vertices[vids[p]].z * 0.85;
+              }
+              geometry.vertices[9].set(0, protonRadius * 0.9, 0);
               break;
             case 'lithium':
               // Move the top center proton to the correct position.
