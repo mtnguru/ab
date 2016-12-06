@@ -1,26 +1,32 @@
-atomizer-js:
+atomizer-base:
   js:
     js/threejs/three.js: {}
     js/threejs/renderers/Projector.js: {}
-    js/threejs/controls/TrackballControls.js: {}
     js/threejs/controls/OrbitControls.js: {}
-    js/physijs/physi.js: {}
     js/atomizer_base.js: {}
     js/atomizer_viewer.js: {}
     js/atomizer_controls.js: {}
     js/atomizer_style.js: {}
+    js/atomizer.js: {}
     js/atomizer_sprites.js: {}
     js/atomizer_shapes.js: {}
     js/atomizer_nuclet.js: {}
     js/atomizer_atom.js: {}
-    js/producers/prod_atom_builder.js: {}
-    js/producers/prod_backbone_builder.js: {}
-    js/producers/prod_workbench.js: {}
-    js/producers/prod_platonic_solids.js: {}
-    js/atomizer.js: {}
   css:
     component:
       css/atomizer.css: {}
   dependencies:
     - core/drupal.ajax
+
+atomizer-atom-builder:
+  js:
+    js/producers/prod_atom_builder.js: {}
+
+atomizer-atom-viewer:
+  js:
+    js/producers/prod_atom_viewer.js: {}
+
+atomizer-platonic-solids:
+  js:
+    js/producers/prod_platonic_solids.js: {}
 

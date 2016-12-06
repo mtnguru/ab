@@ -4,12 +4,6 @@
   display: none;
 }
 
-// Atom Builder Viewer Block
-.block-atomizer-viewer {
-  display: inline-flex;
-  width: calc(100% - 240px);
-}
-
 .ui-dialog.az-dialog {
   background: $color-controls;
   .ui-dialog-titlebar {

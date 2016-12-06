@@ -1,0 +1,1 @@
+{"version":3,"sources":["atomizerViewer.scss"],"names":[],"mappings":"AACA,uBACE,2BAAA,AACA,oBAAA,wBAAW,CAFb,2BAII,UAAY,CAGb","file":"atomizerViewer.css","sourcesContent":["@import \"variables\";\n.block-atomizer-viewer {\n  display: inline-flex;\n  width: calc(100% - 220px);\n  > div {\n    width: 100%;\n    canvas {\n    }\n  }\n}\n\n\n"],"sourceRoot":"/source/"}

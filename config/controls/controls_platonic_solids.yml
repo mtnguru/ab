@@ -1,0 +1,180 @@
+name: Platonic Solids Base
+static:
+
+  reset:
+#   title: Mouse
+    controls:
+      style--cameraReset:         ['Reset Camera',        'button']
+      hr1: ['null', hr]
+
+styler:
+
+  style:
+    title:               Styles
+    controls:
+      hr1:                         [ null,               'hr']
+      style--loadlabel:            ['Select Style',      'header']
+      style--selectyml:            [ null,               'selectyml', 'base.yml',   'style',   'config/style/platonic_solids', 'atomizer.ajax_yml_load']
+      style--reset:                [ 'Reset Style',      'button']
+      style--saveButton:           [ 'Save Changes',     'button']
+      style--saveMessage:          [ null,               'container']
+      hr2:                         [ null,               'hr']
+      style--saveNew:              [ 'Create New Style', 'header']
+      style--saveNewName:          [ 'Name',             'textfield', '', 20]
+      style--saveNewButton:        [ 'Save New',         'button',    'config/style/platonic_solids', 'atomizer.ajax_yml_save']
+      style--saveNewMessage:       [ null,               'container']
+
+  particles:
+    title:               Protons
+    controls:
+      proton--label:               ['Protons', 'header']
+      proton--opacity:             ['Opacity',      'range',     .5, [0, 1, .01]]
+      proton--scale:               ['Scale',        'range',     1, [0, 3, .01]]
+      proton-default--color:       ['Default',      'color',    '#777777']
+
+  tetrahedron:
+    title:               Tetrahedron
+    controls:
+      tetra--scale:                ['Scale',        'range',     1,  [0, 3, .01]]
+      tetra--rotation:             ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+
+      hr1:                         [ null, 'hr']
+      tetraWireframe--color:       ['Wireframe',    'color',    '#00ee00']
+      tetraWireframe--opacity:     ['Opacity',      'range',     1, [0, 1, .01]]
+      tetraWireframe--linewidth:   ['Linewidth',    'range',     3, [0, 5, .1]]
+
+      tetraVertexid--label:        ['IDs',          'label']
+      tetraVertexid--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
+      tetraVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                         [ null, 'hr']
+      tetraFaces--color:           ['Faces',        'color',    '#005500']
+      tetraFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+
+      tetraFaceid--label:          ['IDs',          'label']
+      tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+      tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+
+  hexa:
+    title:               Hexahedron
+    controls:
+      hexa--scale:                 ['Scale',        'range',    1,  [0, 3, .01]]
+      hexa--rotation:              ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+
+      hr1:                         [ null, 'hr']
+      hexaWireframe--color:        ['Wireframe',    'color',    '#ff00ff']
+      hexaWireframe--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
+      hexaWireframe--linewidth:    ['Linewidth',    'range',     3, [0, 5, .1]]
+
+      hexaVertexid--label:         ['IDs',          'label']
+      hexaVertexid--opacity:       ['Opacity',      'range',     0,  [0, 1, .01]]
+      hexaVertexids--scale:        ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                         [ null, 'hr']
+      hexaFaces--color:            ['Faces',        'color',    '#aa00aa']
+      hexaFaces--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+
+      hexaFaceid--label:           ['IDs',          'label']
+      hexaFaceid--opacity:         ['Opacity',      'range',     0,  [0, 1, .01]]
+      hexaFaceids--scale:          ['Scale',        'range',     1,  [0, 3, .01]]
+
+  octahedron:
+    title:               Octahedron
+    controls:
+      octa--scale:                 ['Scale',        'range',    1,  [0, 3, .01]]
+      octa--rotation:              ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+
+      hr1:                         [ null, 'hr']
+      octaWireframe--color:        ['Wireframe',    'color',    '#ffff00']
+      octaWireframe--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
+      octaWireframe--linewidth:    ['Linewidth',    'range',     3, [0, 5, .1]]
+
+      octaVertexid--label:         ['IDs',          'label']
+      octaVertexid--opacity:       ['Opacity',      'range',    0,  [0, 1, .01]]
+      octaVertexids--scale:        ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr2:                         [ null, 'hr']
+      octaFaces--color:            ['Faces',        'color',    '#aaaa00']
+      octaFaces--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+ 
+      octaFaceid--label:           ['IDs',          'label']
+      octaFaceid--opacity:         ['Opacity',      'range',     0,  [0, 1, .01]]
+      octaFaceids--scale:          ['Scale',        'range',     1,  [0, 3, .01]]
+
+  icosa:
+    title:               Icosahedron
+    controls:
+      icosa--scale:               ['Scale',        'range',    1,  [0, 3, .01]]
+      icosa--rotation:            ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+
+      hr1:                        [ null, 'hr']
+      icosaWireframe--color:      ['Wireframe',    'color',    '#ff0000']
+      icosaWireframe--opacity:    ['Opacity',      'range',     1, [0, 1, .01]]
+      icosaWireframe--linewidth:  ['Linewidth',    'range',     3, [0, 5, .1]]
+
+      icosaVertexid--label:       ['IDs',          'label']
+      icosaVertexid--opacity:     ['Opacity',      'range',     0,  [0, 1, .01]]
+      icosaVertexids--scale:      ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                        [ null, 'hr']
+      icosaFaces--color:          ['Faces',        'color',    '#aa0000']
+      icosaFaces--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+
+      icosaFaceid--label:         ['IDs',          'label']
+      icosaFaceid--opacity:       ['Opacity',      'range',     0,  [0, 1, .01]]
+      icosaFaceids--scale:        ['Scale',        'range',     1,  [0, 3, .01]]
+
+  dodeca:
+    title:               Dodecahedron
+    controls:
+      dodeca--scale:                ['Scale',        'range',    1,  [0, 3, .01]]
+      dodeca--rotation:             ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+
+      hr1:                          [ null, 'hr']
+      dodecaWireframe--color:       ['Wireframe',    'color',    '#0088ff']
+      dodecaWireframe--opacity:     ['Opacity',      'range',     1, [0, 1, .01]]
+      dodecaWireframe--linewidth:   ['Linewidth',    'range',     3, [0, 5, .1]]
+
+      dodecaVertexid--label:        ['IDs',          'label']
+      dodecaVertexid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
+      dodecaVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                          [ null, 'hr']
+      dodecaFaces--color:           ['Faces',        'color',    '#88cccc']
+      dodecaFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+
+      dodecaFaceid--label:          ['IDs',          'label']
+      dodecaFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+      dodecaFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+
+  scene:
+    title:               Scene
+    controls:
+      header--camera:          ['Camera',        'header']
+      camera--perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
+      camera--position:        ['Position',      'position', [200, 1500, -1500], [-3000, 3000, 1]]
+
+      hr1:                     [ null, 'hr']
+      renderer--color:         ['Background',    'color',    '#707080']
+
+      hr2:                     [ null, 'hr']
+      plane--color:            ['Plane',         'color',    '#504050']
+      plane--opacity:          ['Opacity',       'range',    1, [0, 1, .01]]
+      plane--width:            ['Width',         'range',    1200, [500, 2000, 1]]
+      plane--depth:            ['Depth',         'range',    1200, [500, 2000, 1]]
+      plane--position:         ['Position',      'position', [0, -200, 0], [-600, 800, 1]]
+      plane--rotation:         ['Rotation',      'rotation', [0, -180, 1], [-180, 180, 1]]
+
+  lighting:
+    title:               Lighting
+    controls:
+      ambient--color:          ['Ambient',       'color',    '#777777']
+      hr1:                     [ null, 'hr']
+      spotlight-1--color:      ['Spotlight 1',   'color',    '#885555']
+      spotlight-1--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
+      hr2:                     [ null, 'hr']
+      spotlight-2--color:      ['Spotlight 2',   'color',    '#558855']
+      spotlight-2--position:   ['Position',      'position', [ 800, 800, -200], [-1000, 1000, 1]]
+      hr3:                     [ null, 'hr']
+      spotlight-3--color:      ['Spotlight 3',   'color',    '#555588']
+      spotlight-3--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]

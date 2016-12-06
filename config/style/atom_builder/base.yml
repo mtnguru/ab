@@ -56,13 +56,13 @@ styles:
     defaultValue: 1
     type: range
   icosaWireframe--color:
-    defaultValue: '#fe4545'
+    defaultValue: '#ff0000'
     type: color
   icosaWireframe--opacity:
     defaultValue: 1
     type: range
   icosaWireframe--linewidth:
-    defaultValue: '1'
+    defaultValue: '0.5'
     type: range
   icosaVertexid--opacity:
     defaultValue: 0
@@ -101,7 +101,7 @@ styles:
     defaultValue: 1
     type: range
   dodecaWireframe--linewidth:
-    defaultValue: '0.4'
+    defaultValue: '0.5'
     type: range
   dodecaVertexid--opacity:
     defaultValue: 0
@@ -140,7 +140,7 @@ styles:
     defaultValue: 1
     type: range
   octaWireframe--linewidth:
-    defaultValue: '0.1'
+    defaultValue: '0.5'
     type: range
   octaVertexid--opacity:
     defaultValue: 0
@@ -167,7 +167,7 @@ styles:
     defaultValue: '1'
     type: range
   tetraWireframe--linewidth:
-    defaultValue: '0.8'
+    defaultValue: '0.5'
     type: range
   tetraVertexid--opacity:
     defaultValue: 0
@@ -245,10 +245,10 @@ styles:
       - -1600
     type: position
   renderer--color:
-    defaultValue: '#778d97'
+    defaultValue: '#95acbc'
     type: color
   plane--color:
-    defaultValue: '#6a6a6a'
+    defaultValue: '#878787'
     type: color
   plane--opacity:
     defaultValue: 1
@@ -479,7 +479,7 @@ styles:
     defaultValue: 1
     type: range
   decaWireframe--linewidth:
-    defaultValue: '2'
+    defaultValue: '1'
     type: range
   decaVertexid--opacity:
     defaultValue: 0
@@ -530,16 +530,16 @@ styles:
     defaultValue: 0
     type: rotation
   proton-valence--color:
-    defaultValue: '#4e3f43'
+    defaultValue: '#534444'
     type: color
   proton-grow--color:
-    defaultValue: '#546756'
+    defaultValue: '#3d5744'
     type: color
   proton-polar--color:
-    defaultValue: '#444455'
+    defaultValue: '#454b5b'
     type: color
   proton-neutral--color:
-    defaultValue: '#6a5776'
+    defaultValue: '#584961'
     type: color
   proton-newproton--color:
     defaultValue: '#555599'
@@ -554,7 +554,7 @@ styles:
     defaultValue: '#338585'
     type: color
   proton-ghost--color:
-    defaultValue: '#aa55aa'
+    defaultValue: '#ac58ac'
     type: color
   protonVertexid--color:
     defaultValue: '#fc78fc'
@@ -730,4 +730,19 @@ styles:
   nucletOuter-N00--rotation--z:
     defaultValue: 0
     type: rotation
+  valence--opacity:
+    defaultValue: '1'
+    type: range
+  valence--scale:
+    defaultValue: '1'
+    type: range
+  valence--diameter:
+    defaultValue: 0.12
+    type: range
+  valence-active--color:
+    defaultValue: '#85223C'
+    type: color
+  valence-inactive--color:
+    defaultValue: '#666666'
+    type: color
 filepath: config/style/atom_builder/base.yml

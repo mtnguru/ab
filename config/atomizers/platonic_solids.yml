@@ -1,8 +1,11 @@
 name: Platonic Solids
 defaultView: solids
 styleSetDirectory: config/style/platonic_solids
+objects: [solids]
+canvasRatio: .50
+libraries: [atomizer/atomizer-base, atomizer/atomizer-platonic-solids]
 views:
-  atoms:
+  solids:
     name: Platonic solids
     producer: platonic_solids
     styleSetPath: config/style/platonic_solids/base.yml

@@ -1,7 +1,8 @@
 /**
  * @file - atomizer_controls.js
  *
- * Initialize controls.  Listen for events and deliver them to the appropriate modules.
+ * Initialize controls.
+ * Listen for events and dispense them to the appropriate modules.
  */
 
 Drupal.atomizer.controlsC = function (_viewer, controlSet) {
@@ -163,13 +164,6 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     showStylerBlock();
     styler.addEventListener("change", showStylerBlock);
 
-//  var radios = document.forms["atomizer-controls-form"].elements["mouse--mode"];
-//  for(var i = 0, max = radios.length; i < max; i++) {
-//    radios[i].onclick = function (event) {
-//      changeMode(event.target.value);
-//    }
-//  }
-
     // Initialize all the sliders, buttons and color fields in the styler blocks
     for (var controlId in viewer.atomizer.styleSet.styles) {
       var control = viewer.atomizer.styleSet.styles[controlId];
@@ -235,7 +229,6 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     controls.dampingFactor=  0.3;
 
     controls.keys = [65, 83, 68];
-//  controls.addEventListener('change', viewer.render);
     return controls;
   }
 
@@ -289,6 +282,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     if (viewer.producer.hoverObjects) {
       viewer.producer.hovered(findIntersects(viewer.producer.hoverObjects()));
     }
+    viewer.render();
   }
 
   /**
@@ -299,7 +293,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     mouse.x =  (event.offsetX / viewer.canvasWidth) * 2 - 1;
     mouse.y = -(event.offsetY / viewer.canvasHeight) * 2 + 1;
     if (viewer.producer.mouseClick) {
-      event.preventDefault();
+//    event.preventDefault();
       return viewer.producer.mouseClick(event);
     }
   }
@@ -350,7 +344,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    * Initialize all controls.
    */
   var init = function init() {
-    cameraTrackballControls = createCameraTrackballControls();
+//  cameraTrackballControls = createCameraTrackballControls();
     initializeControls();
 
     // Find the styler block.  @TODO this needs to be smarter.  Not all controls will have styler blocks

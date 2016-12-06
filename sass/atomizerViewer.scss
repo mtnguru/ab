@@ -1,0 +1,12 @@
+@import "variables";
+.block-atomizer-viewer {
+  display: inline-flex;
+  width: calc(100% - 220px);
+  > div {
+    width: 100%;
+    canvas {
+    }
+  }
+}
+
+

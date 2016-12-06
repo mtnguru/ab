@@ -12,13 +12,14 @@ Drupal.atomizer.viewerC = function (atomizer) {
   var spotlights = [];
   var viewer = {};
 
-  Physijs.scripts.worker = '/modules/custom/atomizer/js/physijs/physijs_worker.js';
-  Physijs.scripts.ammo =   '/modules/custom/atomizer/js/libs/ammo.js';
+//Physijs.scripts.worker = '/modules/custom/atomizer/js/physijs/physijs_worker.js';
+//Physijs.scripts.ammo =   '/modules/custom/atomizer/js/libs/ammo.js';
 
   var render = function render () {
 //  viewer.scene.simulate();
     viewer.renderer.render(viewer.scene, viewer.camera);
   }
+
   /**
    * Create a spotlight.
    *
@@ -37,17 +38,24 @@ Drupal.atomizer.viewerC = function (atomizer) {
 
     // Calculate dimensions of canvas - offsetWidth determines width
     // If offsetHeight is not 0, use it for the height, otherwise make the
-    // canvas the same aspect ratio as the browser window.
-//  var canvasWidth = window.innerWidth - 422;
-    viewer.canvasWidth = window.innerWidth - 273;
-    viewer.canvasHeight = window.innerHeight / window.innerWidth * viewer.canvasWidth;
 
-    // Create the producer for the current view and create it.
+    var canvasId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-wrapper';
+    viewer.canvasContainer = document.getElementById(canvasId);
+    viewer.canvasWidth = viewer.canvasContainer.clientWidth;
+    if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
+      var windowRatio = window.innerHeight / window.innerWidth;
+      viewer.canvasHeight = viewer.canvasWidth * windowRatio;
+    } else {
+      viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
+    }
+
+
+    // Create the producer.
     viewer.producer = Drupal.atomizer.producers[viewer.view.producer + 'C'](viewer);
 
     // Create and position the scene
-//  viewer.scene = new THREE.Scene();
-    viewer.scene = new Physijs.Scene();
+    viewer.scene = new THREE.Scene();
+//  viewer.scene = new Physijs.Scene();
     viewer.scene.position.x = 0;
     viewer.scene.position.y = 0;
     viewer.scene.position.z = 0;
@@ -62,8 +70,17 @@ Drupal.atomizer.viewerC = function (atomizer) {
     viewer.renderer.shadowEnabled = true;
 
     // add the output of the renderer to the html element
-    viewer.canvasContainer = document.getElementById(viewer.atomizer.atomizerId + '-wrapper');
     viewer.canvasContainer.appendChild(viewer.renderer.domElement);
+
+//  var canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
+//  viewer.canvasContainer.addEventListener('resize', function () {
+//    canvas.width  = canvas.clientWidth;
+//    canvas.height = canvas.clientHeight;
+//    viewer.renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
+//    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+//    camera.updateProjectionMatrix();
+//  });
+
 
     // Create camera, and point it at the scene
     viewer.camera = new THREE.PerspectiveCamera(
@@ -79,7 +96,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
     // Add the trackball and page controls
     viewer.controls.init();
 
-    // Create an ambient light and 2 spotlights
+    // Create an ambient light and 3 spotlights
     ambient = new THREE.AmbientLight(viewer.style.get('ambient--color'));
     ambient.name = 'ambient';
     viewer.scene.add(ambient);
@@ -94,7 +111,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
       viewer.scene.add(spotlights[i]);
     }
 
-    // Initialize the ObjectC - doesn't actually create anything.
+    // Initialize the nuclet, shapes, and sprites modules
     viewer.nuclet = Drupal.atomizer.nucletC(viewer);
     viewer.shapes = Drupal.atomizer.shapesC(viewer);
     viewer.sprites = Drupal.atomizer.spritesC(viewer);

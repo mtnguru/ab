@@ -7,14 +7,11 @@
 
 namespace Drupal\atomizer\Plugin\Field\FieldFormatter;
 
-// use Drupal\Core\Access\AccessResult;
-// use Drupal\Core\Entity\EntityInterface;
-// use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\atomizer\Utils\AtomizerFiles;
-use Drupal\Component\Serialization\Yaml;
+use Drupal\atomizer\Utils\AtomizerInit;
 
 /**
  * Plugin implementation of the 'atom' formatter.
@@ -77,49 +74,25 @@ class AtomFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    static $js_loaded = false;
     $elements = array();
 
-    foreach ($items as $delta => $entity) {
+    foreach ($items as $delta => $item) {
+      $parent1 = $item->parent;
+      $parent2 = $parent1->parent;
+      $entity  = $parent2->entity;
+      $values = $entity->values;
+      $nid = $values['nid'];
+      $default = $nid['x-default'];
       // Read in the config/atomizer file
-      $atomizerFile = $this->getSetting('atomizer');
-      $atomizerId = 'atomizer';
+      $config = [
+        'atom_id' => 1,
+        'atomizer_id' => 'Atomizer Viewer',
+        'atomizer_file' => $this->getSetting('atomizer'),
+        'label' => 'Atomizer Embed',
+        'nid' => $item->parent->parent->entity->values['nid']['x-default'],
+      ];
 
-      $atomizer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $atomizerFile));
-      $atomizer['filename']   = $atomizerFile;
-      $atomizer['atomizerId'] = $atomizerId;  // For now hard code this as atomizer.
-
-      $elements[$delta] = array(
-        'atomizer' => array(
-          'atomizer' => array(
-            'wrapper' => array(
-              'scene' => array('#markup' => '<div id="' . $atomizerId . '-wrapper"></div>'),
-            ),
-          ),
-        ),
-      );
-      if (!$js_loaded) {
-        $js_loaded = true;
-
-        // Read in the nuclets
-        $files = file_scan_directory(drupal_get_path('module','atomizer') . '/config/nuclets', '/\.yml/');
-        foreach ($files as $file) {
-          $nuclets[str_replace('nuclet_', '', $file->name)] = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/nuclets/' . $file->filename));
-        }
-
-        // Attach atomizer libraries and the nuclet information.
-        $elements[$delta]['#attached'] = [
-          'library' => ['atomizer/atomizer-js'],
-          'drupalSettings' => [
-            'atomizer' => [
-              $atomizerId => $atomizer,
-            ],
-            'atomizer_config' =>[
-              'nuclets' => $nuclets,
-            ],
-          ],
-        ];
-      }
+      $elements[$delta] = AtomizerInit::start($config);
     }
 
     return $elements;

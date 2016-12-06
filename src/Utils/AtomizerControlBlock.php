@@ -156,7 +156,7 @@ class AtomizerControlBlock {
                 'data-dialog-type' => $controlConf[2],
                 'data-dialog-options' => Json::encode([
                   'dialogClass' => 'az-dialog',
-                  'width' => 'auto',
+                  'width' => '520px',
                   'draggable' => TRUE,
                   'autoResize' => FALSE,
                   'position' => ['my' => 'right top', 'at' => 'right-10 top-10'],

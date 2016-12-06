@@ -1,14 +1,16 @@
 /**
- * @file - prod_atom_builder.js
+ * @file - prod_atom_viewer.js
  *
- * This is a 'producer' which allows users to build atoms.
- * This module provides functions to handle deleting/adding nuclets,
- * changing a nuclets slider angle, etc.
  */
 
-Drupal.atomizer.producers.atom_builderC = function (_viewer) {
+Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
   var viewer = _viewer;
+  var constants = Drupal.atomizer.base.constants;
+  var abc = ['a', 'b', 'c'];
+
   var atom;
+  var atomNid;
+  var userAtomNid;
 
   var editNuclet;
   var nucletEditForm =    document.getElementById('hidden-nuclet');
@@ -27,46 +29,26 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   nucletAngleSlider.addEventListener('input', onAngleChanged);
   nucletDelete.addEventListener('click', onNucletDelete);
 
-  /**
-   * User has changed the nuclet angle slider.
-   *
-   * @param event
-   */
   function onAngleChanged(event) {
     viewer.atom.changeNucletAngle(editNuclet.az.id, event.target.value);
     viewer.render();
   }
 
-  /**
-   * User pressed the Delete button on the nuclet edit form.
-   *
-   * @param event
-   */
   function onNucletDelete(event) {
     // Delete the protons from the
-    viewer.atom.deleteNuclet(editNuclet.az.id);
     delete viewer.atom.az().nuclets[editNuclet.az.id];
+    viewer.nucleus.deleteNuclet(editNuclet.az.id);
     nucletEditForm.classList.add('az-hidden');
     viewer.render();
   }
 
-  /**
-   * User pressed a nuclet Add button - so add a nuclet.
-   * @param event
-   */
   function onNucletAddButton(event) {
     var id = event.target.id.split('-',2)[1];
     var nuclet = viewer.atom.addNuclet(id);
     setEditNuclet(nuclet);
-    viewer.atom.setValenceRings();
     viewer.render();
   }
 
-  /**
-   * Return the objects which are active for hovering
-   *
-   * @returns {*}
-   */
   var hoverObjects = function hoverObjects() {
     if (viewer.objects && viewer.objects.protons) {
       return viewer.objects.protons;
@@ -108,6 +90,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
       var color = viewer.style.get('proton-ghost--color');
       highlightedProton.object.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
     }
+    viewer.render();
   };
 
   /**
@@ -136,14 +119,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
         break;
       case 3:
         event.preventDefault();
-        var activeProtons = [];
-        for (var p = 0; p < viewer.objects.protons.length; p++) {
-          var proton = viewer.objects.protons[p];
-          if (proton.az.active) {
-            activeProtons.push(proton);
-          }
-        }
-        var intersects = viewer.controls.findIntersects(activeProtons);
+        var intersects = viewer.controls.findIntersects(viewer.objects.protons);
         if (intersects.length == 0) {
           // Pop down the nuclet edit dialog.
           nucletEditForm.classList.add('az-hidden');
@@ -154,6 +130,8 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
           editNuclet = intersects[0].object.parent.parent;
           nucletEditForm.classList.remove('az-hidden');
           setEditNuclet(editNuclet);
+//        nucletEditForm.style.top =  (event.clientY - 250) + 'px';
+//        nucletEditForm.style.left = (event.clientX - 300)+ 'px';
           nucletEditForm.style.top =  10  +'px';
           nucletEditForm.style.left = 214 + 'px';
           return false;
@@ -162,12 +140,6 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     }
   };
 
-  /**
-   * Create the button or label for a grow point
-   *
-   * @param id
-   * @param nucletGrow
-   */
   function createGrowItem(id, nucletGrow) {
     var label = nucletGrow.getElementsByTagName('LABEL')[0];
     var div = nucletGrow.getElementsByTagName('DIV')[0];
@@ -225,36 +197,41 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     editNuclet = nuclet;
   }
 
-  /**
-   * Set Default values for any forms.
-   */
   function setDefaults() {
-    userAtomFile = localStorage.getItem('atomizer_builder_atom');
+    userAtomFile = localStorage.getItem('atomizer_viewer_atom');
     if (userAtomFile && userAtomFile != 'undefined') {
       var selectyml = document.getElementById('atom--selectyml');
       if (selectyml) {
         select = selectyml.querySelector('select');
         select.value = userAtomFile;
       }
+      return;
     }
   }
 
-  /**
-   * Create the view - add any objects to scene.
-   */
   var createView = function () {
+
     viewer.nuclet = Drupal.atomizer.nucletC(viewer);
     viewer.atom = Drupal.atomizer.atomC(viewer);
 
     // Load and display the default atom
-    var userAtomNid = localStorage.getItem('atomizer_builder_atom_nid');
-    viewer.view.atom = viewer.atom.loadAtom((userAtomNid == 'undefined') ? 73 : userAtomNid);
+    userAtomNid = localStorage.getItem('atomizer_viewer_atom_nid');
+    if (userAtomNid == 'undefined') {
+      // Use the backbone.
+      atomNid = 73;
+    } else {
+      atomNid = (userAtomNid && userAtomNid != 'undefined') ? userAtomNid : 39;
+
+    }
+
+    viewer.view.atom = viewer.atom.loadAtom(atomNid);
 
     // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
     viewer.view.ghostProton = viewer.nuclet.makeProton({type: 'ghost'}, 1, {x: 300, y: 50, z: 0});
+
+    return;
   };
 
-  // Add event listeners to the nuclet edit form
   var radios = document.forms["atomizer-controls-form"].elements["nuclet--state"];
   for(var i = radios.length - 1; i > 0; i--) {
     radios[i].onclick = function (event) {
@@ -265,6 +242,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     }
     radios[i].id = radios[i].id + '--' + radios[i].value;
   }
+
 
   return {
     createView: createView,

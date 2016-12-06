@@ -139,7 +139,8 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
         if (defaultSet.styles[id]) {
           def = defaultSet.styles[id].defaultValue;
         } else {
-          alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
+//        alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
+          console.log('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
         }
         if (updateAll || currentSet.styles[id].defaultValue != def) {
           if (!controlsOnly) {
@@ -340,14 +341,28 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
       if (currentSet.styles[id]) {
         return currentSet.styles[id]['defaultValue'];
       } else {
-        return viewer.controls.getDefault(id);
+        var value = viewer.controls.getDefault(id, index);
+        if (value == null) {
+          if (id.indexOf('--color')) {
+            return '#ffff00';   // yellow
+          }
+          return 1;
+        }
+        return value;
       }
     } else {
       if (currentSet.styles[id] && currentSet.styles[id][index]) {
         return currentSet.styles[id]['defaultValue'][index];
       } else {
 //      alert('style for rotation or position needs fixed');
-        return viewer.controls.getDefault(id, index);
+        var value = viewer.controls.getDefault(id, index);
+        if (value == null) {
+          if (id.indexOf('--color')) {
+            return '#ffff00';   // yellow
+          }
+          return 1;
+        }
+        return value;
       }
     }
   };

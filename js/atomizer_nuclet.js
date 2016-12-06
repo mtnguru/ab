@@ -230,14 +230,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       visible:     (opacity > constants.visibleThresh),
       roughness: 0.5,
       metalness: 0,
-//    shading: THREE.FlatShading
     } );
     var faces = new THREE.Mesh(geometry, material);
-//  for (var i = 0; i < faces.geometry.faces.length; i++) {
-//    var face = faces.geometry.faces[i];
-//    face.azid = ''
-//    continue;
-//  }
     faces.scale.set(scale, scale, scale);
     faces.init_scale = scale;
     faces.name = id;
@@ -320,28 +314,17 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     // Set the Mesh material
     var materials = [];
-    if (mat.wireframe) {
-      materials.push(new THREE.MeshBasicMaterial(mat.wireframe));
-    }
-
-    if (mat.lambert) {
-      materials.push(new THREE.MeshLambertMaterial(mat.lambert));
-    }
-
-    if (mat.phong) {
-      materials.push(new THREE.MeshPhongMaterial(mat.phong));
-    }
-
-    if (mat.doubleSided) {
-      materials[0].side = THREE.DoubleSide;
-    }
+    if (mat.wireframe)   { materials.push(new THREE.MeshBasicMaterial(mat.wireframe)); }
+    if (mat.lambert)     { materials.push(new THREE.MeshLambertMaterial(mat.lambert)); }
+    if (mat.phong)       { materials.push(new THREE.MeshPhongMaterial(mat.phong)); }
+    if (mat.doubleSided) { materials[0].side = THREE.DoubleSide; }
 
     // Create the object
     var object;
     if (materials.length == 1) {
-//    object = new THREE.Mesh(geometry, materials[0]);
       if (name == 'proton') {
-        object = new Physijs.SphereMesh(geometry, materials[0]);
+//      object = new Physijs.SphereMesh(geometry, materials[0]);
+        object = new THREE.Mesh(geometry, materials[0]);
       } else {
         object = new THREE.Mesh(geometry, materials[0]);
       }
@@ -473,10 +456,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
     // Remove the proton from the viewer.objects.protons array
     for (var p = 0; p < protons.length; p++) {
       var proton = protons[p];
-      // Remove protons from the protons, optionalProtons and hiddenProtons arrays.
+      // Remove protons from the objects.protons array
       viewer.objects.protons = viewer.objects.protons.filter(function (e) {return e !== proton;})
-      viewer.objects.optionalProtons = viewer.objects.optionalProtons.filter(function(e) { return e !== proton; })
-      viewer.objects.hiddenProtons = viewer.objects.hiddenProtons.filter(function(e) { return e !== proton; })
     }
   }
 
@@ -491,18 +472,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
       var proton = nuclet.az.protons[protons[p]];
       if (show) {
         if (viewer.objects.protons.indexOf(proton) === -1) viewer.objects.protons.push(proton);
-        viewer.objects.hiddenProtons = viewer.objects.hiddenProtons.filter(function (e) {return e !== proton;});
         proton.material.visible = true;
         proton.material.opacity = 1;
         proton.material.transparent = false;
       } else {
-        if (viewer.objects.hiddenProtons.indexOf(proton) === -1) viewer.objects.hiddenProtons.push(proton);
         viewer.objects.protons = viewer.objects.protons.filter(function (e) { return e !== proton; });
         proton.material.visible = false;
         proton.material.opacity = 0;
         proton.material.transparent = true;
       }
-      var darn = 5;
     }
   }
 
@@ -543,11 +521,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
       state: nucletConf.state
     };
 
-    nuclet.geo = drupalSettings.atomizer_config.nuclets[nucletConf.state.replace('-', '_')];
+    nuclet.geo = drupalSettings.atomizer_config.objects[nucletConf.state.replace('-', '_')];
 
     var protons;
     var electrons;
     switch (nucletConf.state) {
+      case 'dodecahedron':
+        protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+        break;
       case 'neutral':
         protons = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
         electrons = [0,1,2,3,4,5];
@@ -570,6 +551,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
         electrons = [0,1,2,3,4,5];
         break;
       case 'carbon':
+      case 'icosahedron':
         protons = [0,1,2,3,4,5,6,7,8,9,10,11];
         electrons = [0,1,2,3,4,5];
     }
@@ -578,6 +560,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     if (id != 'N0' && protons[10]) protons[10] = undefined;
 
     // If the configuration for protons and electrons is not set then use the default values set above.
+    // @TODO This needs to be pulled from configuration, get rid of the above switch statement.
     if (!nucletConf.protons) nucletConf.protons = protons;
     if (!nucletConf.electrons) nucletConf.electrons = electrons;
 
@@ -621,10 +604,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
 //        nuclet.scale.set(scale,scale,scale);
         }
 
-
         // Add Protons
         if (geo.protons) {
-
           // Move to a new location
           var protons;
           var electrons;
@@ -648,14 +629,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
             case 'boron':
               vids = [0,2];
               for (p = 0; p < vids.length; p++) {
-                geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.25;
+                geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.23;
                 geometry.vertices[vids[p]].y = geometry.vertices[vids[p]].y * 0.95;
               }
               vids = [4,5,6,7];
               for (p = 0; p < vids.length; p++) {
                 geometry.vertices[vids[p]].z = geometry.vertices[vids[p]].z * 0.85;
               }
-              geometry.vertices[9].set(0, protonRadius * 0.9, 0);
+              geometry.vertices[9].set(0, protonRadius * 0.95, 0);
               break;
             case 'lithium':
               // Move the top center proton to the correct position.
@@ -892,7 +873,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     innerShell.name = 'nucletInner-' + id;
     innerShell.add(nuclet);
 
-    // Create helper axis
+    // Create inner shell helper axis
     innerShell.add(createHelperAxes('nucletInnerAxes', protonRadius * 5, 3));
 
     //// Create outer shell
@@ -900,7 +881,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     outerShell.name = 'nucletOuter-' + id;
     outerShell.add(innerShell);
 
-    // Create helper axis
+    // Create outer shell helper axis
     outerShell.add(createHelperAxes('nucletOuterAxes', protonRadius * 4, 5));
 
     //// Set the nucletShell position
@@ -913,6 +894,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return outerShell;
   }
 
+  /**
+   * Delete a nuclet from the scene.
+   *
+   * @param nuclet
+   */
   function deleteNuclet(nuclet) {
     // If there is a '0' nuclet, delete it recursively
     if (viewer.atom.az().nuclets[nuclet.az.id + '0']) {
@@ -931,6 +917,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       }
     }
     // Remove nuclet from the atom
+    delete viewer.atom.az().nuclets[nuclet.az.id];
     nuclet.parent.parent.parent.remove(nuclet.parent.parent);
   }
 
@@ -1053,6 +1040,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @param object
    */
   function addObject(name, object) {
+    if (!viewer.objects) viewer.objects = {};
     if (viewer.objects[name]) {
       viewer.objects[name].push(object);
     } else {
