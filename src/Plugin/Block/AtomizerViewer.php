@@ -5,6 +5,7 @@ namespace Drupal\atomizer\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\atomizer\Utils\AtomizerInit;
+use Drupal\atomizer\Utils\AtomizerFiles;
 
 /**
  * Provides a 'Atomizer' block.
@@ -31,7 +32,7 @@ class AtomizerViewer extends BlockBase {
       '#title' => $this->t('Atomizer file'),
       '#description' => $this->t(''),
       '#default_value' => isset($this->configuration['atomizer_file']) ? $this->configuration['atomizer_file'] : 'default',
-      '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/' . $controlConf[4], '/\.yml/'),
+      '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/'),
     );
 
     return $form;
