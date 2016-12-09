@@ -77,19 +77,13 @@ class AtomFormatter extends FormatterBase {
     $elements = array();
 
     foreach ($items as $delta => $item) {
-      $parent1 = $item->parent;
-      $parent2 = $parent1->parent;
-      $entity  = $parent2->entity;
-      $values = $entity->values;
-      $nid = $values['nid'];
-      $default = $nid['x-default'];
       // Read in the config/atomizer file
       $config = [
         'atom_id' => 1,
         'atomizer_id' => 'Atomizer Viewer',
         'atomizer_file' => $this->getSetting('atomizer'),
         'label' => 'Atomizer Embed',
-        'nid' => $item->parent->parent->entity->values['nid']['x-default'],
+        'nid' => $items->getEntity()->nid->value,
       ];
 
       $elements[$delta] = AtomizerInit::start($config);

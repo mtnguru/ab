@@ -296,10 +296,10 @@ styles:
       - 1
     type: rotation
   ambient--color:
-    defaultValue: '#888888'
+    defaultValue: '#989494'
     type: color
   spotlight-1--color:
-    defaultValue: '#775577'
+    defaultValue: '#9c789c'
     type: color
   spotlight-1--position--x:
     defaultValue:
@@ -320,7 +320,7 @@ styles:
       - -500
     type: position
   spotlight-2--color:
-    defaultValue: '#557777'
+    defaultValue: '#8eb6b6'
     type: color
   spotlight-2--position--x:
     defaultValue:
@@ -341,7 +341,7 @@ styles:
       - -200
     type: position
   spotlight-3--color:
-    defaultValue: '#777755'
+    defaultValue: '#b0b089'
     type: color
   spotlight-3--position--x:
     defaultValue:
@@ -665,7 +665,7 @@ styles:
     defaultValue: 5
     type: range
   nuclet--attachAngle:
-    defaultValue: 1
+    defaultValue: '5'
     type: range
   attachLines--opacity:
     defaultValue: 0

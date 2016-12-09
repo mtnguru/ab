@@ -12,7 +12,6 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
 
   var editNuclet;
   var nucletEditForm =    document.getElementById('hidden-nuclet');
-  var hiddenControls =    document.getElementById('hidden-controls');
 
   var nucletAngle =       document.getElementById('nuclet--attachAngle');
   var nucletAngleSlider = document.getElementById('nuclet--attachAngle--az-slider');
@@ -22,6 +21,10 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
 
   var nucletGrow0 =       document.getElementById('edit-nuclet-grow-0');
   var nucletGrow1 =       document.getElementById('edit-nuclet-grow-1');
+
+  var hoverProtons = [];
+  var visibleProtons = [];
+  var highlightedProton;
 
   // Add Event Listener to attachAngle slider
   nucletAngleSlider.addEventListener('input', onAngleChanged);
@@ -46,8 +49,10 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     // Delete the protons from the
     viewer.atom.deleteNuclet(editNuclet.az.id);
     delete viewer.atom.az().nuclets[editNuclet.az.id];
-    nucletEditForm.classList.add('az-hidden');
+    createProtonLists();
     viewer.render();
+
+    nucletEditForm.classList.add('az-hidden');
   }
 
   /**
@@ -59,6 +64,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     var nuclet = viewer.atom.addNuclet(id);
     setEditNuclet(nuclet);
     viewer.atom.setValenceRings();
+    createProtonLists();
     viewer.render();
   }
 
@@ -68,15 +74,9 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
    * @returns {*}
    */
   var hoverObjects = function hoverObjects() {
-    if (viewer.objects && viewer.objects.protons) {
-      return viewer.objects.protons;
-    } else {
-      return [];
-    }
-
+    return hoverProtons;
   };
 
-  var highlightedProton;
   /**
    * User has hovered over a proton, set transparency to .5.
    *
@@ -122,7 +122,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var mouseClick = function mouseClick(event) {
     switch (event.which) {
       case 1:
-        var intersects = viewer.controls.findIntersects(viewer.objects.protons);
+        var intersects = viewer.controls.findIntersects(hoverProtons);
         event.preventDefault();
         if (intersects.length) {
           var proton = intersects[0].object;
@@ -130,20 +130,14 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
             proton.az.visible = !proton.az.visible;
             proton.material.visible = proton.az.visible;
             viewer.atom.setValenceRings();
+            createProtonLists();
             viewer.render();
           }
         }
         break;
       case 3:
         event.preventDefault();
-        var activeProtons = [];
-        for (var p = 0; p < viewer.objects.protons.length; p++) {
-          var proton = viewer.objects.protons[p];
-          if (proton.az.active) {
-            activeProtons.push(proton);
-          }
-        }
-        var intersects = viewer.controls.findIntersects(activeProtons);
+        var intersects = viewer.controls.findIntersects(visibleProtons);
         if (intersects.length == 0) {
           // Pop down the nuclet edit dialog.
           nucletEditForm.classList.add('az-hidden');
@@ -161,6 +155,23 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
         break;
     }
   };
+
+  function createProtonLists() {
+    hoverProtons = [];
+    visibleProtons = [];
+    var nuclets = viewer.atom.az().nuclets;
+    for (var id in nuclets) {
+      if (nuclets.hasOwnProperty(id)) {
+        var protons = nuclets[id].az.protons;
+        for (var p = 0; p < protons.length; p++) {
+          if (protons[p]) {
+            if (protons[p].az.active)  hoverProtons.push(protons[p]);
+            if (protons[p].az.visible)  visibleProtons.push(protons[p]);
+          }
+        }
+      }
+    }
+  }
 
   /**
    * Create the button or label for a grow point
@@ -239,6 +250,10 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     }
   }
 
+  var atomLoaded = function atomLoaded() {
+    createProtonLists();
+  };
+
   /**
    * Create the view - add any objects to scene.
    */
@@ -260,6 +275,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     radios[i].onclick = function (event) {
       if (event.target.tagName == 'INPUT') {
         editNuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
+        createProtonLists();
         viewer.render();
       }
     }
@@ -271,7 +287,8 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     setDefaults: setDefaults,
     mouseClick: mouseClick,
     hoverObjects: hoverObjects,
-    hovered: hovered
+    hovered: hovered,
+    atomLoaded: atomLoaded
   };
 };
 

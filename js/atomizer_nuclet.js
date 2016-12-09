@@ -5,10 +5,21 @@
  */
 
 /**
- * Creates an instance of a nucletC - does not really do anything except define function to call.
+ * Class to build and maintain individual nuclets
+ * d$does not really do anything except define function to call.
  *
  * @param _viewer
- * @returns {{makeObject: makeObject, makeProton: makeProton, create: createNuclet, createGeometryWireframe: createGeometryWireframe, createGeometryFaces: createGeometryFaces, objects: {}, protonRadius: *}}
+ * @returns {
+ *   {makeObject: makeObject,
+ *    makeProton: makeProton,
+ *    showProtons: showProtons,
+ *    createNuclet: createNuclet,
+ *    deleteNuclet: deleteNuclet,
+ *    createGeometry: createGeometry,
+ *    createGeometryWireframe: createGeometryWireframe,
+ *    createGeometryFaces: createGeometryFaces,
+ *    protonRadius}
+ * }
  */
 Drupal.atomizer.nucletC = function (_viewer) {
   var viewer = _viewer;
@@ -408,24 +419,27 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @returns {*}
    */
   function makeProton(conf, opacity, pos) {
-    conf.type = conf.type || 'default';
-    conf.visible = ('visible' in conf) ? conf.visible : true;
-    conf.optional = conf.optional || false;
-    conf.active = conf.active || true;
+
+    var az = {
+      type: conf.type || 'default',
+      visible: ('visible' in conf) ? conf.visible : true,
+      optional: conf.optional || false,
+      active: conf.active || true
+    };
 
     var opacity = viewer.style.get('proton--opacity');
 
     var visible;
-    if (conf.active === false) {
+    if (az.active === false) {
       visible = false;
     }  else {
-      visible = (conf.visible === false) ? false : (opacity > constants.visibleThresh);
+      visible = (az.visible === false) ? false : (opacity > constants.visibleThresh);
     }
 
     var proton = makeObject('proton',
       {
         phong: {
-          color: protonColors[conf.type],
+          color: protonColors[az.type],
           opacity: opacity,
           transparent: (opacity < constants.transparentThresh),
           visible: visible,
@@ -442,8 +456,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       }
     );
     proton.material.visible = visible;
-    proton.name = 'proton-' + conf.type;
-    proton.az = conf;
+    proton.name = 'proton-' + az.type;
+    proton.az = az;
     return proton;
   }
 
@@ -453,12 +467,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @param proton
    */
   function deleteProtons(protons) {
+    /*
     // Remove the proton from the viewer.objects.protons array
     for (var p = 0; p < protons.length; p++) {
       var proton = protons[p];
       // Remove protons from the objects.protons array
       viewer.objects.protons = viewer.objects.protons.filter(function (e) {return e !== proton;})
     }
+    */
   }
 
   /**
@@ -471,12 +487,12 @@ Drupal.atomizer.nucletC = function (_viewer) {
     for (var p = 0; p < protons.length; p++) {
       var proton = nuclet.az.protons[protons[p]];
       if (show) {
-        if (viewer.objects.protons.indexOf(proton) === -1) viewer.objects.protons.push(proton);
+//      if (viewer.objects.protons.indexOf(proton) === -1) viewer.objects.protons.push(proton);
         proton.material.visible = true;
         proton.material.opacity = 1;
         proton.material.transparent = false;
       } else {
-        viewer.objects.protons = viewer.objects.protons.filter(function (e) { return e !== proton; });
+//      viewer.objects.protons = viewer.objects.protons.filter(function (e) { return e !== proton; });
         proton.material.visible = false;
         proton.material.opacity = 0;
         proton.material.transparent = true;
@@ -534,15 +550,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
         electrons = [0,1,2,3,4,5];
         break;
       case 'lithium':
-        protons = [10, 1, 4, 5, 3, 11, 9];
-        electrons = [0,1,2];
-        break;
-      case 'boron':
-        protons = [0, 2, 10, 1, 4, 5, 3, 11, 9, 6, 7];
+        protons = [0,1,3,4,5,9,11];
         electrons = [0,1,2];
         break;
       case 'beryllium':
-        protons = [10, 1, 4, 5, 3, 11, 9, 6, 7];
+        protons = [1,3,4,5,6,7,9,10,11];
+        electrons = [0,1,2];
+        break;
+      case 'boron':
+        protons = [0,1,2,3,4,5,6,7,9,10,11];
         electrons = [0,1,2];
         break;
       case 'backbone-initial':
@@ -557,7 +573,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
     }
 
     // Remove the attach proton if this isn't 'N0'
-    if (id != 'N0' && protons[10]) protons[10] = undefined;
+    if (id != 'N0') {
+      var i = protons.indexOf(10);
+      if (i > -1) protons[i] = undefined;
+    }
 
     // If the configuration for protons and electrons is not set then use the default values set above.
     // @TODO This needs to be pulled from configuration, get rid of the above switch statement.
@@ -657,6 +676,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
           nuclet.az.protonGeometry = geometry;
           for (var p in geo.protons) {
             if (!geo.protons.hasOwnProperty(p)) continue;
+            var visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
             geo.protons[p].visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
             var proton = makeProton(geo.protons[p], opacity, geometry.vertices[p]);
             addObject('protons', proton);

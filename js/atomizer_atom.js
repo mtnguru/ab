@@ -3,11 +3,11 @@
  *
  * Manage atom's - load, save, create
  */
+var atom;
 
 Drupal.atomizer.atomC = function (_viewer) {
 
   var viewer = _viewer;
-  var atom;
   var atomConf;
   var atomInformation = document.getElementById('atom--information');
 
@@ -49,20 +49,17 @@ Drupal.atomizer.atomC = function (_viewer) {
    * @param value
    */
   function changeNucletState(nuclet, state) {
-    var az = nuclet.az;
+    var id = nuclet.az.id;
+    var attachAngle = nuclet.az.attachAngle;
     var parent = nuclet.parent.parent.parent;
     viewer.nuclet.deleteNuclet(nuclet);
-    delete atom.az.nuclets[nuclet.az.id];
 
-    az.conf = {
-      state: state,
-      attachAngle: az.attachAngle
-    };
-
-    var nucletOuterShell = createNuclet(az.id, az.conf, parent);
+    var nucletOuterShell = createNuclet(
+      id,
+      {state: state, attachAngle: attachAngle},
+      parent
+    );
     nuclet = nucletOuterShell.children[0].children[0];
-    atom.az.nuclets[nuclet.az.id] = nuclet;
-
     setValenceRings();
 
     return nuclet;
@@ -107,9 +104,8 @@ Drupal.atomizer.atomC = function (_viewer) {
 
     // Create the new nuclet
     var nucletOuterShell = createNuclet(id, conf, parent);
-    var nuclet = nucletOuterShell.children[0].children[0];
-    atom.az.nuclets[nuclet.az.id] = nuclet;
-    return nuclet;
+    setValenceRings();
+    return nucletOuterShell.children[0].children[0];
   }
 
   /**
@@ -148,14 +144,17 @@ Drupal.atomizer.atomC = function (_viewer) {
     var nucletOuterShell = viewer.nuclet.createNuclet(id, nucletConf);
     var nucletInnerShell = nucletOuterShell.children[0];
     var nuclet = nucletOuterShell.children[0].children[0];
+    nuclet.az.attachAngle = nucletConf.attachAngle;
     parent.add(nucletOuterShell);
 
     // Rotate and position the nuclet onto it's parents grow point.
     if (nuclet.az.id != 'N0') {
-      var growSide = nuclet.az.id.substr(nuclet.az.id.length - 1);
+      var side = nuclet.az.id.substr(nuclet.az.id.length - 1);
+      var parentId = nuclet.az.id.slice(0, -1);
+      activateNeutralProtons( side, atom.az.nuclets[parentId], false, false );
       var growId;
       var attachId;
-      if (growSide == 0) {  // left side
+      if (side == 0) {  // left side
         growId = 0;
 
         // attach on 10
@@ -177,7 +176,7 @@ Drupal.atomizer.atomC = function (_viewer) {
 //      nucletInnerShell.initial_rotation_y = -162;
       }
 
-      var growProton = atom.children[0].children[0].children[0].az.protons[growId];
+      var growProton = atom.az.nuclets[parentId].az.protons[growId];
       var growPt = growProton.position.clone();
 
       // Create normalized axis of vector to rotate to.
@@ -221,6 +220,7 @@ Drupal.atomizer.atomC = function (_viewer) {
     atom.az.nuclets[nuclet.az.id] = nuclet;
 
     if (nucletConf.nuclets) {
+      viewer.render();
       for (var id in nucletConf.nuclets) {
         createNuclet(id, nucletConf.nuclets[id], nuclet);
         activateNeutralProtons(id.charAt(id.length-1), nuclet, false, false);
@@ -260,10 +260,6 @@ Drupal.atomizer.atomC = function (_viewer) {
           atomInformation.innerHTML = result.data.teaser;
         }
 
-        viewer.objects = {
-          protons: [],
-          electrons: []
-        };
         if (atom) {
           // Remove any atom's currently displayed
           viewer.scene.remove(atom);
@@ -279,6 +275,10 @@ Drupal.atomizer.atomC = function (_viewer) {
         createAtom(result.data.atomConf['N0']);
       }
     }
+    viewer.producer.atomLoaded();
+    if (typeof viewer.producer.atomloaded == 'function') {
+      viewer.producer.atomLoaded();
+    }
   };
 
   var createAtom = function createAtom (atomConf) {
@@ -287,7 +287,6 @@ Drupal.atomizer.atomC = function (_viewer) {
     atom.name = 'atom';
     atom.az = {nuclets: {}};
     createNuclet('N0', atomConf, atom);
-
     setValenceRings();
 
     viewer.scene.add(atom);
