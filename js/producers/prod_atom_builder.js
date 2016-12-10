@@ -26,10 +26,6 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var visibleProtons = [];
   var highlightedProton;
 
-  // Add Event Listener to attachAngle slider
-  nucletAngleSlider.addEventListener('input', onAngleChanged);
-  nucletDelete.addEventListener('click', onNucletDelete);
-
   /**
    * User has changed the nuclet angle slider.
    *
@@ -250,7 +246,8 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     }
   }
 
-  var atomLoaded = function atomLoaded() {
+  var atomLoaded = function atomLoaded(atom) {
+    localStorage.setItem('atomizer_viewer_atom_nid', atom.az.nid);
     createProtonLists();
   };
 
@@ -268,6 +265,12 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
     viewer.view.ghostProton = viewer.nuclet.makeProton({type: 'ghost'}, 1, {x: 300, y: 50, z: 0});
   };
+
+  /////////// Attach event listeners
+
+  // Add Event Listener to attachAngle slider
+  nucletAngleSlider.addEventListener('input', onAngleChanged);
+  nucletDelete.addEventListener('click', onNucletDelete);
 
   // Add event listeners to the nuclet edit form
   var radios = document.forms["atomizer-controls-form"].elements["nuclet--state"];

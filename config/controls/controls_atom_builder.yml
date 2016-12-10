@@ -129,7 +129,7 @@ styler:
 
       icosaVertexid--label:       ['IDs',          'label']
       icosaVertexid--opacity:     ['Opacity',      'range',     0,  [0, 1, .01]]
-      icosaVertexids--scale:      ['Scale',        'range',     1,  [0, 3, .01]]
+#     icosaVertexids--scale:      ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr2:                        [ null, 'hr']
       icosaFaces--color:          ['Faces',        'color',    '#88cccc']
@@ -137,7 +137,7 @@ styler:
 
       icosaFaceid--label:         ['IDs',          'label']
       icosaFaceid--opacity:       ['Opacity',      'range',     0,  [0, 1, .01]]
-      icosaFaceids--scale:        ['Scale',        'range',     1,  [0, 3, .01]]
+#     icosaFaceids--scale:        ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr4:                        [ null, 'hr']
       icosaAxes--color:           ['Axis',         'color',    '#ffbbcc']
@@ -158,7 +158,7 @@ styler:
 
       decaVertexid--label:          ['IDs',          'label']
       decaVertexid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
-      decaVertexids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+#     decaVertexids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr2:                          [ null, 'hr']
       decaFaces--color:             ['Faces',        'color',    '#88cccc']
@@ -166,7 +166,7 @@ styler:
 
       decaFaceid--label:            ['IDs',          'label']
       decaFaceid--opacity:          ['Opacity',      'range',     0,  [0, 1, .01]]
-      decaFaceids--scale:           ['Scale',        'range',     1,  [0, 3, .01]]
+#     decaFaceids--scale:           ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr4:                          [ null, 'hr']
       decaAxes--color:              ['Axis',         'color',    '#aabb99']
@@ -190,7 +190,7 @@ styler:
 
       dodecaVertexid--label:        ['IDs',          'label']
       dodecaVertexid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
-      dodecaVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+#     dodecaVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr2:                          [ null, 'hr']
       dodecaFaces--color:           ['Faces',        'color',    '#88cccc']
@@ -198,7 +198,7 @@ styler:
 
       dodecaFaceid--label:          ['IDs',          'label']
       dodecaFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
-      dodecaFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+#     dodecaFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr4:                          [ null, 'hr']
       dodecaAxes--color:            ['Axis',         'color',    '#aabb99']
@@ -218,7 +218,7 @@ styler:
 
       octaVertexid--label:         ['IDs',          'label']
       octaVertexid--opacity:       ['Opacity',      'range',    0,  [0, 1, .01]]
-      octaVertexids--scale:        ['Scale',        'range',    1,  [0, 3, .01]]
+#     octaVertexids--scale:        ['Scale',        'range',    1,  [0, 3, .01]]
 
       hr3:                         [ null, 'hr']
       octaAxes--color:             ['Axis',         'color',    '#ffbbcc']
@@ -241,7 +241,7 @@ styler:
 
       tetraVertexid--label:        ['IDs',          'label']
       tetraVertexid--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
-      tetraVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+#     tetraVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr2:                         [ null, 'hr']
       tetraFaces--color:           ['Faces',        'color',    '#88cccc']
@@ -249,7 +249,7 @@ styler:
 
       tetraFaceid--label:          ['IDs',          'label']
       tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
-      tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+#     tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
       hr3:                         [ null, 'hr']
       tetraAxes--color:            ['Axis',         'color',    '#ffbbcc']
@@ -289,18 +289,3 @@ styler:
       spotlight-3--color:      ['Spotlight 3',   'color',    '#555588']
       spotlight-3--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
 
-  nuclet-debug:
-    title:               Nuclet Debug
-    controls:
-      hr1:                        [ null,              'hr']
-      nuclet-N00--label:          ['Nuclet',           'label']
-      nuclet-N00--position:       ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
-      nuclet-N00--rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
-      hr2:                        [ null,              'hr']
-      nucletInner-N00--label:     ['Inner Nuclet Shell',     'header']
-      nucletInner-N00--position:  ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
-      nucletInner-N00--rotation:  ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
-      hr3:                        [ null,              'hr']
-      nucletOuter-N00--label:     ['Outer Nuclet Shell',     'header']
-      nucletOuter-N00--position:  ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
-      nucletOuter-N00--rotation:  ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]

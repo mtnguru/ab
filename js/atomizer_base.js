@@ -34,7 +34,7 @@ Drupal.atomizer.baseC = function () {
         if (successCallback) successCallback(response);
       },
       error: function (response) {
-        alert(response.responseText);
+        alert('atomizer_base doAjax: ' + response.responseText);
         (errorCallback) ? errorCallback(response) : successCallback(response);
       }
     });

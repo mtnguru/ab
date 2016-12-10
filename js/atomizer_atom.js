@@ -121,6 +121,7 @@ Drupal.atomizer.atomC = function (_viewer) {
 
     // Activate the neutral ending protons on the parent but don't show.
     activateNeutralProtons(id.charAt(id.length-1), parent, true, false);
+    setValenceRings();
   }
 
   /**
@@ -265,19 +266,13 @@ Drupal.atomizer.atomC = function (_viewer) {
           viewer.scene.remove(atom);
           az = atom.az;
         } else {
-          az = {
-            nuclets: {},
-          }
+          az = {nuclets: {}}
         }
-        atomConf = result.data.atomConf;
-        localStorage.setItem('atomizer_builder_atom_nid', result.data.nid);
 
         createAtom(result.data.atomConf['N0']);
+        atom.az.nid = result.data.nid;
+        viewer.producer.atomLoaded(atom);
       }
-    }
-    viewer.producer.atomLoaded();
-    if (typeof viewer.producer.atomloaded == 'function') {
-      viewer.producer.atomLoaded();
     }
   };
 

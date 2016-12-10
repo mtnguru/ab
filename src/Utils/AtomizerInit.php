@@ -18,6 +18,9 @@ class AtomizerInit {
     $atomizer['filename']   = $config['atomizer_file'];
     $atomizer['atomizerId'] = $config['atomizer_id'];
     $atomizer['id'] = $id = strtolower(str_replace(['_', ' '], '-', $config['atomizer_id']));
+    if (!empty($config['nid'])) {
+      $atomizer['nid'] = $config['nid'];
+    }
 
 //  Read in the objects
     $objects = [];

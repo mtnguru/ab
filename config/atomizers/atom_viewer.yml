@@ -1,8 +1,11 @@
 name: Atom Viewer
 defaultView: viewer
 styleSetDirectory: config/style/atom_viewer
+libraries: [atomizer/atomizer-base, atomizer/atomizer-atom-viewer]
+objects: [nuclets]
+canvasRatio: window
 views:
-  builder:
+  viewer:
     name: Atom Viewer
     producer: atom_viewer
     defaultAtom: carbon.yml

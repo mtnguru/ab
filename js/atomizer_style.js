@@ -96,6 +96,15 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
    * @param styles
    */
   var saveStyle = function (styleSet) {
+
+    var styles = styleSet.styles;
+    var sortedKeys = Object.keys(styles).sort();
+    delete styleSet.styles;
+    styleSet.styles = {};
+    for (var key in sortedKeys) {
+      var pname = sortedKeys[key];
+      styleSet.styles[sortedKeys[key]] = styles[sortedKeys[key]];
+    }
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/saveYml',
@@ -189,9 +198,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
         }
         break;
 
-      case 'ambient':
-        node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
-        break;
+//    case 'ambient':
+//      node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+//      break;
 
       default:
         viewer.scene.traverse(function (node) {
@@ -248,7 +257,13 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                 var opacity =     value;
                 var visible =     (value > .02);
                 var transparent = (value < .97);
-                if (argNames[0].indexOf('Wireframe') > -1) {
+                if (argNames[0] == 'proton') {
+                  if (node.az.active) {
+                    node.material.opacity = opacity;
+                    node.material.visible = visible;
+                    node.material.transparent = transparent;
+                  }
+                } else if (argNames[0].indexOf('Wireframe') > -1) {
                   if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
                     for (var i = 0; i < node.children.length; i++) {
                       node.children[i].material.opacity = opacity;
@@ -285,18 +300,24 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                 break;
 
               case 'color':
-                if (argNames[0] == 'spotlight') {
-                  node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
-                } else if (argNames[0].indexOf('Wireframe') > -1) {
-                  if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
-                    for (var i = 0; i < node.children.length; i++) {
-                      node.children[i].material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                switch (argNames[0]) {
+                  case 'ambient':
+                  case 'spotlight':
+                    node.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                    break;
+                  default:
+                    if (argNames[0].indexOf('Wireframe') > -1) {
+                      if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
+                        for (var i = 0; i < node.children.length; i++) {
+                          node.children[i].material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                        }
+                      } else {
+                        node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                      }
+                    } else {
+                      node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
                     }
-                  } else {
-                    node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
-                  }
-                } else {
-                  node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                    break;
                 }
                 break;
 
@@ -351,8 +372,8 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
         return value;
       }
     } else {
-      if (currentSet.styles[id] && currentSet.styles[id][index]) {
-        return currentSet.styles[id]['defaultValue'][index];
+      if (currentSet.styles[id + '--' + index]) {
+        return currentSet.styles[id + '--' + index]['defaultValue'];
       } else {
 //      alert('style for rotation or position needs fixed');
         var value = viewer.controls.getDefault(id, index);

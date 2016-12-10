@@ -674,12 +674,13 @@ Drupal.atomizer.nucletC = function (_viewer) {
           // Create protons
           nuclet.az.protons = [];
           nuclet.az.protonGeometry = geometry;
+          var opacity = viewer.style.get('proton--opacity');
           for (var p in geo.protons) {
             if (!geo.protons.hasOwnProperty(p)) continue;
             var visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
             geo.protons[p].visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
             var proton = makeProton(geo.protons[p], opacity, geometry.vertices[p]);
-            addObject('protons', proton);
+//          addObject('protons', proton);
             nucletGroup.add(proton);
             nuclet.az.protons[p] = proton;
           }
@@ -857,7 +858,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
         // Create particle ids
         if (geo.particleids) {
-          nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
+//        nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
         }
 
         viewer.render();

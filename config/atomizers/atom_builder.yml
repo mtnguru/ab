@@ -10,4 +10,9 @@ views:
     producer: atom_builder
     defaultAtom: carbon.yml
     styleSetPath: config/style/atom_builder/base.yml
+  builder2:
+    name: Atom Builder
+    producer: atom_builder
+    defaultAtom: carbon.yml
+    styleSetPath: config/style/atom_builder/base.yml
 

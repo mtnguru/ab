@@ -149,6 +149,37 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
 
   }
 
+  function setStyleDefaults() {
+    // Initialize all the sliders, buttons and color fields in the styler blocks
+    if (!viewer.atomizer.styleSet) return;
+    for (var controlId in viewer.atomizer.styleSet.styles) {
+      var control = viewer.atomizer.styleSet.styles[controlId];
+      var id = controlId.replace(/_/g, "-");
+      var element = document.getElementById(id);
+      if (element || control.type == 'rotation' || control.type == 'position') {
+        switch (control.type) {
+          case 'color':
+          case 'range':
+            viewer.style.set(control.defaultValue, id, control.type);
+            break;
+          case 'rotation':
+          case 'position':
+            var sid;
+            sid = id + '--az-slider';
+            viewer.style.set(control.defaultValue, id + '--az-slider', control.type);
+
+            sid = id + '--az-slider';
+            viewer.style.set(control.defaultValue, id, control.type);
+
+            sid = id + '--az-slider';
+            viewer.style.set(control.defaultValue, id, control.type);
+            break;
+        }
+        // Make sure that style has default values for all controls
+      }
+    }
+  }
+
   /**
    * Initialize controls
    *
@@ -158,13 +189,17 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    */
   function initializeControls() {
 
+    // Extract default values to initialize styles
+    setStyleDefaults();
+
     var form = document.forms['atomizer-controls-form'];
+    if (!form) return;
 
     // Add a change listener to each item in the styler select list
     showStylerBlock();
     styler.addEventListener("change", showStylerBlock);
 
-    // Initialize all the sliders, buttons and color fields in the styler blocks
+    // Set up event listeners
     for (var controlId in viewer.atomizer.styleSet.styles) {
       var control = viewer.atomizer.styleSet.styles[controlId];
       var id = controlId.replace(/_/g, "-");
@@ -172,25 +207,12 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
       if (element || control.type == 'rotation' || control.type == 'position') {
         switch (control.type) {
           case 'color':
-            element.addEventListener("input", onControlChanged);
-            viewer.style.set(control.defaultValue, id, control.type);
-            break;
           case 'range':
             element.addEventListener("input", onControlChanged);
-            viewer.style.set(control.defaultValue, id, control.type);
             break;
           case 'rotation':
           case 'position':
-            var sid;
-            sid = id + '--az-slider';
-            document.getElementById(sid).addEventListener("input", onControlChanged);
-            viewer.style.set(control.defaultValue, id, control.type);
-
-            sid = id + '--az-slider';
-            document.getElementById(sid).addEventListener("input", onControlChanged);
-            viewer.style.set(control.defaultValue, id, control.type);
-
-            sid = id + '--az-slider';
+            var sid = id + '--az-slider';
             document.getElementById(sid).addEventListener("input", onControlChanged);
             viewer.style.set(control.defaultValue, id, control.type);
             break;
