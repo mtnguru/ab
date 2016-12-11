@@ -3,6 +3,7 @@
 namespace Drupal\atomizer\Utils;
 
 use Drupal\Component\Serialization\Yaml;
+use Drupal\Component\Utility\Xss;
 
 /**
  * Class AtomizerFiles.
@@ -36,8 +37,14 @@ class AtomizerInit {
     $build = array(
       'atomizer' => array(
         $config['atomizer_id'] => array(
-          'wrapper' => array(
-            'scene' => array('#markup' => '<div id="' . $id . '-wrapper"></div>'),
+          '#type' => 'container',
+          '#attributes' => array(
+            'class' => array('az-canvas-wrapper'),
+            'id' => $id . '-wrapper',
+          ),
+          'canvas' => array(
+            '#markup' => '<canvas id="' . $id .'" class="az-canvas"></canvas>',
+            '#allowed_tags' => array_merge(Xss::getHtmlTagList(), ['canvas'])
           ),
         ),
         '#attached' => array(

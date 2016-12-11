@@ -1,0 +1,1 @@
+{"version":3,"sources":["embed.scss"],"names":[],"mappings":"AACA,iCAEI,UACA,UAAY,CACb","file":"embed.css","sourcesContent":["\n.az-atomizer-viewer-small {\n  canvas {\n    width: 300;\n    height: 200;\n  }\n}\n\n"],"sourceRoot":"/source/"}

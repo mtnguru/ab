@@ -3,7 +3,7 @@ defaultView: viewer
 styleSetDirectory: config/style/atom_viewer
 libraries: [atomizer/atomizer-base, atomizer/atomizer-atom-viewer]
 objects: [nuclets]
-canvasRatio: window
+canvasRatio: .75
 views:
   viewer:
     name: Atom Viewer

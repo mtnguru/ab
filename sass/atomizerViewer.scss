@@ -1,12 +1,46 @@
 @import "variables";
 .block-atomizer-viewer {
+  width: calc(100% - 210px);
   display: inline-flex;
-  width: calc(100% - 220px);
   > div {
     width: 100%;
     canvas {
+      width: 100%;
     }
   }
 }
 
-
+#main .container {
+  figure.az-atomizer {
+    &.align-left {
+      margin-right: 20px;
+    }
+    &.align-right {
+      margin-left: 20px;
+    }
+    article,
+    canvas {
+      width: 100%;
+      margin: 0;
+    }
+    article.node {
+      margin-bottom: 0;
+    }
+    h2 {
+      display: none;
+    }
+    figcaption {
+      width: 100%;
+      text-align: center;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .az-canvas-wrapper {
+      width: 100%;
+    }
+  }
+  figure.az-atom-viewer-small {
+    width: 50%;
+    //  max-width: 500px;
+  }
+}

@@ -36,19 +36,20 @@ Drupal.atomizer.viewerC = function (atomizer) {
 
   var makeScene = function () {
 
-    // Calculate dimensions of canvas - offsetWidth determines width
-    // If offsetHeight is not 0, use it for the height, otherwise make the
+    // Canvas size is set through CSS.
+    // Retrieve canvas dimensions and set renderer size to that.
 
-    var canvasId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-wrapper';
-    viewer.canvasContainer = document.getElementById(canvasId);
-    viewer.canvasWidth = viewer.canvasContainer.clientWidth;
+    var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-wrapper';
+    viewer.canvasContainer = document.getElementById(containerId);
+    viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
+    viewer.canvasWidth = viewer.canvas.clientWidth;
     if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
       var windowRatio = window.innerHeight / window.innerWidth;
       viewer.canvasHeight = viewer.canvasWidth * windowRatio;
     } else {
       viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
     }
-
+    viewer.canvas.height = viewer.canvasHeight;
 
     // Create the producer.
     viewer.producer = Drupal.atomizer.producers[viewer.view.producer + 'C'](viewer);
@@ -56,15 +57,17 @@ Drupal.atomizer.viewerC = function (atomizer) {
     // Create and position the scene
     viewer.scene = new THREE.Scene();
 //  viewer.scene = new Physijs.Scene();
-    viewer.scene.position.x = 0;
-    viewer.scene.position.y = 0;
-    viewer.scene.position.z = 0;
+    viewer.scene.position.set(0,0,0);
 
     // Make controls
     viewer.controls = Drupal.atomizer.controlsC(viewer);
 
     // Create the renderer
-    viewer.renderer = new THREE.WebGLRenderer({ antialias: true});
+    var parameters = {
+      antialias: true,
+      canvas: viewer.canvas
+    };
+    viewer.renderer = new THREE.WebGLRenderer(parameters);
     viewer.renderer.setClearColor(viewer.style.get('renderer--color'), 1.0);
     viewer.renderer.setSize(viewer.canvasWidth, viewer.canvasHeight);
     viewer.renderer.shadowEnabled = true;
@@ -72,15 +75,26 @@ Drupal.atomizer.viewerC = function (atomizer) {
     // add the output of the renderer to the html element
     viewer.canvasContainer.appendChild(viewer.renderer.domElement);
 
-//  var canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
 //  viewer.canvasContainer.addEventListener('resize', function () {
-//    canvas.width  = canvas.clientWidth;
-//    canvas.height = canvas.clientHeight;
-//    viewer.renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
-//    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-//    camera.updateProjectionMatrix();
-//  });
+    window.addEventListener('resize', function () {
+      // Get container width and calculate new height
+      viewer.canvasWidth  = viewer.canvasContainer.clientWidth;
+      if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
+        var windowRatio = window.innerHeight / window.innerWidth;
+        viewer.canvasHeight = viewer.canvasWidth * windowRatio;
+      } else {
+        viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
+      }
+      viewer.canvas.width = viewer.canvasWidth;
+      viewer.canvas.height = viewer.canvasHeight;
 
+      // Tell the renderer and camera about the new canvas size.
+      viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
+      viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+      viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
+      viewer.camera.updateProjectionMatrix();
+      viewer.render();
+    });
 
     // Create camera, and point it at the scene
     viewer.camera = new THREE.PerspectiveCamera(

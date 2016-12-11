@@ -78,12 +78,13 @@ class AtomFormatter extends FormatterBase {
 
     foreach ($items as $delta => $item) {
       // Read in the config/atomizer file
+      $nid = $items->getEntity()->nid->value;
       $config = [
         'atom_id' => 1,
-        'atomizer_id' => 'Atomizer Viewer',
+        'atomizer_id' => 'Atomizer Viewer ' . $nid,
         'atomizer_file' => $this->getSetting('atomizer'),
         'label' => 'Atomizer Embed',
-        'nid' => $items->getEntity()->nid->value,
+        'nid' => $nid,
       ];
 
       $elements[$delta] = AtomizerInit::start($config);
