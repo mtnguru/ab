@@ -11,7 +11,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\atomizer\Utils\AtomizerFiles;
+use Drupal\atomizer\AtomizerFiles;
 use Drupal\Component\Serialization\Yaml;
 
 /**

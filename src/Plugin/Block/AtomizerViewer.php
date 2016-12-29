@@ -4,8 +4,8 @@ namespace Drupal\atomizer\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\atomizer\Utils\AtomizerInit;
-use Drupal\atomizer\Utils\AtomizerFiles;
+use Drupal\atomizer\AtomizerInit;
+use Drupal\atomizer\AtomizerFiles;
 
 /**
  * Provides a 'Atomizer' block.

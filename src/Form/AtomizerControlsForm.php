@@ -5,7 +5,7 @@ namespace Drupal\atomizer\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\atomizer\Utils\AtomizerControlBlock;
+use Drupal\atomizer\AtomizerControlBlock;
 
 
 /**

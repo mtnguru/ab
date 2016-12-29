@@ -10,8 +10,8 @@ namespace Drupal\atomizer\Plugin\Field\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\atomizer\Utils\AtomizerFiles;
-use Drupal\atomizer\Utils\AtomizerInit;
+use Drupal\atomizer\AtomizerFiles;
+use Drupal\atomizer\AtomizerInit;
 
 /**
  * Plugin implementation of the 'atom' formatter.

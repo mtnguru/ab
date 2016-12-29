@@ -1,4 +1,14 @@
 @import "variables";
+
+.field--name-field-atomic-structure {
+  .az-canvas-wrapper {
+    canvas {
+      width: 100%;
+    }
+  }
+}
+
+
 .block-atomizer-viewer {
   width: calc(100% - 210px);
   display: inline-flex;

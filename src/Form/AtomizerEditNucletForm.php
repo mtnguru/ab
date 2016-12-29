@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Serialization\Yaml;
-use Drupal\atomizer\Utils\AtomizerFiles;
+use Drupal\atomizer\AtomizerFiles;
 
 
 /**

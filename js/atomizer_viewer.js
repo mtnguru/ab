@@ -34,6 +34,28 @@ Drupal.atomizer.viewerC = function (atomizer) {
     return spotLight;
   }
 
+  /**
+   * Search backward up the parent chain and extract an data-az attributes.
+   *
+   * @param canvasContainer
+   */
+  function getDataAttr(canvasContainer) {
+    var attr = {};
+    // Look for a parent with class 'az-atomizer'
+    var el = canvasContainer;
+    while ((el = el.parentElement) && !el.classList.contains('az-atomizer'));
+    if (el) {
+      var value = el.children[0].attributes['data-az'].value;
+      var pairs = value.split(' ');
+      for (var pair in pairs) {
+        if (!pairs.hasOwnProperty(pair)) continue;
+        var pieces = pairs[pair].split('-');
+        attr[pieces[0]] = pieces[1];
+      }
+    }
+    return attr;
+  }
+
   var makeScene = function () {
 
     // Canvas size is set through CSS.
@@ -41,6 +63,7 @@ Drupal.atomizer.viewerC = function (atomizer) {
 
     var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-wrapper';
     viewer.canvasContainer = document.getElementById(containerId);
+    viewer.dataAttr = getDataAttr(viewer.canvasContainer);
     viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
     viewer.canvasWidth = viewer.canvas.clientWidth;
     if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
@@ -95,16 +118,18 @@ Drupal.atomizer.viewerC = function (atomizer) {
       viewer.camera.updateProjectionMatrix();
       viewer.render();
     });
-
     // Create camera, and point it at the scene
     viewer.camera = new THREE.PerspectiveCamera(
       viewer.style.get('camera--perspective'),
       viewer.canvasWidth / viewer.canvasHeight,
       .1, 10000
     );
-    viewer.camera.position.x = viewer.style.get('camera--position', 'x');
-    viewer.camera.position.y = viewer.style.get('camera--position', 'y');
-    viewer.camera.position.z = viewer.style.get('camera--position', 'z');
+    zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
+    viewer.camera.position.set(
+      zoom * viewer.style.get('camera--position', 'x'),
+      zoom * viewer.style.get('camera--position', 'y'),
+      zoom * viewer.style.get('camera--position', 'z')
+    );
     viewer.camera.lookAt(viewer.scene.position);
 
     // Add the trackball and page controls
