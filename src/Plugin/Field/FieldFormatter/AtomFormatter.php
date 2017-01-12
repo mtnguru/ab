@@ -35,6 +35,7 @@ class AtomFormatter extends FormatterBase {
   public static function defaultSettings() {
     return array(
       'atomizer' => 'atom_builder',
+      'atomizer_class' => '',
     );
   }
 
@@ -44,11 +45,19 @@ class AtomFormatter extends FormatterBase {
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
     $atomizer = $this->getSetting('atomizer');
+    $atomizer_class = $this->getSetting('atomizer_class');
+
     $elements['atomizer'] = array(
       '#type' => 'select',
       '#options' => $fileList,
       '#title' => t('Atomizer mode'),
-      '#default_value' => ($atomizer) ? $atomizer : defaultSettings()['atomizer'],
+      '#default_value' => ($atomizer) ? $atomizer : $this->defaultSettings()['atomizer'],
+      '#required' => TRUE,
+    );
+    $elements['atomizer_class'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Class'),
+      '#default_value' => ($atomizer_class) ? $atomizer_class : $this->defaultSettings()['atomizer_class'],
       '#required' => TRUE,
     );
 
@@ -65,6 +74,9 @@ class AtomFormatter extends FormatterBase {
     $atomizer = $this->getSetting('atomizer');
     $atomizer = ($atomizer) ? $atomizer : defaultSettings()['atomizer'];
     $summary[] = t('Atomizer: @atomizer', array('@atomizer' => $fileList[$atomizer]));
+
+    $atomizer_class = $this->getSetting('atomizer_class');
+    $summary[] = t('Class: @class', array('@class' => $atomizer_class));
 
     return $summary;
   }
@@ -83,6 +95,7 @@ class AtomFormatter extends FormatterBase {
         'atom_id' => 1,
         'atomizer_id' => 'Atomizer Viewer ' . $nid,
         'atomizer_file' => $this->getSetting('atomizer'),
+        'atomizer_class' => $this->getSetting('atomizer_class'),
         'label' => 'Atomizer Embed',
         'nid' => $nid,
       ];

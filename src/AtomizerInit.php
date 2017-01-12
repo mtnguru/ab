@@ -34,12 +34,13 @@ class AtomizerInit {
       }
     }
 
+    $class = (empty($config['atomizer_class'])) ? '' : $config['atomizer_class'];
     $build = array(
       'atomizer' => array(
         $config['atomizer_id'] => array(
           '#type' => 'container',
           '#attributes' => array(
-            'class' => array('az-canvas-wrapper'),
+            'class' => array('az-canvas-wrapper', $class),
             'id' => $id . '-wrapper',
           ),
           'canvas' => array(

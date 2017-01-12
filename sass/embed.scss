@@ -1,8 +1,15 @@
-
 .az-atomizer-viewer-small {
   canvas {
-    width: 300;
-    height: 200;
+    width: 480;
+    height: 360;
   }
 }
+
+.az-atomizer-viewer-large {
+  canvas {
+    width: 800px;
+    height: 600px;
+  }
+}
+
 
