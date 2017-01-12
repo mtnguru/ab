@@ -236,7 +236,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
    * Set Default values for any forms.
    */
   function setDefaults() {
-    userAtomFile = localStorage.getItem('atomizer_builder_atom');
+    userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');
     if (userAtomFile && userAtomFile != 'undefined') {
       var selectyml = document.getElementById('atom--selectyml');
       if (selectyml) {
@@ -247,7 +247,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   }
 
   var atomLoaded = function atomLoaded(atom) {
-    localStorage.setItem('atomizer_viewer_atom_nid', atom.az.nid);
+    localStorage.setItem('atomizer_builder_atom_nid', atom.az.nid);
     createProtonLists();
   };
 
