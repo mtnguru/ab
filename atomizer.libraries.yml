@@ -3,6 +3,7 @@ atomizer-base:
     js/threejs/three.js: {}
     js/threejs/renderers/Projector.js: {}
     js/threejs/controls/OrbitControls.js: {}
+    js/libs/screenfull.js: {}
     js/atomizer_base.js: {}
     js/atomizer_viewer.js: {}
     js/atomizer_controls.js: {}

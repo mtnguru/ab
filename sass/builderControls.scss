@@ -2,10 +2,11 @@
 @import "fontAwesome.scss";
 
 // Atom Builder Controls form
+.az-controls-wrapper,
 .block-atomizer-controls {
   padding: 8px;
   vertical-align: top;
-  display: inline-flex;
+  display: inline-block;
   width: 200px;
   background: $color-controls;
   form {

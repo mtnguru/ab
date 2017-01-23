@@ -18,7 +18,7 @@ class AtomizerInit {
     $atomizer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_file']));
     $atomizer['filename']   = $config['atomizer_file'];
     $atomizer['atomizerId'] = $config['atomizer_id'];
-    $atomizer['id'] = $id = strtolower(str_replace(['_', ' '], '-', $config['atomizer_id']));
+    $atomizer['id'] = strtolower(str_replace(['_', ' '], '-', $config['atomizer_id']));
     if (!empty($config['nid'])) {
       $atomizer['nid'] = $config['nid'];
     }
@@ -41,10 +41,10 @@ class AtomizerInit {
           '#type' => 'container',
           '#attributes' => array(
             'class' => array('az-canvas-wrapper', $class),
-            'id' => $id . '-wrapper',
+            'id' => $atomizer['id'] . '-canvas-wrapper',
           ),
           'canvas' => array(
-            '#markup' => '<canvas id="' . $id .'" class="az-canvas"></canvas>',
+            '#markup' => '<canvas id="' . $atomizer['id'] .'" class="az-canvas"></canvas>',
             '#allowed_tags' => array_merge(Xss::getHtmlTagList(), ['canvas'])
           ),
         ),

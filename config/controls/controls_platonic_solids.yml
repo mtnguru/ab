@@ -4,7 +4,8 @@ static:
   reset:
 #   title: Mouse
     controls:
-      style--cameraReset:         ['Reset Camera',        'button']
+      style--cameraReset:          ['Reset Camera',       'button']
+      viewer--fullScreen:          ['Full screen',        'toggle']
       hr1: ['null', hr]
 
 styler:

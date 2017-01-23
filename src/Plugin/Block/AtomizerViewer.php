@@ -20,20 +20,20 @@ class AtomizerViewer extends BlockBase {
   public function blockForm($form, FormStateInterface $form_state) {
 
     // Give the atomizer the controls block can connect to it.
-    $form['atomizer_id'] = array(
+    $form['atomizer_id'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Atomizer ID'),
       '#description' => $this->t('Give this atomizer the same id as that assigned the Atomizer Control block'),
       '#default_value' => isset($this->configuration['atomizer_id']) ? $this->configuration['atomizer_id'] : 'Atomizer',
-    );
+    ];
 
-    $form['atomizer_file'] = array(
+    $form['atomizer_file'] = [
       '#type' => 'select',
       '#title' => $this->t('Atomizer file'),
       '#description' => $this->t(''),
       '#default_value' => isset($this->configuration['atomizer_file']) ? $this->configuration['atomizer_file'] : 'default',
       '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/'),
-    );
+    ];
 
     return $form;
   }

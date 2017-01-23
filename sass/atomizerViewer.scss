@@ -8,10 +8,16 @@
   }
 }
 
+.az-wrapper {
+  width: 100%;
+}
 
+.az-canvas-wrapper,
 .block-atomizer-viewer {
-  width: calc(100% - 210px);
-  display: inline-flex;
+
+  width: calc(100% - 204px);
+  display: inline-block;
+//vertical-align: top;
   > div {
     width: 100%;
     canvas {

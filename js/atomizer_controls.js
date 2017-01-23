@@ -131,8 +131,13 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         }
         break;
       default:
-        if (viewer[args[0]].buttonClicked) {
-          viewer[args[0]].buttonClicked(event.target.id);
+        if (args[0] === 'viewer') {
+          viewer.buttonClicked(event.target);
+        }
+        else {
+          if (viewer[args[0]].buttonClicked) {
+            viewer[args[0]].buttonClicked(event.target);
+          }
         }
         break;
     }
@@ -225,6 +230,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
             break;
           case 'link':
           case 'button':
+          case 'toggle':
             element.addEventListener("click", onButtonClicked);
             break;
         }

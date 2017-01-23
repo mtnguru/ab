@@ -114,7 +114,7 @@ function atomizer_form_alter (&$form, FormStateInterface $form_state) {
 }
 
 function atomizer_views_pre_render($view) {
-  return;
+  return $view;
 }
 
 function atomizer_views_post_render($view, &$output, $cache) {

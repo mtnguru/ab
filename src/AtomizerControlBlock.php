@@ -169,8 +169,24 @@ class AtomizerControlBlock {
         case 'button':
           $control = array(
             '#type' => 'button',
-//          '#attributes' => array('onclick' => 'return (false);'),
             '#value' => $controlConf[0],
+          );
+          $addValue = true;
+          break;
+
+        case 'toggle':
+          $control = array(
+            '#type' => 'button',
+            '#value' => $controlConf[0],
+          );
+          $addValue = true;
+          break;
+
+        case 'checkbox':
+          $control = array(
+            '#type' => 'checkbox',
+//          '#attributes' => array('onclick' => 'return (false);'),
+            '#title' => $controlConf[0],
           );
           $addValue = true;
           break;

@@ -388,8 +388,8 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     }
   };
 
-  var buttonClicked = function buttonClicked (id) {
-    switch (id) {
+  var buttonClicked = function buttonClicked (target) {
+    switch (target.id) {
       case 'style--saveButton':
         saveStyle(currentSet);
         break;

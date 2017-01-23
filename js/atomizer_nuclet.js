@@ -291,15 +291,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
       case 'sphere':
         geometry = new THREE.SphereGeometry(
           geo.radius || viewer.style.get('proton--radius'),
-          geo.widthSegments || 30,
-          geo.heightSegments || 30
+          geo.widthSegments || 36,
+          geo.heightSegments || 36
         );
         break;
       case 'electron':
         geometry = new THREE.SphereGeometry(
           geo.radius || viewer.style.get('electron--radius'),
-          geo.widthSegments || 25,
-          geo.heightSegments || 25
+          geo.widthSegments || 24,
+          geo.heightSegments || 24
         );
         break;
       case 'octahedron':
