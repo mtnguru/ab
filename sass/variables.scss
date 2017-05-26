@@ -10,3 +10,32 @@ $color-grey-lighter: #ccc;
 $color-button: #006688;
 $color-popup: #fff9ec;
 $color-text: #555;
+
+$page-margin-mobile: calc(30 / 320 * 100%);
+$page-margin-tablet: calc(30 / 580 * 100%);
+$page-margin-desktop: calc(30 / 960 * 100%);
+$page-margin-widescreen: calc(30 / 1280 * 100%);
+
+@mixin page-margins {
+
+  @include media(max-width $bp320only) {
+    margin-right: calc(30 / 580 * 100%);
+    margin-left: calc(30 / 580 * 100%);
+  } // $bp320only
+
+  @include media(max-width $bp580only) {
+    margin-right: calc(30 / 580 * 100%);
+    margin-left: calc(30 / 580 * 100%);
+  } // $bp580only
+
+  @include media(max-width $bp960only) {
+    margin-right: calc(30 / 580 * 100%);
+    margin-left: calc(30 / 580 * 100%);
+  } // $bp960only
+
+  @include media(max-width $bp1280) {
+    margin-right: calc(30 / 580 * 100%);
+    margin-left: calc(30 / 580 * 100%);
+  } // $bp1280
+
+} // mixin page-margins
