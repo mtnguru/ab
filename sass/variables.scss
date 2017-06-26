@@ -19,8 +19,8 @@ $page-margin-widescreen: calc(30 / 1280 * 100%);
 @mixin page-margins {
 
   @include media(max-width $bp320only) {
-    margin-right: calc(30 / 580 * 100%);
-    margin-left: calc(30 / 580 * 100%);
+    margin-right: calc(30 / 320 * 100%);
+    margin-left: calc(30 / 320 * 100%);
   } // $bp320only
 
   @include media(max-width $bp580only) {
@@ -29,13 +29,13 @@ $page-margin-widescreen: calc(30 / 1280 * 100%);
   } // $bp580only
 
   @include media(max-width $bp960only) {
-    margin-right: calc(30 / 580 * 100%);
-    margin-left: calc(30 / 580 * 100%);
+    margin-right: calc(30 / 960 * 100%);
+    margin-left: calc(30 / 960 * 100%);
   } // $bp960only
 
   @include media(max-width $bp1280) {
-    margin-right: calc(30 / 580 * 100%);
-    margin-left: calc(30 / 580 * 100%);
+    margin-right: calc(30 / 1280 * 100%);
+    margin-left: calc(30 / 1280 * 100%);
   } // $bp1280
 
 } // mixin page-margins
