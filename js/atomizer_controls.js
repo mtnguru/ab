@@ -136,6 +136,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         }
         else {
           if (viewer[args[0]].buttonClicked) {
+            event.preventDefault();
             viewer[args[0]].buttonClicked(event.target);
           }
         }

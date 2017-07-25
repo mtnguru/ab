@@ -1,5 +1,4 @@
 @import "variables.scss";
-@import "fontAwesome.scss";
 
 // Atom Builder Controls form
 .az-controls-wrapper,
@@ -92,7 +91,6 @@
   .az-header {
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 8px;
   }
   .az-label {
     font-weight: bold;
@@ -164,12 +162,14 @@
       margin: 0px 0 0;
     }
     input[type="color"] {
+      background-color: $color-controls;
       display: inline-block;
       width: 37%;
       height: 26px;
       padding: 0;
       border: 0;
       -webkit-box-shadow: 0 0 0 0;
+      margin: 0;
     }
   }
   #control-particles {

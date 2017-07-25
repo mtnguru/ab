@@ -18,7 +18,7 @@
 
         // jQuery dialogs need this executed once to enable the close button in the upper right.
         // See: http://stackoverflow.com/questions/8681707/jqueryui-modal-dialog-does-not-show-close-button-x
-        $.fn.bootstrapBtn = $.fn.button.noConflict();
+//      $.fn.bootstrapBtn = $.fn.button.noConflict();
       }
     }
   };

@@ -8,38 +8,10 @@ static:
       viewer--fullScreen:         ['Full screen',      'toggle']
       hr1: ['null', hr]
 
-styler:
-
-  atom:
-    title:               Atom
-    controls:
-      hr1:                        [ null,              'hr']
-      atom--num-protons:          [ '# Protons',       'textfield', '', 6 ]
-      atom--information:          [ null,              'container']
-      hr3:                        [ null,              'hr']
-      atom--select:               ['Select Atom',      'button']
-#     atom--save:                 ['Save',             'link',    'modal',   'node.edit',    {node_type: atom}]
-      atom--save:                 ['Save',             'link',    'modal',   'entity.node.edit_form', {node: 119}]
-      atom--saveNew:              ['Create New',       'link',    'modal',   'node.add',    {node_type: atom}]
-#     atom--edit:                 ['Edit',             'link',    'node/48/edit']
-#     atom--reset:                ['Reset',            'button']
-
-  mode:
-    title:               Mouse Mode
-    controls:
-      mouse--mode:
-        - ''
-        - radios
-        - initial
-        -
-          none: None
-          protons: Add/Delete Protons
-          nuclets: Edit Nuclets
-          inner-faces: Assign Inner Faces
-          outer-faces: Assign Outer Faces
+hidden:
 
   nuclet:
-    title:               Nuclet
+    title:               Nuclet Hidden
     controls:
       nuclet--id:                 ['Id',               'container']
       nuclet--state:
@@ -59,6 +31,21 @@ styler:
       nuclet--grow-0:             ['&nbsp;&nbsp;0',    'html',    '--']
       nuclet--grow-1:             ['&nbsp;&nbsp;1',    'html',    '--']
       nuclet--delete:             ['Delete',           'button']
+
+styler:
+
+  atom:
+    title:               Atom
+    controls:
+      hr1:                        [ null,              'hr']
+      atom--information:          [ null,              'container']
+      hr3:                        [ null,              'hr']
+      atom--select:               ['Select Atom',      'button']
+#     atom--select:               ['Select Atom',      'link',    'dialog',  view.az_atom.select_atom]
+#     atom--save:                 ['Save',             'link',    'modal',   'node.edit',    {node_type: atom}]
+      atom--saveNew:              ['Create New',       'link',    'modal',   'node.add',    {node_type: atom}]
+#     atom--edit:                 ['Edit',             'link',    'node/48/edit']
+#     atom--reset:                ['Reset',            'button']
 
   style:
     title:               Styles

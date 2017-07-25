@@ -15,7 +15,7 @@ class AtomizerInit {
 
   static public function start($config) {
     // Read in the config/atomizer file
-    $atomizer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_file']));
+    $atomizer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers.old/' . $config['atomizer_file']));
     $atomizer['filename']   = $config['atomizer_file'];
     $atomizer['atomizerId'] = $config['atomizer_id'];
     $atomizer['id'] = strtolower(str_replace(['_', ' '], '-', $config['atomizer_id']));

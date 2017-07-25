@@ -264,7 +264,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                     node.material.transparent = transparent;
                   }
                 } else if (argNames[0].indexOf('Wireframe') > -1) {
-                  if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
+                  if (node.name == 'dodecaWireframe' || 
+                      node.name == 'dodecaOutWireframe' || 
+                      node.name == 'hexaWireframe') {
                     for (var i = 0; i < node.children.length; i++) {
                       node.children[i].material.opacity = opacity;
                       node.children[i].material.visible = visible;
@@ -284,7 +286,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
 
               case 'linewidth':
                 if (argNames[0].indexOf('Wireframe') > -1) {
-                  if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
+                  if (node.name == 'dodecaWireframe' || 
+                      node.name == 'dodecaOutWireframe' || 
+                      node.name == 'hexaWireframe') {
                     for (var i = 0; i < node.children.length; i++) {
                       node.children[i].material.linewidth = value;
                       node.children[i].material.visible = (value >.05);
@@ -307,7 +311,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                     break;
                   default:
                     if (argNames[0].indexOf('Wireframe') > -1) {
-                      if (node.name == 'dodecaWireframe' || node.name == 'hexaWireframe') {
+                      if (node.name == 'dodecaWireframe' || 
+                          node.name == 'dodecaOutWireframe' || 
+                          node.name == 'hexaWireframe') {
                         for (var i = 0; i < node.children.length; i++) {
                           node.children[i].material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
                         }

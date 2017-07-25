@@ -10,6 +10,9 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var viewer = _viewer;
   var atom;
 
+  var mouseMode = 'none';
+  var mouseModeRadios =   document.getElementById('edit-nuclet-attachproton--wrapper');
+
   var editNuclet;
   var nucletEditForm =    document.getElementById('hidden-nuclet');
 
@@ -19,12 +22,17 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var nucletDelete =      document.getElementById('nuclet--delete');
   var nucletAttachPt =    document.getElementById('edit-nuclet-attachproton--wrapper');
 
-  var nucletGrow0 =       document.getElementById('edit-nuclet-grow-0');
-  var nucletGrow1 =       document.getElementById('edit-nuclet-grow-1');
+  var nucletAttach0 =     document.getElementById('edit-nuclet-grow-0');
+  var nucletAttach1 =     document.getElementById('edit-nuclet-grow-1');
 
+  var hoverInnerFaces = [];
+  var hoverOuterFaces = [];
+  var hoverNuclets = [];  // The
   var hoverProtons = [];
   var visibleProtons = [];
   var highlightedProton;
+  var highlightedInnerFace;
+  var highlightedOuterFace;
 
   /**
    * User has changed the nuclet angle slider.
@@ -70,7 +78,18 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
    * @returns {*}
    */
   var hoverObjects = function hoverObjects() {
-    return hoverProtons;
+    switch (mouseMode) {
+      case 'none':
+        return null;
+      case 'protons':
+        return hoverProtons;
+      case 'nuclets':
+        return visibleProtons;
+      case 'inner-faces':
+        return hoverInnerFaces;
+      case 'outer-faces':
+        return hoverOuterFaces;
+    }
   };
 
   /**
@@ -78,31 +97,72 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
    *
    * @param event
    */
-  var hovered = function hovered(protons) {
-    var opacity = viewer.style.get('proton--opacity');
+  var hovered = function hovered(objects) {
+    switch (mouseMode) {
+      case 'none':
+        return [];
+      case 'protons':
+        var opacity = viewer.style.get('proton--opacity');
 
-    // If there is already a highlighted proton
-    if (highlightedProton) {
-      // Return if the proton is already highlighted
-      if (protons.length && highlightedProton == protons[0]) return;
+        // If there is already a highlighted proton
+        if (highlightedProton) {
+          // Return if the proton is already highlighted
+          if (objects.length && highlightedProton == objects[0]) return;
 
-      var proton = highlightedProton.object;
+          var proton = highlightedProton.object;
 
-      // Change the proton back to it's original color and visibility.
-      var color = viewer.style.get('proton-' + proton.az.type + '--color');
-      proton.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
-      proton.material.visible = proton.az.visible;
-    }
+          // Change the proton back to it's original color and visibility.
+          var color = viewer.style.get('proton-' + proton.az.type + '--color');
+          proton.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
+          proton.material.visible = proton.az.visible;
+        }
 
-    if (protons.length) {
-      // Return if this proton isn't optional
-      if (!protons[0].object.az.optional || !protons[0].object.az.active) return;
+        if (objects.length) {
+          // Return if this proton isn't optional
+          if (!objects[0].object.az.optional || !objects[0].object.az.active) return;
 
-      // Highlight the proton
-      highlightedProton = protons[0];
-      highlightedProton.object.material.visible = true;
-      var color = viewer.style.get('proton-ghost--color');
-      highlightedProton.object.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
+          // Highlight the proton
+          highlightedProton = objects[0];
+          highlightedProton.object.material.visible = true;
+          var color = viewer.style.get('proton-ghost--color');
+          highlightedProton.object.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
+        }
+        break;
+
+      case 'nuclets':
+//      Get the nuclet form working, display all current nuclets in a tree.
+        break;
+
+      case 'inner-faces':
+
+        break;
+
+      case 'outer-faces':
+        var opacity = viewer.style.get(' icosaOutFaces--opacity');
+
+        // If there is already a highlighted proton
+        if (highlightedOuterFace) {
+          // Return if the proton is already highlighted
+          if (objects.length && highlightedOuterFace == objects[0]) return;
+
+          var face = highlightedOuterFace.object;
+
+          // Change the proton back to it's original color and visibility.
+          var color = viewer.style.get('proton-' + proton.az.type + '--color');
+          proton.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
+          proton.material.visible = proton.az.visible;
+        }
+
+        if (objects.length) {
+          // Return if this proton isn't optional
+
+          // Highlight the proton
+          highlightedOuterFace = objects[0];
+          highlightedOuterFace.object.material.visible = true;
+          var color = viewer.style.get('proton-ghost--color');
+          highlightedOuterFace.face.color.setHex( Math.random() * 0xffffff | 0x80000000 );
+        }
+        break;
     }
   };
 
@@ -117,38 +177,77 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
    */
   var mouseClick = function mouseClick(event) {
     switch (event.which) {
-      case 1:
-        var intersects = viewer.controls.findIntersects(hoverProtons);
+
+      case 1:       // Left mouse click
         event.preventDefault();
-        if (intersects.length) {
-          var proton = intersects[0].object;
-          if (proton.az.optional) {
-            proton.az.visible = !proton.az.visible;
-            proton.material.visible = proton.az.visible;
-            viewer.atom.setValenceRings();
-            createProtonLists();
-            viewer.render();
-          }
-        }
         break;
-      case 3:
+
+      case 3:       // Right click
         event.preventDefault();
-        var intersects = viewer.controls.findIntersects(visibleProtons);
-        if (intersects.length == 0) {
-          // Pop down the nuclet edit dialog.
-          nucletEditForm.classList.add('az-hidden');
-          editNuclet = undefined;
-          return false;
-        } else {
-          // Initialize to current nuclet.
-          editNuclet = intersects[0].object.parent.parent;
-          nucletEditForm.classList.remove('az-hidden');
-          setEditNuclet(editNuclet);
-          nucletEditForm.style.top =  10  +'px';
-          nucletEditForm.style.left = 214 + 'px';
-          return false;
+        switch (mouseMode) {
+          case 'none':
+            break;
+
+          case 'protons':
+            var intersects = viewer.controls.findIntersects(hoverProtons);
+            if (intersects.length) {
+              var proton = intersects[0].object;
+              if (proton.az.optional) {
+                proton.az.visible = !proton.az.visible;
+                proton.material.visible = proton.az.visible;
+                viewer.atom.setValenceRings();
+                createProtonLists();
+                viewer.render();
+              }
+            }
+            break;
+
+          case 'nuclets':
+            var intersects = viewer.controls.findIntersects(visibleProtons);
+            if (intersects.length == 0) {
+              // Pop down the nuclet edit dialog.
+              nucletEditForm.classList.add('az-hidden');
+              editNuclet = undefined;
+              return false;
+            } else {
+              // Initialize to current nuclet.
+              editNuclet = intersects[0].object.parent.parent;
+              nucletEditForm.classList.remove('az-hidden');
+              setEditNuclet(editNuclet);
+              nucletEditForm.style.top =  10  +'px';
+              nucletEditForm.style.left = 214 + 'px';
+              return false;
+            }
+            break;
+
+          case 'inner-faces':
+            var intersects = viewer.controls.findIntersects(hoverInnerFaces);
+            if (intersects.length) {
+              var face = intersects[0].object;
+              if (proton.az.optional) {
+                proton.az.visible = !proton.az.visible;
+                proton.material.visible = proton.az.visible;
+                viewer.atom.setValenceRings();
+                createProtonLists();
+                viewer.render();
+              }
+            }
+            break;
+
+          case 'outer-faces':
+            var intersects = viewer.controls.findIntersects(hoverOuterFaces);
+            if (intersects.length) {
+              var face = intersects[0].object;
+              if (proton.az.optional) {
+                proton.az.visible = !proton.az.visible;
+                proton.material.visible = proton.az.visible;
+                viewer.atom.setValenceRings();
+                createProtonLists();
+                viewer.render();
+              }
+            }
+            break;
         }
-        break;
     }
   };
 
@@ -175,7 +274,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
    * @param id
    * @param nucletGrow
    */
-  function createGrowItem(id, nucletGrow) {
+  function createNucletAttachItem(id, nucletAttach) {
     var label = nucletGrow.getElementsByTagName('LABEL')[0];
     var div = nucletGrow.getElementsByTagName('DIV')[0];
 
@@ -202,7 +301,6 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
    * @param nuclet
    */
   function setEditNuclet(nuclet) {
-
     var id = nuclet.az.id;
     var nucletLabel = document.getElementById('nuclet--id');
     nucletLabel.innerHTML = '<span class="az-label">Nuclet ID: </span><span class="az-id"> ' + id + '</span>';
@@ -227,8 +325,8 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     if (nuclet.az.conf.state == 'backbone-initial') {
 //    Display
     }
-    createGrowItem(id + '0', nucletGrow0);
-    createGrowItem(id + '1', nucletGrow1);
+    createNucletAttachItem(id + '0', nucletAttach0);
+    createNucletAttachItem(id + '1', nucletAttach1);
     editNuclet = nuclet;
   }
 
@@ -249,6 +347,12 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var atomLoaded = function atomLoaded(atom) {
     localStorage.setItem('atomizer_builder_atom_nid', atom.az.nid);
     createProtonLists();
+    if (viewer.objects.icosaFaces) {
+      hoverInnerFaces = viewer.objects.icosaFaces;
+    }
+    if (viewer.objects.icosaOutFaces) {
+      hoverOuterFaces = viewer.objects.icosaOutFaces;
+    }
   };
 
   /**
@@ -280,6 +384,19 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
         editNuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
         createProtonLists();
         viewer.render();
+      }
+    }
+    radios[i].id = radios[i].id + '--' + radios[i].value;
+  }
+
+  // Add event listeners to mode form
+  var radios = document.forms["atomizer-controls-form"].elements["mouse--mode"];
+  for(var i = radios.length - 1; i > 0; i--) {
+    radios[i].onclick = function (event) {
+      if (event.target.tagName == 'INPUT') {
+        console.log('mode: ' + event.target.value);
+        mouseMode = event.target.value;
+//      viewer.render();
       }
     }
     radios[i].id = radios[i].id + '--' + radios[i].value;

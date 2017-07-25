@@ -51,7 +51,7 @@
       var el = canvasContainer;
       while ((el = el.parentElement) && !el.classList.contains('az-atomizer'));
       if (el) {
-        var value = el.children[0].attributes['data-az'].value;
+        var value = el.attributes['data-az'].value;
         var pairs = value.split(' ');
         for (var pair in pairs) {
           if (!pairs.hasOwnProperty(pair)) continue;

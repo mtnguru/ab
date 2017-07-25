@@ -46,7 +46,7 @@ class AtomizerBlock extends BlockBase {
       '#title' => $this->t('Atomizer file'),
       '#description' => $this->t(''),
       '#default_value' => isset($this->configuration['atomizer_file']) ? $this->configuration['atomizer_file'] : 'default',
-      '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/'),
+      '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers.old', '/\.yml/'),
     ];
     return $form;
   }
@@ -70,8 +70,6 @@ class AtomizerBlock extends BlockBase {
     $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $config['control_file']));
     $controlSet['filename'] = $config['control_file'];
 
-
-
     // Create the controls form
     $controls['form'] = \Drupal::formBuilder()->getForm('Drupal\atomizer\Form\AtomizerControlsForm', $controlSet);
     $controls['form']['#attributes'] = ['class' => ['atomizer-controls-wrapper']];
@@ -83,6 +81,7 @@ class AtomizerBlock extends BlockBase {
             'atomizerId' =>  $config['atomizer_id'],
             'controlSet' =>  $controlSet,
             'styleSet' => $controls['form']['#az-styleset'],
+            'configuration' => $config['atomizer_config'],
           ],
         ],
       ],

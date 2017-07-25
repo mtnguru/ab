@@ -39,7 +39,7 @@ styler:
       hr1:                        [ null,              'hr']
       atom--information:          [ null,              'container']
       hr3:                        [ null,              'hr']
-      atom--select:               ['Select Atom',      'link',    'dialog',  view.az_atom.select_nuclei]
+#     atom--select:               ['Select Atom',      'link',    'dialog',  view.az_atom.select_atom]
 #     atom--save:                 ['Save',             'link',    'modal',   'node.edit',    {node_type: atom}]
       atom--saveNew:              ['Create New',       'link',    'modal',   'node.add',    {node_type: atom}]
 #     atom--edit:                 ['Edit',             'link',    'node/48/edit']

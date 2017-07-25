@@ -26,8 +26,8 @@
   }
 }
 
-#main .container {
-  figure.az-atomizer {
+//#main .container {
+  article.az-atomizer {
     &.align-left {
       margin-right: 20px;
     }
@@ -55,8 +55,9 @@
       width: 100%;
     }
   }
-  figure.az-atom-viewer-small {
+
+  article.az-atom-viewer-small {
     width: 50%;
     //  max-width: 500px;
   }
-}
+//}

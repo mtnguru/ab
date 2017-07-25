@@ -1,4 +1,4 @@
-name: Atom Builder
+name: Atom Builder - keep
 static:
 
   reset:
@@ -8,38 +8,10 @@ static:
       viewer--fullScreen:         ['Full screen',      'toggle']
       hr1: ['null', hr]
 
-styler:
-
-  atom:
-    title:               Atom
-    controls:
-      hr1:                        [ null,              'hr']
-      atom--num-protons:          [ '# Protons',       'textfield', '', 6 ]
-      atom--information:          [ null,              'container']
-      hr3:                        [ null,              'hr']
-      atom--select:               ['Select Atom',      'button']
-#     atom--save:                 ['Save',             'link',    'modal',   'node.edit',    {node_type: atom}]
-      atom--save:                 ['Save',             'link',    'modal',   'entity.node.edit_form', {node: 119}]
-      atom--saveNew:              ['Create New',       'link',    'modal',   'node.add',    {node_type: atom}]
-#     atom--edit:                 ['Edit',             'link',    'node/48/edit']
-#     atom--reset:                ['Reset',            'button']
-
-  mode:
-    title:               Mouse Mode
-    controls:
-      mouse--mode:
-        - ''
-        - radios
-        - initial
-        -
-          none: None
-          protons: Add/Delete Protons
-          nuclets: Edit Nuclets
-          inner-faces: Assign Inner Faces
-          outer-faces: Assign Outer Faces
+hidden:
 
   nuclet:
-    title:               Nuclet
+    title:               Nuclet Hidden
     controls:
       nuclet--id:                 ['Id',               'container']
       nuclet--state:
@@ -60,20 +32,35 @@ styler:
       nuclet--grow-1:             ['&nbsp;&nbsp;1',    'html',    '--']
       nuclet--delete:             ['Delete',           'button']
 
+styler:
+
+  atom:
+    title:               Atom
+    controls:
+      hr1:                        [ null,              'hr']
+      atom--information:          [ null,              'container']
+      hr3:                        [ null,              'hr']
+      atom--select:               ['Select Atom',      'button']
+#     atom--select:               ['Select Atom',      'link',    'dialog',  view.az_atom.select_atom]
+#     atom--save:                 ['Save',             'link',    'modal',   'node.edit',    {node_type: atom}]
+      atom--saveNew:              ['Create New',       'link',    'modal',   'node.add',    {node_type: atom}]
+#     atom--edit:                 ['Edit',             'link',    'node/48/edit']
+#     atom--reset:                ['Reset',            'button']
+
   style:
     title:               Styles
     controls:
-      hr1:                        [ null,              'hr']
-      style--loadlabel:           ['Select Style',     'header']
-      style--selectyml:           [ null,              'selectyml', 'base.yml',   'style',   'config/style/atom_builder', 'atomizer.ajax_yml_load']
-      style--reset:               ['Reset Style',      'button']
-      style--saveButton:          ['Save Changes',     'button']
-      style--saveMessage:         [ null,              'container']
-      hr2:                        [ null,              'hr']
-      style--saveNew:             ['Create New Style', 'header']
-      style--saveNewName:         ['Name',             'textfield', '', 20]
-      style--saveNewButton:       ['Save New',         'button',    'config/style/atom_builder', 'atomizer.ajax_yml_save']
-      style--saveNewMessage:      [ null,              'container']
+      hr1:                        [ null,               'hr']
+      style--loadlabel:           ['Select Style',      'header']
+      style--selectyml:           [ null,               'selectyml', 'base.yml',   'style',   'config/style/atom_builder', 'atomizer.ajax_yml_load']
+      style--reset:               [ 'Reset Style',      'button']
+      style--saveButton:          [ 'Save Changes',     'button']
+      style--saveMessage:         [ null,               'container']
+      hr2:                        [ null,               'hr']
+      style--saveNew:             [ 'Create New Style', 'header']
+      style--saveNewName:         [ 'Name',             'textfield', '', 20]
+      style--saveNewButton:       [ 'Save New',         'button',    'config/style/atom_builder', 'atomizer.ajax_yml_save']
+      style--saveNewMessage:      [ null,               'container']
 
   particles:
     title:               Protons, Electrons
@@ -99,22 +86,14 @@ styler:
       electron--scale:            ['Scale',        'range',     1, [0, 3, .01]]
 
   valence:
-    title:               Valence Rings & Faces
+    title:               Valence Rings
     controls:
-      valence--label:             ['Rings',        'header']
-      valence--opacity:           ['Opacity',      'range',     1, [0, 1, .01]]
-      valence--scale:             ['Scale',        'range',     1, [0, 3, .01]]
-      valence--diameter:          ['Diameter',     'range',     .12, [0, 10, .01]]
+      valence--opacity:           ['Opacity',     'range',     1, [0, 1, .01]]
+      valence--scale:             ['Scale',       'range',     1, [0, 3, .01]]
+      valence--diameter:          ['Diameter',    'range',     .12, [0, 10, .01]]
 
-      valence-active--color:      ['Active',       'color',    '#85223C']
-      valence-inactive--color:    ['Inactive',     'color',    '#666666']
-
-      hr1:                        [ null,          'hr']
-      faces--label:               ['Faces',        'header']
-      faces--opacity:             ['Opacity',      'range', 1, [0, 1, .01]]
-      faces-neutral--color:       ['Neutral',      'color',    '#74ff74']
-      faces-positive--color:      ['Positive',     'color',    '#74fdff']
-      faces-negative--color:      ['negative',     'color',    '#fffd73']
+      valence-active--color:      ['Active',      'color',    '#85223C']
+      valence-inactive--color:    ['Inactive',    'color',    '#666666']
 
   axes:
     title:               Axes
@@ -141,7 +120,7 @@ styler:
       nucletOuterAxes--linewidth: ['Linewidth',    'range',        5, [0, 5, .1]]
 
   icosa:
-    title:               Icosahedron - Inner
+    title:               Icosahedron
     controls:
       icosa--scale:               ['Scale',        'range',    1,  [0, 3, .01]]
 
@@ -167,34 +146,6 @@ styler:
       icosaAxes--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
       icosaAxes--scale:           ['Scale',        'range',     2, [0, 5, .01]]
       icosaAxes--linewidth:       ['Linewidth',    'range',     1, [0, 5, .1]]
-
-  icosaOut:
-    title:               Icosahedron - Outer
-    controls:
-      icosaOut--scale:              ['Scale',        'range',    1,  [0, 3, .01]]
-
-      hr1:                          [ null, 'hr']
-      icosaOutWireframe--color:     ['Wireframe',    'color',    '#ff33ff']
-      icosaOutWireframe--opacity:   ['Opacity',      'range',     1, [0, 1, .01]]
-      icosaOutWireframe--linewidth: ['Linewidth',    'range',     3, [0, 5, .1]]
-
-      icosaOutVertexid--label:      ['IDs',          'label']
-      icosaOutVertexid--opacity:    ['Opacity',      'range',     0,  [0, 1, .01]]
-#     icosaOutVertexids--scale:     ['Scale',        'range',     1,  [0, 3, .01]]
-
-      hr2:                          [ null, 'hr']
-      icosaOutFaces--color:         ['Faces',        'color',    '#88cccc']
-      icosaOutFaces--opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
-
-      icosaOutFaceid--label:        ['IDs',          'label']
-      icosaOutFaceid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
-#     icosaOutFaceids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
-
-      hr4:                          [ null, 'hr']
-      icosaOutAxes--color:          ['Axis',         'color',    '#ffbbcc']
-      icosaOutAxes--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
-      icosaOutAxes--scale:          ['Scale',        'range',     2, [0, 5, .01]]
-      icosaOutAxes--linewidth:      ['Linewidth',    'range',     1, [0, 5, .1]]
 
 
   deca:
@@ -230,7 +181,7 @@ styler:
       decahedron--rotation:         ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
 
   dodeca:
-    title:               Dodecahedron inner
+    title:               Dodecahedron
     controls:
       dodeca--scale:                ['Scale',        'range',    1,  [0, 3, .01]]
 
@@ -256,34 +207,6 @@ styler:
       dodecaAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
       dodecaAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
       dodecaAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
-
-  dodecaOut:
-    title:               Dodecahedron outer
-    controls:
-      dodecaOut--scale:              ['Scale',        'range',    1,  [0, 3, .01]]
-
-      hr1:                           [ null, 'hr']
-      dodecaOutWireframe--color:     ['Wireframe',    'color',    '#00ffff']
-      dodecaOutWireframe--opacity:   ['Opacity',      'range',     1, [0, 1, .01]]
-      dodecaOutWireframe--linewidth: ['Linewidth',    'range',     3, [0, 5, .1]]
-
-      dodecaOutVertexid--label:      ['IDs',          'label']
-      dodecaOutVertexid--opacity:    ['Opacity',      'range',     0,  [0, 1, .01]]
-#     dodecaOutVertexids--scale:     ['Scale',        'range',     1,  [0, 3, .01]]
-
-      hr2:                           [ null, 'hr']
-      dodecaOutFaces--color:         ['Faces',        'color',    '#88cccc']
-      dodecaOutFaces--opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
-
-      dodecaOutFaceid--label:        ['IDs',          'label']
-      dodecaOutFaceid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
-#     dodecaOutFaceids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
-
-      hr4:                           [ null, 'hr']
-      dodecaOutAxes--color:          ['Axis',         'color',    '#aabb99']
-      dodecaOutAxes--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
-      dodecaOutAxes--scale:          ['Scale',        'range',     2, [0, 5, .01]]
-      dodecaOutAxes--linewidth:      ['Linewidth',    'range',     1, [0, 5, .1]]
 
   octahedron:
     title:               Octahedron

@@ -110,6 +110,26 @@ class AtomizerController extends ControllerBase {
   public function loadAtom() {
     $response = new AjaxResponse();
     $data = json_decode(file_get_contents("php://input"), true);
+    $link = [
+      '#type' => 'link',
+      '#title' => 'Save',
+      '#url' => Url::fromRoute('entity.node.edit_form',['node' => $data['nid']]),
+      '#attached' => ['library' => ['core/drupal.dialog.ajax']],
+      '#attributes' => [
+        'class' => ['use-ajax'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode([
+          'dialogClass' => 'az-dialog',
+          'width' => '520px',
+          'draggable' => true,
+          'autoResize' => false,
+          'position' => ['my' => 'right top', 'at' => 'right-10 top-10'],
+        ]),
+        'data-drupal-selector' => "edit-link",
+        'id' =>"edit-link--2",
+      ],
+    ];
+    $data['link'] = render($link);
 
     $node = Node::load($data['nid']);
 

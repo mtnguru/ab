@@ -5,8 +5,10 @@
  * Contains atomizer.module..
  */
 
+use Drupal\atomizer\AtomizerFiles;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Component\Serialization\Yaml;
 
 /**
  * Implements hook_help().
@@ -23,7 +25,6 @@ function atomizer_help($route_name, RouteMatchInterface $route_match) {
     default:
   }
 }
-
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -113,10 +114,66 @@ function atomizer_form_alter (&$form, FormStateInterface $form_state) {
   return;
 }
 
+/**
+ * Atomizer Edit form alterations - node-atomizer-edit-form
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function atomizer_form_node_atomizer_edit_form_alter (&$form, FormStateInterface $form_state) {
+  // Set the field_configuration_file option to the list of files in atomizer/config/atomizers.
+  $form['field_configuration_file']['widget']['#options'] = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
+
+  $form['#validate'][] = 'atomizer_form_node_atomizer_validate';
+//foreach (array_keys($form['actions']) as $action) {
+//  if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+//    $form['actions'][$action]['#submit'][] = 'atomizer_form_node_atomizer_submit';
+//  }
+//}
+}
+
+function atomizer_form_node_atomizer_submit (&$form, FormStateInterface $form_state) {
+  return;
+}
+
+function atomizer_form_node_atomizer_validate (&$form, FormStateInterface $form_state) {
+//$errors = $form_state->getErrors();
+//if (!empty($errors['field_configuration_file'])) {
+//  $form_state->clearErrors();
+//};
+}
+
 function atomizer_views_pre_render($view) {
   return $view;
 }
 
 function atomizer_views_post_render($view, &$output, $cache) {
+  return;
+}
+
+function atomizer_preprocess_node(&$variables) {
+  $type = $variables['node']->getType();
+  switch ($type) {
+
+    case 'atomizer':
+      // Add Select Atom Views block.
+      $variables['content']['view_select_atom'] = views_embed_view('az_atom', 'select_atom');
+
+      // Read in configuration yml file
+      if (!empty($variables['node']->field_configuration_file)) {
+        $atomizer_block = \Drupal::entityManager()->getStorage('block')->load('atom_builder');
+
+        if (!empty($atomizer_block)) {
+          $config = Yaml::decode($variables['node']->field_configuration_file->value);
+          $atomizer_block->getPlugin()->setConfigurationValue('atomizer_config', $config);
+          $atomizer_block->save();
+          $variables['content']['atomizer_block'] = \Drupal::entityManager()
+            ->getViewBuilder('block')
+            ->view($atomizer_block);
+        }
+      }
+      break;
+  } // switch ($type)
+
   return;
 }

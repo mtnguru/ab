@@ -832,7 +832,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
         // Create geometry faces
         if (geo.faces) {
           var name = groupName + 'Faces';
-          var faces =createGeometryFaces(
+          var faces = createGeometryFaces(
             name,
             geo.scale,
             geometry,

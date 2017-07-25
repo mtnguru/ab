@@ -1,3 +1,12 @@
+.fa-futbol-o {
+  font-size: 80%;
+}
+
+.fa-dot-circle-o {
+  font-size: 110%;
+  color: orange;
+}
+
 .az-fa {
   font-family: FontAwesome;
   padding-right: .3em;
@@ -16,6 +25,7 @@
 .az-fa-book:before              { @extend .az-fa; content: "\f02d"; }
 .az-fa-calculator:before        { @extend .az-fa; content: "\f1ec"; }
 .az-fa-clock-o:before           { @extend .az-fa; content: "\f017"; }
+.az-fa-close:before             { @extend .az-fa; content: "\f00d"; }
 .az-fa-cog:before               { @extend .az-fa; content: "\f013"; }
 .az-fa-comment:before           { @extend .az-fa; content: "\f075"; }
 .az-fa-comment-o:before         { @extend .az-fa; content: "\f0e5"; }

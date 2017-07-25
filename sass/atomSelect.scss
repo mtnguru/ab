@@ -1,4 +1,5 @@
 @import "variables";
+@import "fontAwesome";
 
 #landing_page-atom-builder {
   .ui-dialog {
@@ -9,6 +10,20 @@
 #views-exposed-form-az-atom-select-nuclei {
   font-size: 12px;
 } 
+
+// Select atom View block
+#view-select-atom {
+  .close-button {
+    position: absolute;
+    padding: .5em;
+    background: #d0d0d0;
+    right: 20px;
+    &:hover {
+      background-color: #477DCA;
+    }
+//  @extend .az-fa-close;
+  }
+}
 
 .view-content {
 
@@ -26,7 +41,7 @@
       }
       &.views-field-field-atomic-number,
       &.views-field-field__p {
-        text-align: center;
+        text-align: right;
       }
     }
     td {

@@ -1,6 +1,6 @@
-name: Base
+name: Shells
 description: 'Initial style set'
-filepath: config/style/atom_builder/base.yml
+filepath: config/style/atom_builder/Shells.yml
 styles:
   ambient--color:
     defaultValue: '#5e5e5e'
@@ -171,7 +171,7 @@ styles:
     defaultValue: '#88cccc'
     type: color
   dodecaOutFaces--opacity:
-    defaultValue: 0
+    defaultValue: '0.02'
     type: range
   dodecaOutVertexid--opacity:
     defaultValue: 0
@@ -288,7 +288,7 @@ styles:
     defaultValue: 1
     type: range
   icosa--scale:
-    defaultValue: 1
+    defaultValue: '1.72'
     type: range
   icosaAxes--color:
     defaultValue: '#ffbbcc'
@@ -321,7 +321,7 @@ styles:
     defaultValue: '#88cccc'
     type: color
   icosaFaces--opacity:
-    defaultValue: 0
+    defaultValue: '0.53'
     type: range
   icosaOut--scale:
     defaultValue: 1
@@ -342,10 +342,10 @@ styles:
     defaultValue: 0
     type: range
   icosaOutFaces--color:
-    defaultValue: '#88cccc'
+    defaultValue: '#cc88b9'
     type: color
   icosaOutFaces--opacity:
-    defaultValue: 0
+    defaultValue: '0.26'
     type: range
   icosaOutVertexid--opacity:
     defaultValue: 0
@@ -516,7 +516,7 @@ styles:
     defaultValue: 2500
     type: range
   proton--opacity:
-    defaultValue: '0.76'
+    defaultValue: '1'
     type: range
   proton--radius:
     type: range
