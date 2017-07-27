@@ -33,9 +33,6 @@ class AtomizerControlBlock {
           'class' => array($valueClass),
         ),
       ),
-      /*          'min' => array(
-                    '#markup' => '<div class="az-min">' . $controlConf[3][0] . '</div>'
-                  ), */
       'range' => array (
         '#type' => 'range',
         '#default_value' => $defaultValue,
@@ -47,13 +44,10 @@ class AtomizerControlBlock {
           'class' => array($sliderClass),
         ),
       ),
-      /*          'max' => array(
-                    '#markup' => '<div class="az-max">' . $controlConf[3][1] . '</div>'
-                  ), */
     );
   }
 
-  static public function create($type, $blockName, $blockConf, &$styleSet, $showTitle) {
+  static public function create($type, $blockName, $blockConf, &$theme, $showTitle) {
     // Create a container for the block
     $block[$blockName] = array(
       '#type' => 'container',
@@ -242,7 +236,7 @@ class AtomizerControlBlock {
               $controlConf[3][2]
             );
             $control[$id . '--' . $axis]['#attributes']['class'][] = 'az-indent';
-            $styleSet[$id . '--' . $axis] = array(
+            $theme[$id . '--' . $axis] = array(
               'type' => $controlConf[1],
               'defaultValue' => $defaultValue[$ind],
             );
@@ -322,7 +316,7 @@ class AtomizerControlBlock {
           break;
       }
       if ($addValue) {
-        $styleSet[$id] = array(
+        $theme[$id] = array(
           'type' => $controlConf[1],
           'defaultValue' => $defaultValue,
         );

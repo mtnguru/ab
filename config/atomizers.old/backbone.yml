@@ -1,9 +1,9 @@
 name:  Backbone
 defaultView: backbone
-styleSetDirectory: config/style/backbone
+themeDirectory: config/themes/backbone
 views:
   backbone:
     name: Backbone Builder
     producer: backbone_builder
     defaultAtom: half_backbone.yml
-    styleSetPath: config/style/builder/backbone.yml
+    themePath: config/themes/builder/backbone.yml

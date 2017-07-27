@@ -302,8 +302,8 @@
      */
     function setValenceRings() {
       var numActive = 0;
-      var activeColor = viewer.style.get('valence-active--color');
-      var inactiveColor = viewer.style.get('valence-inactive--color');
+      var activeColor = viewer.theme.get('valence-active--color');
+      var inactiveColor = viewer.theme.get('valence-inactive--color');
       for (var n in atom.az.nuclets) {
         var nuclet = atom.az.nuclets[n];
         if (nuclet.az.state === 'backbone-initial' || nuclet.az.state === 'backbone-final') {
@@ -341,7 +341,7 @@
      * @param response
      */
     var savedYml = function (response) {
-      var select = document.getElementById('style--selectyml').querySelector('select');
+      var select = document.getElementById('theme--selectyml').querySelector('select');
       // Remove current options
     }
 
@@ -357,7 +357,7 @@
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/saveYml',
         { name: controls.name,
-          component: 'style',
+          component: 'theme',
           filename: controls.filename,
           ymlContents: currentSet },
         savedYml
@@ -374,7 +374,7 @@
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/saveYml',
         { name: currentSet.name,
-          component: 'style',
+          component: 'theme',
           filename: currentSet.filename,
           ymlContents: currentSet },
         null  // TODO: Put in useful error codes and have them be displayed.

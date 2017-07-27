@@ -4,7 +4,7 @@ static:
   reset:
 #   title: Mouse
     controls:
-      style--cameraReset:         ['Reset Camera',     'button']
+      theme--cameraReset:         ['Reset Camera',     'button']
       viewer--fullScreen:         ['Full screen',      'toggle']
       hr1: ['null', hr]
 
@@ -30,7 +30,7 @@ styler:
       mouse--mode:
         - ''
         - radios
-        - initial
+        - inner-faces
         -
           none: None
           protons: Add/Delete Protons
@@ -41,6 +41,7 @@ styler:
   nuclet:
     title:               Nuclet
     controls:
+      nuclet--list:               [ null,              'container']
       nuclet--id:                 ['Id',               'container']
       nuclet--state:
         - 'State:'
@@ -60,20 +61,20 @@ styler:
       nuclet--grow-1:             ['&nbsp;&nbsp;1',    'html',    '--']
       nuclet--delete:             ['Delete',           'button']
 
-  style:
-    title:               Styles
+  theme:
+    title:               Themes
     controls:
       hr1:                        [ null,              'hr']
-      style--loadlabel:           ['Select Style',     'header']
-      style--selectyml:           [ null,              'selectyml', 'base.yml',   'style',   'config/style/atom_builder', 'atomizer.ajax_yml_load']
-      style--reset:               ['Reset Style',      'button']
-      style--saveButton:          ['Save Changes',     'button']
-      style--saveMessage:         [ null,              'container']
+      theme--loadlabel:           ['Select Theme',     'header']
+      theme--selectyml:           [ null,              'selectyml', 'base.yml',   'theme',   'config/themes/atom_builder', 'atomizer.ajax_yml_load']
+      theme--reset:               ['Reset Theme',      'button']
+      theme--saveButton:          ['Save Changes',     'button']
+      theme--saveMessage:         [ null,              'container']
       hr2:                        [ null,              'hr']
-      style--saveNew:             ['Create New Style', 'header']
-      style--saveNewName:         ['Name',             'textfield', '', 20]
-      style--saveNewButton:       ['Save New',         'button',    'config/style/atom_builder', 'atomizer.ajax_yml_save']
-      style--saveNewMessage:      [ null,              'container']
+      theme--saveNew:             ['Create New Theme', 'header']
+      theme--saveNewName:         ['Name',             'textfield', '', 20]
+      theme--saveNewButton:       ['Save New',         'button',    'config/themes/atom_builder', 'atomizer.ajax_yml_save']
+      theme--saveNewMessage:      [ null,              'container']
 
   particles:
     title:               Protons, Electrons

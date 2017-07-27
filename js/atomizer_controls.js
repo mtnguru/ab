@@ -70,7 +70,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   }
 
   /**
-   * One of the styling controls has changed, get the value of the control and apply control through the style module.
+   * One of the styling controls has changed, get the value of the control and apply control through the theme module.
    * @param event
    */
   function onControlChanged(event) {
@@ -80,7 +80,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     } else if (this.className.indexOf('az-control-range') > -1) {
       document.getElementById(this.id + '--az-value').value = event.target.value;
     }
-    viewer.style.applyControl(this.id, event.target.value);
+    viewer.theme.applyControl(this.id, event.target.value);
   }
 
   /**
@@ -152,36 +152,35 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     for (var i=0; i < styler.length; i++) {
       document.getElementById('control-' + styler[i].value).style.display = (styler[i].selected) ? 'block' : 'none';
     }
-
   }
 
-  function setStyleDefaults() {
+  function setThemeDefaults() {
     // Initialize all the sliders, buttons and color fields in the styler blocks
-    if (!viewer.atomizer.styleSet) return;
-    for (var controlId in viewer.atomizer.styleSet.styles) {
-      var control = viewer.atomizer.styleSet.styles[controlId];
+    if (!viewer.atomizer.theme) return;
+    for (var controlId in viewer.atomizer.theme.settings) {
+      var control = viewer.atomizer.theme.settings[controlId];
       var id = controlId.replace(/_/g, "-");
       var element = document.getElementById(id);
       if (element || control.type == 'rotation' || control.type == 'position') {
         switch (control.type) {
           case 'color':
           case 'range':
-            viewer.style.set(control.defaultValue, id, control.type);
+            viewer.theme.set(control.defaultValue, id, control.type);
             break;
           case 'rotation':
           case 'position':
             var sid;
-            sid = id + '--az-slider';
-            viewer.style.set(control.defaultValue, id + '--az-slider', control.type);
+            sid = id + '-x--az-slider';
+            viewer.theme.set(control.defaultValue, sid, control.type);
 
-            sid = id + '--az-slider';
-            viewer.style.set(control.defaultValue, id, control.type);
+            sid = id + '-y--az-slider';
+            viewer.theme.set(control.defaultValue, sid, control.type);
 
-            sid = id + '--az-slider';
-            viewer.style.set(control.defaultValue, id, control.type);
+            sid = id + '-z--az-slider';
+            viewer.theme.set(control.defaultValue, sid, control.type);
             break;
         }
-        // Make sure that style has default values for all controls
+        // Make sure that theme has default values for all controls
       }
     }
   }
@@ -189,14 +188,14 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   /**
    * Initialize controls
    *
-   * Set defaults as per the current style.  Add Event listeners
+   * Set defaults as per the current theme.  Add Event listeners
    *
    * @returns {controls|*}
    */
   function initializeControls() {
 
-    // Extract default values to initialize styles
-    setStyleDefaults();
+    // Extract default values to initialize settings
+    setThemeDefaults();
 
     var form = document.forms['atomizer-controls-form'];
     if (!form) return;
@@ -206,8 +205,8 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     styler.addEventListener("change", showStylerBlock);
 
     // Set up event listeners
-    for (var controlId in viewer.atomizer.styleSet.styles) {
-      var control = viewer.atomizer.styleSet.styles[controlId];
+    for (var controlId in viewer.atomizer.theme.settings) {
+      var control = viewer.atomizer.theme.settings[controlId];
       var id = controlId.replace(/_/g, "-");
       var element = document.getElementById(id);
       if (element || control.type == 'rotation' || control.type == 'position') {
@@ -220,7 +219,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
           case 'position':
             var sid = id + '--az-slider';
             document.getElementById(sid).addEventListener("input", onControlChanged);
-            viewer.style.set(control.defaultValue, id, control.type);
+            viewer.theme.set(control.defaultValue, sid, control.type);
             break;
           case 'saveyml':
             var elem = document.getElementById(id + '--button');
@@ -235,7 +234,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
             element.addEventListener("click", onButtonClicked);
             break;
         }
-        // Make sure that style has default values for all controls
+        // Make sure that theme has default values for all controls
       }
     }
 
@@ -343,7 +342,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
   /**
    * Get the default setting for a control.
    *
-   * Used when the current style does not define a valid default.
+   * Used when the current theme does not define a valid default.
    *
    * @param id
    * @param index
@@ -380,7 +379,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     styler = document.getElementById('edit-styler');
 
     // Set the current mouse mode.
-//  changeMode(viewer.style.get('mouse--mode'));
+//  changeMode(viewer.theme.get('mouse--mode'));
     changeMode('atom_builder');
 
     // Set any default values the producer may have.

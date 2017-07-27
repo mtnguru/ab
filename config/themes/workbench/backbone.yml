@@ -1,6 +1,7 @@
 name: Backbone
+filepath: config/themes/workbench/backbone.yml
 description: 'Backbone builder'
-styles:
+settings:
   proton--radius:
     type: range
     defaultValue: 50
@@ -574,4 +575,3 @@ styles:
   protonVertexid--scale:
     defaultValue: 1
     type: range
-filepath: config/style/workbench/backbone.yml

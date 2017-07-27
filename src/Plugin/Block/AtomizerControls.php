@@ -69,7 +69,7 @@ class AtomizerControls extends BlockBase {
           $config['atomizer_id'] => array(
             'atomizerId' =>  $config['atomizer_id'],
             'controlSet' =>  $controlSet,
-            'styleSet' => $render['form']['#az-styleset'],
+            'theme' => $render['form']['#az-theme'],
           ),
         ),
       ),

@@ -5,12 +5,12 @@ views:
   fiveSolids:
     name: The 5 Platonic Solids
     producer: platonic_solids
-    styleSetPath: config/style/element/base.yml
+    themePath: config/themes/element/base.yml
   dualSolids:
     name: Platonic solids and their duals 
     producer: platonic_solids_dual
-    styleSetPath: config/style/element/base.yml
+    themePath: config/themes/element/base.yml
   octoNiso:
     name: The Octahedron and IsocaHedron
     producer: octo_and_iso_solids
-    styleSetPath: config/style/element/base.yml
+    themePath: config/themes/element/base.yml

@@ -1,6 +1,6 @@
 name: Atom Builder
 defaultView: builder
-styleSetDirectory: config/style/atom_builder
+themeDirectory: config/themes/atom_builder
 libraries: [atomizer/atomizer-base, atomizer/atomizer-atom-builder]
 objects: [nuclets]
 canvasRatio: window
@@ -9,10 +9,10 @@ views:
     name: Atom Builder
     producer: atom_builder
     defaultAtom: carbon.yml
-    styleSetPath: config/style/atom_builder/base.yml
+    themePath: config/themes/atom_builder/Shells.yml
   builder2:
     name: Atom Builder
     producer: atom_builder
     defaultAtom: carbon.yml
-    styleSetPath: config/style/atom_builder/base.yml
+    themePath: config/themes/atom_builder/Shells.yml
 

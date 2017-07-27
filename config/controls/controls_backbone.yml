@@ -4,7 +4,7 @@ static:
 #   title: Mouse
     controls:
       camera--reset:           ['Reset Camera',      'button']
-      style--reset:            ['Reset Style',      'button']
+      theme--reset:            ['Reset Theme',      'button']
 
       hr1: ['null', hr]
 
@@ -23,16 +23,16 @@ styler:
       atom--position:       ['Position',         'position', [0, 0, 0], [-500, 500, 1]]
       atom--rotation:       ['Rotation',         'rotation', [0, 0, 0], [-360, 360, 1]]
 
-  style:
-    title:               Styles
+  theme:
+    title:               Themes
     controls:
-      style--reset:            ['Reset Style',      'button']
+      theme--reset:            ['Reset Theme',      'button']
       hr1:                     [ null,              'hr']
-      style--loadlabel:        ['Current Style',    'header']
-      style--selectyml:        [ null,              'selectyml', 'base.yml',   'style',   'config/style/builder', 'atomizer.ajax_yml_load']
+      theme--loadlabel:        ['Current Theme',    'header']
+      theme--selectyml:        [ null,              'selectyml', 'base.yml',   'theme',   'config/themes/builder', 'atomizer.ajax_yml_load']
       hr2:                     [ null,              'hr']
-      style--savelabel:        ['Create New Style', 'header']
-      style--saveyml:          [ null,              'saveyml',   '',           'style',   'config/style/builder', 'atomizer.ajax_yml_save']
+      theme--savelabel:        ['Create New Theme', 'header']
+      theme--saveyml:          [ null,              'saveyml',   '',           'theme',   'config/themes/builder', 'atomizer.ajax_yml_save']
 
   particles:
     title:               Protons, Electrons

@@ -1,6 +1,7 @@
 name: Base
-description: 'Initial style set'
-styles:
+filepath: config/themes/workbench/base.yml
+description: 'Initial theme settings'
+settings:
   proton--radius:
     type: range
     defaultValue: 50
@@ -625,4 +626,3 @@ styles:
   outerbackbone-2--rotation--z:
     defaultValue: 0
     type: rotation
-filepath: config/style/workbench/base.yml

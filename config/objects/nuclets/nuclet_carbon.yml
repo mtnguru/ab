@@ -52,9 +52,11 @@ geoGroups:
     geometries:
       solid:
         shape: icosahedron
-        scale: 1.37
+#       scale: 1.37
+        scale: 2
         wireframe: true
         attachFaces: true
+        transparentFaces: true
         faces:
           0:
             type: valence
@@ -142,9 +144,10 @@ geoGroups:
     geometries:
       solid:
         shape: icosahedron
-        scale: 3
+        scale: 6
         wireframe: true
-        attachFaces: true
+#       attachFaces: true
+#       transparentFaces: false
         faces:
           0:
             type: valence

@@ -8,7 +8,7 @@ dialogs:
     draggable: true
     resize: false
     items:
-      style--cameraReset:         ['Reset Camera',     'button']
+      theme--cameraReset:         ['Reset Camera',     'button']
       viewer--fullScreen:         ['Full screen',      'toggle']
 
   mode:
@@ -66,15 +66,15 @@ dialogs:
       nuclet--grow-1:             ['&nbsp;&nbsp;1',    'html',    '--']
       nuclet--delete:             ['Delete',           'button']
 
-  quick-style:
-    title: Quick Style
+  quick-theme:
+    title: Quick Theme
     icon: Paint Gun
     scroll: on/off/auto?
     draggable: true/false
     resize: true/false
     items:
-      style--quick:
-        - 'Quick Style'
+      theme--quick:
+        - 'Quick Theme'
         - radios
         - base
         -
@@ -84,15 +84,15 @@ dialogs:
           valence: Valence
           charge: Charge
 
-  style:
-    title: Style
+  theme:
+    title: Theme
     icon: paint brush
     scroll: on/off/auto?
     draggable: true/false
     resize: true/false
     items:
-      style--select-block:
-        - 'Select Style'
+      theme--select-block:
+        - 'Select Theme'
         - select-block
         - 'base'
         -

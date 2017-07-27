@@ -17,7 +17,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   var highlightedFace;
   var highlightedNuclet;
   var intersectList = [];
-  var protonRadius = viewer.style.get('proton--radius');
+  var protonRadius = viewer.theme.get('proton--radius');
   var tetrahedronId = 0;
   var protonId = 0;
 
@@ -101,12 +101,12 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       highlightAttachProtons(highlightedNuclet.protons, highlightedFace);
 
       var proton = viewer.view.ghostProton;
-      proton.material.color.setHex(parseInt(viewer.style.get('proton-default--color').replace(/#/, "0x")), 16);
+      proton.material.color.setHex(parseInt(viewer.theme.get('proton-default--color').replace(/#/, "0x")), 16);
 
       var tetrahedron = viewer.view.ghostTetrahedron;
-      tetrahedron.children[0].material.color.setHex(parseInt(viewer.style.get('tetraWireframe--color').replace(/#/, "0x")), 16);
+      tetrahedron.children[0].material.color.setHex(parseInt(viewer.theme.get('tetraWireframe--color').replace(/#/, "0x")), 16);
       tetrahedron.children[0].name = 'tetraWireframe';
-      tetrahedron.children[1].material.color.setHex(parseInt(viewer.style.get('tetraFaces--color').replace(/#/, "0x")), 16);
+      tetrahedron.children[1].material.color.setHex(parseInt(viewer.theme.get('tetraFaces--color').replace(/#/, "0x")), 16);
       tetrahedron.children[1].name = 'tetraFaces';
 
       intersectList.push(tetrahedron.children[1]);
@@ -126,7 +126,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       // Create a new ghost Proton
       viewer.view.ghostProton = viewer.nuclet.makeProton(
         'ghost',
-        viewer.style.get('proton--opacity'),
+        viewer.theme.get('proton--opacity'),
         {x: 300, y: 50, z: 0}
       );
 
@@ -223,7 +223,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
         viewer.view.ghostTetrahedron.children[1].geometry.computeVertexNormals();
         highlightedNuclet.children[0].add(viewer.view.ghostTetrahedron);
 
-        color = viewer.style.get('proton-vattach--color');
+        color = viewer.theme.get('proton-vattach--color');
         highlightAttachProtons(highlightedNuclet.protons, highlightedFace, color.replace('#', '0x'));
 
         viewer.render();
@@ -280,7 +280,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       '/ajax-ab/saveYml',
       { name: data.name,
         source: 'backbone_builder',
-        component: 'style',
+        component: 'theme',
         filepath: data.filepath,
         ymlContents: nuclet
       },
@@ -300,7 +300,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
   };
 
   /**
-   * Load a style yml file and make it the current style set.
+   * Load a theme yml file and make it the current theme set.
    *
    * @param results
    */
@@ -368,7 +368,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
         var position = geometry.vertices[p];
         var proton = viewer.nuclet.makeProton(
           'default',
-          viewer.style.get('proton--opacity'),
+          viewer.theme.get('proton--opacity'),
           {
             x: position['x'],
             y: position['y'],
@@ -473,7 +473,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       // Create ghost proton
       proton = viewer.nuclet.makeProton(
         'default',
-        viewer.style.get('proton--opacity'),
+        viewer.theme.get('proton--opacity'),
         {x: x, y: y, z: z}
       );
       proton.azid = 'p18';
@@ -483,7 +483,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       // Create ghost proton
       proton = viewer.nuclet.makeProton(
         'default',
-        viewer.style.get('proton--opacity'),
+        viewer.theme.get('proton--opacity'),
         {x: x, y: y, z: -z}
       );
       proton.azid = 'p19';
@@ -513,7 +513,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     // Create ghost proton
     viewer.view.ghostProton = viewer.nuclet.makeProton(
       'ghost',
-      viewer.style.get('proton--opacity'),
+      viewer.theme.get('proton--opacity'),
       {x: 300, y: 50, z: 0}
     );
 

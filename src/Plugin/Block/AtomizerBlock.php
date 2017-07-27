@@ -80,7 +80,7 @@ class AtomizerBlock extends BlockBase {
           $config['atomizer_id'] => [
             'atomizerId' =>  $config['atomizer_id'],
             'controlSet' =>  $controlSet,
-            'styleSet' => $controls['form']['#az-styleset'],
+            'theme' => $controls['form']['#az-theme'],
             'configuration' => $config['atomizer_config'],
           ],
         ],

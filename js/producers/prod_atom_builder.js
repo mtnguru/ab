@@ -31,7 +31,8 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var hoverProtons = [];
   var visibleProtons = [];
   var highlightedProton;
-  var highlightedInnerFace;
+  var highlightedFace;
+  var highlightedIcosa;
   var highlightedOuterFace;
 
   /**
@@ -102,7 +103,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
       case 'none':
         return [];
       case 'protons':
-        var opacity = viewer.style.get('proton--opacity');
+        var opacity = viewer.theme.get('proton--opacity');
 
         // If there is already a highlighted proton
         if (highlightedProton) {
@@ -112,7 +113,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
           var proton = highlightedProton.object;
 
           // Change the proton back to it's original color and visibility.
-          var color = viewer.style.get('proton-' + proton.az.type + '--color');
+          var color = viewer.theme.get('proton-' + proton.az.type + '--color');
           proton.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
           proton.material.visible = proton.az.visible;
         }
@@ -124,7 +125,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
           // Highlight the proton
           highlightedProton = objects[0];
           highlightedProton.object.material.visible = true;
-          var color = viewer.style.get('proton-ghost--color');
+          var color = viewer.theme.get('proton-ghost--color');
           highlightedProton.object.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
         }
         break;
@@ -134,34 +135,42 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
         break;
 
       case 'inner-faces':
-
-        break;
-
-      case 'outer-faces':
-        var opacity = viewer.style.get(' icosaOutFaces--opacity');
+        var opacity = viewer.theme.get(' icosaFaces--opacity--az-slider');
 
         // If there is already a highlighted proton
-        if (highlightedOuterFace) {
-          // Return if the proton is already highlighted
-          if (objects.length && highlightedOuterFace == objects[0]) return;
-
-          var face = highlightedOuterFace.object;
-
-          // Change the proton back to it's original color and visibility.
-          var color = viewer.style.get('proton-' + proton.az.type + '--color');
-          proton.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
-          proton.material.visible = proton.az.visible;
+        if (highlightedFace) {
+          if (objects.length && highlightedFace == objects[0]) return;
+          highlightedFace.color.setHex(parseInt("0x00ff00"));
+          highlightedIcosa.geometry.colorsNeedUpdate = true;
+          highlightedFace = null;
         }
 
         if (objects.length) {
-          // Return if this proton isn't optional
-
-          // Highlight the proton
-          highlightedOuterFace = objects[0];
-          highlightedOuterFace.object.material.visible = true;
-          var color = viewer.style.get('proton-ghost--color');
-          highlightedOuterFace.face.color.setHex( Math.random() * 0xffffff | 0x80000000 );
+          highlightedFace = objects[0].face;
+          highlightedIcosa = objects[0].object;
+          highlightedFace.color.setHex(parseInt("0x00ffff"));
+          highlightedIcosa.geometry.colorsNeedUpdate = true;
+          highlightedIcosa.geometry.elementsNeedUpdate = true;
+          highlightedIcosa.geometry.dynamic = true;
+          highlightedIcosa.geometry.verticesNeedUpdate = true;
         }
+        break;
+
+      case 'outer-faces':
+        var opacity = viewer.theme.get(' icosaOutFaces--opacity');
+
+        // If there is already a highlighted proton
+        if (highlightedOuterFace) {
+          if (objects.length && highlightedOuterFace == objects[0]) return;
+          highlightedOuterFace.color.setHex(parseInt("0xff00ff"));
+          highlightedOuterFace = null;
+        }
+
+        if (objects.length) {
+          highlightedOuterFace = objects[0].face;
+          highlightedOuterFace.color.setHex(parseInt("0xffff00"));
+        }
+        objects[0].object.geometry.colorsNeedUpdate = true;
         break;
     }
   };
@@ -221,30 +230,34 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
             break;
 
           case 'inner-faces':
-            var intersects = viewer.controls.findIntersects(hoverInnerFaces);
-            if (intersects.length) {
-              var face = intersects[0].object;
-              if (proton.az.optional) {
-                proton.az.visible = !proton.az.visible;
-                proton.material.visible = proton.az.visible;
-                viewer.atom.setValenceRings();
-                createProtonLists();
-                viewer.render();
-              }
+            var objects = viewer.controls.findIntersects(hoverInnerFaces);
+            if (objects.length) {
+              var face = objects[0].face;
+              face.materialIndex = 1;
+
+              highlightedIcosa.geometry.faces[0].materialIndex = 2;
+              highlightedIcosa.geometry.faces[1].materialIndex = 0;
+              highlightedIcosa.geometry.faces[2].materialIndex = 1;
+
+              highlightedIcosa.geometry.faces[0].materialIndex = 1;
+              highlightedIcosa.geometry.faces[9].materialIndex = 1;
+              highlightedIcosa.geometry.faces[13].materialIndex = 1;
+
+              highlightedIcosa.geometry.verticesNeedUpdate = true;
+              highlightedIcosa.geometry.elementsNeedUpdate = true;
+              highlightedIcosa.geometry.colorsNeedUpdate = true;
+              viewer.render();
             }
             break;
 
           case 'outer-faces':
             var intersects = viewer.controls.findIntersects(hoverOuterFaces);
             if (intersects.length) {
-              var face = intersects[0].object;
-              if (proton.az.optional) {
-                proton.az.visible = !proton.az.visible;
-                proton.material.visible = proton.az.visible;
-                viewer.atom.setValenceRings();
-                createProtonLists();
-                viewer.render();
+              var face = intersects[0].face;
+              if (face.neutral) {
+
               }
+              viewer.render();
             }
             break;
         }
@@ -370,6 +383,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     viewer.view.ghostProton = viewer.nuclet.makeProton({type: 'ghost'}, 1, {x: 300, y: 50, z: 0});
   };
 
+
   /////////// Attach event listeners
 
   // Add Event Listener to attachAngle slider
@@ -400,6 +414,9 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
       }
     }
     radios[i].id = radios[i].id + '--' + radios[i].value;
+    if (radios[i].checked) {
+      mouseMode = radios[i].value;
+    }
   }
 
   return {

@@ -26,16 +26,16 @@ Drupal.atomizer.nucletC = function (_viewer) {
   var constants = Drupal.atomizer.base.constants;
   var axes = ['x', 'y', 'z'];
   var protonColors = {
-    default:    viewer.style.get('proton-default--color'),
-    ghost:      viewer.style.get('proton-ghost--color'),
-    valence:    viewer.style.get('proton-valence--color'),
-    grow:       viewer.style.get('proton-grow--color'),
-    polar:      viewer.style.get('proton-polar--color'),
-    neutral:    viewer.style.get('proton-neutral--color'),
+    default:    viewer.theme.get('proton-default--color'),
+    ghost:      viewer.theme.get('proton-ghost--color'),
+    valence:    viewer.theme.get('proton-valence--color'),
+    grow:       viewer.theme.get('proton-grow--color'),
+    polar:      viewer.theme.get('proton-polar--color'),
+    neutral:    viewer.theme.get('proton-neutral--color'),
   };
 
-  var protonRadius = viewer.style.get('proton--radius');
-  var electronRadius = viewer.style.get('electron--radius');
+  var protonRadius = viewer.theme.get('proton--radius');
+  var electronRadius = viewer.theme.get('electron--radius');
 
   /*
 	computeFaceNormals: function () {
@@ -65,9 +65,9 @@ Drupal.atomizer.nucletC = function (_viewer) {
    */
   function createAxes(name, conf, geometry) {
     var axisGeometry = new THREE.Geometry();
-    var opacity = viewer.style.get(name + 'Axes--opacity');
+    var opacity = viewer.theme.get(name + 'Axes--opacity');
     var lineMaterial = new THREE.LineBasicMaterial({
-      color: viewer.style.get(name + 'Axes--color'),
+      color: viewer.theme.get(name + 'Axes--color'),
       opacity: opacity,
       transparent: (opacity < constants.transparentThresh),
       visible:     (opacity > constants.visibleThresh),
@@ -129,17 +129,16 @@ Drupal.atomizer.nucletC = function (_viewer) {
    */
   function createGeometryWireframe(id, scale, geometry, rotation, offsetY) {
 
-    var opacity = viewer.style.get(id + '--opacity');
+    var opacity = viewer.theme.get(id + '--opacity');
     var wireframe = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-      color: viewer.style.get(id + '--color'),
+      color: viewer.theme.get(id + '--color'),
       opacity: opacity,
       transparent: (opacity < constants.transparentThresh),
       visible:     (opacity > constants.visibleThresh),
       wireframe: true,
-      wireframeLinewidth: viewer.style.get(id + '--linewidth')
+      wireframeLinewidth: viewer.theme.get(id + '--linewidth')
     }));
     wireframe.scale.set(scale, scale, scale);
-    wireframe.init_scale = scale;
     wireframe.name = id;
     if (rotation) {
       for (var i in axes) {
@@ -152,8 +151,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       }
     }
     if (offsetY) {
-      wireframe.position.y = offsetY * viewer.style.get('proton--radius');
-      wireframe.init_offsetY = offsetY * viewer.style.get('proton--radius');
+      wireframe.position.y = offsetY * viewer.theme.get('proton--radius');
+      wireframe.init_offsetY = offsetY * viewer.theme.get('proton--radius');
     }
     addObject(id, wireframe);
     return wireframe;
@@ -175,13 +174,13 @@ Drupal.atomizer.nucletC = function (_viewer) {
    */
   function createGeometryLines(id, scale, geometry, rotation, offsetY) {
 
-    var opacity = viewer.style.get(id + '--opacity');
+    var opacity = viewer.theme.get(id + '--opacity');
     var material = new THREE.LineBasicMaterial({
-      color: viewer.style.get(id + '--color'),
+      color: viewer.theme.get(id + '--color'),
       opacity: opacity,
       transparent: (opacity < constants.transparentThresh),
       visible:     (opacity > constants.visibleThresh),
-      linewidth: viewer.style.get(id + '--linewidth')
+      linewidth: viewer.theme.get(id + '--linewidth')
     });
 
     var lines = new THREE.Group();
@@ -200,7 +199,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
       lines.add(new THREE.Line(lineGeometry, material));
     }
     lines.scale.set(scale, scale, scale);
-    lines.init_scale = scale;
 
     if (rotation) {
       for (var i in axes) {
@@ -213,8 +211,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       }
     }
     if (offsetY) {
-      lines.position.y = offsetY * viewer.style.get('proton--radius');
-      lines.init_offsetY = offsetY * viewer.style.get('proton--radius');
+      lines.position.y = offsetY * viewer.theme.get('proton--radius');
+      lines.init_offsetY = offsetY * viewer.theme.get('proton--radius');
     }
     addObject(id, lines);
     return lines;
@@ -230,21 +228,49 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @param offset
    * @returns {THREE.Mesh|*}
    */
-  function createGeometryFaces(id, scale, geometry, rotation, offset) {
+  function createGeometryFaces(id, scale, geometry, rotation, offset, transparentFaces) {
+    var faces;
+    if (transparentFaces) {
+      geometry.dynamic = true;
+      // add one random mesh to each scene
+      var opacity = viewer.theme.get(id + '--opacity');
+      var opaqueMaterial = new THREE.MeshLambertMaterial( {
+        color: viewer.theme.get(id + '--color'),
+        opacity:.8,
+        transparent: false,
+        vertexColors: THREE.FaceColors
+      });
+      var transparentMaterial = new THREE.MeshLambertMaterial( {
+        color: viewer.theme.get(id + '--color'),
+        opacity: .2,
+        transparent: true,
+        vertexColors: THREE.FaceColors
+      });
 
-    // add one random mesh to each scene
-    var opacity = viewer.style.get(id + '--opacity');
-    var material = new THREE.MeshStandardMaterial( {
-      color: viewer.style.get(id + '--color'),
-      opacity: opacity,
-      transparent: (opacity < constants.transparentThresh),
-      visible:     (opacity > constants.visibleThresh),
-      roughness: 0.5,
-      metalness: 0,
-    } );
-    var faces = new THREE.Mesh(geometry, material);
+      faces = new THREE.Mesh(
+        geometry,
+        new THREE.MultiMaterial([opaqueMaterial, transparentMaterial])
+//      new THREE.MultiMaterial([transparentMaterial, opaqueMaterial])
+      );
+
+      faces.geometry.faces[0].materialIndex = 1;
+      faces.geometry.faces[9].materialIndex = 1;
+      faces.geometry.faces[13].materialIndex = 1;
+    } else {
+      var opacity = viewer.theme.get(id + '--opacity');
+      var material = new THREE.MeshStandardMaterial( {
+        color: viewer.theme.get(id + '--color'),
+        opacity: opacity,
+        transparent: (opacity < constants.transparentThresh),
+        visible:     (opacity > constants.visibleThresh),
+        roughness: 0.5,
+        metalness: 0,
+        vertexColors: THREE.FaceColors
+      } );
+      faces = new THREE.Mesh(geometry, material);
+    }
+
     faces.scale.set(scale, scale, scale);
-    faces.init_scale = scale;
     faces.name = id;
     if (rotation) {
       for (var i in axes) {
@@ -290,14 +316,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
       case 'proton':
       case 'sphere':
         geometry = new THREE.SphereGeometry(
-          geo.radius || viewer.style.get('proton--radius'),
+          geo.radius || viewer.theme.get('proton--radius'),
           geo.widthSegments || 36,
           geo.heightSegments || 36
         );
         break;
       case 'electron':
         geometry = new THREE.SphereGeometry(
-          geo.radius || viewer.style.get('electron--radius'),
+          geo.radius || viewer.theme.get('electron--radius'),
           geo.widthSegments || 24,
           geo.heightSegments || 24
         );
@@ -427,7 +453,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       active: conf.active || true
     };
 
-    var opacity = viewer.style.get('proton--opacity');
+    var opacity = viewer.theme.get('proton--opacity');
 
     var visible;
     if (az.active === false) {
@@ -446,7 +472,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
         }
       },
       {
-        scale: viewer.style.get('proton--scale'),
+        scale: viewer.theme.get('proton--scale'),
         radius: protonRadius
       },
       {
@@ -510,7 +536,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
    * @returns {THREE.AxisHelper}
    */
   function createHelperAxes(name, length, linewidth) {
-    var opacity = viewer.style.get(name + '--opacity');
+    var opacity = viewer.theme.get(name + '--opacity');
     var axis = new THREE.AxisHelper(length);
     axis.name = name;
     axis.material.linewidth = linewidth;
@@ -595,12 +621,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
       for (var geoName in geoGroup.geometries) {
         if (!geoGroup.geometries.hasOwnProperty(geoName)) continue;
         var geo = geoGroup.geometries[geoName];
+        // Scale the geometry
         var geometry = createGeometry(
           geo.shape,
           nucletConf.state || '',
-          (geo.scale || 1) * protonRadius,
+          geo.scale * protonRadius,
           (geo.scaleHeight || 1) * protonRadius
         );
+        geometry.scaleInit = geo.scale;
 
         if (geoGroup.rotation) {
           if (geoGroup.rotation.x) {
@@ -617,10 +645,12 @@ Drupal.atomizer.nucletC = function (_viewer) {
           }
         }
 
-        // Scale the geometry
-        var scale = viewer.style.get(groupName + '--scale');
-        if (scale) {
-//        nuclet.scale.set(scale,scale,scale);
+        var tscale = parseFloat(viewer.theme.get(groupName + '--scale'));
+
+        nucletGroup.scale.set(tscale, tscale, tscale);
+
+        if (groupName === 'icosa' && geoName === 'solid') {
+          console.log('Scale ' + groupName + ' geo.scale ' + geo.scale + '  configuration ' + tscale);
         }
 
         // Add Protons
@@ -674,7 +704,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
           // Create protons
           nuclet.az.protons = [];
           nuclet.az.protonGeometry = geometry;
-          var opacity = viewer.style.get('proton--opacity');
+          var opacity = viewer.theme.get('proton--opacity');
           for (var p in geo.protons) {
             if (!geo.protons.hasOwnProperty(p)) continue;
             var visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
@@ -687,10 +717,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
         }
 
         if (geo.valence) {
-          var color = viewer.style.get('valence-active--color');
-          var opacity = viewer.style.get('valence--opacity');
-          var radius = viewer.style.get('valence--scale') * protonRadius;
-          var diameter = viewer.style.get('valence--diameter') * protonRadius;
+          var color = viewer.theme.get('valence-active--color');
+          var opacity = viewer.theme.get('valence--opacity');
+          var radius = viewer.theme.get('valence--scale') * protonRadius;
+          var diameter = viewer.theme.get('valence--diameter') * protonRadius;
 
           nuclet.az.rings = [];
           for (var v in geo.valence) {
@@ -772,7 +802,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
         // Add Electrons
         if (geo.electrons) {
-          var opacity = viewer.style.get('electron--opacity') || 1;
+          var opacity = viewer.theme.get('electron--opacity') || 1;
           for (var e in geo.electrons) {
             if (!geo.electrons.hasOwnProperty(e)) continue;
             if (nucletConf.electrons && !nucletConf.electrons.contains(e)) continue;
@@ -780,20 +810,20 @@ Drupal.atomizer.nucletC = function (_viewer) {
             var electron = makeObject('electron',
               {
                 phong: {
-                  color: viewer.style.get('electron--color'),
+                  color: viewer.theme.get('electron--color'),
                   opacity: opacity,
                   transparent: (opacity < constants.transparentThresh),
                   visible: (opacity > constants.visibleThresh)
                 }
               },
               {
-                scale: viewer.style.get('proton--scale'),
+                scale: viewer.theme.get('proton--scale'),
                 radius: electronRadius
               },
               {
-                x: vertice.x * geo.scale,
-                y: vertice.y * geo.scale,
-                z: vertice.z * geo.scale
+                x: vertice.x * scale,
+                y: vertice.y * scale,
+                z: vertice.z * scale
               }
             );
             electron.name = 'electron';
@@ -813,7 +843,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
           if (geo.shape == 'dodecahedron' || geo.shape == 'hexahedron') {
             nucletGroup.add(createGeometryLines(
               name,
-              geo.scale + .02,
+              1 + .02,
               geometry,
               geo.rotation || null,
               geo.offsetY || null
@@ -821,7 +851,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
           } else {
             nucletGroup.add(createGeometryWireframe(
               name,
-              geo.scale + .02,
+              1 + .02,
               geometry,
               geo.rotation || null,
               geo.offsetY || null
@@ -834,10 +864,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
           var name = groupName + 'Faces';
           var faces = createGeometryFaces(
             name,
-            geo.scale,
+            1,
             geometry,
             geo.rotation || null,
-            geo.offsetY || null
+            geo.offsetY || null,
+            geo.transparentFaces
           );
           nucletGroup.add(faces);
           if (geo.attachFaces) {
@@ -863,7 +894,6 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
         viewer.render();
       }
-
     }
 
     // Create nuclet helper axes.
@@ -885,7 +915,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     var geometry = createGeometry('icosahedron', '', protonRadius, 1);
     geometry.applyMatrix(new THREE.Matrix4().makeRotationY(90 / 360 * 2 * Math.PI));
-    var line = createLine('attach', [geometry.vertices[9], geometry.vertices[10]], viewer.style.get('attachLines--opacity'));
+    var line = createLine('attach', [geometry.vertices[9], geometry.vertices[10]], viewer.theme.get('attachLines--opacity'));
     line.scale.set(5, 5, 5);
     nuclet.add(line);
 
@@ -1048,7 +1078,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       1,
       geometry,
       null,
-      null
+      null,
+      false
     ));
 
     return tetrahedron;

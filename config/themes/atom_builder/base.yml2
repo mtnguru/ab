@@ -1,7 +1,7 @@
-name: Shells
-description: 'Initial style set'
-filepath: config/style/atom_builder/Shells.yml
-styles:
+name: Base
+description: 'Initial theme set'
+filepath: config/themes/atom_builder/base.yml
+settings:
   ambient--color:
     defaultValue: '#5e5e5e'
     type: color
@@ -20,19 +20,10 @@ styles:
   camera--position--x:
     defaultValue: 0
     type: position
-  camera--position--x--az-slider:
-    defaultValue: 0
-    type: position
   camera--position--y:
     defaultValue: 1200
     type: position
-  camera--position--y--az-slider:
-    defaultValue: 1200
-    type: position
   camera--position--z:
-    defaultValue: -2000
-    type: position
-  camera--position--z--az-slider:
     defaultValue: -2000
     type: position
   deca--scale:
@@ -80,37 +71,19 @@ styles:
   decahedron--position--x:
     defaultValue: 0
     type: position
-  decahedron--position--x--az-slider:
-    defaultValue: 0
-    type: position
   decahedron--position--y:
-    defaultValue: 0
-    type: position
-  decahedron--position--y--az-slider:
     defaultValue: 0
     type: position
   decahedron--position--z:
     defaultValue: 0
     type: position
-  decahedron--position--z--az-slider:
-    defaultValue: 0
-    type: position
   decahedron--rotation--x:
-    defaultValue: 0
-    type: rotation
-  decahedron--rotation--x--az-slider:
     defaultValue: 0
     type: rotation
   decahedron--rotation--y:
     defaultValue: 0
     type: rotation
-  decahedron--rotation--y--az-slider:
-    defaultValue: 0
-    type: rotation
   decahedron--rotation--z:
-    defaultValue: 0
-    type: rotation
-  decahedron--rotation--z--az-slider:
     defaultValue: 0
     type: rotation
   dodeca--scale:
@@ -171,7 +144,7 @@ styles:
     defaultValue: '#88cccc'
     type: color
   dodecaOutFaces--opacity:
-    defaultValue: '0.02'
+    defaultValue: 0
     type: range
   dodecaOutVertexid--opacity:
     defaultValue: 0
@@ -288,7 +261,7 @@ styles:
     defaultValue: 1
     type: range
   icosa--scale:
-    defaultValue: '1.72'
+    defaultValue: 1
     type: range
   icosaAxes--color:
     defaultValue: '#ffbbcc'
@@ -321,7 +294,7 @@ styles:
     defaultValue: '#88cccc'
     type: color
   icosaFaces--opacity:
-    defaultValue: '0.53'
+    defaultValue: '0.5'
     type: range
   icosaOut--scale:
     defaultValue: 1
@@ -342,10 +315,10 @@ styles:
     defaultValue: 0
     type: range
   icosaOutFaces--color:
-    defaultValue: '#cc88b9'
+    defaultValue: '#88cccc'
     type: color
   icosaOutFaces--opacity:
-    defaultValue: '0.26'
+    defaultValue: '0'
     type: range
   icosaOutVertexid--opacity:
     defaultValue: 0
@@ -410,20 +383,11 @@ styles:
   octa--rotation--x:
     defaultValue: 0
     type: rotation
-  octa--rotation--x--az-slider:
-    defaultValue: 0
-    type: rotation
   octa--rotation--y:
-    defaultValue: 0
-    type: rotation
-  octa--rotation--y--az-slider:
     defaultValue: 0
     type: rotation
   octa--rotation--z:
     defaultValue: 1
-    type: rotation
-  octa--rotation--z--az-slider:
-    defaultValue: 0
     type: rotation
   octa--scale:
     defaultValue: '1.02'
@@ -479,37 +443,19 @@ styles:
   plane--position--x:
     defaultValue: 0
     type: position
-  plane--position--x--az-slider:
-    defaultValue: 0
-    type: position
   plane--position--y:
-    defaultValue: -400
-    type: position
-  plane--position--y--az-slider:
     defaultValue: -400
     type: position
   plane--position--z:
     defaultValue: 0
     type: position
-  plane--position--z--az-slider:
-    defaultValue: 0
-    type: position
   plane--rotation--x:
-    defaultValue: 0
-    type: rotation
-  plane--rotation--x--az-slider:
     defaultValue: 0
     type: rotation
   plane--rotation--y:
     defaultValue: -180
     type: rotation
-  plane--rotation--y--az-slider:
-    defaultValue: -180
-    type: rotation
   plane--rotation--z:
-    defaultValue: 1
-    type: rotation
-  plane--rotation--z--az-slider:
     defaultValue: 1
     type: rotation
   plane--width:
@@ -563,19 +509,10 @@ styles:
   spotlight-1--position--x:
     defaultValue: -1000
     type: position
-  spotlight-1--position--x--az-slider:
-    defaultValue: -1000
-    type: position
   spotlight-1--position--y:
     defaultValue: 1400
     type: position
-  spotlight-1--position--y--az-slider:
-    defaultValue: 1400
-    type: position
   spotlight-1--position--z:
-    defaultValue: -1000
-    type: position
-  spotlight-1--position--z--az-slider:
     defaultValue: -1000
     type: position
   spotlight-2--color:
@@ -584,19 +521,10 @@ styles:
   spotlight-2--position--x:
     defaultValue: 1400
     type: position
-  spotlight-2--position--x--az-slider:
-    defaultValue: 1400
-    type: position
   spotlight-2--position--y:
     defaultValue: 1400
     type: position
-  spotlight-2--position--y--az-slider:
-    defaultValue: 1400
-    type: position
   spotlight-2--position--z:
-    defaultValue: -400
-    type: position
-  spotlight-2--position--z--az-slider:
     defaultValue: -400
     type: position
   spotlight-3--color:
@@ -605,19 +533,10 @@ styles:
   spotlight-3--position--x:
     defaultValue: -1000
     type: position
-  spotlight-3--position--x--az-slider:
-    defaultValue: -1000
-    type: position
   spotlight-3--position--y:
     defaultValue: 1400
     type: position
-  spotlight-3--position--y--az-slider:
-    defaultValue: 1400
-    type: position
   spotlight-3--position--z:
-    defaultValue: -1000
-    type: position
-  spotlight-3--position--z--az-slider:
     defaultValue: -1000
     type: position
   tetraAxes--color:

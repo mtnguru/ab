@@ -7,7 +7,7 @@ atomizer-base:
     js/atomizer_base.js: {}
     js/atomizer_viewer.js: {}
     js/atomizer_controls.js: {}
-    js/atomizer_style.js: {}
+    js/atomizer_theme.js: {}
     js/atomizer.js: {}
     js/atomizer_sprites.js: {}
     js/atomizer_shapes.js: {}

@@ -15,16 +15,16 @@ styler:
     title:               Build Atom
     controls:
       text:                    ['Display nuclets here, plus other controls needed to build atoms', 'label']
-  style:
-    title:               Styles
+  theme:
+    title:               Themes
     controls:
-      style--reset:            ['Reset Style',      'button']
+      theme--reset:            ['Reset Theme',      'button']
       hr1:                     [ null,              'hr']
-      style--loadlabel:        ['Current Style',    'header']
-      style--selectyml:        [ null,              'selectyml', 'base.yml',   'style',   'config/style/builder', 'atomizer.ajax_yml_load']
+      theme--loadlabel:        ['Current Theme',    'header']
+      theme--selectyml:        [ null,              'selectyml', 'base.yml',   'theme',   'config/themes/builder', 'atomizer.ajax_yml_load']
       hr2:                     [ null,              'hr']
-      style--savelabel:        ['Create New Style', 'header']
-      style--saveyml:          [ null,              'saveyml',   '',           'style',   'config/style/builder', 'atomizer.ajax_yml_save']
+      theme--savelabel:        ['Create New Theme', 'header']
+      theme--saveyml:          [ null,              'saveyml',   '',           'theme',   'config/themes/builder', 'atomizer.ajax_yml_save']
   proton:
     title:               Protons
     controls:

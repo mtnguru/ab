@@ -27,10 +27,10 @@ class AtomizerControlsForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $controlSet = array()) {
 
     ////////// Create empty style set - as controls get built this gets initialized.
-    $styleSet = array(
+    $theme = array(
       'name' => 'Default',
       'description' => 'Initial style set',
-      'styles' => array(),
+      'settings' => array(),
     );
 
     ////////// Create static controls at top of control form
@@ -41,7 +41,7 @@ class AtomizerControlsForm extends FormBase {
         '#attributes' => array('id' => 'static-controls'),
       );
       foreach ($controlSet['static'] as $blockName => $block) {
-        $form['static'][$blockName] = AtomizerControlBlock::create('static', $blockName, $block, $styleSet['styles'], false);
+        $form['static'][$blockName] = AtomizerControlBlock::create('static', $blockName, $block, $theme['settings'], false);
       }
     }
 
@@ -53,7 +53,7 @@ class AtomizerControlsForm extends FormBase {
         '#attributes' => array('id' => 'hidden-controls'),
       );
       foreach ($controlSet['hidden'] as $blockName => $block) {
-        $form['hidden'][$blockName] = AtomizerControlBlock::create('hidden', $blockName, $block, $styleSet['styles'], false);
+        $form['hidden'][$blockName] = AtomizerControlBlock::create('hidden', $blockName, $block, $theme['settings'], false);
         $form['hidden'][$blockName][$blockName]['#attributes']['class'][] = 'az-hidden';
       }
     }
@@ -77,14 +77,14 @@ class AtomizerControlsForm extends FormBase {
         '#attributes' => array('id' => 'styler-controls'),
       );
       foreach ($controlSet['styler'] as $blockName => $block) {
-        $form['controls'][$blockName] = AtomizerControlBlock::create('control', $blockName, $block, $styleSet['styles'], false);
+        $form['controls'][$blockName] = AtomizerControlBlock::create('control', $blockName, $block, $theme['settings'], false);
       }
     }
 
     $form['#attributes'] = array('name' => 'atomizer-controls-form');
 
-    $form['#az-styleset'] =  $styleSet;
-//  file_put_contents(drupal_get_path('module', 'atomizer') . '/config/style/base2.yml', Yaml::encode($styleSet));
+    $form['#az-theme'] =  $theme;
+//  file_put_contents(drupal_get_path('module', 'atomizer') . '/config/style/base2.yml', Yaml::encode($theme));
     return $form;
   }
 

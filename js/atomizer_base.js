@@ -33,7 +33,12 @@
         contentType: "application/json; charset=utf-8",
         processData: false,
         success: function (response) {
-          if (successCallback) successCallback(response);
+          if (Array.isArray(response)) {
+            if (successCallback) successCallback(response);
+          } else {
+            alert('atomizer_base doAjax: ' + response);
+            (errorCallback) ? errorCallback(response) : successCallback(response);
+          }
           return false;
         },
         error: function (response) {

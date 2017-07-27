@@ -1,7 +1,7 @@
 name: Base
-description: 'Initial style set'
-filepath: config/style/platonic_solids/base.yml
-styles:
+description: 'Initial theme settings'
+filepath: config/themes/platonic_solids/base.yml
+settings:
   ambient--color:
     defaultValue: '#4f4f4f'
     type: color

@@ -1,24 +1,24 @@
 /**
- * @file - atomizer_style.js
+ * @file - atomizer_theme.js
  *
- * Class to manage and apply styles
+ * Class to manage and apply settings
  * Sets the color, position, opacity, linewidth, or rendered items.
  */
 
 'use strict';
 
-Drupal.atomizer.styleC = function (_viewer, callback) {
+Drupal.atomizer.themeC = function (_viewer, callback) {
   var viewer = _viewer;
   var currentSet = {};
   var defaultSet = {};
-  var styleSetDirectory = viewer.atomizer.styleSetDirectory;
-  var currentStyleName = '';
+  var themeDirectory = viewer.atomizer.themeDirectory;
+  var currentThemeName = '';
 //var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'decalet'];
-  var saveMessage = document.getElementById('style--saveMessage');
-  var saveNewMessage = document.getElementById('style--saveNewMessage');
+  var saveMessage = document.getElementById('theme--saveMessage');
+  var saveNewMessage = document.getElementById('theme--saveNewMessage');
 
   /**
-   * Load a style yml file and make it the current style set.
+   * Load a theme yml file and make it the current theme set.
    *
    * @param results
    */
@@ -34,7 +34,7 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
       currentSet = JSON.parse(JSON.stringify(defaultSet));
       reset(true, true);
     }
-    // This is a hack, the callback is only run the first time the style file is loaded.
+    // This is a hack, the callback is only run the first time the theme file is loaded.
     if (callback) {
       callback();
       callback = null;
@@ -42,32 +42,32 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   /**
-   * The current style set was saved, now re-list the style set directory with AJAX.
+   * The current theme set was saved, now re-list the theme set directory with AJAX.
    *
    * @param response
    */
-// The current style set has been saved,
+// The current theme set has been saved,
   var savedYml = function (response) {
-    saveNewMessage.innerHTML = '.... Loading Style list';
+    saveNewMessage.innerHTML = '.... Loading Theme list';
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/listDirectory',
       {
-        directory: styleSetDirectory,
-        component: 'style'
+        directory: themeDirectory,
+        component: 'theme'
       },
-      updateStyleSelect
+      updateThemeSelect
     );
   };
 
   /**
-   * Update the style select widget.
+   * Update the theme select widget.
    *
    * @param response
    */
-  var updateStyleSelect = function updateStyleSelect(response) {
+  var updateThemeSelect = function updateThemeSelect(response) {
     var select = document.getElementById('edit-selectyml');
 
-    // Remove current options from style select widget
+    // Remove current options from theme select widget
     while (select.hasChildNodes()) {
       select.removeChild(select.lastChild);
     }
@@ -84,60 +84,60 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     select.value = currentSet.filepath.replace(/^.*[\\\/]/, '');
 
     // Clear the Name and File name fields
-    var inputs = document.getElementById('style--saveNewName').value = '';
+    var inputs = document.getElementById('theme--saveNewName').value = '';
 
-    saveNewMessage.innerHTML = 'Style saved successfully';
+    saveNewMessage.innerHTML = 'Theme saved successfully';
     setTimeout(function () { saveNewMessage.innerHTML = ''; }, 3000);
   };
 
   /**
-   * Overwrite the current style set.
+   * Overwrite the current theme set.
    *
-   * @param styles
+   * @param theme
    */
-  var saveStyle = function (styleSet) {
+  var saveTheme = function (theme) {
 
-    var styles = styleSet.styles;
-    var sortedKeys = Object.keys(styles).sort();
-    delete styleSet.styles;
-    styleSet.styles = {};
+    var settings = theme.settings;
+    var sortedKeys = Object.keys(settings).sort();
+    delete theme.settings;
+    theme.settings = {};
     for (var key in sortedKeys) {
       var pname = sortedKeys[key];
-      styleSet.styles[sortedKeys[key]] = styles[sortedKeys[key]];
+      theme.settings[sortedKeys[key]] = settings[sortedKeys[key]];
     }
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/saveYml',
-      { name: styleSet.name,
-        component: 'style',
-        filepath: styleSet.filepath,
-        ymlContents: styleSet },
+      { name: theme.name,
+        component: 'theme',
+        filepath: theme.filepath,
+        ymlContents: theme },
       savedYml
     );
     return;
   };
 
   /**
-   * Reset the current styles to the default.
+   * Reset the current settings to the default.
    *
    * @param controlsOnly - only update the controls, not the objects in the scene.
-   * @param updateAll - update everything to the current style even if current == default.
+   * @param updateAll - update everything to the current theme even if current == default.
    */
   var reset = function reset(controlsOnly, updateAll) {
     var def;
-    for (var id in currentSet.styles) {
+    for (var id in currentSet.settings) {
       // if defaultValue defines an array then set all elements.
-      if (Object.prototype.toString.call(currentSet.styles[id].defaultValue) === '[object Array]') {  // If it's an array
+      if (Object.prototype.toString.call(currentSet.settings[id].defaultValue) === '[object Array]') {  // If it's an array
         var comp = id.split('--');
         var ind = 'xyz'.indexOf(comp[2]);
-        def = defaultSet.styles[id].defaultValue[ind];
-        if (updateAll || currentSet.styles[id].defaultValue[ind] != def) {
+        def = defaultSet.settings[id].defaultValue[ind];
+        if (updateAll || currentSet.settings[id].defaultValue[ind] != def) {
           if (!controlsOnly) {
             applyControl(id, def);
           }
           var element;
 
-          element = document.getElementById(id + '--az-slider');
+          element = document.getElementById(id);
           if (element) element.value = def;
 
           element = document.getElementById(id + '--az-value');
@@ -145,15 +145,15 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
         }
       // else defaultValue is not an array, set the one value
       } else {
-        if (defaultSet.styles[id]) {
-          def = defaultSet.styles[id].defaultValue;
+        if (defaultSet.settings[id]) {
+          def = defaultSet.settings[id].defaultValue;
         } else {
 //        alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
           console.log('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
         }
-        if (updateAll || currentSet.styles[id].defaultValue != def) {
+        if (updateAll || currentSet.settings[id].defaultValue != def) {
           if (!controlsOnly) {
-            applyControl(id, defaultSet.styles[id].defaultValue);
+            applyControl(id, defaultSet.settings[id].defaultValue);
           }
           var element = document.getElementById(id);
           if (element) {
@@ -180,9 +180,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     var argNames = args[0].split("-");
     // Set the currentSet
     if (args.length > 2) {
-      currentSet.styles[args[0] + '--' + args[1] + '--' + args[2]].defaultValue = value;
+      currentSet.settings[args[0] + '--' + args[1] + '--' + args[2]].defaultValue = value;
     } else {
-      currentSet.styles[args[0] + '--' + args[1]].defaultValue = value;
+      currentSet.settings[args[0] + '--' + args[1]].defaultValue = value;
     }
 
     switch (argNames[0]) {
@@ -242,7 +242,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                 break;
 
               case 'scale':
-                var scale = (node.init_scale) ? value * node.init_scale : value;
+//              var scale = (node.scaleInit) ? value * node.scaleInit : value;
+                var scale = value;
+                console.log('applyControl  configuration ' + scale);
                 node.scale.set(scale, scale, scale);
                 break;
 
@@ -278,9 +280,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
                     node.material.transparent = transparent;
                   }
                 } else {
-                  node.material.opacity = opacity;
-                  node.material.visible = visible;
-                  node.material.transparent = transparent;
+                  node.material[0].opacity = opacity;
+                  node.material[0].visible = visible;
+                  node.material[0].transparent = transparent;
                 }
                 break;
 
@@ -336,37 +338,41 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
   };
 
   /**
-   * Set the style of an element externally
+   * Set the theme of an element externally
    *
-   * Used when initializing controls - creates a default style set with all values,
+   * Used when initializing controls - creates a default theme set with all values,
    * The set initially loaded may be incomplete due to changes and not have a default value.
    *
    * @param value
    * @param id
    * @param type
    */
-  var setStyle = function setStyle(value, id, type) {
-    if (!currentSet.styles[id]) {
-      currentSet.styles[id] = {
+  var set = function set(value, id, type) {
+    if (!currentSet.settings[id]) {
+      currentSet.settings[id] = {
         'defaultValue': value,
         'type': type
       }
     } else {
-//    currentSet.styles[id]['defaultValue'] = value;
+//    currentSet.settings[id]['defaultValue'] = value;
     }
   };
 
+  var setBaseSetting = function set(value, id) {
+    currentSet.settings[id]['baseSetting'] = value;
+  };
+
   /**
-   * Get the style for an element
+   * Get the theme for an element
    *
    * @param id
    * @param index
    * @returns {*}
    */
-  var getStyle = function getStyle(id, index) {
+  var get = function get(id, index) {
     if (index == null) {
-      if (currentSet.styles[id]) {
-        return currentSet.styles[id]['defaultValue'];
+      if (currentSet.settings[id]) {
+        return currentSet.settings[id]['defaultValue'];
       } else {
         var value = viewer.controls.getDefault(id, index);
         if (value == null) {
@@ -378,10 +384,10 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
         return value;
       }
     } else {
-      if (currentSet.styles[id + '--' + index]) {
-        return currentSet.styles[id + '--' + index]['defaultValue'];
+      if (currentSet.settings[id + '--' + index]) {
+        return currentSet.settings[id + '--' + index]['defaultValue'];
       } else {
-//      alert('style for rotation or position needs fixed');
+//      alert('theme for rotation or position needs fixed');
         var value = viewer.controls.getDefault(id, index);
         if (value == null) {
           if (id.indexOf('--color')) {
@@ -396,11 +402,11 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
 
   var buttonClicked = function buttonClicked (target) {
     switch (target.id) {
-      case 'style--saveButton':
-        saveStyle(currentSet);
+      case 'theme--saveButton':
+        saveTheme(currentSet);
         break;
-      case 'style--saveNewButton':
-        var name = document.getElementById('style--saveNewName').value;
+      case 'theme--saveNewButton':
+        var name = document.getElementById('theme--saveNewName').value;
         if (name.length) {
           var filename = name.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_');
           if (filename.indexOf('.yml') == -1) {
@@ -409,11 +415,11 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
           // Save the yml file
 
           currentSet.name = name;
-          currentSet.filepath = styleSetDirectory + '/' + filename;
+          currentSet.filepath = themeDirectory + '/' + filename;
           saveNewMessage.classList.remove('az-error');
-          saveNewMessage.innerHTML = '.... Saving style';
+          saveNewMessage.innerHTML = '.... Saving theme';
 
-          saveStyle(currentSet);
+          saveTheme(currentSet);
 
           setTimeout(function () { saveNewMessage.innerHTML = '' }, 3000)
         } else {
@@ -421,24 +427,24 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
           saveNewMessage.classList.add('az-error');
         }
         break;
-      case 'style--reset':
+      case 'theme--reset':
         reset();
         break;
-      case 'style--cameraReset':
-        viewer.camera.position.x = viewer.style.get('camera--position', 'x');
-        viewer.camera.position.y = viewer.style.get('camera--position', 'y');
-        viewer.camera.position.z = viewer.style.get('camera--position', 'z');
+      case 'theme--cameraReset':
+        viewer.camera.position.x = viewer.theme.get('camera--position', 'x');
+        viewer.camera.position.y = viewer.theme.get('camera--position', 'y');
+        viewer.camera.position.z = viewer.theme.get('camera--position', 'z');
         viewer.camera.lookAt(viewer.scene.position);
         viewer.render();
         break;
     }
   };
 
-  /// Load the default style set.
+  /// Load the default theme set.
   Drupal.atomizer.base.doAjax(
     '/ajax-ab/loadYml',
-    { filepath: viewer.view.styleSetPath,
-      component: 'style'
+    { filepath: viewer.view.themePath,
+      component: 'theme'
     },
     loadYml
   );
@@ -448,9 +454,9 @@ Drupal.atomizer.styleC = function (_viewer, callback) {
     buttonClicked: buttonClicked,
     applyControl: applyControl,
     loadYml: loadYml,
-    get: getStyle,
-    set: setStyle,
-    getCurrentControls: function() { return currentSet.styles; },
-    getYmlDirectory:    function () { return styleSetDirectory; }
+    get: get,
+    set: set,
+    getCurrentControls: function() { return currentSet.settings; },
+    getYmlDirectory:    function () { return themeDirectory; }
   };
 };

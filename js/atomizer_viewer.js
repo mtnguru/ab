@@ -97,7 +97,7 @@
         canvas: viewer.canvas
       };
       viewer.renderer = new THREE.WebGLRenderer(parameters);
-      viewer.renderer.setClearColor(viewer.style.get('renderer--color'), 1.0);
+      viewer.renderer.setClearColor(viewer.theme.get('renderer--color'), 1.0);
       viewer.renderer.setSize(viewer.canvasWidth, viewer.canvasHeight);
       viewer.renderer.shadowEnabled = true;
 
@@ -125,15 +125,15 @@
       });
       // Create camera, and point it at the scene
       viewer.camera = new THREE.PerspectiveCamera(
-        viewer.style.get('camera--perspective'),
+        viewer.theme.get('camera--perspective'),
         viewer.canvasWidth / viewer.canvasHeight,
         .1, 10000
       );
       zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
       viewer.camera.position.set(
-        zoom * viewer.style.get('camera--position', 'x'),
-        zoom * viewer.style.get('camera--position', 'y'),
-        zoom * viewer.style.get('camera--position', 'z')
+        zoom * viewer.theme.get('camera--position', 'x'),
+        zoom * viewer.theme.get('camera--position', 'y'),
+        zoom * viewer.theme.get('camera--position', 'z')
       );
       viewer.camera.lookAt(viewer.scene.position);
 
@@ -141,16 +141,16 @@
       viewer.controls.init();
 
       // Create an ambient light and 3 spotlights
-      ambient = new THREE.AmbientLight(viewer.style.get('ambient--color'));
+      ambient = new THREE.AmbientLight(viewer.theme.get('ambient--color'));
       ambient.name = 'ambient';
       viewer.scene.add(ambient);
 
       for (var i = 1; i < 4; i++) {
         spotlights[i] = makeSpotLight('spotlight-' + i, {
-          c: viewer.style.get('spotlight-' + i + '--color'),
-          x: viewer.style.get('spotlight-' + i + '--position', 'x'),
-          y: viewer.style.get('spotlight-' + i + '--position', 'y'),
-          z: viewer.style.get('spotlight-' + i + '--position', 'z')
+          c: viewer.theme.get('spotlight-' + i + '--color'),
+          x: viewer.theme.get('spotlight-' + i + '--position', 'x'),
+          y: viewer.theme.get('spotlight-' + i + '--position', 'y'),
+          z: viewer.theme.get('spotlight-' + i + '--position', 'z')
         });
         viewer.scene.add(spotlights[i]);
       }
@@ -161,17 +161,17 @@
       viewer.sprites = Drupal.atomizer.spritesC(viewer);
 
       // Make the back plane
-      var color = viewer.style.get('plane--color');
+      var color = viewer.theme.get('plane--color');
       viewer.scene.add(viewer.nuclet.makeObject('plane',
-        {lambert: {color: viewer.style.get('plane--color')}},
+        {lambert: {color: viewer.theme.get('plane--color')}},
         {
-          width: viewer.style.get('plane--width'),
-          depth: viewer.style.get('plane--depth')
+          width: viewer.theme.get('plane--width'),
+          depth: viewer.theme.get('plane--depth')
         },
         {
-          x: viewer.style.get('plane--position', 'x'),
-          y: viewer.style.get('plane--position', 'y'),
-          z: viewer.style.get('plane--position', 'z'),
+          x: viewer.theme.get('plane--position', 'x'),
+          y: viewer.theme.get('plane--position', 'y'),
+          z: viewer.theme.get('plane--position', 'z'),
           rotation: {x: -0.5 * Math.PI}
         }
       ));
@@ -249,8 +249,8 @@
     viewer.atomizer = atomizer;
     viewer.view = atomizer.views[atomizer.defaultView];
 
-    // Load styles
-    viewer.style = Drupal.atomizer.styleC(viewer, makeScene);
+    // Load theme
+    viewer.theme = Drupal.atomizer.themeC(viewer, makeScene);
 
     return viewer;
   };

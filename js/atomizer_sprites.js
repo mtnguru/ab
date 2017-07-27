@@ -89,14 +89,14 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		var verticeIds = new THREE.Group();
 		verticeIds.name = name + 'Vertexids';
 
-		var opacity = viewer.style.get(name + 'Vertexid--opacity')
+		var opacity = viewer.theme.get(name + 'Vertexid--opacity')
 
 		var id = (name == 'proton') ? 'Vertexid--color' : 'Wireframe--color';
 		id = name + id;
 		var parameters = {
 			fontsize: 60,
 			color: '#000000',
-			backgroundColor: viewer.style.get(id),
+			backgroundColor: viewer.theme.get(id),
 			opacity: opacity,
 			transparent: (opacity <.97) ? true : false,
 	    visible: (opacity >.03) ? true : false
@@ -124,11 +124,11 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		computeCentroids(geometry.faces, geometry.vertices);
 		faceIds.name = name + 'Faceids';
 
-		var opacity = viewer.style.get(name + 'Faceid--opacity')
+		var opacity = viewer.theme.get(name + 'Faceid--opacity')
 
 		var parameters = {
 			fontsize: 60,
-			color: viewer.style.get(name + 'Wireframe--color'),
+			color: viewer.theme.get(name + 'Wireframe--color'),
 			backgroundColor: '#000000',
 			opacity: opacity,
 			transparent: (opacity <.97) ? true : false,
