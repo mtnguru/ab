@@ -546,6 +546,307 @@ Drupal.atomizer.nucletC = function (_viewer) {
     return axis;
   }
 
+  function createProtons(geometry, geo, nucletConf, nuclet) {
+    var electrons;
+    var p;
+    switch (nucletConf.state) {
+      case 'neutral':
+        geometry.vertices[9].set(
+          0,
+          protonRadius * 0.1616236535868876,
+          protonRadius * .0998889113026354
+        );
+        break;
+      case 'beryllium':
+        vids = [0, 2];
+        for (p = 0; p < vids.length; p++) {
+          geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.2;
+        }
+        geometry.vertices[9].set(0, protonRadius * 0.2, 0);
+        break;
+      case 'boron':
+        vids = [0, 2];
+        for (p = 0; p < vids.length; p++) {
+          geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.23;
+          geometry.vertices[vids[p]].y = geometry.vertices[vids[p]].y * 0.95;
+        }
+        vids = [4, 5, 6, 7];
+        for (p = 0; p < vids.length; p++) {
+          geometry.vertices[vids[p]].z = geometry.vertices[vids[p]].z * 0.85;
+        }
+        geometry.vertices[9].set(0, protonRadius * 0.95, 0);
+        break;
+      case 'lithium':
+        // Move the top center proton to the correct position.
+        geometry.vertices[9].set(
+          0,
+          protonRadius * 0.1616236535868876,
+          protonRadius * .0998889113026354
+        );
+        break;
+      case 'backbone-initial':
+      case 'backbone-final':
+        break;
+      case 'carbon':
+    }
+
+    // Create protons
+    nuclet.az.protons = [];
+    nuclet.az.protonGeometry = geometry;
+    var opacity = viewer.theme.get('proton--opacity');
+    for (var p in geo.protons) {
+      if (!geo.protons.hasOwnProperty(p)) continue;
+      var visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
+      geo.protons[p].visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
+      var proton = makeProton(geo.protons[p], opacity, geometry.vertices[p]);
+//          addObject('protons', proton);
+      nuclet.az.protons[p] = proton;
+    }
+    return nuclet.az.protons;
+  }
+
+  function createValenceRings(geo, nuclet) {
+    var color = viewer.theme.get('valence-active--color');
+    var opacity = viewer.theme.get('valence--opacity');
+    var radius = viewer.theme.get('valence--scale') * protonRadius;
+    var diameter = viewer.theme.get('valence--diameter') * protonRadius;
+
+    nuclet.az.rings = [];
+    for (var v in geo.valence) {
+      var ringConf = geo.valence[v];
+
+      var torusGeometry = new THREE.TorusGeometry(radius, diameter, 10, 40);
+      var material = new THREE.MeshPhongMaterial({
+        color: color,
+        opacity: opacity,
+        transparent: (opacity < constants.transparentThresh),
+        visible: (opacity > constants.visibleThresh)
+      });
+      var ring = new THREE.Mesh(torusGeometry, material);
+      ring.name = 'valence-active';
+      ring.az = ringConf;
+      nuclet.az.rings[v] = ring;
+      if (ringConf.rotation) {
+        if (ringConf.rotation.x) {
+          ring.rotation.x = ringConf.rotation.x / 360 * 2 * Math.PI;
+        }
+        if (ringConf.rotation.y) {
+          ring.rotation.y = ringConf.rotation.y / 360 * 2 * Math.PI;
+        }
+        if (ringConf.rotation.z) {
+          ring.rotation.z = ringConf.rotation.z / 360 * 2 * Math.PI;
+        }
+      }
+      nuclet.az.protons[parseInt(v)].add(ring);
+    }
+  }
+
+  function createTetrahedrons(geo, nuclet) {
+    nuclet.tetrahedrons = [];
+    for (var i = 0; i < geo.tetrahedrons.length; i++) {
+      var tetrahedron = createTetrahedron('tetra');
+      tetrahedron.azid = 't' + i;
+//          intersectList.push(tetrahedron.children[1]); // Attach the faces Mesh
+      nuclet.tetrahedrons.push[tetrahedron.azid] = tetrahedron;
+      nuclet.add(tetrahedron);
+
+      // Set 4 vertices of tetrahedron
+      tetrahedron.children[1].geometry.protons = [];
+      for (var v = 0; v < 4; v++) {
+
+        var p = geo.tetrahedrons[i].vertices[v];
+        tetrahedron.children[0].geometry.vertices[v].x = geometry.vertices[p].x;
+        tetrahedron.children[0].geometry.vertices[v].y = geometry.vertices[p].y;
+        tetrahedron.children[0].geometry.vertices[v].z = geometry.vertices[p].z;
+
+        tetrahedron.children[1].geometry.vertices[v].x = geometry.vertices[p].x;
+        tetrahedron.children[1].geometry.vertices[v].y = geometry.vertices[p].y;
+        tetrahedron.children[1].geometry.vertices[v].z = geometry.vertices[p].z;
+
+        // Save the proton list in tetrafaces mesh
+        tetrahedron.protons[v] = nuclet.az.protons[p];
+      }
+    }
+  }
+
+  function createElectrons(geo, nucletConf) {
+    var opacity = viewer.theme.get('electron--opacity') || 1;
+    var electrons = [];
+    for (var e in geo.electrons) {
+      if (!geo.electrons.hasOwnProperty(e)) continue;
+      if (nucletConf.electrons && !nucletConf.electrons.contains(e)) continue;
+      var vertice = geometry.vertices[e];
+      var electron = makeObject('electron',
+        {
+          phong: {
+            color: viewer.theme.get('electron--color'),
+            opacity: opacity,
+            transparent: (opacity < constants.transparentThresh),
+            visible: (opacity > constants.visibleThresh)
+          }
+        },
+        {
+          scale: viewer.theme.get('proton--scale'),
+          radius: electronRadius
+        },
+        {
+          x: vertice.x * scale,
+          y: vertice.y * scale,
+          z: vertice.z * scale
+        }
+      );
+      electron.name = 'electron';
+      addObject('electrons', electron);
+      electrons[e] = electron;
+    }
+    return electrons;
+  }
+
+  function createWireframe(name, geometry, geo) {
+    var wireframe;
+    if (geo.shape == 'dodecahedron' || geo.shape == 'hexahedron') {
+      wireframe = createGeometryLines(
+        name,
+        1 + .02,
+        geometry,
+        geo.rotation || null,
+        geo.offsetY || null
+      );
+    } else {
+      wireframe = createGeometryWireframe(
+        name,
+        1 + .02,
+        geometry,
+        geo.rotation || null,
+        geo.offsetY || null
+      );
+    }
+    return wireframe;
+  }
+
+  function createFaces(name, geometry, geo) {
+    var faces = createGeometryFaces(
+      name,
+      1,
+      geometry,
+      geo.rotation || null,
+      geo.offsetY || null,
+      geo.transparentFaces
+    );
+    return faces;
+  }
+
+  function createNucletGroupGeometry(groupName, geoGroup, geo, nucletGroup, nucletConf, nuclet) {
+    var geometry = createGeometry(
+      geo.shape,
+      nucletConf.state || '',
+      geo.scale * protonRadius,
+      (geo.scaleHeight || 1) * protonRadius
+    );
+    geometry.scaleInit = geo.scale;
+
+    var radians;
+    if (geoGroup.rotation) {
+      if (geoGroup.rotation.x) {
+        radians = geoGroup.rotation['x'] / 360 * 2 * Math.PI;
+        geometry.applyMatrix(new THREE.Matrix4().makeRotationX(radians));
+      }
+      if (geoGroup.rotation.y) {
+        radians = geoGroup.rotation['y'] / 360 * 2 * Math.PI;
+        geometry.applyMatrix(new THREE.Matrix4().makeRotationY(radians));
+      }
+      if (geoGroup.rotation.z) {
+        radians = geoGroup.rotation['z'] / 360 * 2 * Math.PI;
+        geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(radians));
+      }
+    }
+
+    if (geo.protons) {
+      nucletGroup.add(...createProtons(geometry, geo, nucletConf, nuclet));
+    }
+
+    if (geo.valence) {
+      createValenceRings(geo, nuclet);
+    }
+
+    if (geo.tetrahedrons) {
+      createTetrahedrons(geo, nuclet);
+    }
+
+    if (geo.electrons) {
+      var electrons = createElectrons(geo, nucletConf);
+      if (electrons.length) {
+        nucletGroup.add(electrons);
+      }
+    }
+
+    if (geo.axes) {
+      nucletGroup.add(createAxes(groupName, geo.axes, geometry));
+    }
+
+    if (geo.wireframe) {
+      nucletGroup.add(createWireframe(groupName + 'Wireframe', geometry, geo));
+    }
+
+    if (geo.faces) {
+      var faces = createFaces(groupName + 'Faces', geometry, geo, nucletGroup, groupName);
+      nucletGroup.add(faces);
+      if (geo.attachFaces) {
+        viewer.objects['selectFace'] = [faces];
+        nuclet.attachFaces = geo.faces;
+      }
+    }
+
+    if (geo.vertexids) {
+//    nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
+    }
+
+    if (geo.faceids) {
+//    nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
+    }
+
+    if (geo.particleids) {
+//    nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
+    }
+    return geometry;
+  }
+
+  function createNucletGroup(groupName, geoGroup, nucletConf, nuclet) {
+    var nucletGroup = new THREE.Group();
+    nucletGroup.name = groupName;
+
+    var tscale = parseFloat(viewer.theme.get(groupName + '--scale'));
+    nucletGroup.scale.set(tscale, tscale, tscale);
+
+    if (geoGroup.alignyaxis) {
+      var vertice1 = nuclet.az.protonGeometry.vertices[geoGroup.alignyaxis.vertices[0]];
+      var vertice2 = nuclet.az.protonGeometry.vertices[geoGroup.alignyaxis.vertices[1]];
+      var newAxis = vertice1.clone().sub(vertice2);
+      Drupal.atomizer.base.alignObjectToAxis(
+        nucletGroup,
+        new THREE.Vector3(0,1,0),
+        newAxis.clone().normalize(),
+        false
+      );
+      var origin = new THREE.Vector3(0,0,0);
+      var attachPt = origin.add(newAxis).multiplyScalar(geoGroup.alignyaxis.attachPt);
+      nucletGroup.position.set(attachPt.x, attachPt.y, attachPt.z);
+
+      var radians = geoGroup.alignyaxis.rotatey / 360 * 2 * Math.PI;
+      nucletGroup.rotation['y'] = radians;
+    }
+
+    // Loop through each of the geometries for this group
+    for (var geoName in geoGroup.geometries) {
+      if (!geoGroup.geometries.hasOwnProperty(geoName)) continue;
+      var geo = geoGroup.geometries[geoName];
+
+      createNucletGroupGeometry(groupName, geoGroup, geo, nucletGroup, nucletConf, nuclet);
+      viewer.render();
+    }
+    return nucletGroup;
+  }
+
   /**
    * Create a nuclet as defined in the nucletConf array.
    *
@@ -613,287 +914,10 @@ Drupal.atomizer.nucletC = function (_viewer) {
     for (var groupName in nuclet.geo.geoGroups) {
       if (!nuclet.geo.geoGroups.hasOwnProperty(groupName)) continue;
       var geoGroup = nuclet.geo.geoGroups[groupName];
-      var nucletGroup = new THREE.Group();
+
+      var nucletGroup = createNucletGroup(groupName, geoGroup, nucletConf, nuclet);
       nuclet.add(nucletGroup);
-      nucletGroup.name = groupName;
 
-      // Loop through each of the geometries for this group
-      for (var geoName in geoGroup.geometries) {
-        if (!geoGroup.geometries.hasOwnProperty(geoName)) continue;
-        var geo = geoGroup.geometries[geoName];
-        // Scale the geometry
-        var geometry = createGeometry(
-          geo.shape,
-          nucletConf.state || '',
-          geo.scale * protonRadius,
-          (geo.scaleHeight || 1) * protonRadius
-        );
-        geometry.scaleInit = geo.scale;
-
-        if (geoGroup.rotation) {
-          if (geoGroup.rotation.x) {
-            var radians = geoGroup.rotation['x'] / 360 * 2 * Math.PI;
-            geometry.applyMatrix(new THREE.Matrix4().makeRotationX(radians));
-          }
-          if (geoGroup.rotation.y) {
-            var radians = geoGroup.rotation['y'] / 360 * 2 * Math.PI;
-            geometry.applyMatrix(new THREE.Matrix4().makeRotationY(radians));
-          }
-          if (geoGroup.rotation.z) {
-            var radians = geoGroup.rotation['z'] / 360 * 2 * Math.PI;
-            geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(radians));
-          }
-        }
-
-        var tscale = parseFloat(viewer.theme.get(groupName + '--scale'));
-
-        nucletGroup.scale.set(tscale, tscale, tscale);
-
-        if (groupName === 'icosa' && geoName === 'solid') {
-          console.log('Scale ' + groupName + ' geo.scale ' + geo.scale + '  configuration ' + tscale);
-        }
-
-        // Add Protons
-        if (geo.protons) {
-          // Move to a new location
-          var protons;
-          var electrons;
-          var pids;
-          var p;
-          switch (nucletConf.state) {
-            case 'neutral':
-              geometry.vertices[9].set(
-                0,
-                protonRadius * 0.1616236535868876,
-                protonRadius * .0998889113026354
-              );
-              break;
-            case 'beryllium':
-              vids = [0,2];
-              for (p = 0; p < vids.length; p++) {
-                geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.2;
-              }
-              geometry.vertices[9].set(0, protonRadius * 0.2, 0);
-              break;
-            case 'boron':
-              vids = [0,2];
-              for (p = 0; p < vids.length; p++) {
-                geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.23;
-                geometry.vertices[vids[p]].y = geometry.vertices[vids[p]].y * 0.95;
-              }
-              vids = [4,5,6,7];
-              for (p = 0; p < vids.length; p++) {
-                geometry.vertices[vids[p]].z = geometry.vertices[vids[p]].z * 0.85;
-              }
-              geometry.vertices[9].set(0, protonRadius * 0.95, 0);
-              break;
-            case 'lithium':
-              // Move the top center proton to the correct position.
-              geometry.vertices[9].set(
-                0,
-                protonRadius * 0.1616236535868876,
-                protonRadius * .0998889113026354
-              );
-              break;
-            case 'backbone-initial':
-            case 'backbone-final':
-              break;
-            case 'carbon':
-          }
-
-          // Create protons
-          nuclet.az.protons = [];
-          nuclet.az.protonGeometry = geometry;
-          var opacity = viewer.theme.get('proton--opacity');
-          for (var p in geo.protons) {
-            if (!geo.protons.hasOwnProperty(p)) continue;
-            var visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
-            geo.protons[p].visible = (nucletConf.protons.indexOf(parseInt(p)) > -1);
-            var proton = makeProton(geo.protons[p], opacity, geometry.vertices[p]);
-//          addObject('protons', proton);
-            nucletGroup.add(proton);
-            nuclet.az.protons[p] = proton;
-          }
-        }
-
-        if (geo.valence) {
-          var color = viewer.theme.get('valence-active--color');
-          var opacity = viewer.theme.get('valence--opacity');
-          var radius = viewer.theme.get('valence--scale') * protonRadius;
-          var diameter = viewer.theme.get('valence--diameter') * protonRadius;
-
-          nuclet.az.rings = [];
-          for (var v in geo.valence) {
-            var ringConf = geo.valence[v];
-
-            var torusGeometry = new THREE.TorusGeometry(radius, diameter, 10, 40);
-            var material = new THREE.MeshPhongMaterial({
-              color: color,
-              opacity: opacity,
-              transparent: (opacity < constants.transparentThresh),
-              visible: (opacity > constants.visibleThresh)
-            });
-            var ring = new THREE.Mesh(torusGeometry, material);
-            ring.name = 'valence-active';
-            ring.az = ringConf;
-            nuclet.az.rings[v] = ring;
-            if (ringConf.rotation) {
-              if (ringConf.rotation.x) {
-                ring.rotation.x = ringConf.rotation.x / 360 * 2 * Math.PI;
-              }
-              if (ringConf.rotation.y) {
-                ring.rotation.y = ringConf.rotation.y / 360 * 2 * Math.PI;
-              }
-              if (ringConf.rotation.z) {
-                ring.rotation.z = ringConf.rotation.z / 360 * 2 * Math.PI;
-              }
-            }
-            nuclet.az.protons[parseInt(v)].add(ring);
-          }
-        }
-
-        if (geoGroup.alignyaxis) {
-          var vertice1 = nuclet.az.protonGeometry.vertices[geoGroup.alignyaxis.vertices[0]];
-          var vertice2 = nuclet.az.protonGeometry.vertices[geoGroup.alignyaxis.vertices[1]];
-          var newAxis = vertice1.clone().sub(vertice2);
-          Drupal.atomizer.base.alignObjectToAxis(
-            nucletGroup,
-            new THREE.Vector3(0,1,0),
-            newAxis.clone().normalize(),
-            false
-          );
-          var origin = new THREE.Vector3(0,0,0);
-          var attachPt = origin.add(newAxis).multiplyScalar(geoGroup.alignyaxis.attachPt);
-          nucletGroup.position.set(attachPt.x, attachPt.y, attachPt.z);
-  
-          var radians = geoGroup.alignyaxis.rotatey / 360 * 2 * Math.PI;
-          nucletGroup.rotation['y'] = radians;
-          radians
-        }
-
-        // Add Tetrahedrons
-        if (geo.tetrahedrons) {
-          nuclet.tetrahedrons = [];
-          for (var i = 0; i < geo.tetrahedrons.length; i++) {
-            var tetrahedron = createTetrahedron('tetra');
-            tetrahedron.azid = 't' + i;
-//          intersectList.push(tetrahedron.children[1]); // Attach the faces Mesh
-            nuclet.tetrahedrons.push[tetrahedron.azid] = tetrahedron;
-            nuclet.add(tetrahedron);
-
-            // Set 4 vertices of tetrahedron
-            tetrahedron.children[1].geometry.protons = [];
-            for (var v = 0; v < 4; v++) {
-
-              var p = geo.tetrahedrons[i].vertices[v];
-              tetrahedron.children[0].geometry.vertices[v].x = geometry.vertices[p].x;
-              tetrahedron.children[0].geometry.vertices[v].y = geometry.vertices[p].y;
-              tetrahedron.children[0].geometry.vertices[v].z = geometry.vertices[p].z;
-
-              tetrahedron.children[1].geometry.vertices[v].x = geometry.vertices[p].x;
-              tetrahedron.children[1].geometry.vertices[v].y = geometry.vertices[p].y;
-              tetrahedron.children[1].geometry.vertices[v].z = geometry.vertices[p].z;
-
-              // Save the proton list in tetrafaces mesh
-              tetrahedron.protons[v] = nuclet.az.protons[p];
-            }
-          }
-        }
-
-        // Add Electrons
-        if (geo.electrons) {
-          var opacity = viewer.theme.get('electron--opacity') || 1;
-          for (var e in geo.electrons) {
-            if (!geo.electrons.hasOwnProperty(e)) continue;
-            if (nucletConf.electrons && !nucletConf.electrons.contains(e)) continue;
-            var vertice = geometry.vertices[e];
-            var electron = makeObject('electron',
-              {
-                phong: {
-                  color: viewer.theme.get('electron--color'),
-                  opacity: opacity,
-                  transparent: (opacity < constants.transparentThresh),
-                  visible: (opacity > constants.visibleThresh)
-                }
-              },
-              {
-                scale: viewer.theme.get('proton--scale'),
-                radius: electronRadius
-              },
-              {
-                x: vertice.x * scale,
-                y: vertice.y * scale,
-                z: vertice.z * scale
-              }
-            );
-            electron.name = 'electron';
-            addObject('electrons', electron);
-            nucletGroup.add(electron);
-          }
-        }
-
-        // Create axes
-        if (geo.axes) {
-          nucletGroup.add(createAxes(groupName, geo.axes, geometry));
-        }
-
-        // Create geometry wireframe
-        if (geo.wireframe) {
-          var name = groupName + 'Wireframe';
-          if (geo.shape == 'dodecahedron' || geo.shape == 'hexahedron') {
-            nucletGroup.add(createGeometryLines(
-              name,
-              1 + .02,
-              geometry,
-              geo.rotation || null,
-              geo.offsetY || null
-            ));
-          } else {
-            nucletGroup.add(createGeometryWireframe(
-              name,
-              1 + .02,
-              geometry,
-              geo.rotation || null,
-              geo.offsetY || null
-            ));
-          }
-        }
-
-        // Create geometry faces
-        if (geo.faces) {
-          var name = groupName + 'Faces';
-          var faces = createGeometryFaces(
-            name,
-            1,
-            geometry,
-            geo.rotation || null,
-            geo.offsetY || null,
-            geo.transparentFaces
-          );
-          nucletGroup.add(faces);
-          if (geo.attachFaces) {
-            viewer.objects['selectFace'] = [faces];
-            nuclet.attachFaces = geo.faces;
-          }
-        }
-
-        // Create vertexids
-        if (geo.vertexids) {
-//        nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
-        }
-
-        // Create faceids
-        if (geo.faceids) {
-//        nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
-        }
-
-        // Create particle ids
-        if (geo.particleids) {
-//        nucletGroup.add(viewer.sprites.createVerticeIds(geo.particleids, geometry));
-        }
-
-        viewer.render();
-      }
     }
 
     // Create nuclet helper axes.
