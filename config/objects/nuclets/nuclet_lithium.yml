@@ -4,7 +4,7 @@ geoGroups:
   protons:
     rotation:
       y: 90
-    geometries:
+    components:
       framework:
         scale: 1.9
         shape: lithium
@@ -28,13 +28,12 @@ geoGroups:
       vertices: [9,10]
       attachPt: -.400
       rotatey: 18
-    geometries:
+    components:
       solid:
         shape: decahedron
         scale: 1.30
         scaleHeight: .85
         wireframe: true
-        attachFaces: true
         faces:
           0:
             type: valence

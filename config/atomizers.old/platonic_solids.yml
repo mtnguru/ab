@@ -8,4 +8,4 @@ views:
   solids:
     name: Platonic solids
     producer: platonic_solids
-    themePath: config/themes/platonic_solids/base.yml
+    defaultTheme: base.yml

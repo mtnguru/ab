@@ -2,7 +2,7 @@ name: Backbone Initial
 weight: 7
 geoGroups:
   protons:
-    geometries:
+    components:
       framework:
         shape: backbone
         particleids: proton
@@ -113,12 +113,11 @@ geoGroups:
     allowrotate: false
     rotation:
       y: 90
-    geometries:
+    components:
       solid:
         shape: icosahedron
         scale: 1.37
         wireframe: true
-        attachFaces: true
         faces:
           0:
             type: valence
@@ -202,7 +201,7 @@ geoGroups:
 
   dodeca:
     allowrotate: false
-    geometries:
+    components:
       solid:
         shape: dodecahedron
         scale: 1.31
@@ -234,7 +233,7 @@ geoGroups:
 
   octa:
     allowrotate: true
-    geometries:
+    components:
       framework:
         shape: octahedron
         scale: 1.25

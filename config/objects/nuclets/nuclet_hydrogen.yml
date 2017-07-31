@@ -5,7 +5,7 @@ allowmove: false
 geoGroups:
   protons:
     allowrotate: false
-    geometries:
+    components:
       framework:
         shape: line
         scale: 2.05

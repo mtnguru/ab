@@ -1,7 +1,7 @@
 name: Dodecahedron
 geoGroups:
   protons:
-    geometries:
+    components:
       framework:
         shape: dodecahedron
         scale: 2.8
@@ -47,7 +47,7 @@ geoGroups:
           19:
             type: default
   dodeca:
-    geometries:
+    components:
       solid:
         shape: dodecahedron
         scale: 1.7
@@ -107,7 +107,7 @@ geoGroups:
 # icosa:
 #   rotation:
 #     y: 90
-#   geometries:
+#   components:
 #     solid:
 #       shape: icosahedron
 #       scale: 1.7

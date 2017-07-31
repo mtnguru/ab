@@ -1,3 +1,6 @@
+select#edit-selectyml {
+  font-size: 1.25em;
+}
 
 .node-atom-form {
   font-size: 13px;
@@ -9,31 +12,39 @@
       font-family: monospace;
     }
   }
+
   input[type='text'] {
     padding: 3px 0;
   }
+
   .form-autocomplete {
     width: 200px;
   }
+
   .form-item {
     margin: 3px 0;
   }
+
   label {
     width: 125px;
   }
+
   .form-type-radio {
     margin-left: 3em;
   }
+
   .form-type-number {
     input {
       padding: 3px 6px;
     }
   }
+
   .field--name-body {
     label {
       width: auto;
     }
   }
+
   .form-composite > legend {
     font-weight: normal;
   }

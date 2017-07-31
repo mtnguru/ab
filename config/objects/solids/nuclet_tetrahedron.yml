@@ -5,7 +5,7 @@ allowmove: false
 geoGroups:
   protons:
     allowrotate: false
-    geometries:
+    components:
       framework:
         shape: tetrahedron
         scale: 1.22
@@ -20,12 +20,11 @@ geoGroups:
             type: default
   tetra:
     allowrotate: false
-    geometries:
+    components:
       solid:
         shape: tetrahedron
         scale: 1.094
         wireframe: true
-        attachFaces: true
         faces:
           0:
             type: valence

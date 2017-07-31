@@ -92,7 +92,9 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/loadYml',
       { component: args[0],
-        filepath: viewer[args[0]].getYmlDirectory() + '/' + event.target.value },
+        filepath: viewer[args[0]].getYmlDirectory() + '/' + event.target.value,
+        filename: event.target.value
+      },
       viewer[args[0]].loadYml
     );
   }
@@ -363,7 +365,7 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
         return element.value;
       }
     } else {
-      console.log('atomizer_controls.js - default for element not found - ' + id);
+      console.log('atomizer_controls.js - control not found - ' + id);
       return null;
     }
   };

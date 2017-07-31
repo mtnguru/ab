@@ -1,7 +1,7 @@
 name: Hexahedron
 geoGroups:
   protons:
-    geometries:
+    components:
       framework:
         shape: hexahedron
         scale: 1.72
@@ -23,7 +23,7 @@ geoGroups:
           7:
             type: default
   hexa:
-    geometries:
+    components:
       solid:
         shape: hexahedron
         scale: 1.30

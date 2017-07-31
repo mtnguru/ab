@@ -4,7 +4,7 @@ geoGroups:
   protons:
     rotation:
       y: 90
-    geometries:
+    components:
       framework:
         shape: icosahedron
         scale: 1.9
@@ -36,12 +36,11 @@ geoGroups:
   icosa:
     rotation:
       y: 90
-    geometries:
+    components:
       solid:
         shape: icosahedron
         scale: 1.37
         wireframe: true
-        attachFaces: true
         faces:
           0:
             type: valence
@@ -124,7 +123,7 @@ geoGroups:
         faceids: true
 
 # dodeca:
-#   geometries:
+#   components:
 #     solid:
 #       shape: dodecahedron
 #       scale: 1.31

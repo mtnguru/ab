@@ -23,8 +23,13 @@ Drupal.atomizer.themeC = function (_viewer, callback) {
    * @param results
    */
   var loadYml = function (results) {
+    // Save the theme file name in browser local storage.
+    localStorage.setItem('atomizer_theme_file', results[0].data.filename);
+    document.getElementById('edit-selectyml').value = results[0].data.filename;
+
     results[0].ymlContents.filepath = results[0].data.filepath;
     defaultSet = results[0].ymlContents;
+
     if (currentSet.name) {
       reset(false, false);
       currentSet.name = defaultSet.name;
@@ -34,6 +39,7 @@ Drupal.atomizer.themeC = function (_viewer, callback) {
       currentSet = JSON.parse(JSON.stringify(defaultSet));
       reset(true, true);
     }
+
     // This is a hack, the callback is only run the first time the theme file is loaded.
     if (callback) {
       callback();
@@ -280,9 +286,15 @@ Drupal.atomizer.themeC = function (_viewer, callback) {
                     node.material.transparent = transparent;
                   }
                 } else {
-                  node.material[0].opacity = opacity;
-                  node.material[0].visible = visible;
-                  node.material[0].transparent = transparent;
+                  if (node.material[0]) {
+                    node.material[0].opacity = opacity;
+                    node.material[0].visible = visible;
+                    node.material[0].transparent = transparent;
+                  } else {
+                    node.material.opacity = opacity;
+                    node.material.visible = visible;
+                    node.material.transparent = transparent;
+                  }
                 }
                 break;
 
@@ -323,7 +335,14 @@ Drupal.atomizer.themeC = function (_viewer, callback) {
                         node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
                       }
                     } else {
-                      node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                      if (node.material.materials) {
+                        for (var i = 0; i < node.material.materials.length; i++) {
+                          node.material.materials[i].color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                        }
+                      }
+                      else {
+                        node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                      }
                     }
                     break;
                 }
@@ -440,10 +459,18 @@ Drupal.atomizer.themeC = function (_viewer, callback) {
     }
   };
 
-  /// Load the default theme set.
+  // Get theme file from browser local storage if it exists.
+  var themeFile = localStorage.getItem('atomizer_theme_file');
+  if (!themeFile || themeFile == 'undefined') {
+    themeFile = viewer.view.defaultTheme;
+  }
+  viewer.view.themePath = viewer.atomizer.themeDirectory + '/' + themeFile;
+
+  // Load theme file
   Drupal.atomizer.base.doAjax(
     '/ajax-ab/loadYml',
     { filepath: viewer.view.themePath,
+      filename: themeFile,
       component: 'theme'
     },
     loadYml

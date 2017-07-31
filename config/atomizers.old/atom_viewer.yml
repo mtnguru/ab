@@ -9,4 +9,4 @@ views:
     name: Atom Viewer
     producer: atom_viewer
     defaultAtom: carbon.yml
-    themePath: config/themes/atom_viewer/base.yml
+    defaultTheme: base.yml

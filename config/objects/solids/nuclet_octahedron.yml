@@ -3,7 +3,7 @@ geoGroups:
   protons:
     rotation:
       y: 90
-    geometries:
+    components:
       framework:
         shape: octahedron
         scale: 1.38
@@ -23,7 +23,7 @@ geoGroups:
   octa:
     rotation:
       y: 90
-    geometries:
+    components:
       solid:
         shape: octahedron
         scale: 1.20

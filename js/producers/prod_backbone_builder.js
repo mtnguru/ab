@@ -249,7 +249,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       name: data.name,
       protonRadius: protonRadius,
       protons: {},
-      geometries: {}
+      components: {}
     };
 
     for (var pid in atom.az.protons) {
@@ -384,8 +384,8 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       atom.add(verticeIds);
 
       // Create Tetrahedrons
-      for (var tid in atomConf.geometries) {
-        var geometryConf = atomConf.geometries[tid];
+      for (var tid in atomConf.components) {
+        var geometryConf = atomConf.components[tid];
         if (geometryConf.geometry == 'tetrahedron') {
           // Add the first tetrahedrons
           var tetrahedron = createTetrahedron('tetra');

@@ -4,7 +4,7 @@ geoGroups:
   protons:
     rotation:
       y: 90
-    geometries:
+    components:
       framework:
         scale: 1.9
         shape: beryllium

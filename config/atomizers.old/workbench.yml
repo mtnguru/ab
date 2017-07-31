@@ -5,4 +5,4 @@ views:
   atoms:
     name: 9 Nuclets
     producer: workbench
-    themePath: config/themes/workbench/base.yml
+    defaultTheme: base.yml

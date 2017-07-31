@@ -6,4 +6,4 @@ views:
     name: Backbone Builder
     producer: backbone_builder
     defaultAtom: half_backbone.yml
-    themePath: config/themes/builder/backbone.yml
+    defaultTheme: backbone.yml

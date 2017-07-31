@@ -87,7 +87,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
       case 'nuclets':
         return visibleProtons;
       case 'inner-faces':
-        return hoverInnerFaces;
+        return viewer.objects.icosaFaces;
       case 'outer-faces':
         return hoverOuterFaces;
     }
@@ -135,7 +135,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
         break;
 
       case 'inner-faces':
-        var opacity = viewer.theme.get(' icosaFaces--opacity--az-slider');
+        var opacity = viewer.theme.get('icosaFaces--opacity--az-slider');
 
         // If there is already a highlighted proton
         if (highlightedFace) {
@@ -232,31 +232,36 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
           case 'inner-faces':
             var objects = viewer.controls.findIntersects(hoverInnerFaces);
             if (objects.length) {
+              var oldFaces = objects[0].object;
               var face = objects[0].face;
-              face.materialIndex = 1;
 
-              highlightedIcosa.geometry.faces[0].materialIndex = 2;
-              highlightedIcosa.geometry.faces[1].materialIndex = 0;
-              highlightedIcosa.geometry.faces[2].materialIndex = 1;
-
-              highlightedIcosa.geometry.faces[0].materialIndex = 1;
-              highlightedIcosa.geometry.faces[9].materialIndex = 1;
-              highlightedIcosa.geometry.faces[13].materialIndex = 1;
-
-              highlightedIcosa.geometry.verticesNeedUpdate = true;
-              highlightedIcosa.geometry.elementsNeedUpdate = true;
-              highlightedIcosa.geometry.colorsNeedUpdate = true;
-              viewer.render();
-            }
-            break;
-
-          case 'outer-faces':
-            var intersects = viewer.controls.findIntersects(hoverOuterFaces);
-            if (intersects.length) {
-              var face = intersects[0].face;
-              if (face.neutral) {
-
+              for (var i = 0; i < oldFaces.geometry.faces.length; i++) {
+                if (oldFaces.geometry.faces[i] === face) {
+                  var index = oldFaces.geometry.reactiveState.indexOf(i);
+                  if (index > -1) {
+                    oldFaces.geometry.reactiveState.splice(index, 1);
+                  } else {
+                    oldFaces.geometry.reactiveState.push(i);
+                  }
+                  break;
+                }
               }
+
+              viewer.objects.icosaFaces = null;
+              var faces = viewer.nuclet.createGeometryFaces(
+                oldFaces.name,
+                1,
+                oldFaces.geometry,
+                oldFaces.geometry.compConf.rotation || null,
+                oldFaces.geometry.reactiveState
+              );
+              var nucletGroup = oldFaces.parent;
+              viewer.objects[oldFaces.name] = [];
+              viewer.objects[oldFaces.name].push(faces);
+              faces.geometry.reactiveState = oldFaces.geometry.reactiveState;
+              faces.geometry.compConf = oldFaces.geometry.compConf;
+              nucletGroup.remove(oldFaces);
+              nucletGroup.add(faces);
               viewer.render();
             }
             break;
