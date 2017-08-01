@@ -2,51 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8568dd25-824d-452b-ba9d-69f388f622c1" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/config/style/atom_builder/Shells.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/config/style/atom_builder/base.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/config/style/atom_builder/base_org.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/config/style/atom_carbon_full/base.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/config/style/atom_viewer/base.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/config/style/platonic_solids/base.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/config/style/workbench/backbone.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/config/style/workbench/base.yml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/atomizer.libraries.yml" afterPath="$PROJECT_DIR$/atomizer.libraries.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers.old/atom_builder.yml" afterPath="$PROJECT_DIR$/config/atomizers.old/atom_builder.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers.old/atom_carbon_full.yml" afterPath="$PROJECT_DIR$/config/atomizers.old/atom_carbon_full.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers.old/atom_viewer.yml" afterPath="$PROJECT_DIR$/config/atomizers.old/atom_viewer.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers.old/backbone.yml" afterPath="$PROJECT_DIR$/config/atomizers.old/backbone.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers.old/element.yml" afterPath="$PROJECT_DIR$/config/atomizers.old/element.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers.old/platonic_solids.yml" afterPath="$PROJECT_DIR$/config/atomizers.old/platonic_solids.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers.old/workbench.yml" afterPath="$PROJECT_DIR$/config/atomizers.old/workbench.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers/atomizer_atom_builder.yml" afterPath="$PROJECT_DIR$/config/atomizers/atomizer_atom_builder.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers/dude.yml" afterPath="$PROJECT_DIR$/config/atomizers/dude.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/atomizers/dudette.yml" afterPath="$PROJECT_DIR$/config/atomizers/dudette.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/controls/controls_atom_builder.yml" afterPath="$PROJECT_DIR$/config/controls/controls_atom_builder.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/controls/controls_atom_builder.yml.save" afterPath="$PROJECT_DIR$/config/controls/controls_atom_builder.yml.save" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/controls/controls_atom_viewer.yml" afterPath="$PROJECT_DIR$/config/controls/controls_atom_viewer.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/controls/controls_backbone.yml" afterPath="$PROJECT_DIR$/config/controls/controls_backbone.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/controls/controls_element.yml" afterPath="$PROJECT_DIR$/config/controls/controls_element.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/controls/controls_platonic_solids.yml" afterPath="$PROJECT_DIR$/config/controls/controls_platonic_solids.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/dialogs/dialog_info.yml" afterPath="$PROJECT_DIR$/config/dialogs/dialog_info.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/dialogs/dialog_mode.yml" afterPath="$PROJECT_DIR$/config/dialogs/dialog_mode.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/dialogs/dialog_nuclet.yml" afterPath="$PROJECT_DIR$/config/dialogs/dialog_nuclet.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/dialogs/dialog_scene.yml" afterPath="$PROJECT_DIR$/config/dialogs/dialog_scene.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/dialogs/dialog_styles.yml" afterPath="$PROJECT_DIR$/config/dialogs/dialog_styles.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/next" afterPath="$PROJECT_DIR$/doc/next" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/atomizer_atom.js" afterPath="$PROJECT_DIR$/js/atomizer_atom.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/atomizer_base.js" afterPath="$PROJECT_DIR$/js/atomizer_base.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/atomizer_controls.js" afterPath="$PROJECT_DIR$/js/atomizer_controls.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/atomizer.iml" afterPath="$PROJECT_DIR$/.idea/atomizer.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/atomizer_nuclet.js" afterPath="$PROJECT_DIR$/js/atomizer_nuclet.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/atomizer_sprites.js" afterPath="$PROJECT_DIR$/js/atomizer_sprites.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/atomizer_style.js" afterPath="$PROJECT_DIR$/js/atomizer_style.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/atomizer_viewer.js" afterPath="$PROJECT_DIR$/js/atomizer_viewer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/producers/prod_atom_builder.js" afterPath="$PROJECT_DIR$/js/producers/prod_atom_builder.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/producers/prod_backbone_builder.js" afterPath="$PROJECT_DIR$/js/producers/prod_backbone_builder.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AtomizerControlBlock.php" afterPath="$PROJECT_DIR$/src/AtomizerControlBlock.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/AtomizerController.php" afterPath="$PROJECT_DIR$/src/Controller/AtomizerController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Form/AtomizerControlsForm.php" afterPath="$PROJECT_DIR$/src/Form/AtomizerControlsForm.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Plugin/Block/AtomizerBlock.php" afterPath="$PROJECT_DIR$/src/Plugin/Block/AtomizerBlock.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Plugin/Block/AtomizerControls.php" afterPath="$PROJECT_DIR$/src/Plugin/Block/AtomizerControls.php" />
     </list>
     <ignored path="atomizer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -62,27 +21,30 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
+  <component name="DrupalConfiguration" enabled="true" version="8">
+    <drupalPath>$PROJECT_DIR$/../../..</drupalPath>
+  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="atomizer" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="atomizer_atom.js" pinned="false" current-in-tab="false">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="atomizer_atom.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/atomizer_atom.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="522" column="6" selection-start-line="522" selection-start-column="6" selection-end-line="522" selection-end-column="6" />
+            <state vertical-scroll-proportion="0.42244226">
+              <caret line="518" column="6" selection-start-line="518" selection-start-column="6" selection-end-line="518" selection-end-column="6" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="atomizer_base.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="atomizer_base.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/atomizer_base.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7161716">
-              <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -92,8 +54,20 @@
         <entry file="file://$PROJECT_DIR$/js/atomizer_controls.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="139" column="55" selection-start-line="139" selection-start-column="55" selection-end-line="139" selection-end-column="55" />
+              <caret line="139" column="46" selection-start-line="139" selection-start-column="46" selection-end-line="139" selection-end-column="46" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="atomizer_nuclet.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/atomizer_nuclet.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="24" column="23" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -101,11 +75,9 @@
       <file leaf-file-name="AtomizerController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller/AtomizerController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-21.0">
+            <state vertical-scroll-proportion="0.0">
               <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
-              <folding>
-                <element signature="e#46#80#0#PHP" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -115,9 +87,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="32" column="16" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
-              <folding>
-                <marker date="1501011423263" expanded="true" signature="3134:3192" placeholder="controls:" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -135,6 +105,7 @@
         <option value="$PROJECT_DIR$/js/atomizer_controls.js" />
         <option value="$PROJECT_DIR$/src/Controller/AtomizerController.php" />
         <option value="$PROJECT_DIR$/js/atomizer_base.js" />
+        <option value="$PROJECT_DIR$/js/atomizer_nuclet.js" />
       </list>
     </option>
   </component>
@@ -150,10 +121,26 @@
       </GulpfileState>
     </gulpfiles>
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true">
+    <include_path>
+      <path value="$PROJECT_DIR$/../../../core/includes" />
+      <path value="$PROJECT_DIR$/../../../core/lib" />
+      <path value="$PROJECT_DIR$/../../../core/modules" />
+      <path value="$PROJECT_DIR$/../imager" />
+      <path value="$PROJECT_DIR$/../az_media" />
+      <path value="$PROJECT_DIR$/../glossary" />
+      <path value="$PROJECT_DIR$/../az_article" />
+      <path value="$PROJECT_DIR$/../glossary.old" />
+      <path value="$PROJECT_DIR$/../media_entity_link" />
+      <path value="$PROJECT_DIR$/../media_entity_image" />
+      <path value="$PROJECT_DIR$/../d8-glossify-taxonomy_tooltip" />
+      <path value="$PROJECT_DIR$/../../contrib" />
+      <path value="$PROJECT_DIR$/../../../libraries" />
+    </include_path>
+  </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1518" />
-    <option name="y" value="46" />
+    <option name="y" value="67" />
     <option name="width" value="1883" />
     <option name="height" value="1310" />
   </component>
@@ -182,6 +169,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -280,13 +269,37 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../.." />
     <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <envs />
+      <method />
+    </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="TaskManager">
@@ -299,27 +312,27 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1518" y="46" width="1883" height="1310" extended-state="0" />
-    <editor active="true" />
+    <frame x="1518" y="67" width="1883" height="1310" extended-state="0" />
+    <editor active="false" />
     <layout>
-      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25203693" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25475284" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2374161" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2374161" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -340,16 +353,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/config/controls/controls_atom_builder.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="16" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
-          <folding>
-            <marker date="1501011423263" expanded="true" signature="3134:3192" placeholder="controls:" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/atomizer_atom.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -358,28 +361,84 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/atomizer_base.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/atomizer_controls.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="139" column="55" selection-start-line="139" selection-start-column="55" selection-end-line="139" selection-end-column="55" />
+          <caret line="139" column="46" selection-start-line="139" selection-start-column="46" selection-end-line="139" selection-end-column="46" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/AtomizerController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-21.0">
+        <state vertical-scroll-proportion="0.0">
           <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
-          <folding>
-            <element signature="e#46#80#0#PHP" expanded="true" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/controls/controls_atom_builder.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="16" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/controls/controls_atom_builder.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="16" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/atomizer_controls.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="139" column="46" selection-start-line="139" selection-start-column="46" selection-end-line="139" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/AtomizerController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/atomizer_base.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7161716">
-          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/atomizer_nuclet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="23" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/atomizer_atom.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42244226">
+          <caret line="518" column="6" selection-start-line="518" selection-start-column="6" selection-end-line="518" selection-end-column="6" />
           <folding />
         </state>
       </provider>

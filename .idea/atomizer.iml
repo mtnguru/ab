@@ -4,5 +4,39 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="PHP">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../../core/includes" />
+          <root url="file://$MODULE_DIR$/../../../core/lib" />
+          <root url="file://$MODULE_DIR$/../../../core/modules" />
+          <root url="file://$MODULE_DIR$/../../../libraries" />
+          <root url="file://$MODULE_DIR$/../../contrib" />
+          <root url="file://$MODULE_DIR$/../az_article" />
+          <root url="file://$MODULE_DIR$/../az_media" />
+          <root url="file://$MODULE_DIR$/../d8-glossify-taxonomy_tooltip" />
+          <root url="file://$MODULE_DIR$/../glossary" />
+          <root url="file://$MODULE_DIR$/../glossary.old" />
+          <root url="file://$MODULE_DIR$/../imager" />
+          <root url="file://$MODULE_DIR$/../media_entity_image" />
+          <root url="file://$MODULE_DIR$/../media_entity_link" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../../../core/includes" />
+          <root url="file://$MODULE_DIR$/../../../core/lib" />
+          <root url="file://$MODULE_DIR$/../../../core/modules" />
+          <root url="file://$MODULE_DIR$/../../../libraries" />
+          <root url="file://$MODULE_DIR$/../../contrib" />
+          <root url="file://$MODULE_DIR$/../az_article" />
+          <root url="file://$MODULE_DIR$/../az_media" />
+          <root url="file://$MODULE_DIR$/../d8-glossify-taxonomy_tooltip" />
+          <root url="file://$MODULE_DIR$/../glossary" />
+          <root url="file://$MODULE_DIR$/../glossary.old" />
+          <root url="file://$MODULE_DIR$/../imager" />
+          <root url="file://$MODULE_DIR$/../media_entity_image" />
+          <root url="file://$MODULE_DIR$/../media_entity_link" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

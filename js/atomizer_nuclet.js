@@ -644,7 +644,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
     }
   }
 
-  function createTetrahedrons(compConf, nuclet) {
+  function createTetrahedrons(compConf, geometry, nuclet) {
     nuclet.tetrahedrons = [];
     for (var i = 0; i < compConf.tetrahedrons.length; i++) {
       var tetrahedron = createTetrahedron('tetra');
@@ -672,8 +672,9 @@ Drupal.atomizer.nucletC = function (_viewer) {
     }
   }
 
-  function createElectrons(compConf, nucletConf) {
+  function createElectrons(groupName, geometry, compConf, nucletConf) {
     var opacity = viewer.theme.get('electron--opacity') || 1;
+    var scale = viewer.theme.get(groupName + '--scale');
     var electrons = [];
     for (var e in compConf.electrons) {
       if (!compConf.electrons.hasOwnProperty(e)) continue;
@@ -763,11 +764,11 @@ Drupal.atomizer.nucletC = function (_viewer) {
     }
 
     if (compConf.tetrahedrons) {
-      createTetrahedrons(compConf, nuclet);
+      createTetrahedrons(compConf, geometry, nuclet);
     }
 
     if (compConf.electrons) {
-      var electrons = createElectrons(compConf, nucletConf);
+      var electrons = createElectrons(groupName, geometry, compConf, nucletConf);
       if (electrons.length) {
         nucletGroup.add(electrons);
       }
