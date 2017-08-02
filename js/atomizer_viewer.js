@@ -14,7 +14,7 @@
 
     var ambient;
     var spotlights = [];
-    var viewer = {};
+    var viewer = {objects: {}};
     var fullScreen = false;
     var $wrapper = $('#az-wrapper-' + atomizer.atomizerId.toLowerCase());
 

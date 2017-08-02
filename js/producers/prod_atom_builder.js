@@ -385,7 +385,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     viewer.view.atom = viewer.atom.loadAtom((userAtomNid == 'undefined') ? 73 : userAtomNid);
 
     // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
-    viewer.view.ghostProton = viewer.nuclet.makeProton({type: 'ghost'}, 1, {x: 300, y: 50, z: 0});
+    viewer.view.ghostProton = viewer.nuclet.makeProton({type: 'ghost'}, 1, {x: 300, y: 50, z: 0}, {state: 'default'});
   };
 
 

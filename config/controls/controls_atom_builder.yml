@@ -4,6 +4,7 @@ static:
   reset:
 #   title: Mouse
     controls:
+      atom--select:               ['Select Atom',      'button']
       theme--cameraReset:         ['Reset Camera',     'button']
       viewer--fullScreen:         ['Full screen',      'toggle']
       hr1: ['null', hr]
@@ -17,7 +18,6 @@ styler:
       atom--num-protons:          [ '# Protons',       'textfield', '', 6 ]
       atom--information:          [ null,              'container']
       hr3:                        [ null,              'hr']
-      atom--select:               ['Select Atom',      'button']
 #     atom--save:                 ['Save',             'link',    'modal',   'node.edit',    {node_type: atom}]
       atom--save:                 ['Save',             'link',    'modal',   'entity.node.edit_form', {node: 119}]
       atom--saveNew:              ['Create New',       'link',    'modal',   'node.add',    {node_type: atom}]
@@ -77,30 +77,51 @@ styler:
       theme--saveNewMessage:      [ null,              'container']
 
   particles:
-    title:               Protons, Electrons
+    title:               Protons
     controls:
-      proton--label:              ['Protons', 'header']
-      proton--opacity:            ['Opacity',      'range',     1, [0, 1, .01]]
-      proton--scale:              ['Scale',        'range',     1, [0, 3, .01]]
-      proton-default--color:      ['Default',      'color',    '#777777']
-      proton-grow--color:         ['Grow',         'color',    '#559999']
-      proton-valence--color:      ['Valence',      'color',    '#995599']
-      proton-polar--color:        ['Polar',        'color',    '#999955']
-      proton-neutral--color:      ['Neutral',      'color',    '#995555']
-      proton-ghost--color:        ['ghost',        'color',    '#aa55aa']
+      proton--label:              ['Protons',          'header']
+      proton--opacity:            ['Opacity',          'range',     1, [0, 1, .01]]
+      proton--scale:              ['Scale',            'range',     1, [0, 3, .01]]
+      hr1:                        [ null,              'hr']
+      proton--nuclet-type-label:  ['Nuclet Type',      'header']
+      proton-lithium--color:      ['Lithium',          'color',    '#777777']
+      proton-beryllium--color:    ['Beryllium',        'color',    '#559999']
+      proton-boron--color:        ['Boron',            'color',    '#995599']
+      proton-carbon--color:       ['Carbon',           'color',    '#999955']
+      proton-initial--color:      ['Backbone initial', 'color',    '#999955']
+      proton-capped--color:       ['Backbone capped',  'color',    '#666666']
+      proton-final--color:        ['Backbone final',   'color',    '#888888']
 
-      hr1:                        [ null,          'hr']
+      proton--proton-type-label:  ['Proton Type',      'header']
+      proton-default--color:      ['Default',          'color',    '#559999']
+      proton-neutral--color:      ['Neutral',          'color',    '#995555']
+      proton-ghost--color:        ['ghost',            'color',    '#aa55aa']
+      proton-grow--color:         ['Grow',             'color',    '#559999']
+      proton-valence--color:      ['Valence',          'color',    '#995599']
+      proton-polar--color:        ['Polar',            'color',    '#999955']
+      proton--color-style:
+        - 'Apply color style:'
+        - radios
+        - nuclet
+        -
+          nuclet: Nuclet type
+          proton: Proton type
+
+      hr2:                        [ null,          'hr']
       protonVertexid--color:      ['Proton IDs',   'color',    '#ff00ff']
       protonVertexid--opacity:    ['Opacity',      'range',    1, [0, 1, .01]]
       protonVertexid--scale:      ['Scale',        'range',    1,  [0, 3, .01]]
 
-      hr2:                        [ null,          'hr']
+  electrons:
+    title:               Electrons
+    controls:
+      hr3:                        [ null,          'hr']
       electron--color:            ['Electrons',    'color',    '#ffff33']
       electron--opacity:          ['Opacity',      'range',     1, [0, 1, .01]]
       electron--scale:            ['Scale',        'range',     1, [0, 3, .01]]
 
   valence:
-    title:               Valence Rings & Faces
+    title:               Valence Rings
     controls:
       valence--label:             ['Rings',        'header']
       valence--opacity:           ['Opacity',      'range',     1, [0, 1, .01]]
@@ -109,13 +130,6 @@ styler:
 
       valence-active--color:      ['Active',       'color',    '#85223C']
       valence-inactive--color:    ['Inactive',     'color',    '#666666']
-
-      hr1:                        [ null,          'hr']
-      faces--label:               ['Faces',        'header']
-      faces--opacity:             ['Opacity',      'range', 1, [0, 1, .01]]
-      faces-neutral--color:       ['Neutral',      'color',    '#74ff74']
-      faces-positive--color:      ['Positive',     'color',    '#74fdff']
-      faces-negative--color:      ['negative',     'color',    '#fffd73']
 
   axes:
     title:               Axes

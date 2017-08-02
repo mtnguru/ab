@@ -1,6 +1,6 @@
-name: Shells
-description: 'Initial theme settings'
-filepath: config/themes/atom_builder/Shells.yml
+name: Nuclets
+description: 'Initial theme set'
+filepath: config/themes/atom_builder/Nuclets.yml
 settings:
   ambient--color:
     defaultValue: '#5e5e5e'
@@ -297,7 +297,7 @@ settings:
     defaultValue: '0.59'
     type: range
   faces--opacity:
-    defaultValue: '1'
+    defaultValue: 1
     type: range
   faces-negative--color:
     defaultValue: '#fffd73'
@@ -369,7 +369,7 @@ settings:
     defaultValue: 1
     type: range
   icosa--scale:
-    defaultValue: '1'
+    defaultValue: '1.8'
     type: range
   icosaAxes--color:
     defaultValue: '#ffbbcc'
@@ -402,7 +402,7 @@ settings:
     defaultValue: '#019e04'
     type: color
   icosaFaces--opacity:
-    defaultValue: '0'
+    defaultValue: '1'
     type: range
   icosaOut--scale:
     defaultValue: '1.53'
@@ -447,13 +447,13 @@ settings:
     defaultValue: 1
     type: range
   icosaWireframe--color:
-    defaultValue: '#4fd5ce'
+    defaultValue: '#36fbf8'
     type: color
   icosaWireframe--linewidth:
     defaultValue: '2.2'
     type: range
   icosaWireframe--opacity:
-    defaultValue: '1'
+    defaultValue: 1
     type: range
   icosaWireframe--scale:
     defaultValue: 1
@@ -576,7 +576,7 @@ settings:
     defaultValue: 1
     type: range
   plane--color:
-    defaultValue: '#46414a'
+    defaultValue: '#5b5560'
     type: color
   plane--depth:
     defaultValue: 2000
@@ -687,16 +687,16 @@ settings:
     defaultValue: 1
     type: range
   proton-beryllium--color:
-    defaultValue: '#9e5e43'
+    defaultValue: '#559999'
     type: color
   proton-boron--color:
-    defaultValue: '#76763b'
+    defaultValue: '#995599'
     type: color
   proton-capped--color:
-    defaultValue: '#697881'
+    defaultValue: '#666666'
     type: color
   proton-carbon--color:
-    defaultValue: '#346e7f'
+    defaultValue: '#595c92'
     type: color
   proton-default--color:
     defaultValue: '#767676'
@@ -711,13 +711,13 @@ settings:
     defaultValue: '#3d5744'
     type: color
   proton-initial--color:
-    defaultValue: '#346e7f'
+    defaultValue: '#666666'
     type: color
   proton-lithium--color:
-    defaultValue: '#914747'
+    defaultValue: '#30572c'
     type: color
   proton-neutral--color:
-    defaultValue: '#4a6149'
+    defaultValue: '#584961'
     type: color
   proton-polar--color:
     defaultValue: '#454b5b'
@@ -738,7 +738,7 @@ settings:
     defaultValue: 1
     type: range
   renderer--color:
-    defaultValue: '#084a65'
+    defaultValue: '#557287'
     type: color
   spotlight-1--color:
     defaultValue: '#9c789c'
@@ -939,7 +939,7 @@ settings:
     defaultValue: 0.12
     type: range
   valence--opacity:
-    defaultValue: '0'
+    defaultValue: '1'
     type: range
   valence--scale:
     defaultValue: '1'

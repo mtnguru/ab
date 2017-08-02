@@ -33,9 +33,33 @@
       background: white;
     }
   }
-  legend {
-    color: $color-text;
+
+  fieldset.form-composite {
+    position: relative;
+    padding-top: 1.5em;
+
+    legend {
+      color: $color-text;
+      font-size: 1.4em;
+      span {
+        position: absolute;
+        top: -0.5em;
+        left: 0;
+      }
+    }
+    .form-item {
+      margin: 0;
+
+      label {
+        margin: 0;
+      }
+    }
   }
+
+  fieldset {
+    background: inherit;
+  }
+
   .form-item-styler {
     margin: 0 0 10px;
     select {
@@ -43,6 +67,7 @@
       font-weight: bold;
     }
   }
+
   .az-control-link {
     margin: 2px 10%;
     width: 80%;
@@ -73,7 +98,7 @@
   .control-block {
     font-size: 12px;
     hr {
-      margin: 10px 0 15px;
+      margin: 10px 0 5px;
       border-top: 1px solid #bbb;
     }
   }
@@ -91,6 +116,7 @@
   .az-header {
     font-size: 16px;
     font-weight: bold;
+    margin: 10px 0;
   }
   .az-label {
     font-weight: bold;

@@ -6,6 +6,7 @@ geoGroups:
       framework:
         shape: backbone
         particleids: proton
+        scale: 1
         protons:
           0:
             type: grow

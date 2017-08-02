@@ -288,16 +288,21 @@ Drupal.atomizer.controlsC = function (_viewer, controlSet) {
    * @returns {*}
    */
   function findIntersects(objects) {
-    var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
-    vector.unproject(viewer.camera);
+    if (objects) {
+      var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
+      vector.unproject(viewer.camera);
 
-    var raycaster = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
-    viewer.render();
-    var intersectedObjects = raycaster.intersectObjects(objects);
-    if (intersectedObjects.length) {
-      var dude = 1;
+      var raycaster = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
+      viewer.render();
+      var intersectedObjects = raycaster.intersectObjects(objects);
+      if (intersectedObjects.length) {
+        var dude = 1;
+      }
+      return intersectedObjects;
     }
-    return intersectedObjects;
+    else {
+      return [];
+    }
   }
 
   /**
