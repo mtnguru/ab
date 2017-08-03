@@ -1,5 +1,5 @@
 name: Nuclets
-description: 'Initial theme set'
+description: 'Color by Nuclet'
 filepath: config/themes/atom_builder/Nuclets.yml
 settings:
   ambient--color:

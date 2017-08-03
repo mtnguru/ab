@@ -195,7 +195,7 @@ settings:
     defaultValue: 0
     type: rotation
   dodeca--scale:
-    defaultValue: 1
+    defaultValue: '1.4'
     type: range
   dodecaAxes--color:
     defaultValue: '#aabb99'
@@ -228,7 +228,7 @@ settings:
     defaultValue: '#000000'
     type: color
   dodecaFaces--opacity:
-    defaultValue: '0.35'
+    defaultValue: '0'
     type: range
   dodecaOut--scale:
     defaultValue: 1
@@ -273,10 +273,10 @@ settings:
     defaultValue: 1
     type: range
   dodecaWireframe--color:
-    defaultValue: '#00d5ff'
+    defaultValue: '#9500ff'
     type: color
   dodecaWireframe--linewidth:
-    defaultValue: '0.5'
+    defaultValue: '2'
     type: range
   dodecaWireframe--opacity:
     defaultValue: 1
@@ -294,7 +294,7 @@ settings:
     type: range
     defaultValue: 5
   electron--scale:
-    defaultValue: '0.59'
+    defaultValue: '0.87'
     type: range
   faces--opacity:
     defaultValue: '1'
@@ -369,7 +369,7 @@ settings:
     defaultValue: 1
     type: range
   icosa--scale:
-    defaultValue: '1'
+    defaultValue: '1.41'
     type: range
   icosaAxes--color:
     defaultValue: '#ffbbcc'
@@ -438,7 +438,7 @@ settings:
     defaultValue: 3
     type: range
   icosaOutWireframe--opacity:
-    defaultValue: 1
+    defaultValue: '0'
     type: range
   icosaVertexid--opacity:
     defaultValue: 0
@@ -450,7 +450,7 @@ settings:
     defaultValue: '#4fd5ce'
     type: color
   icosaWireframe--linewidth:
-    defaultValue: '2.2'
+    defaultValue: '2'
     type: range
   icosaWireframe--opacity:
     defaultValue: '1'
@@ -534,7 +534,7 @@ settings:
     defaultValue: 0
     type: rotation
   octa--scale:
-    defaultValue: '1.02'
+    defaultValue: '1.24'
     type: range
   octaAexis--linewidth:
     defaultValue: 1
@@ -567,7 +567,7 @@ settings:
     defaultValue: '#ffff00'
     type: color
   octaWireframe--linewidth:
-    defaultValue: '0.5'
+    defaultValue: '2'
     type: range
   octaWireframe--opacity:
     defaultValue: 1
@@ -678,7 +678,7 @@ settings:
     defaultValue: 2500
     type: range
   proton--opacity:
-    defaultValue: '1'
+    defaultValue: '0.82'
     type: range
   proton--radius:
     type: range
@@ -927,7 +927,7 @@ settings:
     defaultValue: '#0034ff'
     type: color
   tetraWireframe--linewidth:
-    defaultValue: '0.5'
+    defaultValue: '2'
     type: range
   tetraWireframe--opacity:
     defaultValue: '1'

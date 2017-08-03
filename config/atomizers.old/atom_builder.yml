@@ -9,10 +9,10 @@ views:
     name: Atom Builder
     producer: atom_builder
     defaultAtom: carbon.yml
-    defaultTheme: base.yml
+    defaultTheme: Default.yml
   builder2:
     name: Atom Builder
     producer: atom_builder
     defaultAtom: carbon.yml
-    defaultTheme: base.yml
+    defaultTheme: Default.yml
 

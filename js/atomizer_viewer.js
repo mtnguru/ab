@@ -163,7 +163,13 @@
       // Make the back plane
       var color = viewer.theme.get('plane--color');
       viewer.scene.add(viewer.nuclet.makeObject('plane',
-        {lambert: {color: viewer.theme.get('plane--color')}},
+        {
+          lambert: {
+            color: viewer.theme.get('plane--color'),
+            opacity: viewer.theme.get('plane--opacity'),
+            transparent: true
+          }
+        },
         {
           width: viewer.theme.get('plane--width'),
           depth: viewer.theme.get('plane--depth')

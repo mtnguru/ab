@@ -106,10 +106,10 @@ geoGroups:
             vertices: [16, 2, 5, 8]
           13:
             vertices: [19, 6, 2, 9]
-      protonids:
-        shape: backbone
-        scale: 1.9
-        protonids: true
+#     protonids:
+#       shape: backbone
+#       scale: 1.9
+#       protonids: true
   icosa:
     allowrotate: false
     rotation:
@@ -119,43 +119,28 @@ geoGroups:
         shape: icosahedron
         scale: 1.37
         wireframe: true
+        assignFaceOpacity: true
         faces:
           0:
             type: valence
-            attach: deca-left
-            location: top-front
           1:
             type: isotope
-            attach: deca-left
-            location: top-middle
           2:
             type: isotope
-            attach: deca-right
-            location: top-middle
           3:
             type: valence
-            attach: deca-right
-            location: top-rear
           4:
             type: valence
           5:
             type: valence
-            attach: deca-left
-            location: top-rear
           6:
             type: valence
-            attach: deca-left
-            location: bottom-front
           7:
             type: valence
           8:
             type: valence
-            attach: deca-right
-            location: bottom-rear
           9:
             type: valence
-            attach: deca-right
-            location: top-front
           10:
             type: valence
           11:
@@ -168,37 +153,50 @@ geoGroups:
             type: valence
           15:
             type: valence
-            attach: deca-left
-            location: bottom-rear
           16:
             type: valence
           17:
             type: valence
           18:
             type: valence
-            attach: deca-right
-            location: bottom-front
           19:
             type: valence
-      axes:
-        shape: icosahedron
-        axes:
-          scale: 3
-          vertices:
-            - [0, 3]
-            - [1, 2]
-            - [4, 7]
-            - [5, 6]
-            - [8, 11]
-            - [9, 10]
-      vertexids:
-        shape: icosahedron
-        scale: 1.55
-        vertexids: true
+#     axes:
+#       shape: icosahedron
+#       axes:
+#         scale: 3
+#         vertices:
+#           - [0, 3]
+#           - [1, 2]
+#           - [4, 7]
+#           - [5, 6]
+#           - [8, 11]
+#           - [9, 10]
+#     vertexids:
+#       shape: icosahedron
+#       scale: 1.55
+#       vertexids: true
       faceids:
         shape: icosahedron
         scale: 1.3
         faceids: true
+
+  icosaOut:
+    rotation:
+      y: 90
+    components:
+      solid:
+        shape: icosahedron
+        scale: 6
+        wireframe: true
+#     vertexids:
+#       shape: icosahedron
+#       scale: 1.55
+#       vertexids: true
+#     faceids:
+#       shape: icosahedron
+#       scale: 1.3
+#       faceids: true
 
   dodeca:
     allowrotate: false
@@ -208,29 +206,29 @@ geoGroups:
         scale: 1.31
         wireframe: true
         faces: true
-      axes:
-        shape: dodecahedron
-        axes:
-          scale: 3
-          vertices:
-            - [0, 13]
-            - [1, 12]
-            - [2, 11]
-            - [3, 10]
-            - [4, 14]
-            - [5, 17]
-            - [6, 18]
-            - [7, 19]
-            - [8, 15]
-            - [9, 16]
-      vertexids:
-        shape: dodecahedron
-        scale: 1.3
-        vertexids: true
-      faceids:
-        shape: dodecahedron
-        scale: 1.5
-        faceids: true
+#     axes:
+#       shape: dodecahedron
+#       axes:
+#         scale: 3
+#         vertices:
+#           - [0, 13]
+#           - [1, 12]
+#           - [2, 11]
+#           - [3, 10]
+#           - [4, 14]
+#           - [5, 17]
+#           - [6, 18]
+#           - [7, 19]
+#           - [8, 15]
+#           - [9, 16]
+#     vertexids:
+#       shape: dodecahedron
+#       scale: 1.3
+#       vertexids: true
+#     faceids:
+#       shape: dodecahedron
+#       scale: 1.5
+#       faceids: true
 
   octa:
     allowrotate: true
@@ -252,15 +250,15 @@ geoGroups:
           5:
             type: normal
         wireframe: true
-      axes:
-        shape: octahedron
-        axes:
-          scale: 3
-          vertices:
-            - [0, 1]
-            - [2, 3]
-            - [4, 5]
-      vertexids:
-        shape: octahedron
-        scale: 1.3
-        vertexids: true
+#     axes:
+#       shape: octahedron
+#       axes:
+#         scale: 3
+#         vertices:
+#           - [0, 1]
+#           - [2, 3]
+#           - [4, 5]
+#     vertexids:
+#       shape: octahedron
+#       scale: 1.3
+#       vertexids: true

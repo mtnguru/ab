@@ -239,8 +239,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
       // add one random mesh to each scene
       var opaqueMaterial = new THREE.MeshLambertMaterial( {
         color: viewer.theme.get(id + '--color'),
-        opacity: 1,
-        transparent: false,
+        opacity: viewer.theme.get(id + '--opacity'),
+        transparent: true,
         vertexColors: THREE.FaceColors
       });
       var transparentMaterial = new THREE.MeshLambertMaterial( {

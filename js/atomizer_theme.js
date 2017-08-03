@@ -286,7 +286,12 @@ Drupal.atomizer.themeC = function (_viewer, callback) {
                     node.material.transparent = transparent;
                   }
                 } else {
-                  if (node.material[0]) {
+                  if (node.material.materials) {
+                    node.material.materials[1].opacity = opacity;
+                    node.material.materials[1].visible = visible;
+                    node.material.materials[1].transparent = transparent;
+                  }
+                  else if (node.material[0]) {
                     node.material[0].opacity = opacity;
                     node.material[0].visible = visible;
                     node.material[0].transparent = transparent;
