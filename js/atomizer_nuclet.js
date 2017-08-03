@@ -618,8 +618,8 @@ Drupal.atomizer.nucletC = function (_viewer) {
         );
         break;
 
-      case 'backbone-initial':
-      case 'backbone-final':
+      case 'initial':
+      case 'final':
         break;
 
       case 'carbon':

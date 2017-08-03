@@ -188,7 +188,8 @@
         var angleOrigin = new THREE.Vector3(0, 31, 0);
         var origin = new THREE.Vector3(0, 13, 0);
         growPt.y = growPt.y + 11;
-        var attachScale = 2.42;
+//      var attachScale = 2.42;
+        var attachScale = 2.18;
 
         var attachVertice = nuclet.az.protonGeometry.vertices[attachId];
         var initialAxis = attachVertice.clone().normalize();
@@ -306,7 +307,7 @@
       var inactiveColor = viewer.theme.get('valence-inactive--color');
       for (var n in atom.az.nuclets) {
         var nuclet = atom.az.nuclets[n];
-        if (nuclet.az.state === 'backbone-initial' || nuclet.az.state === 'backbone-final') {
+        if (nuclet.az.state === 'initial' || nuclet.az.state === 'final') {
           for (var r in nuclet.az.rings) {
             if (!nuclet.az.rings.hasOwnProperty(r)) continue;
             var ring = nuclet.az.rings[r];

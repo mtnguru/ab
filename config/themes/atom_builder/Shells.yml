@@ -717,7 +717,7 @@ settings:
     defaultValue: '#914747'
     type: color
   proton-neutral--color:
-    defaultValue: '#4a6149'
+    defaultValue: '#437641'
     type: color
   proton-polar--color:
     defaultValue: '#454b5b'
