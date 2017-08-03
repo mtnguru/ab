@@ -822,7 +822,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
 
     if (compConf.faces) {
       var reactiveState;
-      if (compConf.assignFaceOpacity) {
+      if (compConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
         var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
         geometry.reactiveState = azNuclet.reactiveState = reactiveState;
         geometry.compConf = compConf;
