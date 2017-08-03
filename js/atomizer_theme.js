@@ -27,23 +27,25 @@ Drupal.atomizer.themeC = function (_viewer, callback) {
     localStorage.setItem('atomizer_theme_file', results[0].data.filename);
     document.getElementById('edit-selectyml').value = results[0].data.filename;
 
-    results[0].ymlContents.filepath = results[0].data.filepath;
-    defaultSet = results[0].ymlContents;
+    if (results[0].ymlContents) {
+      results[0].ymlContents.filepath = results[0].data.filepath;
+      defaultSet = results[0].ymlContents;
 
-    if (currentSet.name) {
-      reset(false, false);
-      currentSet.name = defaultSet.name;
-      currentSet.description = defaultSet.description;
-      currentSet.filepath = defaultSet.filepath;
-    } else {
-      currentSet = JSON.parse(JSON.stringify(defaultSet));
-      reset(true, true);
-    }
+      if (currentSet.name) {
+        reset(false, false);
+        currentSet.name = defaultSet.name;
+        currentSet.description = defaultSet.description;
+        currentSet.filepath = defaultSet.filepath;
+      } else {
+        currentSet = JSON.parse(JSON.stringify(defaultSet));
+        reset(true, true);
+      }
 
-    // This is a hack, the callback is only run the first time the theme file is loaded.
-    if (callback) {
-      callback();
-      callback = null;
+      // This is a hack, the callback is only run the first time the theme file is loaded.
+      if (callback) {
+        callback();
+        callback = null;
+      }
     }
   };
 

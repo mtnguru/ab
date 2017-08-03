@@ -744,14 +744,14 @@ Drupal.atomizer.nucletC = function (_viewer) {
     if (compConf.shape == 'dodecahedron' || compConf.shape == 'hexahedron') {
       wireframe = createGeometryLines(
         name,
-        1 + .02,
+        compConf.scale + .02,
         geometry,
         compConf.rotation || null
       );
     } else {
       wireframe = createGeometryWireframe(
         name,
-        1 + .02,
+        compConf.scale + .02,
         geometry,
         compConf.rotation || null
       );
