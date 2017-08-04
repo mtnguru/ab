@@ -126,6 +126,19 @@
   .az-indent .az-name {
     padding-left: 15px;
   }
+  .az-control-text {
+    font-size: 100%;
+    .text-label {
+      display: inline-block;
+      width: 8em;
+    }
+    .text-value {
+      text-align: right;
+      width: 2em;
+      display: inline-block;
+
+    }
+  }
   .az-control-position,
   .az-control-rotation,
   .az-control-range {

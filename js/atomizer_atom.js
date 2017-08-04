@@ -291,6 +291,7 @@
       atom.az = {nuclets: {}};
       createNuclet('N0', atomConf, atom);
       setValenceRings();
+      showStats();
 
       viewer.scene.add(atom);
       viewer.render();
@@ -305,6 +306,58 @@
       var numActive = 0;
       var activeColor = viewer.theme.get('valence-active--color');
       var inactiveColor = viewer.theme.get('valence-inactive--color');
+      for (var n in atom.az.nuclets) {
+        var nuclet = atom.az.nuclets[n];
+        if (nuclet.az.state === 'initial' || nuclet.az.state === 'final') {
+          for (var r in nuclet.az.rings) {
+            if (!nuclet.az.rings.hasOwnProperty(r)) continue;
+            var ring = nuclet.az.rings[r];
+            var gid = nuclet.az.id + ring.az.grow;
+            var color = activeColor;
+            if (atom.az.nuclets[nuclet.az.id + ring.az.grow] ||
+              (nuclet.az.protons[ring.az.lock[0]].az.visible && nuclet.az.protons[ring.az.lock[1]].az.visible)) {
+              color = inactiveColor;
+            } else {
+              numActive++;
+            }
+            ring.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
+          }
+        }
+      }
+      return;
+    }
+
+    function showStats() {
+      var numProtons = 0;
+      var numNuclets = 0;
+      var numUnclassified = 0;
+      for (var n in atom.az.nuclets) {
+        numNuclets++;
+        var nuclet = atom.az.nuclets[n];
+        for (var p in nuclet.az.protons) {
+          var proton = nuclet.az.protons[p];
+          if (!proton.az) {
+            numUnclassified++;
+          }
+          else if (proton.az.visible) {
+            numProtons++;
+          }
+        }
+      }
+
+      $('#atom--num-nuclets .text-value').html(numNuclets);
+      $('#atom--num-protons .text-value').html(numProtons);
+//    $('#atom--num-unclassified .text-value').html(numUnclassified);
+    }
+
+    /**
+     * Check all valence rings and color active/inactive rings - count total Active and update atom information.
+     */
+    function calcStats() {
+      var numProtons = 0;
+      var numNuclets = 0;
+      var numValenceRings = 0;
+
       for (var n in atom.az.nuclets) {
         var nuclet = atom.az.nuclets[n];
         if (nuclet.az.state === 'initial' || nuclet.az.state === 'final') {

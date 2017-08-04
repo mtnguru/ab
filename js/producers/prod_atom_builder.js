@@ -14,7 +14,7 @@ Drupal.atomizer.producers.atom_builderC = function (_viewer) {
   var mouseModeRadios =   document.getElementById('edit-nuclet-attachproton--wrapper');
 
   var editNuclet;
-  var nucletEditForm =    document.getElementById('hidden-nuclet');
+  var nucletEditForm =    document.getElementById('control-nuclet');
 
   var nucletAngle =       document.getElementById('nuclet--attachAngle');
   var nucletAngleSlider = document.getElementById('nuclet--attachAngle--az-slider');

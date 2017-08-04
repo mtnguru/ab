@@ -20,66 +20,74 @@ class AtomizerControlBlock {
     $valueClass = 'az-value';
     $valueId = $id . '--' . $valueClass;
 
-    return array(
+    return [
       '#type' => 'container',
-      'title' => array(
+      'title' => [
         '#markup' => '<div class="az-name">' . $name . '</div>'
-      ),
-      'value' => array (
+      ],
+      'value' => [
         '#type' => 'textfield',
         '#default_value' => $defaultValue,
-        '#attributes' => array(
+        '#attributes' => [
           'id' => $valueId,
-          'class' => array($valueClass),
-        ),
-      ),
-      'range' => array (
+          'class' => [$valueClass],
+        ],
+      ],
+      'range' => [
         '#type' => 'range',
         '#default_value' => $defaultValue,
         '#min' => $min,
         '#max' => $max,
         '#step' => $step,
-        '#attributes' => array(
+        '#attributes' => [
           'id' => $sliderId,
-          'class' => array($sliderClass),
-        ),
-      ),
-    );
+          'class' => [$sliderClass],
+        ],
+      ],
+    ];
   }
 
+  /**
+   * @param $type
+   * @param $blockName
+   * @param $blockConf
+   * @param $theme
+   * @param $showTitle
+   * @return mixed
+   */
   static public function create($type, $blockName, $blockConf, &$theme, $showTitle) {
     // Create a container for the block
-    $block[$blockName] = array(
+    $block[$blockName] = [
       '#type' => 'container',
-      '#attributes' => array(
+      '#attributes' => [
         'id' => $type . '-' . $blockName,
-        'class' => array('control-block'),
-      ),
-    );
+        'class' => ['control-block'],
+      ],
+    ];
     if ($showTitle && !empty($blockConf['title'])) {
       $block[$blockName]['#title'] = $blockConf['title'];
     }
 
     // Create each control
     foreach ($blockConf['controls'] as $controlName => $controlConf) {
-      $control = array();
+      $control = [];
       $id = str_replace('_', '-', $controlName);
-      $containerClasses = array('az-control', 'az-control-' . $controlConf[1]);
+      $containerClasses = ['az-control', 'az-control-' . $controlConf[1]];
       $defaultValue = (isset($controlConf[2])) ? $controlConf[2] : '';
       $addValue = false;
       switch ($controlConf[1]) {
 
         case 'selectyml':
 
-          $control = array(
+          $control = [
             '#type' => 'container',
-            '#attributes' => array('class' => array('selectyml')),
-            'selectyml' => array (
+            '#attributes' => ['class' => ['selectyml']],
+            'selectyml' => [
               '#type' => 'select',
               '#title' => $controlConf[0],
               '#default_value' => $controlConf[2],
               '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/' . $controlConf[4], '/\.yml/'),
-            ),
+            ],
 /*          'overwrite_button' => array(
               '#type' => 'item',
               '#prefix' => '<div id="' . $id . '--button" class="button-wrapper">',
@@ -92,14 +100,14 @@ class AtomizerControlBlock {
               '#suffix' => '</div>',
               '#markup' => t(''),
             ) */
-          );
+          ];
           $addValue = true;
           break;
 
         case 'saveyml':
-          $control = array(
+          $control = [
             '#type' => 'container',
-            '#attributes' => array('class' => array('saveyml')),
+            '#attributes' => ['class' => ['saveyml']],
 /*          'name' => array(
               '#type' => 'textfield',
               '#maxlength' => 24,
@@ -118,19 +126,19 @@ class AtomizerControlBlock {
               '#maxlength' => 64,
               '#rows' => 4,
             ), */
-            'save_button' => array(
+            'save_button' => [
               '#type' => 'item',
               '#prefix' => '<div id="' . $id . '--button" class="button-wrapper">',
               '#suffix' => '</div>',
               '#markup' => t('Save'),
-            ),
-            'overwrite_message' => array(
+            ],
+            'overwrite_message' => [
               '#type' => 'item',
               '#prefix' => '<div id="' . $id . '--message" class="message-wrapper">',
               '#suffix' => '</div>',
               '#markup' => t(''),
-            )
-          );
+            ]
+          ];
           $addValue = true;
           break;
 
@@ -161,27 +169,27 @@ class AtomizerControlBlock {
           break;
 
         case 'button':
-          $control = array(
+          $control = [
             '#type' => 'button',
             '#value' => $controlConf[0],
-          );
+          ];
           $addValue = true;
           break;
 
         case 'toggle':
-          $control = array(
+          $control = [
             '#type' => 'button',
             '#value' => $controlConf[0],
-          );
+          ];
           $addValue = true;
           break;
 
         case 'checkbox':
-          $control = array(
+          $control = [
             '#type' => 'checkbox',
 //          '#attributes' => array('onclick' => 'return (false);'),
             '#title' => $controlConf[0],
-          );
+          ];
           $addValue = true;
           break;
 
@@ -198,34 +206,34 @@ class AtomizerControlBlock {
           break;
 
         case 'radios':
-          $control = array(
+          $control = [
             '#type' => 'radios',
             '#title' => $controlConf[0],
             '#default_value' => $defaultValue,
             '#options' => $controlConf[3],
-          );
+          ];
           $addValue = true;
           break;
 
         case 'select':
-          $control = array(
+          $control = [
             '#type' => 'select',
             '#title' => $controlConf[0],
             '#default_value' => $defaultValue,
             '#options' => $controlConf[3],
-          );
+          ];
           $addValue = true;
           break;
 
         case 'rotation':
         case 'position':
-          $control = array(
+          $control = [
             '#type' => 'container',
             '#attributes' => ['class' => ['multi-slider']],
-            'title' => array(
+            'title' => [
               '#markup' => '<div class="az-label">' . $controlConf[0] . '</div>',
-            ),
-          );
+            ],
+          ];
           foreach (['x', 'y', 'z'] as $ind => $axis) {
             $control[$id . '--' . $axis] = AtomizerControlBlock::makeRangeControl(
               $id . '--' . $axis,
@@ -236,90 +244,101 @@ class AtomizerControlBlock {
               $controlConf[3][2]
             );
             $control[$id . '--' . $axis]['#attributes']['class'][] = 'az-indent';
-            $theme[$id . '--' . $axis] = array(
+            $theme[$id . '--' . $axis] = [
               'type' => $controlConf[1],
               'defaultValue' => $defaultValue[$ind],
-            );
+            ];
           }
           break;
 
         case 'color':
-          $control = array(
+          $control = [
             '#type' => 'color',
             '#title' => $controlConf[0],
             '#default_value' => $defaultValue,
-          );
+          ];
           $addValue = true;
           break;
 
         case 'textfield':
-          $control = array(
+          $control = [
             '#type' => 'textfield',
             '#title' => $controlConf[0],
             '#maxlength' => $controlConf[3],
-          );
+          ];
           $addValue = true;
           break;
 
         case 'html':
-          $control = array(
+          $control = [
             '#type' => 'item',
             '#title' => $controlConf[0],
-            'value' => array(
+            'value' => [
               '#type' => 'item',
               '#markup' => $controlConf[2],
-            ),
-          );
+            ],
+          ];
           $addValue = true;
           break;
 
         case 'textarea':
-          $control = array(
+          $control = [
             '#type' => 'textarea',
             '#title' => 'Description',
             '#maxlength' => $controlConf[3],
             '#rows' => $controlConf[4],
-          );
+          ];
           $addValue = true;
           break;
 
+        case 'text':
+          $control = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['text-wrapper'],
+            ],
+            'label' => ['#markup' => "<div class='text-label " . $id . "--label'>$controlConf[0]</div>"],
+            'value' => ['#markup' => "<div class='text-value " . $id . "--value'>$controlConf[2]</div"],
+          ];
+          break;
+
         case 'number':
-          $control = array(
+          $control = [
             '#type' => 'number',
             '#title' => $controlConf[0],
             '#default_value' => $controlConf[2],
             '#min' => $controlConf[3][0],
             '#max' => $controlConf[3][1],
             '#maxlength' => $controlConf[3][2],
-          );
+          ];
           $addValue = true;
           break;
 
         case 'container':
-          $control = array('#type' => 'container');
+          $control = ['#type' => 'container'];
           $addValue = true;
           break;
 
         case 'header':
-          $control = array('#markup' => "<div class='az-header'>$controlConf[0]</div>");
+          $control = ['#markup' => "<div class='az-header'>$controlConf[0]</div>"];
           break;
 
         case 'label':
-          $control = array('#markup' => "<div class='az-label'>$controlConf[0]</div>");
+          $control = ['#markup' => "<div class='az-label'>$controlConf[0]</div>"];
           break;
 
         case 'hr':
-          $control = array('#markup' => '<hr>');
+          $control = ['#markup' => '<hr>'];
           break;
 
         default:
           break;
       }
       if ($addValue) {
-        $theme[$id] = array(
+        $theme[$id] = [
           'type' => $controlConf[1],
           'defaultValue' => $defaultValue,
-        );
+        ];
       }
       $control['#attributes']['id'] = $id;
       $control['#attributes']['name'] = $id;

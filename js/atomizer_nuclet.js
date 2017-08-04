@@ -940,19 +940,15 @@ Drupal.atomizer.nucletC = function (_viewer) {
         electrons = [0,1,2,3,4,5];
     }
 
-    // Remove the attach proton if this isn't 'N0'
-    if (id != 'N0') {
-      var i = protons.indexOf(10);
-      if (i > -1) protons[i] = undefined;
-    }
-
     // If the configuration for protons and electrons is not set then use the default values set above.
     // @TODO This needs to be pulled from configuration, get rid of the above switch statement.
     if (!nuclet.az.conf.electrons) nuclet.az.conf.electrons = electrons;
     if (!nuclet.az.conf.protons) nuclet.az.conf.protons = protons;
 
-    // If this is a boron nuclet and it isn't N0 then remove one proton.
+    // Remove the attach proton if this isn't 'N0'
     if (id != 'N0') {
+      var i = nuclet.az.conf.protons.indexOf(10);
+      if (i > -1) nuclet.az.conf.protons[i] = undefined;
       if (nuclet.az.conf.state === 'boron') {
         var i = nuclet.az.conf.protons.indexOf(0);
         if (i > -1) {

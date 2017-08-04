@@ -15,7 +15,8 @@ styler:
     title:               Atom
     controls:
       hr1:                        [ null,              'hr']
-      atom--num-protons:          [ '# Protons',       'textfield', '', 6 ]
+      atom--num-nuclets:          [ 'Nuclets',         'text', '', 6 ]
+      atom--num-protons:          [ 'Protons',         'text', '', 6 ]
       atom--information:          [ null,              'container']
       hr3:                        [ null,              'hr']
 #     atom--save:                 ['Save',             'link',    'modal',   'node.edit',    {node_type: atom}]
@@ -312,15 +313,15 @@ styler:
       tetraFaces--color:           ['Faces',        'color',    '#88cccc']
       tetraFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
 
-      tetraFaceid--label:          ['IDs',          'label']
-      tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+#     tetraFaceid--label:          ['IDs',          'label']
+#     tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
 #     tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
-      hr3:                         [ null, 'hr']
-      tetraAxes--color:            ['Axis',         'color',    '#ffbbcc']
-      tetraAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
-      tetraAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
-      tetraAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+#     hr3:                         [ null, 'hr']
+#     tetraAxes--color:            ['Axis',         'color',    '#ffbbcc']
+#     tetraAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+#     tetraAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
+#     tetraAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
 
   scene:
     title:               Scene
