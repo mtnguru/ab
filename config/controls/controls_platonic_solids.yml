@@ -15,7 +15,7 @@ styler:
     controls:
       hr1:                         [ null,               'hr']
       theme--loadlabel:            ['Select Theme',      'header']
-      theme--selectyml:            [ null,               'selectyml', 'base.yml',   'theme',   'config/themes/platonic_solids', 'atomizer.ajax_yml_load']
+      theme--selectyml:            [ null,               'selectyml', 'Default.yml',   'theme',   'config/themes/platonic_solids', 'atomizer.ajax_yml_load']
       theme--reset:                [ 'Reset Theme',      'button']
       theme--saveButton:           [ 'Save Changes',     'button']
       theme--saveMessage:          [ null,               'container']

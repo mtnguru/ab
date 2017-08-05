@@ -271,7 +271,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       faces = new THREE.Mesh(geometry, material);
     }
 
-    faces.scale.set(scale, scale, scale);
+//  faces.scale.set(scale, scale, scale);
     faces.name = id;
     if (rotation) {
       for (var i in axes) {
@@ -744,14 +744,16 @@ Drupal.atomizer.nucletC = function (_viewer) {
     if (compConf.shape == 'dodecahedron' || compConf.shape == 'hexahedron') {
       wireframe = createGeometryLines(
         name,
-        compConf.scale + .02,
+//      compConf.scale + .02,
+        1 + .02,
         geometry,
         compConf.rotation || null
       );
     } else {
       wireframe = createGeometryWireframe(
         name,
-        compConf.scale + .02,
+//      compConf.scale + .02,
+        1 + .02,
         geometry,
         compConf.rotation || null
       );

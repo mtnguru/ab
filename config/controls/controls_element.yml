@@ -21,7 +21,7 @@ styler:
       theme--reset:            ['Reset Theme',      'button']
       hr1:                     [ null,              'hr']
       theme--loadlabel:        ['Current Theme',    'header']
-      theme--selectyml:        [ null,              'selectyml', 'base.yml',   'theme',   'config/themes/builder', 'atomizer.ajax_yml_load']
+      theme--selectyml:        [ null,              'selectyml', 'Default.yml',   'theme',   'config/themes/builder', 'atomizer.ajax_yml_load']
       hr2:                     [ null,              'hr']
       theme--savelabel:        ['Create New Theme', 'header']
       theme--saveyml:          [ null,              'saveyml',   '',           'theme',   'config/themes/builder', 'atomizer.ajax_yml_save']

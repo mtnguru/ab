@@ -1,5 +1,5 @@
-name: Base
-filepath: config/themes/workbench/base.yml
+name: Default
+filepath: config/themes/workbench/Default.yml
 description: 'Initial theme settings'
 settings:
   proton--radius:

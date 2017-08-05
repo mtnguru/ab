@@ -36,6 +36,13 @@ class AtomizerController extends ControllerBase {
   public function loadYml() {
     $data = json_decode(file_get_contents("php://input"), true);
 
+    $path = drupal_get_path('module', 'atomizer') . '/' . $data['filepath'];
+    if (!file_exists($path)) {
+       $path =  dirname($path) . '/Default.yml';
+       $data['message'] = 'Could not find ' . $data['filepath'] . ' -- Default.yml file loaded.';
+       $data['filepath'] = $path;
+       $data['filename'] = 'Default.yml';
+    }
     $response = new AjaxResponse();
     $ymlContents = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath']));
     $response->addCommand(new LoadYmlCommand($data, $ymlContents));

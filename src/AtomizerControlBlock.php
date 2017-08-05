@@ -57,7 +57,7 @@ class AtomizerControlBlock {
    */
   static public function create($type, $blockName, $blockConf, &$theme, $showTitle) {
     // Create a container for the block
-    $block[$blockName] = [
+    $block = [
       '#type' => 'container',
       '#attributes' => [
         'id' => $type . '-' . $blockName,
@@ -65,7 +65,7 @@ class AtomizerControlBlock {
       ],
     ];
     if ($showTitle && !empty($blockConf['title'])) {
-      $block[$blockName]['#title'] = $blockConf['title'];
+      $block['#title'] = $blockConf['title'];
     }
 
     // Create each control
@@ -169,19 +169,52 @@ class AtomizerControlBlock {
           break;
 
         case 'button':
-          $control = [
-            '#type' => 'button',
-            '#value' => $controlConf[0],
-          ];
+          if (empty($controlConf[2])) {
+            $control = [
+              '#type' => 'button',
+              '#value' => $controlConf[0],
+            ];
+          }
+          else {
+            $control = [
+              '#type' => 'container',
+              '#attributes' => [
+                'title' => $controlConf[0],
+              ],
+            ];
+            $containerClasses[] = 'az-button';
+            $containerClasses[] = 'fa';
+            $containerClasses[] = $controlConf[2];
+          }
+          if (!empty($controlConf[3])) {
+            foreach ($controlConf[3] as $key => $value) {
+              $control['#attributes']['data-' . $key] = $value;
+              if ($key == 'blockid') {
+                $containerClasses[] = 'toggle-block';
+              }
+            }
+          }
           $addValue = true;
           break;
 
         case 'toggle':
-          $control = [
-            '#type' => 'button',
-            '#value' => $controlConf[0],
-          ];
-          $addValue = true;
+          if (empty($controlConf[2])) {
+            $control = [
+              '#type' => 'button',
+              '#value' => $controlConf[0],
+            ];
+          }
+          else {
+            $control = [
+              '#type' => 'container',
+              '#attributes' => [
+                'title' => $controlConf[0],
+              ],
+            ];
+            $containerClasses[] = 'fa';
+            $containerClasses[] = $controlConf[2];
+            $addValue = TRUE;
+          }
           break;
 
         case 'checkbox':
@@ -221,6 +254,16 @@ class AtomizerControlBlock {
             '#title' => $controlConf[0],
             '#default_value' => $defaultValue,
             '#options' => $controlConf[3],
+          ];
+          $addValue = true;
+          break;
+
+        case 'selectblock':
+          $control = [
+            '#type' => 'select',
+            '#title' => $controlConf[0],
+//          '#default_value' => $defaultValue,
+            '#default_value' => 'dude',
           ];
           $addValue = true;
           break;
@@ -344,7 +387,7 @@ class AtomizerControlBlock {
       $control['#attributes']['name'] = $id;
       $control['#attributes']['class'] = $containerClasses;
 
-      $block[$blockName][$controlName] = $control;
+      $block[$controlName] = $control;
     }
     return $block;
   }

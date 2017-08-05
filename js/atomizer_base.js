@@ -34,6 +34,9 @@
         processData: false,
         success: function (response) {
           if (Array.isArray(response)) {
+            if (response[0].data && response[0].data.message) {
+              alert(response[0].data.message);
+            }
             if (successCallback) successCallback(response);
           } else {
             alert('atomizer_base doAjax: ' + response);

@@ -478,6 +478,7 @@ Drupal.atomizer.themeC = function (_viewer, callback) {
     '/ajax-ab/loadYml',
     { filepath: viewer.view.themePath,
       filename: themeFile,
+      directory: themeDirectory,
       component: 'theme'
     },
     loadYml

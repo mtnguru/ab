@@ -1,6 +1,6 @@
-name: Base
+name: Default
 description: 'Initial theme settings'
-filepath: config/themes/atom_builder/base.yml
+filepath: config/themes/atom_builder/Default.yml
 settings:
   ambient--color:
     defaultValue: '#5e5e5e'
@@ -20,19 +20,10 @@ settings:
   camera--position--x:
     defaultValue: 0
     type: position
-  camera--position--x--az-slider:
-    defaultValue: 0
-    type: position
   camera--position--y:
     defaultValue: 700
     type: position
-  camera--position--y--az-slider:
-    defaultValue: 700
-    type: position
   camera--position--z:
-    defaultValue: -1500
-    type: position
-  camera--position--z--az-slider:
     defaultValue: -1500
     type: position
   deca--scale:
@@ -80,37 +71,19 @@ settings:
   decahedron--position--x:
     defaultValue: 0
     type: position
-  decahedron--position--x--az-slider:
-    defaultValue: 0
-    type: position
   decahedron--position--y:
-    defaultValue: 0
-    type: position
-  decahedron--position--y--az-slider:
     defaultValue: 0
     type: position
   decahedron--position--z:
     defaultValue: 0
     type: position
-  decahedron--position--z--az-slider:
-    defaultValue: 0
-    type: position
   decahedron--rotation--x:
-    defaultValue: 0
-    type: rotation
-  decahedron--rotation--x--az-slider:
     defaultValue: 0
     type: rotation
   decahedron--rotation--y:
     defaultValue: 0
     type: rotation
-  decahedron--rotation--y--az-slider:
-    defaultValue: 0
-    type: rotation
   decahedron--rotation--z:
-    defaultValue: 0
-    type: rotation
-  decahedron--rotation--z--az-slider:
     defaultValue: 0
     type: rotation
   dodeca--scale:
@@ -326,20 +299,11 @@ settings:
   octa--rotation--x:
     defaultValue: 0
     type: rotation
-  octa--rotation--x--az-slider:
-    defaultValue: 0
-    type: rotation
   octa--rotation--y:
-    defaultValue: 0
-    type: rotation
-  octa--rotation--y--az-slider:
     defaultValue: 0
     type: rotation
   octa--rotation--z:
     defaultValue: 1
-    type: rotation
-  octa--rotation--z--az-slider:
-    defaultValue: 0
     type: rotation
   octa--scale:
     defaultValue: '1.02'
@@ -395,44 +359,26 @@ settings:
   plane--position--x:
     defaultValue: 0
     type: position
-  plane--position--x--az-slider:
-    defaultValue: 0
-    type: position
   plane--position--y:
-    defaultValue: -200
-    type: position
-  plane--position--y--az-slider:
     defaultValue: -200
     type: position
   plane--position--z:
     defaultValue: 0
     type: position
-  plane--position--z--az-slider:
-    defaultValue: 0
-    type: position
   plane--rotation--x:
-    defaultValue: 0
-    type: rotation
-  plane--rotation--x--az-slider:
     defaultValue: 0
     type: rotation
   plane--rotation--y:
     defaultValue: -180
     type: rotation
-  plane--rotation--y--az-slider:
-    defaultValue: -180
-    type: rotation
   plane--rotation--z:
-    defaultValue: 1
-    type: rotation
-  plane--rotation--z--az-slider:
     defaultValue: 1
     type: rotation
   plane--width:
     defaultValue: 1500
     type: range
   proton--opacity:
-    defaultValue: '0.76'
+    defaultValue: '0.42'
     type: range
   proton--radius:
     type: range
@@ -479,19 +425,10 @@ settings:
   spotlight-1--position--x:
     defaultValue: -500
     type: position
-  spotlight-1--position--x--az-slider:
-    defaultValue: -500
-    type: position
   spotlight-1--position--y:
     defaultValue: 800
     type: position
-  spotlight-1--position--y--az-slider:
-    defaultValue: 800
-    type: position
   spotlight-1--position--z:
-    defaultValue: -500
-    type: position
-  spotlight-1--position--z--az-slider:
     defaultValue: -500
     type: position
   spotlight-2--color:
@@ -500,19 +437,10 @@ settings:
   spotlight-2--position--x:
     defaultValue: 800
     type: position
-  spotlight-2--position--x--az-slider:
-    defaultValue: 800
-    type: position
   spotlight-2--position--y:
     defaultValue: 800
     type: position
-  spotlight-2--position--y--az-slider:
-    defaultValue: 800
-    type: position
   spotlight-2--position--z:
-    defaultValue: -200
-    type: position
-  spotlight-2--position--z--az-slider:
     defaultValue: -200
     type: position
   spotlight-3--color:
@@ -521,19 +449,10 @@ settings:
   spotlight-3--position--x:
     defaultValue: -500
     type: position
-  spotlight-3--position--x--az-slider:
-    defaultValue: -500
-    type: position
   spotlight-3--position--y:
     defaultValue: 800
     type: position
-  spotlight-3--position--y--az-slider:
-    defaultValue: 800
-    type: position
   spotlight-3--position--z:
-    defaultValue: -500
-    type: position
-  spotlight-3--position--z--az-slider:
     defaultValue: -500
     type: position
   tetraAxes--color:

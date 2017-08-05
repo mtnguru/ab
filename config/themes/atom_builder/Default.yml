@@ -195,7 +195,7 @@ settings:
     defaultValue: 0
     type: rotation
   dodeca--scale:
-    defaultValue: '1.4'
+    defaultValue: '1.12'
     type: range
   dodecaAxes--color:
     defaultValue: '#aabb99'
@@ -369,7 +369,7 @@ settings:
     defaultValue: 1
     type: range
   icosa--scale:
-    defaultValue: '1.41'
+    defaultValue: '1.03'
     type: range
   icosaAxes--color:
     defaultValue: '#ffbbcc'
@@ -534,7 +534,7 @@ settings:
     defaultValue: 0
     type: rotation
   octa--scale:
-    defaultValue: '1.24'
+    defaultValue: '1.07'
     type: range
   octaAexis--linewidth:
     defaultValue: 1
@@ -684,7 +684,7 @@ settings:
     type: range
     defaultValue: 50
   proton--scale:
-    defaultValue: 1
+    defaultValue: '1'
     type: range
   proton-beryllium--color:
     defaultValue: '#9e5e43'
