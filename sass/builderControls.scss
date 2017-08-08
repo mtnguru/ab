@@ -40,11 +40,6 @@
     legend {
       color: $color-text;
       font-size: 1.4em;
-      span {
-        position: absolute;
-        top: -0.5em;
-        left: 0;
-      }
     }
     .form-item {
       margin: 0;
@@ -59,11 +54,10 @@
     background: inherit;
   }
 
-  .form-item-styler {
+  .form-item-theme--selectblock {
     margin: 0 0 10px;
     select {
       font-size: 16px;
-      font-weight: bold;
     }
   }
 
@@ -186,7 +180,7 @@
     margin-left: 10px;
   }
   .form-type-color {
-    margin: 10px 0 2px;
+    margin: 0;
     &not:first-child {
       border-top: solid 1px #aaa;
       padding-top: 10px;
@@ -196,18 +190,18 @@
       vertical-align: top;
       font-size: 14px;
       font-weight: bold;
-      width: 60%;
-      margin: 0px 0 0;
+      width: 68%;
+      margin: 3px 0 0;
     }
     input[type="color"] {
       background-color: $color-controls;
       display: inline-block;
-      width: 37%;
+      width: 30%;
       height: 26px;
-      padding: 0;
       border: 0;
       -webkit-box-shadow: 0 0 0 0;
       margin: 0;
+      padding: 0;
     }
   }
   #control-particles {

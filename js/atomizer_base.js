@@ -33,7 +33,7 @@
         contentType: "application/json; charset=utf-8",
         processData: false,
         success: function (response) {
-          if (Array.isArray(response)) {
+          if (Array.isArray(response) && response.length > 0) {
             if (response[0].data && response[0].data.message) {
               alert(response[0].data.message);
             }

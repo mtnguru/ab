@@ -60,7 +60,7 @@ class AtomizerControlBlock {
     $block = [
       '#type' => 'container',
       '#attributes' => [
-        'id' => $type . '-' . $blockName,
+        'id' => $type . '--' . $blockName,
         'class' => ['control-block'],
       ],
     ];
@@ -367,7 +367,7 @@ class AtomizerControlBlock {
           break;
 
         case 'label':
-          $control = ['#markup' => "<div class='az-label'>$controlConf[0]</div>"];
+          $control = ['#markup' => "<div id='$controlName' class='az-label'>$controlConf[0]</div>"];
           break;
 
         case 'hr':

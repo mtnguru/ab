@@ -151,12 +151,6 @@
     /**
      * Display the currently selected block - hide the rest
      */
-    function showStylerBlock() {
-      for (var i=0; i < selectBlock.length; i++) {
-        document.getElementById('blocks-' + selectBlock[i].value).style.display = (selectBlock[i].selected) ? 'block' : 'none';
-      }
-    }
-
     function setThemeDefaults() {
       // Initialize all the sliders, buttons and color fields in the selectBlock blocks
       if (!viewer.atomizer.theme) return;
@@ -188,6 +182,26 @@
       }
     }
 
+    function showThemeBlock() {
+      for (var i=0; i < selectBlock.length; i++) {
+        if (selectBlock[i].selected) {
+          var blockName = selectBlock[i].id.split('--')[1];
+          showSelectedThemeBlock($(blockName));
+        }
+      }
+    }
+
+    function showSelectedThemeBlock($block) {
+      // Hide all .control-block's in theme block.
+      var $blocks = $('#blocks--theme .control-block');
+      $('#blocks--theme .control-block').addClass('az-hidden');
+
+      // get value of #theme--selectBlock and move block into theme block.
+      var $selectedBlock = $('#blocks--' + selectBlock.value);
+      $selectedBlock.insertAfter($(selectBlock));
+      $selectedBlock.removeClass('az-hidden');
+    }
+
     /**
      * Initialize controls
      *
@@ -203,9 +217,9 @@
       var form = document.forms['atomizer-controls-form'];
       if (!form) return;
 
-      // Add a change listener to each item in the selectBlock select list
-      showStylerBlock();
-      selectBlock.addEventListener("change", showStylerBlock);
+      selectBlock.addEventListener("change", function(e) {
+        showSelectedThemeBlock($('#blocks--' + e.value));
+      });
 
       // Set up event listeners
       for (var controlId in viewer.atomizer.theme.settings) {
@@ -240,6 +254,28 @@
           // Make sure that theme has default values for all controls
         }
       }
+
+      // Initialize the theme block select list - move form elements into
+      // Initialize toggle-block buttons
+      $('.toggle-block').click(function(e) {
+        var $block = $('#' + $(this).data('blockid'));
+        if ($block.hasClass('az-hidden')) {
+          var blockid = $(this).data('blockid');
+          $block.removeClass('az-hidden');
+          $(this).addClass('az-selected');
+
+          // Move selected block to immediately after buttons.
+          $block.insertAfter($('#blocks--buttons'));
+
+          // If this is the theme block then move selected control block into it.
+          if (blockid === 'blocks--theme') {
+            showThemeBlock();
+          }
+        } else {
+          $block.addClass('az-hidden');
+          $(this).removeClass('az-selected');
+        }
+      });
 
       return false;
     }
@@ -382,18 +418,6 @@
     var init = function init() {
 //  cameraTrackballControls = createCameraTrackballControls();
       initializeControls();
-
-      $('.toggle-block').click(function(e) {
-        var $block = $('#' + $(this).data('blockid'));
-        if ($block.hasClass('az-hidden')) {
-          $block.removeClass('az-hidden');
-          $block.insertAfter($('#blocks-buttons'));
-          $(this).addClass('az-selected');
-        } else {
-          $block.addClass('az-hidden');
-          $(this).removeClass('az-selected');
-        }
-      });
 
       // Set the current mouse mode.
 //  changeMode(viewer.theme.get('mouse--mode'));

@@ -1,9 +1,9 @@
-name: Shells
-description: 'Initial theme settings'
-filepath: config/themes/atom_builder/Shells.yml
+name: Nuclets
+description: 'Highlight Nuclets by color'
+filepath: config/themes/atom_builder/Nuclets.yml
 settings:
   ambient--color:
-    defaultValue: '#5e5e5e'
+    defaultValue: '#8d8d8d'
     type: color
   attachLines--linewidth:
     defaultValue: 1
@@ -741,13 +741,10 @@ settings:
     defaultValue: '#084a65'
     type: color
   spotlight-1--color:
-    defaultValue: '#9c789c'
+    defaultValue: '#978d97'
     type: color
-  spotlight-1--position--x:
-    defaultValue: -1000
-    type: position
   spotlight-1--position--x--az-slider:
-    defaultValue: -1000
+    defaultValue: -500
     type: position
   spotlight-1--position--x-x--az-slider:
     defaultValue: -500
@@ -758,11 +755,8 @@ settings:
   spotlight-1--position--x-z--az-slider:
     defaultValue: -500
     type: position
-  spotlight-1--position--y:
-    defaultValue: 1400
-    type: position
   spotlight-1--position--y--az-slider:
-    defaultValue: 1400
+    defaultValue: 800
     type: position
   spotlight-1--position--y-x--az-slider:
     defaultValue: 800
@@ -773,11 +767,8 @@ settings:
   spotlight-1--position--y-z--az-slider:
     defaultValue: 800
     type: position
-  spotlight-1--position--z:
-    defaultValue: -1000
-    type: position
   spotlight-1--position--z--az-slider:
-    defaultValue: -1000
+    defaultValue: -500
     type: position
   spotlight-1--position--z-x--az-slider:
     defaultValue: -500
@@ -789,13 +780,10 @@ settings:
     defaultValue: -500
     type: position
   spotlight-2--color:
-    defaultValue: '#8eb6b6'
+    defaultValue: '#caf6f6'
     type: color
-  spotlight-2--position--x:
-    defaultValue: 1400
-    type: position
   spotlight-2--position--x--az-slider:
-    defaultValue: 1400
+    defaultValue: 800
     type: position
   spotlight-2--position--x-x--az-slider:
     defaultValue: 800
@@ -806,11 +794,8 @@ settings:
   spotlight-2--position--x-z--az-slider:
     defaultValue: 800
     type: position
-  spotlight-2--position--y:
-    defaultValue: 1400
-    type: position
   spotlight-2--position--y--az-slider:
-    defaultValue: 1400
+    defaultValue: 800
     type: position
   spotlight-2--position--y-x--az-slider:
     defaultValue: 800
@@ -821,11 +806,8 @@ settings:
   spotlight-2--position--y-z--az-slider:
     defaultValue: 800
     type: position
-  spotlight-2--position--z:
-    defaultValue: -400
-    type: position
   spotlight-2--position--z--az-slider:
-    defaultValue: -400
+    defaultValue: -200
     type: position
   spotlight-2--position--z-x--az-slider:
     defaultValue: -200
@@ -837,52 +819,43 @@ settings:
     defaultValue: -200
     type: position
   spotlight-3--color:
-    defaultValue: '#b0b089'
+    defaultValue: '#c5c5a9'
     type: color
-  spotlight-3--position--x:
-    defaultValue: -1000
-    type: position
   spotlight-3--position--x--az-slider:
-    defaultValue: -1000
+    defaultValue: 0
     type: position
   spotlight-3--position--x-x--az-slider:
-    defaultValue: -500
+    defaultValue: 0
     type: position
   spotlight-3--position--x-y--az-slider:
-    defaultValue: -500
+    defaultValue: 0
     type: position
   spotlight-3--position--x-z--az-slider:
-    defaultValue: -500
-    type: position
-  spotlight-3--position--y:
-    defaultValue: 1400
+    defaultValue: 0
     type: position
   spotlight-3--position--y--az-slider:
-    defaultValue: 1400
+    defaultValue: -800
     type: position
   spotlight-3--position--y-x--az-slider:
-    defaultValue: 800
+    defaultValue: -800
     type: position
   spotlight-3--position--y-y--az-slider:
-    defaultValue: 800
+    defaultValue: -800
     type: position
   spotlight-3--position--y-z--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-3--position--z:
-    defaultValue: -1000
+    defaultValue: -800
     type: position
   spotlight-3--position--z--az-slider:
-    defaultValue: -1000
+    defaultValue: 0
     type: position
   spotlight-3--position--z-x--az-slider:
-    defaultValue: -500
+    defaultValue: 0
     type: position
   spotlight-3--position--z-y--az-slider:
-    defaultValue: -500
+    defaultValue: 0
     type: position
   spotlight-3--position--z-z--az-slider:
-    defaultValue: -500
+    defaultValue: 0
     type: position
   tetraAxes--color:
     defaultValue: '#ffbbcc'

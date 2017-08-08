@@ -5,11 +5,11 @@
  */
 
 (function ($) {
-  var atom;
 
   Drupal.atomizer.atomC = function (_viewer) {
 
     var viewer = _viewer;
+    var atom;
     var atomConf;
     var atomInformation = document.getElementById('atom--information');
     var $viewSelectAtom = $('#view-select-atom');
@@ -78,6 +78,10 @@
       }
     }
 
+    function getNuclet(id) {
+      return (atom.az.nuclets[id]) ? atom.az.nuclets[id] : null;
+    }
+
     /**
      * When the user has clicked on an add nuclet button,
      * create the new nuclet with a carbon ending.
@@ -86,7 +90,7 @@
      */
     function addNuclet(id) {
       /*  conf = {
-       state: 'backbone-final',
+       state: 'final',
        attachAngle: 3,
        protons: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
        electrons: [0,1,2,3,4,5]
@@ -289,6 +293,7 @@
       atom = new THREE.Group();
       atom.name = 'atom';
       atom.az = {nuclets: {}};
+      viewer.atom.atom = atom;
       createNuclet('N0', atomConf, atom);
       setValenceRings();
       showStats();
@@ -345,38 +350,7 @@
         }
       }
 
-      $('#atom--num-nuclets .text-value').html(numNuclets);
       $('#atom--num-protons .text-value').html(numProtons);
-//    $('#atom--num-unclassified .text-value').html(numUnclassified);
-    }
-
-    /**
-     * Check all valence rings and color active/inactive rings - count total Active and update atom information.
-     */
-    function calcStats() {
-      var numProtons = 0;
-      var numNuclets = 0;
-      var numValenceRings = 0;
-
-      for (var n in atom.az.nuclets) {
-        var nuclet = atom.az.nuclets[n];
-        if (nuclet.az.state === 'initial' || nuclet.az.state === 'final') {
-          for (var r in nuclet.az.rings) {
-            if (!nuclet.az.rings.hasOwnProperty(r)) continue;
-            var ring = nuclet.az.rings[r];
-            var gid = nuclet.az.id + ring.az.grow;
-            var color = activeColor;
-            if (atom.az.nuclets[nuclet.az.id + ring.az.grow] ||
-              (nuclet.az.protons[ring.az.lock[0]].az.visible && nuclet.az.protons[ring.az.lock[1]].az.visible)) {
-              color = inactiveColor;
-            } else {
-              numActive++;
-            }
-            ring.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
-          }
-        }
-      }
-      return;
     }
 
     /**
@@ -434,6 +408,7 @@
         null  // TODO: Put in useful error codes and have them be displayed.
       );
     };
+
 
     /**
      * User pressed a button on the main form - act on it.
@@ -581,6 +556,7 @@
       az: function () { return atom.az; },
       addProton: addProton,
       addNuclet: addNuclet,
+      getNuclet: getNuclet,
       deleteNuclet: deleteNuclet,
       setValenceRings: setValenceRings,
       buttonClicked: buttonClicked,

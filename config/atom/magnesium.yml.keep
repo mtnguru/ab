@@ -5,7 +5,7 @@ variant: 0
 numProtons: 24
 nuclets:
   N0:
-    state: backbone-final
+    state: final
     numProtons: 24
     numInnerElectrons: 12
     protons:

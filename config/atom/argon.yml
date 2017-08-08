@@ -4,7 +4,7 @@ isotope: 0
 numProtons: 20
 nuclets:
   N0:
-    state: backbone-initial
+    state: initial
     numProtons: 12
     numInnerElectrons: 6
   N00:

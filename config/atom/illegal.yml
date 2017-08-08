@@ -4,16 +4,16 @@ isotope: 0
 numProtons: 24
 nuclets:
   N0:
-    state: backbone-final
+    state: final
     numProtons: 12
     numInnerElectrons: 6
   N00:
-    state: backbone-final
+    state: final
     attachAngle: 2
     numProtons: 12
     numInnerElectrons: 6
   N01:
-    state: backbone-initial
+    state: initial
     attachAngle: 5
     numProtons: 12
     numInnerElectrons: 6

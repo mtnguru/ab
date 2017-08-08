@@ -101,7 +101,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
       var z = vertices[offset + 2] * radius;
 
       // When completing the lithium ring, the carbon ring is squeezed and the gap is changed.{
-      if (state == 'backbone-final') {
+      if (state == 'final') {
         if (v == 0 || v == 2) {
           x = x * (1 - percent);
         }

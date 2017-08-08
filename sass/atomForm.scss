@@ -2,6 +2,16 @@ select#edit-selectyml {
   font-size: 1.25em;
 }
 
+#node-atom-edit-form {
+  #edit-field-atomic-structure-wrapper {
+    textarea {
+      font-family: monospace;
+      font-size: 120%;
+      line-height: 1.15;
+    }
+  }
+}
+
 .node-atom-form {
   font-size: 13px;
   .book-outline-form,

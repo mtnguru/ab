@@ -22,31 +22,6 @@ class AtomizerControlsForm extends FormBase {
     return 'atomizer_controls_form';
   }
 
-  function buildSelectList() {
-    ////////// Create Styler select list for control blocks
-    if (isset($controlSet['styler'])) {
-      // Create Styler Select list
-      foreach ($controlSet['styler'] as $blockName => $block) {
-        if (empty($block['hidden'])) {
-          $options[$blockName] = $block['title'];
-        }
-      }
-      $form['styler'] = array(
-        '#type' => 'select',
-        '#options' => $options,
-      );
-
-// Add the styler blocks
-      $form['controls'] = array(
-        '#type' => 'container',
-        '#attributes' => array('id' => 'styler-controls'),
-      );
-      foreach ($controlSet['styler'] as $blockName => $block) {
-//      $form['controls'][$blockName] = AtomizerControlBlock::create('control', $blockName, $block, $theme['settings'], false);
-      }
-    }
-  }
-
   /**
    * {@inheritdoc}
    */

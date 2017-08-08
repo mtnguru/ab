@@ -271,7 +271,7 @@ Drupal.atomizer.nucletC = function (_viewer) {
       faces = new THREE.Mesh(geometry, material);
     }
 
-//  faces.scale.set(scale, scale, scale);
+    faces.scale.set(scale, scale, scale);
     faces.name = id;
     if (rotation) {
       for (var i in axes) {
@@ -744,16 +744,16 @@ Drupal.atomizer.nucletC = function (_viewer) {
     if (compConf.shape == 'dodecahedron' || compConf.shape == 'hexahedron') {
       wireframe = createGeometryLines(
         name,
-//      compConf.scale + .02,
-        1 + .02,
+        compConf.scale + .02,
+//      1 + .02,
         geometry,
         compConf.rotation || null
       );
     } else {
       wireframe = createGeometryWireframe(
         name,
-//      compConf.scale + .02,
-        1 + .02,
+        compConf.scale + .02,
+//      1 + .02,
         geometry,
         compConf.rotation || null
       );
@@ -898,16 +898,17 @@ Drupal.atomizer.nucletC = function (_viewer) {
   function createNuclet(id, nucletConf) {
     var nuclet = new THREE.Group();
     nuclet.name = 'nuclet-' + id;
+    nucletConf.state = nucletConf.state.replace('backbone-','');
 
     // Determine of it's capped here'
     nuclet.az = {
       protonRadius: protonRadius,
       conf: nucletConf,
       id: id,
-      state: nucletConf.state.replace('backbone-','')
+      state: nucletConf.state
     };
 
-    nuclet.geo = drupalSettings.atomizer_config.objects[nucletConf.state.replace('-', '_')];
+    nuclet.geo = drupalSettings.atomizer_config.objects[nucletConf.state];
 
     var protons;
     var electrons;

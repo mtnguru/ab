@@ -57,8 +57,8 @@ dialogs:
           beryllium: 8 Beryllium
           boron: 10 Boron
           carbon: 11 Carbon
-          backbone-initial: Initial Backbone
-          backbone-final: Final Backbone
+          initial: Initial Backbone
+          final: Final Backbone
       nuclet--attachAngle:        ['Angle',            'range',   1,  [1, 5, 1]]
       nuclet--attachProton:       ['Attach Pt',        'radios',  10, {10: '10', 11: '11'}]
       nuclet--grow-label:         ['Grow Points',      'label']

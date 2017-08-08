@@ -1,37 +1,99 @@
 @import "variables";
 
 // Atom Builder Controls form
-.block-atomizer-controls {
-  #hidden-nuclet {
-    position: absolute;
-    z-index: 100;
+#atomizer-controls-form {
+
+  #blocks--nuclet-list {
+    .nuclet {
+      font-size: 14px;
+    }
+
+    .shell-1 {
+      margin-left: 10px;
+    }
+
+    .shell-2 {
+      margin-left: 20px;
+    }
+
+    .shell-3 {
+      margin-left: 30px;
+    }
+
+    .shell-4 {
+      margin-left: 40px;
+    }
+  }
+
+  #blocks--nuclet-list {
+    .atom--num-protons--label {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .text-label {
+      margin-top: 10px;
+      width: 4em;
+    }
+
+    .text-value {
+      font-size: 14px;
+    }
+
+    .az-header {
+      margin: 0 0 5px;
+    }
+  }
+
+  #blocks--nuclet-form {
+//  position: absolute;
+//  z-index: 100;
     padding: 5px;
     background: $color-nuclet-edit;
     border: solid 2px $color-border;
     border-radius: 8px;
+
     .form-item {
       margin: 0;
     }
-    .az-name {
-      font-weight: normal;
-    }
+
     .az-slider {
       width: 43%;
     }
+
     .az-value {
       background: inherit;
     }
+
+    .az-control-range {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
     label {
       margin: 0;
     }
+
+    &::before {
+      display: none;
+    }
+
     textarea#edit-field-atomic-structure-0-value {
       font-family: "New Courier";
     }
+
     #edit-nuclet-grow-0,
     #edit-nuclet-grow-1 {
+
       label {
+        display: inline-block;
         margin: 0 10px 0 5px;
       }
+
+      .form-item {
+        display: inline-block;
+      }
+
       .nuclet-list-button {
         margin: 1px 0px;
         padding: 1px 5px;

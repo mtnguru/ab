@@ -164,8 +164,6 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
         var faceIndex = intersects[0].faceIndex;
         highlightedNuclet = intersects[0].object.parent;
 
-//      if (!highlightedNuclet.azfaces[faceIndex].attachProton) return;
-
         // Find vertices for this face and find the centroid.
         highlightedFace.centroid = new THREE.Vector3(0, 0, 0);
         for (var i in abc) {
