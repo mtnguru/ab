@@ -39,7 +39,6 @@
             }
             if (successCallback) successCallback(response);
           } else {
-            alert('atomizer_base doAjax: ' + response);
             (errorCallback) ? errorCallback(response) : successCallback(response);
           }
           return false;

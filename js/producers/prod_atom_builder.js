@@ -189,9 +189,6 @@
       switch (event.which) {
 
         case 1:       // Left mouse click
-          event.preventDefault();
-          break;
-
         case 3:       // Right click
           event.preventDefault();
           switch (mouseMode) {
@@ -209,6 +206,7 @@
                   createProtonLists();
                   viewer.render();
                 }
+                viewer.atom.showStats();
               }
               break;
 

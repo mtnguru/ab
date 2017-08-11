@@ -3,7 +3,7 @@ description: 'Highlight Nuclets by color'
 filepath: config/themes/atom_builder/Nuclets.yml
 settings:
   ambient--color:
-    defaultValue: '#8d8d8d'
+    defaultValue: '#c9c9c9'
     type: color
   attachLines--linewidth:
     defaultValue: 1
@@ -195,7 +195,7 @@ settings:
     defaultValue: 0
     type: rotation
   dodeca--scale:
-    defaultValue: '1.12'
+    defaultValue: '1.03'
     type: range
   dodecaAxes--color:
     defaultValue: '#aabb99'
@@ -276,7 +276,7 @@ settings:
     defaultValue: '#9500ff'
     type: color
   dodecaWireframe--linewidth:
-    defaultValue: '2'
+    defaultValue: '1'
     type: range
   dodecaWireframe--opacity:
     defaultValue: 1
@@ -369,7 +369,7 @@ settings:
     defaultValue: 1
     type: range
   icosa--scale:
-    defaultValue: '1.03'
+    defaultValue: '1'
     type: range
   icosaAxes--color:
     defaultValue: '#ffbbcc'
@@ -450,7 +450,7 @@ settings:
     defaultValue: '#4fd5ce'
     type: color
   icosaWireframe--linewidth:
-    defaultValue: '2'
+    defaultValue: '1'
     type: range
   icosaWireframe--opacity:
     defaultValue: '1'
@@ -678,7 +678,7 @@ settings:
     defaultValue: 2500
     type: range
   proton--opacity:
-    defaultValue: '0.82'
+    defaultValue: '0.85'
     type: range
   proton--radius:
     type: range
@@ -702,7 +702,7 @@ settings:
     defaultValue: '#767676'
     type: color
   proton-final--color:
-    defaultValue: '#888888'
+    defaultValue: '#8c8c8c'
     type: color
   proton-ghost--color:
     defaultValue: '#ac58ac'
@@ -746,77 +746,23 @@ settings:
   spotlight-1--position--x--az-slider:
     defaultValue: -500
     type: position
-  spotlight-1--position--x-x--az-slider:
-    defaultValue: -500
-    type: position
-  spotlight-1--position--x-y--az-slider:
-    defaultValue: -500
-    type: position
-  spotlight-1--position--x-z--az-slider:
-    defaultValue: -500
-    type: position
   spotlight-1--position--y--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-1--position--y-x--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-1--position--y-y--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-1--position--y-z--az-slider:
-    defaultValue: 800
+    defaultValue: 700
     type: position
   spotlight-1--position--z--az-slider:
-    defaultValue: -500
-    type: position
-  spotlight-1--position--z-x--az-slider:
-    defaultValue: -500
-    type: position
-  spotlight-1--position--z-y--az-slider:
-    defaultValue: -500
-    type: position
-  spotlight-1--position--z-z--az-slider:
-    defaultValue: -500
+    defaultValue: -300
     type: position
   spotlight-2--color:
     defaultValue: '#caf6f6'
     type: color
   spotlight-2--position--x--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-2--position--x-x--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-2--position--x-y--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-2--position--x-z--az-slider:
-    defaultValue: 800
+    defaultValue: 500
     type: position
   spotlight-2--position--y--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-2--position--y-x--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-2--position--y-y--az-slider:
-    defaultValue: 800
-    type: position
-  spotlight-2--position--y-z--az-slider:
-    defaultValue: 800
+    defaultValue: 700
     type: position
   spotlight-2--position--z--az-slider:
-    defaultValue: -200
-    type: position
-  spotlight-2--position--z-x--az-slider:
-    defaultValue: -200
-    type: position
-  spotlight-2--position--z-y--az-slider:
-    defaultValue: -200
-    type: position
-  spotlight-2--position--z-z--az-slider:
-    defaultValue: -200
+    defaultValue: 300
     type: position
   spotlight-3--color:
     defaultValue: '#c5c5a9'
@@ -824,38 +770,11 @@ settings:
   spotlight-3--position--x--az-slider:
     defaultValue: 0
     type: position
-  spotlight-3--position--x-x--az-slider:
-    defaultValue: 0
-    type: position
-  spotlight-3--position--x-y--az-slider:
-    defaultValue: 0
-    type: position
-  spotlight-3--position--x-z--az-slider:
-    defaultValue: 0
-    type: position
   spotlight-3--position--y--az-slider:
-    defaultValue: -800
-    type: position
-  spotlight-3--position--y-x--az-slider:
-    defaultValue: -800
-    type: position
-  spotlight-3--position--y-y--az-slider:
-    defaultValue: -800
-    type: position
-  spotlight-3--position--y-z--az-slider:
-    defaultValue: -800
+    defaultValue: -700
     type: position
   spotlight-3--position--z--az-slider:
-    defaultValue: 0
-    type: position
-  spotlight-3--position--z-x--az-slider:
-    defaultValue: 0
-    type: position
-  spotlight-3--position--z-y--az-slider:
-    defaultValue: 0
-    type: position
-  spotlight-3--position--z-z--az-slider:
-    defaultValue: 0
+    defaultValue: -300
     type: position
   tetraAxes--color:
     defaultValue: '#ffbbcc'

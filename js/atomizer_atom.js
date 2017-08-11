@@ -112,6 +112,7 @@
       // Create the new nuclet
       var nucletOuterShell = createNuclet(id, conf, parent);
       setValenceRings();
+      showStats();
       return nucletOuterShell.children[0].children[0];
     }
 
@@ -129,6 +130,7 @@
       // Activate the neutral ending protons on the parent but don't show.
       activateNeutralProtons(id.charAt(id.length-1), parent, true, false);
       setValenceRings();
+      showStats();
     }
 
     /**
@@ -547,20 +549,21 @@
      * Interface to this atomC.
      */
     return {
-      saveYml: saveYml,
-      overwriteYml: overwriteYml,
-      loadAtom: loadAtom,
-      createAtom: createAtom,
+      addNuclet: addNuclet,
+      addProton: addProton,
+      az: function () { return atom.az; },
+      buttonClicked: buttonClicked,
       changeNucletState: changeNucletState,
       changeNucletAngle: changeNucletAngle,
-      az: function () { return atom.az; },
-      addProton: addProton,
-      addNuclet: addNuclet,
-      getNuclet: getNuclet,
+      createAtom: createAtom,
       deleteNuclet: deleteNuclet,
+      getNuclet: getNuclet,
+      getYmlDirectory: function () { return 'config/atom'; },
+      loadAtom: loadAtom,
+      overwriteYml: overwriteYml,
+      saveYml: saveYml,
       setValenceRings: setValenceRings,
-      buttonClicked: buttonClicked,
-      getYmlDirectory: function () { return 'config/atom'; }
+      showStats: showStats
     };
   };
 

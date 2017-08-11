@@ -167,13 +167,7 @@
             case 'rotation':
             case 'position':
               var sid;
-              sid = id + '-x--az-slider';
-              viewer.theme.set(control.defaultValue, sid, control.type);
-
-              sid = id + '-y--az-slider';
-              viewer.theme.set(control.defaultValue, sid, control.type);
-
-              sid = id + '-z--az-slider';
+              sid = id + '--az-slider';
               viewer.theme.set(control.defaultValue, sid, control.type);
               break;
           }
@@ -193,7 +187,6 @@
 
     function showSelectedThemeBlock($block) {
       // Hide all .control-block's in theme block.
-      var $blocks = $('#blocks--theme .control-block');
       $('#blocks--theme .control-block').addClass('az-hidden');
 
       // get value of #theme--selectBlock and move block into theme block.
@@ -217,6 +210,7 @@
       var form = document.forms['atomizer-controls-form'];
       if (!form) return;
 
+      showThemeBlock();
       selectBlock.addEventListener("change", function(e) {
         showSelectedThemeBlock($('#blocks--' + e.value));
       });

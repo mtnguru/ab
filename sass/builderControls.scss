@@ -4,29 +4,33 @@
 .az-controls-wrapper,
 .block-atomizer-controls {
   float: left;
-
   padding: 8px;
   vertical-align: top;
   display: inline-block;
   width: 200px;
   background: $color-controls;
+
   form {
     width: 100%;
   }
+
   label {
     font-size: 14px;
   }
+
   .form-checkboxes {
     margin: 0;
     .form-item {
       margin: 0;
     }
   }
+
   .subtitle {
     font-weight: bold;
     font-size: 13px;
     text-align: center;
   }
+
   .form-item {
     select {
       width: 100%;
@@ -41,6 +45,7 @@
       color: $color-text;
       font-size: 1.4em;
     }
+
     .form-item {
       margin: 0;
 
@@ -57,7 +62,7 @@
   .form-item-theme--selectblock {
     margin: 0 0 10px;
     select {
-      font-size: 16px;
+      font-size: 125%;
     }
   }
 
@@ -95,11 +100,13 @@
       border-top: 1px solid #bbb;
     }
   }
+
   #styler-controls {
     .control-block {
       display: none;
     }
   }
+
   #hidden-controls {
     //  .control-block {
     //    display: none;
@@ -111,20 +118,24 @@
     font-weight: bold;
     margin: 10px 0;
   }
+
   .az-label {
     font-weight: bold;
     font-size: 14px;
     margin-top: 10px;
   }
+
   .az-indent .az-name {
     padding-left: 15px;
   }
+
   .az-control-text {
     font-size: 100%;
     .text-label {
       display: inline-block;
       width: 8em;
     }
+
     .text-value {
       text-align: right;
       width: 2em;
@@ -132,17 +143,21 @@
 
     }
   }
+
   .az-control-position,
   .az-control-rotation,
   .az-control-range {
+
     .az-name {
       vertical-align: middle;
       display: inline-flex;
       width: 30%;
     }
+
     .form-item {
       margin: 0;
     }
+
     .form-item-value {
       vertical-align: middle;
       display: inline-flex;
@@ -155,6 +170,7 @@
         background: $color-controls;
       }
     }
+
     .az-slider {
       width: 46%;
       display: inline-flex;
@@ -165,6 +181,7 @@
 //    height: 18px;
       border: 0;
     }
+
     .az-max,
     .az-min {
       vertical-align: middle;
@@ -172,19 +189,27 @@
       width: 2em;
     }
   }
+
   #style--name {
     width: 100%;
   }
+
   #style--newfilename {
     width: 132px;
     margin-left: 10px;
   }
+
+  .selectyml {
+    font-size: 125%;
+  }
+
   .form-type-color {
     margin: 0;
     &not:first-child {
       border-top: solid 1px #aaa;
       padding-top: 10px;
     }
+
     label {
       display: inline-block;
       vertical-align: top;
@@ -193,6 +218,7 @@
       width: 68%;
       margin: 3px 0 0;
     }
+
     input[type="color"] {
       background-color: $color-controls;
       display: inline-block;
@@ -204,40 +230,50 @@
       padding: 0;
     }
   }
+
   #control-particles {
     .form-type-color {
       margin: 2px 0;
     }
   }
+
   .form-type-checkbox {
     margin: 0 0 0 10px ;
   }
+
   .button {
     margin: 5px 0;
   }
+
   .form-type-radio {
     label {
     }
     .form-radio {
       margin: 0 0 0 15px;
     }
+
     .form-item-radio {
       margin: 0;
       .form-type-checkbox {
+
         margin: 0 0 0 10px;
       }
+
       input {
         margin: 0;
       }
     }
   }
+
   .js-form-submit {
     padding: 5px 8px;
     border-radius: 8px;
   }
+
   .form-text {
     width: 100%;
   }
+
   .az-min,
   .az-max,
   .az-label,
