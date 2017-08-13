@@ -1,13 +1,10 @@
-name: Nuclets
-description: 'Highlight Nuclets by color'
-filepath: config/themes/atom_builder/Nuclets.yml
+name: Faces
+description: 'Highlight Faces'
+filepath: config/themes/atom_builder/Faces.yml
 settings:
   ambient--color:
-    defaultValue: '#c9c9c9'
+    defaultValue: '#5e5e5e'
     type: color
-  animation--speed:
-    defaultValue: '10'
-    type: range
   attachLines--linewidth:
     defaultValue: 1
     type: range
@@ -198,7 +195,7 @@ settings:
     defaultValue: 0
     type: rotation
   dodeca--scale:
-    defaultValue: '1.03'
+    defaultValue: 1
     type: range
   dodecaAxes--color:
     defaultValue: '#aabb99'
@@ -231,7 +228,7 @@ settings:
     defaultValue: '#000000'
     type: color
   dodecaFaces--opacity:
-    defaultValue: '0'
+    defaultValue: '0.35'
     type: range
   dodecaOut--scale:
     defaultValue: 1
@@ -276,10 +273,10 @@ settings:
     defaultValue: 1
     type: range
   dodecaWireframe--color:
-    defaultValue: '#9500ff'
+    defaultValue: '#00d5ff'
     type: color
   dodecaWireframe--linewidth:
-    defaultValue: '1'
+    defaultValue: '0.5'
     type: range
   dodecaWireframe--opacity:
     defaultValue: 1
@@ -297,7 +294,7 @@ settings:
     type: range
     defaultValue: 5
   electron--scale:
-    defaultValue: '0.87'
+    defaultValue: '0.59'
     type: range
   faces--opacity:
     defaultValue: '1'
@@ -372,7 +369,7 @@ settings:
     defaultValue: 1
     type: range
   icosa--scale:
-    defaultValue: '1'
+    defaultValue: '3.5'
     type: range
   icosaAxes--color:
     defaultValue: '#ffbbcc'
@@ -402,13 +399,13 @@ settings:
     defaultValue: 1
     type: range
   icosaFaces--color:
-    defaultValue: '#019e04'
+    defaultValue: '#019e2a'
     type: color
   icosaFaces--opacity:
-    defaultValue: '0'
+    defaultValue: '0.82'
     type: range
   icosaOut--scale:
-    defaultValue: '1.53'
+    defaultValue: '2.3'
     type: range
   icosaOutAxes--color:
     defaultValue: '#ffbbcc'
@@ -441,7 +438,7 @@ settings:
     defaultValue: 3
     type: range
   icosaOutWireframe--opacity:
-    defaultValue: '0'
+    defaultValue: 1
     type: range
   icosaVertexid--opacity:
     defaultValue: 0
@@ -453,7 +450,7 @@ settings:
     defaultValue: '#4fd5ce'
     type: color
   icosaWireframe--linewidth:
-    defaultValue: '1'
+    defaultValue: '2.2'
     type: range
   icosaWireframe--opacity:
     defaultValue: '1'
@@ -537,7 +534,7 @@ settings:
     defaultValue: 0
     type: rotation
   octa--scale:
-    defaultValue: '1.07'
+    defaultValue: '1.02'
     type: range
   octaAexis--linewidth:
     defaultValue: 1
@@ -570,7 +567,7 @@ settings:
     defaultValue: '#ffff00'
     type: color
   octaWireframe--linewidth:
-    defaultValue: '2'
+    defaultValue: '0.5'
     type: range
   octaWireframe--opacity:
     defaultValue: 1
@@ -585,7 +582,7 @@ settings:
     defaultValue: 2000
     type: range
   plane--opacity:
-    defaultValue: 1
+    defaultValue: '0.72'
     type: range
   plane--position--x:
     defaultValue: 0
@@ -681,13 +678,13 @@ settings:
     defaultValue: 2500
     type: range
   proton--opacity:
-    defaultValue: '0.85'
+    defaultValue: '1'
     type: range
   proton--radius:
     type: range
     defaultValue: 50
   proton--scale:
-    defaultValue: '1'
+    defaultValue: 1
     type: range
   proton-beryllium--color:
     defaultValue: '#9e5e43'
@@ -705,7 +702,7 @@ settings:
     defaultValue: '#767676'
     type: color
   proton-final--color:
-    defaultValue: '#8c8c8c'
+    defaultValue: '#888888'
     type: color
   proton-ghost--color:
     defaultValue: '#ac58ac'
@@ -744,40 +741,148 @@ settings:
     defaultValue: '#084a65'
     type: color
   spotlight-1--color:
-    defaultValue: '#978d97'
+    defaultValue: '#9c789c'
     type: color
+  spotlight-1--position--x:
+    defaultValue: -1000
+    type: position
   spotlight-1--position--x--az-slider:
+    defaultValue: -1000
+    type: position
+  spotlight-1--position--x-x--az-slider:
     defaultValue: -500
     type: position
+  spotlight-1--position--x-y--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-1--position--x-z--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-1--position--y:
+    defaultValue: 1400
+    type: position
   spotlight-1--position--y--az-slider:
-    defaultValue: 700
+    defaultValue: 1400
+    type: position
+  spotlight-1--position--y-x--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-1--position--y-y--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-1--position--y-z--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-1--position--z:
+    defaultValue: -1000
     type: position
   spotlight-1--position--z--az-slider:
-    defaultValue: -300
+    defaultValue: -1000
+    type: position
+  spotlight-1--position--z-x--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-1--position--z-y--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-1--position--z-z--az-slider:
+    defaultValue: -500
     type: position
   spotlight-2--color:
-    defaultValue: '#caf6f6'
+    defaultValue: '#8eb6b6'
     type: color
+  spotlight-2--position--x:
+    defaultValue: 1400
+    type: position
   spotlight-2--position--x--az-slider:
-    defaultValue: 500
+    defaultValue: 1400
+    type: position
+  spotlight-2--position--x-x--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-2--position--x-y--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-2--position--x-z--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-2--position--y:
+    defaultValue: 1400
     type: position
   spotlight-2--position--y--az-slider:
-    defaultValue: 700
+    defaultValue: 1400
+    type: position
+  spotlight-2--position--y-x--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-2--position--y-y--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-2--position--y-z--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-2--position--z:
+    defaultValue: -400
     type: position
   spotlight-2--position--z--az-slider:
-    defaultValue: 300
+    defaultValue: -400
+    type: position
+  spotlight-2--position--z-x--az-slider:
+    defaultValue: -200
+    type: position
+  spotlight-2--position--z-y--az-slider:
+    defaultValue: -200
+    type: position
+  spotlight-2--position--z-z--az-slider:
+    defaultValue: -200
     type: position
   spotlight-3--color:
-    defaultValue: '#c5c5a9'
+    defaultValue: '#b0b089'
     type: color
+  spotlight-3--position--x:
+    defaultValue: -1000
+    type: position
   spotlight-3--position--x--az-slider:
-    defaultValue: 0
+    defaultValue: -1000
+    type: position
+  spotlight-3--position--x-x--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-3--position--x-y--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-3--position--x-z--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-3--position--y:
+    defaultValue: 1400
     type: position
   spotlight-3--position--y--az-slider:
-    defaultValue: -700
+    defaultValue: 1400
+    type: position
+  spotlight-3--position--y-x--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-3--position--y-y--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-3--position--y-z--az-slider:
+    defaultValue: 800
+    type: position
+  spotlight-3--position--z:
+    defaultValue: -1000
     type: position
   spotlight-3--position--z--az-slider:
-    defaultValue: -300
+    defaultValue: -1000
+    type: position
+  spotlight-3--position--z-x--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-3--position--z-y--az-slider:
+    defaultValue: -500
+    type: position
+  spotlight-3--position--z-z--az-slider:
+    defaultValue: -500
     type: position
   tetraAxes--color:
     defaultValue: '#ffbbcc'
@@ -819,10 +924,10 @@ settings:
     defaultValue: 1
     type: range
   tetraWireframe--color:
-    defaultValue: '#00ffdc'
+    defaultValue: '#0034ff'
     type: color
   tetraWireframe--linewidth:
-    defaultValue: '1'
+    defaultValue: '0.5'
     type: range
   tetraWireframe--opacity:
     defaultValue: '1'

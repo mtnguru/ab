@@ -15,12 +15,19 @@ class AtomizerInit {
 
   static public function start($config) {
     // Read in the config/atomizer file
-    $atomizer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers.old/' . $config['atomizer_file']));
-    $atomizer['filename']   = $config['atomizer_file'];
-    $atomizer['atomizerId'] = $config['atomizer_id'];
-    $atomizer['id'] = strtolower(str_replace(['_', ' '], '-', $config['atomizer_id']));
-    if (!empty($config['nid'])) {
-      $atomizer['nid'] = $config['nid'];
+    if (empty($config['atomizer_config'])) {
+      $atomizer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_file']));
+      $atomizer['filename']   = $config['atomizer_file'];
+      $atomizer['atomizerId'] = $config['atomizer_id'];
+      $atomizer['id'] = strtolower(str_replace(['_', ' '], '-', $config['atomizer_id']));
+      if (!empty($config['nid'])) {
+        $atomizer['nid'] = $config['nid'];
+      }
+    } else { // When displaying an atomizer node override block settings, read configuration from atomizer_config file - Set in atomizer_preprocess_node()
+      $atomizer = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_config']));
+      $atomizer['filename']   = $config['atomizer_config'];
+      $atomizer['atomizerId'] = 'atomizer';
+      $atomizer['id'] = strtolower(str_replace(['_', ' '], '-', 'atomizer'));
     }
 
 //  Read in the objects
@@ -40,7 +47,7 @@ class AtomizerInit {
         $config['atomizer_id'] => array(
           '#type' => 'container',
           '#attributes' => array(
-            'class' => array('az-canvas-wrapper', $class),
+            'class' => array('atomizer-canvas-wrapper', $class),
             'id' => $atomizer['id'] . '-canvas-wrapper',
           ),
           'canvas' => array(

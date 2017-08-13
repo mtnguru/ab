@@ -164,7 +164,7 @@ function atomizer_preprocess_node(&$variables) {
         $atomizer_block = \Drupal::entityManager()->getStorage('block')->load('atom_builder');
 
         if (!empty($atomizer_block)) {
-          $config = Yaml::decode($variables['node']->field_configuration_file->value);
+          $config = $variables['node']->field_configuration_file->value;
           $atomizer_block->getPlugin()->setConfigurationValue('atomizer_config', $config);
           $atomizer_block->save();
           $variables['content']['atomizer_block'] = \Drupal::entityManager()

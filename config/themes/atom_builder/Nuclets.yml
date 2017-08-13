@@ -5,6 +5,9 @@ settings:
   ambient--color:
     defaultValue: '#c9c9c9'
     type: color
+  animation--speed:
+    defaultValue: '10'
+    type: range
   attachLines--linewidth:
     defaultValue: 1
     type: range
@@ -816,10 +819,10 @@ settings:
     defaultValue: 1
     type: range
   tetraWireframe--color:
-    defaultValue: '#0034ff'
+    defaultValue: '#00ffdc'
     type: color
   tetraWireframe--linewidth:
-    defaultValue: '2'
+    defaultValue: '1'
     type: range
   tetraWireframe--opacity:
     defaultValue: '1'

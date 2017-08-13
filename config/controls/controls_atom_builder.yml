@@ -8,7 +8,7 @@ sidebar:
     mouse-mode:
     nuclet-list: {show: true}
     nuclet:
-    animation:
+    animation:   {show: true}
     theme:
 
 blocks:
@@ -16,11 +16,11 @@ blocks:
   buttons:
     controls:
       atom--select:               ['Select Atom',      'button',  'fa-dot-circle-o']
-      toggle--information:        ['Atom Information', 'button',  'fa-info-circle',    {destination: sidebar, blockid: blocks--information}]
-      toggle--nuclet-list:        ['Edit Nuclet',      'button',  'fa-futbol-o',       {destination: sidebar, blockid: blocks--nuclet-list}]
-      toggle--mouse-mode:         ['Mouse Mode',       'button',  'fa-mouse-pointer',  {destination: sidebar, blockid: blocks--mouse-mode}]
-      toggle--theme:              ['Edit Theme',       'button',  'fa-paint-brush',    {destination: sidebar, blockid: blocks--theme}]
-      toggle--animations:         ['Animations',       'button',  'fa-play',           {destination: sidebar, blockid: blocks--animations}]
+      toggle--information:        ['Atom Information', 'button',  'fa-info-circle',    {data-destination: sidebar, data-blockid: blocks--information}]
+      toggle--nuclet-list:        ['Edit Nuclet',      'button',  'fa-futbol-o',       {data-destination: sidebar, data-blockid: blocks--nuclet-list}]
+      toggle--mouse-mode:         ['Mouse Mode',       'button',  'fa-mouse-pointer',  {data-destination: sidebar, data-blockid: blocks--mouse-mode}]
+      toggle--theme:              ['Edit Theme',       'button',  'fa-paint-brush',    {data-destination: sidebar, data-blockid: blocks--theme}]
+      toggle--animations:         ['Animations',       'button',  'fa-play',           {data-destination: sidebar, data-blockid: blocks--animations}]
       viewer--fullScreen:         ['Full screen',      'toggle',  'fa-arrows-alt']
       theme--cameraReset:         ['Reset Camera',     'button',  'fa-video-camera']
 
@@ -37,6 +37,7 @@ blocks:
   mouse-mode:
     title:               Mouse Mode
     controls:
+      mouse--mode-label:          ['Mouse Mode',       header]
       mouse--mode:
         - ''
         - radios
@@ -50,15 +51,23 @@ blocks:
   animations:
     title:               Animation
     controls:
-      animation--pause:           ['Pause',            'button',  'fa-pause']
-      animation--play:            ['Play',             'button',  'fa-play']
+      animation--label:           ['Animations',       'header']
       animation--selectyml:       [ null,              'selectyml',       'build_atoms.yml',   'animation',   'config/animations/atom_builder', 'atomizer.ajax_yml_load']
+      animation--wrapper:
+        id: 'animation-wrapper'
+        controls:
+          animation--play:            ['Play',             'button',  'fa-play']
+          animation--pause:           ['Pause',            'button',  'fa-pause']
+          animation--stop:            ['Stop',             'button',  'fa-stop', {class: 'az-selected'}]
+#         animation--step-backward:   ['Previous',         'button',  'fa-step-backward']
+#         animation--step-forward:    ['Next',             'button',  'fa-step-forward']
+      animation--speed:               ['Speed',            'range',   3,  [0, 100, .1]]
 
   nuclet-list:
-    title:               Nuclets
+    title:               Edit Nuclets
     controls:
+      nuclet-label:               ['Edit Nuclets',     'header']
       atom--num-protons:          ['Protons',          'text', '', 6 ]
-      nuclet-label:               ['Nuclets',          'header']
       nuclet--list:               [ null,              'container']
 
   nuclet-form:
@@ -84,7 +93,7 @@ blocks:
   theme:
     title:               Theme
     controls:
-      theme--loadlabel:           ['Select Theme',     'header']
+      theme--loadlabel:           ['Theme',            'header']
       theme--selectyml:           [ null,              'selectyml', 'Default.yml',   'theme',   'config/themes/atom_builder', 'atomizer.ajax_yml_load']
       theme--reset:               ['Reset Theme',      'button']
       theme--saveButton:          ['Save Changes',     'button']

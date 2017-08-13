@@ -1,0 +1,332 @@
+@import "_azVariables.scss";
+
+// Atom Builder Controls form
+.az-controls-wrapper,
+.block-atomizer-controls {
+  float: left;
+  vertical-align: top;
+  display: inline-block;
+  width: 200px;
+  background: $color-controls-wrapper;
+  padding: .5em;
+  margin-right: .5em;
+  border-radius: 8px;
+  border: 1px solid $color-border;
+
+  form {
+    width: 100%;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  .form-checkboxes {
+    margin: 0;
+    .form-item {
+      margin: 0;
+    }
+  }
+
+  .subtitle {
+    font-weight: bold;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .form-item {
+    select {
+      width: 100%;
+      background: white;
+    }
+  }
+
+  fieldset.form-composite {
+    position: relative;
+
+    legend {
+      color: $color-text;
+      font-size: 1.4em;
+    }
+
+    .form-item {
+      margin: 0;
+
+      label {
+        margin: 0;
+      }
+    }
+  }
+
+  fieldset {
+    background: inherit;
+  }
+
+  .form-item-theme--selectblock {
+    margin: 0 0 10px;
+    select {
+      font-size: 125%;
+    }
+  }
+
+  .az-control-link {
+    margin: 4px 10%;
+    width: 80%;
+    a {
+      display: block;
+      color: white;
+      background: $color_button;
+      border-radius: 6px;
+      padding: 3px 0;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+
+  .az-control.button,
+  .button-wrapper > div,
+  .link-button {
+    color: white;
+    background: $color_button;
+    border-radius: 6px;
+    padding: 6px 0;
+    font-weight: bold;
+    text-align: center;
+    margin: 2px 10%;
+    width: 80%;
+
+  }
+
+  .control-block {
+    font-size: 12px;
+    background: $color-controls;
+    padding: .5em .75em;
+    border: 1px solid $color-border;
+    margin-top: .5em;
+    border-radius: 8px;
+
+    hr {
+      margin: 10px 0 5px;
+      border-top: 1px solid #bbb;
+    }
+  }
+
+  .az-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 .5em;
+  }
+
+  .az-label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .az-indent .az-name {
+    padding-left: 15px;
+  }
+
+  .az-control-text {
+    font-size: 100%;
+    .text-label {
+      display: inline-block;
+      width: 8em;
+    }
+
+    .text-value {
+      text-align: right;
+      width: 2em;
+      display: inline-block;
+
+    }
+  }
+
+  .az-control-position,
+  .az-control-rotation,
+  .az-control-range {
+
+    .az-name {
+      vertical-align: middle;
+      display: inline-flex;
+      width: 30%;
+    }
+
+    .form-item {
+      margin: 0;
+    }
+
+    .form-item-value {
+      vertical-align: middle;
+      display: inline-flex;
+      .az-value {
+        text-align: right;
+        width: 2.2em;
+        padding: 0;
+        border: 0;
+        margin: 0 5px;
+        background: $color-controls;
+      }
+    }
+
+    .az-slider {
+      width: 43%;
+      display: inline-flex;
+      vertical-align: middle;
+      background: inherit;
+      margin: 1px 0px;
+      padding: 0;
+//    height: 18px;
+      border: 0;
+    }
+
+    .az-max,
+    .az-min {
+      vertical-align: middle;
+      font-size: 90%;
+      width: 2em;
+    }
+  }
+
+  #style--name {
+    width: 100%;
+  }
+
+  #style--newfilename {
+    width: 132px;
+    margin-left: 10px;
+  }
+
+  .selectyml {
+    font-size: 125%;
+  }
+
+  .form-type-color {
+    margin: 0;
+    &not:first-child {
+      border-top: 1px solid #aaa;
+      padding-top: 10px;
+    }
+
+    label {
+      display: inline-block;
+      vertical-align: top;
+      font-size: 14px;
+      font-weight: bold;
+      width: 68%;
+      margin: 3px 0 0;
+    }
+
+    input[type="color"] {
+      background-color: $color-controls;
+      display: inline-block;
+      width: 29%;
+      height: 26px;
+      border: 0;
+      -webkit-box-shadow: 0 0 0 0;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  #control-particles {
+    .form-type-color {
+      margin: 2px 0;
+    }
+  }
+
+  .form-type-checkbox {
+    margin: 0 0 0 10px ;
+  }
+
+  .button {
+    margin: 5px 0;
+  }
+
+  .form-type-radio {
+    label {
+    }
+    .form-radio {
+      margin: 0 0 0 15px;
+    }
+
+    .form-item-radio {
+      margin: 0;
+      .form-type-checkbox {
+
+        margin: 0 0 0 10px;
+      }
+
+      input {
+        margin: 0;
+      }
+    }
+  }
+
+  .js-form-submit {
+    padding: 5px 8px;
+    border-radius: 8px;
+  }
+
+  .form-text {
+    width: 100%;
+  }
+
+  .az-min,
+  .az-max,
+  .az-label,
+  .form-item-value,
+  .form-item-range {
+    display: inline;
+  }
+
+  #blocks--animations {
+    .form-item-selectyml {
+      margin-bottom: .5em;
+    }
+  }
+
+  #blocks--animation--wrapper {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1em;
+  }
+
+  #blocks--theme {
+    .control-block {
+      padding: 1em 0 0;
+      margin: 0;
+      border: 0;
+    }
+  }
+
+  #blocks--buttons {
+    border: none;
+  }
+
+  #blocks--animation--wrapper,
+  #blocks--buttons {
+    display: flex;
+    justify-content: space-around;
+    font-size: 115%;
+    background: inherit;
+    padding: 0;
+    margin-top: 0;
+
+    hr {
+      clear: both;
+    }
+
+    .az-control {
+      padding: 3px;
+      transition: color .5s;
+      color: $color-button-inactive;
+      &.az-selected {
+        color: $color-button-selected;
+      }
+      &:hover {
+        color: $color-button-hover;
+      }
+    }
+  }
+}

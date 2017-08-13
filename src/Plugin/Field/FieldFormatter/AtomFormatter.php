@@ -43,7 +43,7 @@ class AtomFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers.old', '/\.yml/');
+    $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
     $atomizer = $this->getSetting('atomizer');
     $atomizer_class = $this->getSetting('atomizer_class');
 
@@ -69,7 +69,7 @@ class AtomFormatter extends FormatterBase {
    */
   public function settingsSummary() {
     $summary = array();
-    $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers.old', '/\.yml/');
+    $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
 
     $atomizer = $this->getSetting('atomizer');
     $atomizer = ($atomizer) ? $atomizer : defaultSettings()['atomizer'];
