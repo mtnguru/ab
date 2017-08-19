@@ -1,6 +1,6 @@
 name: Nuclets
 description: 'Highlight Nuclets by color'
-filepath: config/themes/atom_builder/Nuclets.yml
+filepath: config/themes/atom_builder/Default.yml
 settings:
   ambient--color:
     defaultValue: '#c9c9c9'
@@ -198,7 +198,7 @@ settings:
     defaultValue: 0
     type: rotation
   dodeca--scale:
-    defaultValue: '1.03'
+    defaultValue: '1.05'
     type: range
   dodecaAxes--color:
     defaultValue: '#aabb99'
@@ -276,7 +276,7 @@ settings:
     defaultValue: 1
     type: range
   dodecaWireframe--color:
-    defaultValue: '#9500ff'
+    defaultValue: '#a220ff'
     type: color
   dodecaWireframe--linewidth:
     defaultValue: '1'
@@ -537,7 +537,7 @@ settings:
     defaultValue: 0
     type: rotation
   octa--scale:
-    defaultValue: '1.07'
+    defaultValue: '0'
     type: range
   octaAexis--linewidth:
     defaultValue: 1
@@ -681,7 +681,7 @@ settings:
     defaultValue: 2500
     type: range
   proton--opacity:
-    defaultValue: '0.85'
+    defaultValue: '0.9'
     type: range
   proton--radius:
     type: range
@@ -825,7 +825,7 @@ settings:
     defaultValue: '1'
     type: range
   tetraWireframe--opacity:
-    defaultValue: '1'
+    defaultValue: '0'
     type: range
   tetraWireframe--scale:
     defaultValue: 1

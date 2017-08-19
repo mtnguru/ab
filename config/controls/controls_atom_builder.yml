@@ -52,7 +52,7 @@ blocks:
     title:               Animation
     controls:
       animation--label:           ['Animations',       'header']
-      animation--selectyml:       [ null,              'selectyml',       'build_atoms.yml',   'animation',   'config/animations/atom_builder', 'atomizer.ajax_yml_load']
+      animation--selectyml:       [ null,              'selectyml',       'orbitals.yml',   'animation',   'config/animations/atom_builder', 'atomizer.ajax_yml_load']
       animation--wrapper:
         id: 'animation-wrapper'
         controls:

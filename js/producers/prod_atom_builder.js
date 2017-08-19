@@ -381,7 +381,7 @@
           }
         }
         var out = '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">' +
-          id + ' - ' + nuclet.az.state +
+          id + ' ' + nuclet.az.state +
           ' - ' + numProtons;
         if (numNeutral) {
           out += ' - ' + numNeutral;
