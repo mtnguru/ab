@@ -450,7 +450,7 @@
       var colorType;
       colorType = viewer.theme.get('proton--color-style');
       if (!colorType) {
-        colorType = 'nuclet';
+        colorType = 'proton';
       }
 
       if (colorType === 'nuclet' && azNuclet && azNuclet.state && azNuclet.state !== undefined) {
@@ -848,7 +848,7 @@
 
         var faces = createGeometryFaces(
           groupName + 'Faces',
-          1,
+          compConf.scale,
           geometry,
           compConf.rotation || null,
           azNuclet.reactiveState
@@ -968,6 +968,7 @@
       if (id != 'N0') {
         var i = nuclet.az.conf.protons.indexOf(10);
         if (i > -1) nuclet.az.conf.protons[i] = undefined;
+        // If this is a child nuclet and it's boron then remove one proton from the base boron.
         if (nuclet.az.conf.state === 'boron') {
           var i = nuclet.az.conf.protons.indexOf(0);
           if (i > -1) {

@@ -1,6 +1,8 @@
 name: Platonic Solids
 defaultView: solids
 themeDirectory: config/themes/platonic_solids
+animateDirectory: config/animations/platonic_solids
+controlFile: controls_platonic_solids.yml
 objects: [solids]
 canvasRatio: .50
 libraries: [atomizer/atomizer-base, atomizer/atomizer-platonic-solids]
@@ -9,3 +11,4 @@ views:
     name: Platonic solids
     producer: platonic_solids
     defaultTheme: Default.yml
+

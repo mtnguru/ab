@@ -49,7 +49,7 @@ blocks:
           inner-faces: Assign Inner Faces
 
   animations:
-    title:               Animation
+    title:               Animations
     controls:
       animation--label:           ['Animations',       'header']
       animation--selectyml:       [ null,              'selectyml',       'orbitals.yml',   'animation',   'config/animations/atom_builder', 'atomizer.ajax_yml_load']
@@ -103,9 +103,9 @@ blocks:
       theme--selectBlock:
         - Component
         - selectblock
-        - protons
+        - proton
         -
-          - protons
+          - proton
           - electrons
           - valence
 #         - axes
@@ -126,7 +126,7 @@ blocks:
       theme--saveNewMessage:      [ null,              'container']
 
 
-  protons:
+  proton:
     title:               Protons
     controls:
       proton--opacity:            ['Opacity',          'range',     1, [0, 1, .01]]

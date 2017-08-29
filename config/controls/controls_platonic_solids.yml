@@ -1,37 +1,74 @@
 name: Platonic Solids Base
-static:
+sidebar:
+  top:
+    buttons:     {show: true}
+  center:
+    information: {show: true}
+    mouse-mode:
+    nuclet-list: {show: true}
+    nuclet:
+    animation:   {show: true}
+    theme:
 
-  reset:
-#   title: Mouse
+blocks:
+
+  buttons:
     controls:
-      theme--cameraReset:          ['Reset Camera',       'button']
-      viewer--fullScreen:          ['Full screen',        'toggle']
-      hr1: ['null', hr]
-
-styler:
+      toggle--theme:              ['Edit Theme',       'button',  'fa-paint-brush',    {data-destination: sidebar, data-blockid: blocks--theme}]
+      toggle--animations:         ['Animations',       'button',  'fa-play',           {data-destination: sidebar, data-blockid: blocks--animations}]
+      viewer--fullScreen:         ['Full screen',      'toggle',  'fa-arrows-alt']
+      theme--cameraReset:         ['Reset Camera',     'button',  'fa-video-camera']
 
   theme:
-    title:               Themes
+    title:               Theme
     controls:
-      hr1:                         [ null,               'hr']
-      theme--loadlabel:            ['Select Theme',      'header']
-      theme--selectyml:            [ null,               'selectyml', 'Default.yml',   'theme',   'config/themes/platonic_solids', 'atomizer.ajax_yml_load']
-      theme--reset:                [ 'Reset Theme',      'button']
-      theme--saveButton:           [ 'Save Changes',     'button']
-      theme--saveMessage:          [ null,               'container']
-      hr2:                         [ null,               'hr']
-      theme--saveNew:              [ 'Create New Theme', 'header']
-      theme--saveNewName:          [ 'Name',             'textfield', '', 20]
-      theme--saveNewButton:        [ 'Save New',         'button',    'config/themes/platonic_solids', 'atomizer.ajax_yml_save']
-      theme--saveNewMessage:       [ null,               'container']
+      theme--loadlabel:           ['Theme',            'header']
+      theme--selectyml:           [ null,              'selectyml', 'Default.yml',   'theme',   'config/themes/platonic_solids', 'atomizer.ajax_yml_load']
+      theme--reset:               ['Reset Theme',      'button']
+      theme--saveButton:          ['Save Changes',     'button']
+      theme--enableNewTheme:      ['Create new theme', 'button']
+      theme--message:             [ null,              'container']
+      hr1:                        [ null,              'hr']
+      theme--selectBlock:
+        - Component
+        - selectblock
+        - protons
+        -
+          - protons
+          - icosa
+          - dodeca
+          - octahedron
+          - tetrahedron
+          - scene
+          - lighting
 
-  particles:
+  animations:
+      title:               Animation
+      controls:
+        animation--label:           ['Animations',       'header']
+        animation--selectyml:       [ null,              'selectyml',       'rotation.yml',   'animation',   'config/animations/platonic_solids', 'atomizer.ajax_yml_load']
+        animation--wrapper:
+          id: 'animation-wrapper'
+          controls:
+            animation--play:            ['Play',             'button',  'fa-play']
+            animation--pause:           ['Pause',            'button',  'fa-pause']
+            animation--stop:            ['Stop',             'button',  'fa-stop', {class: 'az-selected'}]
+#           animation--step-backward:   ['Previous',         'button',  'fa-step-backward']
+#           animation--step-forward:    ['Next',             'button',  'fa-step-forward']
+        animation--speed:               ['Speed',            'range',   3,  [0, 100, .1]]
+
+  protons:
     title:               Protons
     controls:
       proton--label:               ['Protons', 'header']
-      proton--opacity:             ['Opacity',      'range',     .5, [0, 1, .01]]
-      proton--scale:               ['Scale',        'range',     1, [0, 3, .01]]
+      proton--opacity:             ['Opacity',          'range',     1, [0, 1, .01]]
+      protons--scale:              ['Scale',            'range',     1, [0, 3, .01]]
       proton-default--color:       ['Default',      'color',    '#777777']
+
+      hr2:                         [ null,           'hr']
+      protonVertexid--color:       ['Proton IDs',    'color',    '#ff00ff']
+      protonVertexid--opacity:     ['Opacity',       'range',    1, [0, 1, .01]]
+      protonVertexid--scale:       ['Scale',         'range',    1,  [0, 3, .01]]
 
   tetrahedron:
     title:               Tetrahedron

@@ -5,6 +5,9 @@ settings:
   ambient--color:
     defaultValue: '#4f4f4f'
     type: color
+  animation--speed:
+    defaultValue: 3
+    type: range
   camera--perspective:
     defaultValue: 20
     type: range
@@ -276,11 +279,20 @@ settings:
     type: range
     defaultValue: 50
   proton--scale:
-    defaultValue: 1
+    defaultValue: '1'
     type: range
   proton-default--color:
     defaultValue: '#979797'
     type: color
+  protonVertexid--color:
+    defaultValue: '#ff00ff'
+    type: color
+  protonVertexid--opacity:
+    defaultValue: 1
+    type: range
+  protonVertexid--scale:
+    defaultValue: 1
+    type: range
   renderer--color:
     defaultValue: '#056538'
     type: color
@@ -381,7 +393,7 @@ settings:
     defaultValue: '0.59'
     type: range
   tetraVertexid--opacity:
-    defaultValue: 1
+    defaultValue: '0'
     type: range
   tetraVertexids--scale:
     defaultValue: 1

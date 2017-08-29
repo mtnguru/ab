@@ -1,0 +1,5 @@
+name: Rotate Atom
+animations:
+  rotation:
+    name: orbitals
+    speed: .07

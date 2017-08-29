@@ -66,9 +66,20 @@ class AtomizerBlock extends BlockBase {
   public function build() {
     $config = $this->getConfiguration();
 
-    // Read in the controls file
-    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $config['control_file']));
-    $controlSet['filename'] = $config['control_file'];
+    // If this is an atomizer CT then get configuration from Atomizer node.
+    if ($config['atomizer_config']) {
+      $atomizer_config = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_config']));
+      $atomizerId = $atomizer_config['name'];
+      $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $atomizer_config['controlFile']));
+      $controlSet['filename'] = $atomizer_config['controlFile'];
+    }
+    else {  // else use the block configuration
+      // Read in the controls file
+      $atomizerId = $config['atomizer_id'];
+      $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $config['control_file']));
+      $controlSet['filename'] = $config['control_file'];
+    }
+
 
     // Create the controls form
     $controls['form'] = \Drupal::formBuilder()->getForm('Drupal\atomizer\Form\AtomizerControlsForm', $controlSet);
@@ -81,7 +92,7 @@ class AtomizerBlock extends BlockBase {
             'atomizerId' =>  $config['atomizer_id'],
             'controlSet' =>  $controlSet,
             'theme' => $controls['form']['#az-theme'],
-            'configuration' => $config['atomizer_config'],
+            'configuration' => $atomizerId,
           ],
         ],
       ],

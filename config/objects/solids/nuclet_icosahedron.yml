@@ -121,21 +121,3 @@ geoGroups:
         shape: icosahedron
         scale: 1.3
         faceids: true
-
-# dodeca:
-#   components:
-#     solid:
-#       shape: dodecahedron
-#       scale: 1.31
-#       wireframe: true
-#       faces: true
-#     vertexids:
-#       shape: dodecahedron
-#       scale: 1.3
-#       vertexids: true
-#     faceids:
-#       shape: dodecahedron
-#       scale: 1.5
-#       faceids: true
-
-
