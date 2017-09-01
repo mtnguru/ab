@@ -15,6 +15,12 @@
 #    _title: 'Atomizer'
 #  requirements:
 #    _permission: 'access content'
+atomizer.renderNode:
+  path: '/ajax-ab/renderNode'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::renderNode'
+  requirements:
+    _permission: 'access content'
 atomizer.loadYml:
   path: '/ajax-ab/loadYml'
   defaults:

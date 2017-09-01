@@ -1,17 +1,36 @@
 @import "_azVariables.scss";
 
+.az-wrapper {
+  &.az-float-controls {
+    .az-controls-wrapper {
+      float: left;
+      background: $color-controls-wrapper;
+      border: 1px solid $color-border;
+      padding: .5em .25em;
+    }
+  }
+  &.az-overlay-controls {
+    .az-controls-wrapper {
+      position: absolute;
+      top: .25em;
+      left: .25em;
+      padding: .25em;
+      &:hover {
+        background: $color-controls-wrapper;
+        border: 1px solid $color-border;
+      }
+    }
+  }
+}
+
 // Atom Builder Controls form
-.az-controls-wrapper,
-.block-atomizer-controls {
-  float: left;
+.az-controls-wrapper {
+// .block-atomizer-controls {
+  width: 200px;
   vertical-align: top;
   display: inline-block;
-  width: 200px;
-  background: $color-controls-wrapper;
-  padding: .5em;
   margin-right: .5em;
-  border-radius: 8px;
-  border: 1px solid $color-border;
+  border-radius: 6px;
 
   form {
     width: 100%;
@@ -320,7 +339,7 @@
     .az-control {
       padding: 3px;
       transition: color .5s;
-      color: $color-button-inactive;
+      color: rgba($color-button-inactive, .5);
       &.az-selected {
         color: $color-button-selected;
       }

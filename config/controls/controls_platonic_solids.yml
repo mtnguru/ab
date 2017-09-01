@@ -14,10 +14,11 @@ blocks:
 
   buttons:
     controls:
-      toggle--theme:              ['Edit Theme',       'button',  'fa-paint-brush',    {data-destination: sidebar, data-blockid: blocks--theme}]
-      toggle--animations:         ['Animations',       'button',  'fa-play',           {data-destination: sidebar, data-blockid: blocks--animations}]
-      viewer--fullScreen:         ['Full screen',      'toggle',  'fa-arrows-alt']
-      theme--cameraReset:         ['Reset Camera',     'button',  'fa-video-camera']
+      toggle--theme:              ['Edit Theme',       'button',      'fa-paint-brush',    {data-destination: sidebar, data-blockid: blocks--theme}]
+      toggle--animations:         ['Animations',       'button',      'fa-play',           {data-destination: sidebar, data-blockid: blocks--animations}]
+      viewer--fullScreen:         ['Full screen',      'toggle',      'fa-arrows-alt']
+      theme--cameraReset:         ['Reset Camera',     'button',      'fa-video-camera']
+      atomizer--help:             ['Help',             'popup-node',  'fa-question',       {data-nid: 330, data-viewmode: default}]
 
   theme:
     title:               Theme
@@ -35,10 +36,11 @@ blocks:
         - protons
         -
           - protons
-          - icosa
-          - dodeca
-          - octahedron
           - tetrahedron
+          - hexahedron
+          - octahedron
+          - icosahedron
+          - dodecahedron
           - scene
           - lighting
 
@@ -93,8 +95,8 @@ blocks:
       tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
       tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
 
-  hexa:
-    title:               Hexahedron
+  hexahedron:
+    title:               Hexahedron - Cube
     controls:
       hexa--scale:                 ['Scale',        'range',    1,  [0, 3, .01]]
       hexa--rotation:              ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
@@ -139,7 +141,7 @@ blocks:
       octaFaceid--opacity:         ['Opacity',      'range',     0,  [0, 1, .01]]
       octaFaceids--scale:          ['Scale',        'range',     1,  [0, 3, .01]]
 
-  icosa:
+  icosahedron:
     title:               Icosahedron
     controls:
       icosa--scale:               ['Scale',        'range',    1,  [0, 3, .01]]
@@ -162,7 +164,7 @@ blocks:
       icosaFaceid--opacity:       ['Opacity',      'range',     0,  [0, 1, .01]]
       icosaFaceids--scale:        ['Scale',        'range',     1,  [0, 3, .01]]
 
-  dodeca:
+  dodecahedron:
     title:               Dodecahedron
     controls:
       dodeca--scale:                ['Scale',        'range',    1,  [0, 3, .01]]

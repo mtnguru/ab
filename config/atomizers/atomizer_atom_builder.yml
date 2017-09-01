@@ -3,8 +3,11 @@ defaultView: builder
 themeDirectory: config/themes/atom_builder
 animateDirectory: config/animations/atom_builder
 controlFile: controls_atom_builder.yml
+atomizerId: atom-builder
+classes: [az-float-controls]
 libraries: [atomizer/atomizer-base, atomizer/atomizer-atom-builder]
 objects: [nuclets]
+view: select_atom
 canvasRatio: window
 views:
   builder:

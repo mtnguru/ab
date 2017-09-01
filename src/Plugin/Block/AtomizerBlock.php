@@ -67,49 +67,62 @@ class AtomizerBlock extends BlockBase {
     $config = $this->getConfiguration();
 
     // If this is an atomizer CT then get configuration from Atomizer node.
-    if ($config['atomizer_config']) {
+    if (!empty($config['atomizer_configuration'])) {
+      $atomizer_config = $config['atomizer_configuration'];
+    }
+    else if (!empty($config['atomizer_config'])) {
       $atomizer_config = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_config']));
-      $atomizerId = $atomizer_config['name'];
-      $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $atomizer_config['controlFile']));
-      $controlSet['filename'] = $atomizer_config['controlFile'];
     }
-    else {  // else use the block configuration
-      // Read in the controls file
-      $atomizerId = $config['atomizer_id'];
-      $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $config['control_file']));
-      $controlSet['filename'] = $config['control_file'];
+    else {
+      return;
     }
-
+    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $atomizer_config['controlFile']));
+    $controlSet['filename'] = $atomizer_config['controlFile'];
 
     // Create the controls form
     $controls['form'] = \Drupal::formBuilder()->getForm('Drupal\atomizer\Form\AtomizerControlsForm', $controlSet);
-    $controls['form']['#attributes'] = ['class' => ['atomizer-controls-wrapper']];
+    $controls['form']['#attributes'] = ['class' => ['az-controls-form']];
     $controls['form']['#attached'] =  [
       'library' => ['atomizer/atomizer-js'],
       'drupalSettings' => [
         'atomizer' => [
-          $config['atomizer_id'] => [
-            'atomizerId' =>  $config['atomizer_id'],
+          $atomizer_config['atomizerId'] => [
+            'atomizerId' =>  $atomizer_config['atomizerId'],
             'controlSet' =>  $controlSet,
             'theme' => $controls['form']['#az-theme'],
-            'configuration' => $atomizerId,
           ],
         ],
       ],
     ];
 
-    $build = AtomizerInit::start($config);
-    $build['#attributes'] = [
-      'class' => ['az-wrapper'],
-      'id' => 'az-wrapper-' . strtolower($config['atomizer_id']),
-      'tabindex' => 1,
-    ];
-    $build['controls'] = [
+    $atomizer = AtomizerInit::start($config);
+    $build = [
       '#type' => 'container',
-      '#weight' => -10,
-      '#attributes' => ['class' => ['az-controls-wrapper']],
-      'controls' => $controls,
+      '#attributes' => [
+        'class' => ['az-wrapper'],
+        'tabindex' => 1,
+      ],
+      'content' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => 'az-id-' . $atomizer_config['atomizerId'],
+          'class' => ['az-atomizer-wrapper'],
+        ],
+        'atomizer' => $atomizer['atomizer'],
+        'controls' => [
+          '#type' => 'container',
+          '#weight' => -10,
+          '#attributes' => ['class' => ['az-controls-wrapper']],
+          'controls' => $controls,
+        ],
+      ],
     ];
+
+    if (!empty($atomizer_config['classes'])) {
+      foreach ($atomizer_config['classes'] as $class) {
+        $build['#attributes']['class'][] = $class;
+      }
+    }
 
     return $build;
   }

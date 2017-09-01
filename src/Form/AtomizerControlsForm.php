@@ -78,7 +78,7 @@ class AtomizerControlsForm extends FormBase {
       }
     }
 
-    $form['#attributes'] = array('name' => 'atomizer-controls-form');
+    $form['#attributes'] = array('name' => 'az-controls-form');
 
     // Attach the theme to form for later use.
     $form['#az-theme'] =  $theme;

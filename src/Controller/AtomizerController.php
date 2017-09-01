@@ -15,6 +15,7 @@ use Drupal\Core\Url;
 
 use Drupal\Component\Serialization\Yaml;
 
+use Drupal\atomizer\Ajax\RenderNodeCommand;
 use Drupal\atomizer\Ajax\LoadYmlCommand;
 use Drupal\atomizer\Ajax\LoadAtomCommand;
 use Drupal\atomizer\Ajax\ListDirectoryCommand;
@@ -30,6 +31,28 @@ class AtomizerController extends ControllerBase {
 
   /**
    * Load a YML file.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
+  public function renderNode() {
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    $path = drupal_get_path('module', 'atomizer') . '/' . $data['filepath'];
+    if (!file_exists($path)) {
+       $path =  dirname($path) . '/Default.yml';
+       $data['message'] = 'Could not find ' . $data['filepath'] . ' -- Default.yml file loaded.';
+       $data['filepath'] = $path;
+       $data['filename'] = 'Default.yml';
+    }
+    $response = new AjaxResponse();
+    $htmlContents = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath']));
+    $response->addCommand(new RenderNodeCommand($data, $htmlContents));
+
+    return $response;
+  }
+
+  /**
+   * Load a Node and render it.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
    */

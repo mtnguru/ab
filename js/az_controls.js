@@ -15,7 +15,8 @@
     var cameraTrackballControls;
     var objectTrackballControls;
     var mouseMode = 'none';
-    var selectBlock = document.getElementById('theme--selectBlock');
+    var selectBlock = $('#theme--selectBlock', viewer.context)[0];
+    var $popup;
 
     // Variables for detecting items mouse is hovering over.
     var raycaster;
@@ -77,9 +78,9 @@
     function onControlChanged(event) {
       var args = this.id.split("--");
       if (this.className.indexOf('az-slider') > -1) {
-        document.getElementById(args[0] + '--' + args[1] + '--' + args[2] + '--az-value').value = event.target.value;
+        $('#' + args[0] + '--' + args[1] + '--' + args[2] + '--az-value', viewer.context)[0].value = event.target.value;
       } else if (this.className.indexOf('az-control-range') > -1) {
-        document.getElementById(this.id + '--az-value').value = event.target.value;
+        $('#' + this.id + '--az-value', viewer.context)[0].value = event.target.value;
       }
       viewer.theme.applyControl(this.id, event.target.value);
     }
@@ -115,7 +116,7 @@
           viewer[args[0]].overwriteYml();
           break;
         case 'saveyml':
-          var wrapper  = document.getElementById(args[0] + '--saveyml');
+          var wrapper  = $('3' + args[0] + '--saveyml', viewer.context)[0];
           var name = wrapper.querySelector('input[name=name]').value;
           var filename = wrapper.querySelector('input[name=filename]').value;
           // If user didn't enter a file name then generate it from the Name
@@ -126,7 +127,7 @@
             if (filename.indexOf('.yml') == -1) {
               filename += '.yml';
             }
-            // Save the yml file
+            // Save the yml file154G
             viewer[args[0]].saveYml({
               name: name,
               filepath: viewer[args[0]].getYmlDirectory() + '/' + filename.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_')
@@ -148,6 +149,46 @@
       return false;
     }
 
+    function popupDialog(response) {
+      if ($popup == null) {
+        $html = '<div class="' + + '"></div>';
+        var $popup = $('#blocks--popup', viewer.context);
+        $html =
+          '<div class="az-popup">' +
+          '<div class="az-popup-titlebar">' +
+          '<div class="az-popup-title">' +
+          'Yo Dude' +
+          '</div>' +
+          '</div>' +
+          '<div class="az-popup-content">' +
+          'Hey James' +
+          '</div>' +
+          '</div>';
+
+      }
+
+      // Declare this as a block - it'll have already been rendered then.
+      // create a div,
+      // place html into it
+      // give the div a title area and close button in the upper right.
+    }
+
+    function onPopupNode(event) {
+      event.preventDefault();
+      var nid = $(event.target).data('nid');
+      var viewMode = $(event.target).data('viewmode');
+      Drupal.atomizer.base.doAjax(
+        '/ajax-ab/loadYml',
+        {
+          nid: nid,
+          viewMode: viewMode,
+          popupId: 'popupNode'
+        },
+        popupDialog
+      );
+      return;
+    }
+
     /**
      * Display the currently selected block - hide the rest
      */
@@ -157,7 +198,7 @@
       for (var controlId in viewer.atomizer.theme.settings) {
         var control = viewer.atomizer.theme.settings[controlId];
         var id = controlId.replace(/_/g, "-");
-        var element = document.getElementById(id);
+        var element = $('#' + id, viewer.context)[0];
         if (element || control.type == 'rotation' || control.type == 'position') {
           switch (control.type) {
             case 'color':
@@ -207,7 +248,7 @@
       // Extract default values to initialize settings
       setThemeDefaults();
 
-      var form = document.forms['atomizer-controls-form'];
+      var form = $('.az-controls-form', viewer.context)[0];
       if (!form) return;
 
       showThemeBlock();
@@ -219,7 +260,7 @@
       for (var controlId in viewer.atomizer.theme.settings) {
         var control = viewer.atomizer.theme.settings[controlId];
         var id = controlId.replace(/_/g, "-");
-        var element = document.getElementById(id);
+        var element = $('#' + id, viewer.context)[0];
         if (element || control.type == 'rotation' || control.type == 'position') {
           switch (control.type) {
             case 'color':
@@ -229,12 +270,12 @@
             case 'rotation':
             case 'position':
               var sid = id + '--az-slider';
-              document.getElementById(sid).addEventListener("input", onControlChanged);
+              $('#' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
               viewer.theme.set(control.defaultValue, sid, control.type);
               break;
             case 'saveyml':
-              var elem = document.getElementById(id + '--button');
-              document.getElementById(id + '--button').addEventListener("click", onButtonClicked);
+              var elem = $('#' + id + '--button', viewer.context)[0];
+              $('#' + id + '--button', viewer.context)[0].addEventListener("click", onButtonClicked);
               break;
             case 'selectyml':
               element.addEventListener("change", selectYmlChanged);
@@ -243,6 +284,9 @@
             case 'button':
             case 'toggle':
               element.addEventListener("click", onButtonClicked);
+              break;
+            case 'popup-node':
+              element.addEventListener("click", onPopupNode);
               break;
           }
           // Make sure that theme has default values for all controls
@@ -371,21 +415,21 @@
      *
      * @param id
      * @param index
-     * @returns {*}
+     * @returns
      */
     var getDefault = function getDefault(id, index) {
-      var element = document.getElementById(id);
-      if (element) {
-        if (element.className.indexOf('az-control-range') > -1 ||
-          element.className.indexOf('az-control-rotation') > -1 ||
-          element.className.indexOf('az-control-position') > -1) {
+      var element = $('#' + id, viewer.context);
+      if (element.length) {
+        if (element[0].className.indexOf('az-control-range') > -1 ||
+          element[0].className.indexOf('az-control-rotation') > -1 ||
+          element[0].className.indexOf('az-control-position') > -1) {
           if (index) {
-            return document.getElementById(id + '--' + index + '--az-slider').value;
+            return $('#' + id + '--' + index + '--az-slider', viewer.context)[0].value;
           } else {
-            return document.getElementById(id + '--az-slider').value;
+            return $('#' + id + '--az-slider', viewer.context)[0].value;
           }
         } else {
-          return element.value;
+          return element[0].value;
         }
       } else {
         console.log('atomizer_controls.js - control not found - ' + id);

@@ -14,9 +14,11 @@
 
     var ambient;
     var spotlights = [];
-    var viewer = {objects: {}};
+    var viewer = {
+      objects: {},
+      context: $('#az-id-' + atomizer.atomizerId.toLowerCase())
+    };
     var fullScreen = false;
-    var $wrapper = $('#az-wrapper-' + atomizer.atomizerId.toLowerCase());
 
 //Physijs.scripts.worker = '/modules/custom/atomizer/js/physijs/physijs_worker.js';
 //Physijs.scripts.ammo =   '/modules/custom/atomizer/js/libs/ammo.js';
@@ -68,7 +70,7 @@
       // Retrieve canvas dimensions and set renderer size to that.
 
       var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-canvas-wrapper';
-      viewer.canvasContainer = document.getElementById(containerId);
+      viewer.canvasContainer = $('#' + containerId)[0];
       viewer.dataAttr = getDataAttr(viewer.canvasContainer);
       viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
       viewer.canvasWidth = viewer.canvasContainer.clientWidth;
@@ -190,7 +192,7 @@
     };
 
 
-    $wrapper.hover(function () {
+    viewer.context.hover(function () {
       var x = window.scrollX;
       var y = window.scrollY;
       this.focus();
@@ -201,7 +203,13 @@
       switch (event.keyCode) {
         case 70: // F
           fullScreen = !fullScreen;
-          screenfull.toggle($wrapper[0]);
+          screenfull.toggle(viewer.context[0]);
+          if (fullScreen) {
+            viewer.context.addClass('az-fullscreen');
+          }
+          else {
+            viewer.context.removeClass('az-fullscreen');
+          }
           event.preventDefault();
           break;
 
@@ -217,9 +225,10 @@
       }
     });
 
-    $wrapper.dblclick(function () {
+    viewer.context.dblclick(function () {
       if (fullScreen) {
         fullScreen = false;
+        viewer.context.removeClass('az-fullscreen');
         screenfull.exit();
       }
     });
@@ -231,7 +240,7 @@
         $dialogs.each(function ($dialog) {
           if (!$(this).hasClass('az-dialog-processed')) {
             $(this).addClass('az-dialog-processed');
-//          $wrapper.append($(this));
+//          viewer.context.append($(this));
           }
         });
       }
@@ -241,10 +250,12 @@
       if (target.id === 'viewer--fullScreen') {
         fullScreen = !fullScreen;
         if (fullScreen) {
-          screenfull.request($wrapper[0]);
+          screenfull.request(viewer.context[0]);
+          viewer.context.addClass('az-fullscreen');
         }
         else {
           screenfull.exit();
+          viewer.context.removeClass('az-fullscreen');
         }
       }
     };

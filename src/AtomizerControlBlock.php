@@ -151,6 +151,7 @@ class AtomizerControlBlock {
         break;
 
       case 'button':
+      case 'popup-node':
         if (empty($controlConf[2])) {
           $control = [
             '#type' => 'button',

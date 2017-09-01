@@ -25,6 +25,10 @@
       Drupal.atomizer[response.component].saveYml(response);
     };
 
+    Drupal.AjaxCommands.prototype.renderNodeCommand = function(ajax, response, status) {
+      Drupal.atomizer[response.component].renderNode(response);
+    };
+
     var doAjax = function doAjax (url, data, successCallback, errorCallback) {
       $.ajax({
         url: url,
