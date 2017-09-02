@@ -11,20 +11,14 @@ settings:
   camera--perspective:
     defaultValue: 20
     type: range
-  camera--position--x:
-    defaultValue: 0
     type: position
   camera--position--x--az-slider:
-    defaultValue: 200
+    defaultValue: 0
     type: position
-  camera--position--y:
-    defaultValue: 2000
     type: position
   camera--position--y--az-slider:
     defaultValue: 1500
     type: position
-  camera--position--z:
-    defaultValue: -2000
     type: position
   camera--position--z--az-slider:
     defaultValue: -1500
@@ -69,7 +63,7 @@ settings:
     defaultValue: 1
     type: range
   dodecaWireframe--color:
-    defaultValue: '#0088ff'
+    defaultValue: '#00b6ff'
     type: color
   dodecaWireframe--linewidth:
     defaultValue: 4
@@ -293,6 +287,9 @@ settings:
   protonVertexid--scale:
     defaultValue: 1
     type: range
+  protons--scale:
+    defaultValue: 1
+    type: range
   renderer--color:
     defaultValue: '#056538'
     type: color
@@ -399,7 +396,7 @@ settings:
     defaultValue: 1
     type: range
   tetraWireframe--color:
-    defaultValue: '#00ee00'
+    defaultValue: '#1aff00'
     type: color
   tetraWireframe--linewidth:
     defaultValue: 4
