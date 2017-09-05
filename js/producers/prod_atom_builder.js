@@ -15,13 +15,13 @@
     var mouseMode = 'none';
     var editNuclet;
 
-    var nucletAngle =       document.getElementById('nuclet--attachAngle');
-    var nucletAngleSlider = document.getElementById('nuclet--attachAngle--az-slider');
-    var nucletAngleValue =  document.getElementById('nuclet--attachAngle--az-value');
-    var nucletDelete =      document.getElementById('nuclet--delete');
+    var nucletAngle =       $('#nuclet--attachAngle', viewer.context)[0];
+    var nucletAngleSlider = $('#nuclet--attachAngle--az-slider', viewer.context)[0]
+    var nucletAngleValue =  $('#nuclet--attachAngle--az-value', viewer.context)[0];
+    var nucletDelete =      $('#nuclet--delete', viewer.context)[0];
 
-    var nucletAttach0 =     document.getElementById('edit-nuclet-grow-0');
-    var nucletAttach1 =     document.getElementById('edit-nuclet-grow-1');
+    var nucletAttach0 =     $('#edit-nuclet-grow-0', viewer.context)[0];
+    var nucletAttach1 =     $('#edit-nuclet-grow-1', viewer.context)[0];
 
     var $nucletList =  $('#nuclet--list');
     var $nucletFormBlock = $('#blocks--nuclet-form');
@@ -466,9 +466,10 @@
     nucletDelete.addEventListener('click', onNucletDelete);
 
     // Add event listeners to the nuclet edit form
-    var radios = document.forms["az-controls-form"].elements["nuclet--state"];
-    for(var i = radios.length - 1; i > 0; i--) {
-      radios[i].onclick = function (event) {
+    var $form = $('.az-controls-form', viewer.context);
+    var $radios = $('.az-controls-form', viewer.context).find('.nuclet--state');
+    for(var i = $radios.length - 1; i > 0; i--) {
+      radios[i][0].onclick = function (event) {
         if (event.target.tagName == 'INPUT') {
           editNuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
           createProtonLists();
@@ -479,7 +480,7 @@
     }
 
     // Add event listeners to mode form
-    var radios = document.forms["atomizer-controls-form"].elements["mouse--mode"];
+    var radios = $('.az-controls-form', viewer.context).find('.mouse--mode');
     for(var i = radios.length - 1; i > 0; i--) {
       radios[i].onclick = function (event) {
         if (event.target.tagName == 'INPUT') {
