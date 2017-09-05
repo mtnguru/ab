@@ -450,7 +450,7 @@
       var colorType;
       colorType = viewer.theme.get('proton--color-style');
       if (!colorType) {
-        colorType = 'proton';
+        colorType = 'nuclet';
       }
 
       if (colorType === 'nuclet' && azNuclet && azNuclet.state && azNuclet.state !== undefined) {
