@@ -466,7 +466,7 @@
     nucletDelete.addEventListener('click', onNucletDelete);
 
     // Add event listeners to the nuclet edit form
-    var radios = document.forms["atomizer-controls-form"].elements["nuclet--state"];
+    var radios = document.forms["az-controls-form"].elements["nuclet--state"];
     for(var i = radios.length - 1; i > 0; i--) {
       radios[i].onclick = function (event) {
         if (event.target.tagName == 'INPUT') {
