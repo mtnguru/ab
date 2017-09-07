@@ -153,6 +153,7 @@ function atomizer_views_post_render($view, &$output, $cache) {
 
 function atomizer_preprocess_node(&$variables) {
   $type = $variables['node']->getType();
+  \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  node type ' . $type);
   switch ($type) {
 
     case 'atomizer':
