@@ -157,14 +157,16 @@ function atomizer_preprocess_node(&$variables) {
 
     case 'atomizer':
 
+      $nid = $variables['node']->id();
       // Read in configuration yml file
+      \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  nid ' . $nid);
       if (!empty($variables['node']->field_configuration_file)) {
+        \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  has field_configuration_file');
         $atomizer_block = \Drupal::entityManager()->getStorage('block')->load('atom_builder');
 
         if (!empty($atomizer_block)) {
           // Read in the configuration file and save it back into the block for use later.
           $configFile = $variables['node']->field_configuration_file->value;
-          $nid = $variables['node']->id();
           \Drupal::logger('my_module')->notice('atomizer_preprocess_node: configFile ' . $configFile . '  nid ' . $nid);
           $atomizerConfig = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $configFile));
           $atomizerConfig['filename'] = $configFile;
