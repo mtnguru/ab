@@ -9,6 +9,7 @@ use Drupal\atomizer\AtomizerFiles;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Component\Serialization\Yaml;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_help().
@@ -151,6 +152,11 @@ function atomizer_views_post_render($view, &$output, $cache) {
   return;
 }
 
+function atomizer_node_view(array &$build, NodeInterface $node, $display, $view_mode) {
+  if ($node->getType() == 'atomizer' && $view_mode == 'atomizer') {
+    $build['#cache']['max-age'] = 0;
+  }
+}
 /**
  * Implements hook_preprocess_HOOK() for block.html.twig.
  */
