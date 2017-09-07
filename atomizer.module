@@ -151,16 +151,25 @@ function atomizer_views_post_render($view, &$output, $cache) {
   return;
 }
 
+/**
+ * Implements hook_preprocess_HOOK() for block.html.twig.
+ */
+function atomizer_preprocess_block(&$variables){
+  if ($variables['plugin_id'] == 'atomizer_block') {
+    //-- This stops the block being cache in drupal 8
+    $variables['#cache']['max-age'] = 0;
+  }
+}
+
+
 function atomizer_preprocess_node(&$variables) {
   $type = $variables['node']->getType();
-  \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  node type ' . $type);
+  $nid = $variables['node']->id();
+  \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  node type ' . $type . ' nid ' . $nid);
   switch ($type) {
 
     case 'atomizer':
-
-      $nid = $variables['node']->id();
       // Read in configuration yml file
-      \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  nid ' . $nid);
       if (!empty($variables['node']->field_configuration_file)) {
         \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  has field_configuration_file');
         $atomizer_block = \Drupal::entityManager()->getStorage('block')->load('atom_builder');
