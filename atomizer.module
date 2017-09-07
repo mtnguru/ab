@@ -153,6 +153,7 @@ function atomizer_views_post_render($view, &$output, $cache) {
 }
 
 function atomizer_node_view(array &$build, NodeInterface $node, $display, $view_mode) {
+  $build['#cache']['max-age'] = 0;
   if ($node->getType() == 'book') {
     $build['#cache']['max-age'] = 0;
   }
