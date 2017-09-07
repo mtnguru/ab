@@ -102,6 +102,9 @@ class AtomizerBlock extends BlockBase {
         'class' => ['az-wrapper'],
         'tabindex' => 1,
       ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
       'content' => [
         '#type' => 'container',
         '#attributes' => [
