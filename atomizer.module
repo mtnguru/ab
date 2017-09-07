@@ -164,6 +164,8 @@ function atomizer_preprocess_node(&$variables) {
         if (!empty($atomizer_block)) {
           // Read in the configuration file and save it back into the block for use later.
           $configFile = $variables['node']->field_configuration_file->value;
+          $nid = $variables['node']->id();
+          \Drupal::logger('my_module')->notice('atomizer_preprocess_node: configFile ' . $configFile . '  nid ' . $nid);
           $atomizerConfig = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $configFile));
           $atomizerConfig['filename'] = $configFile;
           $atomizer_block->getPlugin()->setConfigurationValue('atomizer_configuration', $atomizerConfig);
@@ -174,9 +176,8 @@ function atomizer_preprocess_node(&$variables) {
             $variables['content']['view_' . $atomizerConfig['view']] = views_embed_view('az_atom', $atomizerConfig['view']);
           }
 
-          $variables['content']['atomizer_block'] = \Drupal::entityManager()
-            ->getViewBuilder('block')
-            ->view($atomizer_block);
+          $view = \Drupal::entityManager()->getViewBuilder('block');
+          $variables['content']['atomizer_block'] = $view->view($atomizer_block);
         }
       }
       break;
