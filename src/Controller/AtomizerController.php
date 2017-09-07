@@ -166,7 +166,8 @@ class AtomizerController extends ControllerBase {
     $node = Node::load($data['nid']);
 
     // Render the node/atom using teaser view mode.
-    $data['teaser'] = render(\Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser'));
+    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
+    $data['teaser'] = render($build);
 
     // Get the atomic structure field.
     $field = $node->field_atomic_structure;
