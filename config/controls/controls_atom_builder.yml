@@ -15,14 +15,14 @@ blocks:
 
   buttons:
     controls:
-      atom--select:               ['Select Atom',      'button',  'fa-dot-circle-o']
-      toggle--information:        ['Atom Information', 'button',  'fa-info-circle',    {data-destination: sidebar, data-blockid: blocks--information}]
-      toggle--nuclet-list:        ['Edit Nuclet',      'button',  'fa-futbol-o',       {data-destination: sidebar, data-blockid: blocks--nuclet-list}]
-      toggle--mouse-mode:         ['Mouse Mode',       'button',  'fa-mouse-pointer',  {data-destination: sidebar, data-blockid: blocks--mouse-mode}]
-      toggle--theme:              ['Edit Theme',       'button',  'fa-paint-brush',    {data-destination: sidebar, data-blockid: blocks--theme}]
-      toggle--animations:         ['Animations',       'button',  'fa-play',           {data-destination: sidebar, data-blockid: blocks--animations}]
-      viewer--fullScreen:         ['Full screen',      'toggle',  'fa-arrows-alt']
-      theme--cameraReset:         ['Reset Camera',     'button',  'fa-video-camera']
+      atom--select:               ['Select Atom',      'button',  {font-awesome: fa-dot-circle-o}]
+      toggle--information:        ['Atom Information', 'button',  {font-awesome: fa-info-circle,    data-destination: sidebar, data-blockid: blocks--information}]
+      toggle--nuclet-list:        ['Edit Nuclet',      'button',  {font-awesome: fa-futbol-o,       data-destination: sidebar, data-blockid: blocks--nuclet-list}]
+      toggle--mouse-mode:         ['Mouse Mode',       'button',  {font-awesome: fa-mouse-pointer,  data-destination: sidebar, data-blockid: blocks--mouse-mode}]
+      toggle--theme:              ['Edit Theme',       'button',  {font-awesome: fa-paint-brush,    data-destination: sidebar, data-blockid: blocks--theme}]
+      toggle--animations:         ['Animations',       'button',  {font-awesome: fa-play,           data-destination: sidebar, data-blockid: blocks--animations}]
+      viewer--fullScreen:         ['Full screen',      'toggle',  {font-awesome: fa-arrows-alt}]
+      theme--cameraReset:         ['Reset Camera',     'button',  {font-awesome: fa-video-camera}]
 
   information:
     title:               Atom Information
@@ -56,11 +56,11 @@ blocks:
       animation--wrapper:
         id: 'animation-wrapper'
         controls:
-          animation--play:            ['Play',             'button',  'fa-play']
-          animation--pause:           ['Pause',            'button',  'fa-pause']
-          animation--stop:            ['Stop',             'button',  'fa-stop', {class: 'az-selected'}]
-#         animation--step-backward:   ['Previous',         'button',  'fa-step-backward']
-#         animation--step-forward:    ['Next',             'button',  'fa-step-forward']
+          animation--play:            ['Play',             'button',  {font-awesome: fa-play}]
+          animation--pause:           ['Pause',            'button',  {font-awesome: fa-pause}]
+          animation--stop:            ['Stop',             'button',  {font-awesome: fa-stop,  class: az-selected}]
+#         animation--step-backward:   ['Previous',         'button',  {font-awesome: fa-step-backward}]
+#         animation--step-forward:    ['Next',             'button',  {font-awesome: fa-step-forward}]
       animation--speed:               ['Speed',            'range',   3,  [0, 100, .1]]
 
   nuclet-list:
@@ -122,7 +122,8 @@ blocks:
     controls:
       theme--saveNew:             ['Create New Theme', 'header']
       theme--saveNewName:         ['Name',             'textfield', '', 20]
-      theme--saveNewButton:       ['Save New',         'button',    'config/themes/atom_builder']
+#     theme--saveNewButton:       ['Save New',         'button',    'config/themes/atom_builder']
+      theme--saveNewButton:       ['Save New',         'button']
       theme--saveNewMessage:      [ null,              'container']
 
 

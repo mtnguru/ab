@@ -14,11 +14,11 @@ blocks:
 
   buttons:
     controls:
-      toggle--theme:              ['Edit Theme',       'button',      'fa-paint-brush',    {data-destination: sidebar, data-blockid: blocks--theme}]
-      toggle--animations:         ['Animations',       'button',      'fa-play',           {data-destination: sidebar, data-blockid: blocks--animations}]
-      viewer--fullScreen:         ['Full screen',      'toggle',      'fa-arrows-alt']
-      theme--cameraReset:         ['Reset Camera',     'button',      'fa-video-camera']
-      atomizer--help:             ['Help',             'popup-node',  'fa-question',       {data-nid: 330, data-viewmode: default}]
+      toggle--theme:              ['Edit Theme',       'button',      {font-awesome: fa-paint-brush, data-destination: sidebar, data-blockid: blocks--theme}]
+      toggle--animations:         ['Animations',       'button',      {font-awesome: fa-play,        data-destination: sidebar, data-blockid: blocks--animations}]
+      viewer--fullScreen:         ['Full screen',      'toggle',      {font-awesome: fa-arrows-alt}]
+      theme--cameraReset:         ['Reset Camera',     'button',      {font-awesome: fa-video-camera}]
+      atomizer--help:             ['Help',             'popup-node',  {font-awesome: fa-question     data-nid: 330,    data-viewmode: default}]
 
   theme:
     title:               Theme
@@ -52,11 +52,11 @@ blocks:
         animation--wrapper:
           id: 'animation-wrapper'
           controls:
-            animation--play:            ['Play',             'button',  'fa-play']
-            animation--pause:           ['Pause',            'button',  'fa-pause']
-            animation--stop:            ['Stop',             'button',  'fa-stop', {class: 'az-selected'}]
-#           animation--step-backward:   ['Previous',         'button',  'fa-step-backward']
-#           animation--step-forward:    ['Next',             'button',  'fa-step-forward']
+            animation--play:            ['Play',             'button',  {font-awesome: fa-play}]
+            animation--pause:           ['Pause',            'button',  {font-awesome: fa-pause}]
+            animation--stop:            ['Stop',             'button',  {font-awesome: fa-stop, class: az-selected}]
+#           animation--step-backward:   ['Previous',         'button',  {font-awesome: fa-step-backward}]
+#           animation--step-forward:    ['Next',             'button',  {font-awesome: fa-step-forward}]
         animation--speed:               ['Speed',            'range',   3,  [0, 100, .1]]
 
   protons:

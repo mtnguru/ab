@@ -26,6 +26,8 @@
     var $nucletList =  $('#nuclet--list');
     var $nucletFormBlock = $('#blocks--nuclet-form');
 
+    var $controlsForm = $('.az-controls-form', viewer.context);
+
     var hoverInnerFaces = [];
     var hoverOuterFaces = [];
     var hoverProtons = [];
@@ -466,8 +468,7 @@
     nucletDelete.addEventListener('click', onNucletDelete);
 
     // Add event listeners to the nuclet edit form
-    var $form = $('.az-controls-form', viewer.context);
-    var $radios = $('.az-controls-form', viewer.context).find('.nuclet--state');
+    var $radios = $controlsForm.find('.nuclet--state');
     for(var i = $radios.length - 1; i > 0; i--) {
       radios[i][0].onclick = function (event) {
         if (event.target.tagName == 'INPUT') {

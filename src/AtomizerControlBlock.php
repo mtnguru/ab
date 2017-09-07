@@ -152,25 +152,12 @@ class AtomizerControlBlock {
 
       case 'button':
       case 'popup-node':
-        if (empty($controlConf[2])) {
-          $control = [
-            '#type' => 'button',
-            '#value' => $controlConf[0],
-          ];
-        }
-        else {
-          $control = [
-            '#type' => 'container',
-            '#attributes' => [
-              'title' => $controlConf[0],
-            ],
-          ];
-          $containerClasses[] = 'az-button';
-          $containerClasses[] = 'fa';
-          $containerClasses[] = $controlConf[2];
-        }
-        if (!empty($controlConf[3])) {
-          foreach ($controlConf[3] as $key => $value) {
+        $control = [
+          '#type' => 'button',
+          '#value' => $controlConf[0],
+        ];
+        if (!empty($controlConf[2])) {
+          foreach ($controlConf[2] as $key => $value) {
             if (preg_match('/^data\-/', $key)) {
               $control['#attributes'][$key] = $value;
               if ($key == 'data-blockid') {
@@ -178,6 +165,16 @@ class AtomizerControlBlock {
               }
             } else if ($key == 'class') {
               $containerClasses[] = $value;
+            } else if ($key == 'font-awesome') {
+              $control = [
+                '#type' => 'container',
+                '#attributes' => [
+                  'title' => $controlConf[0],
+                ],
+              ];
+              $containerClasses[] = 'az-button';
+              $containerClasses[] = 'fa';
+              $containerClasses[] = $controlConf[2]['font-awesome'];
             }
           }
         }
@@ -185,13 +182,11 @@ class AtomizerControlBlock {
         break;
 
       case 'toggle':
-        if (empty($controlConf[2])) {
-          $control = [
-            '#type' => 'button',
-            '#value' => $controlConf[0],
-          ];
-        }
-        else {
+        $control = [
+          '#type' => 'button',
+          '#value' => $controlConf[0],
+        ];
+        if (!empty($controlConf[2]['font-awesome'])) {
           $control = [
             '#type' => 'container',
             '#attributes' => [
@@ -199,7 +194,7 @@ class AtomizerControlBlock {
             ],
           ];
           $containerClasses[] = 'fa';
-          $containerClasses[] = $controlConf[2];
+          $containerClasses[] = $controlConf[2]['font-awesome'];
           $addValue = TRUE;
         }
         break;
