@@ -1,8 +1,0 @@
-name: Atomizer Workbench
-defaultView: atoms
-themeDirectory: config/themes/workbench
-views:
-  atoms:
-    name: 9 Nuclets
-    producer: workbench
-    defaultTheme: Default.yml

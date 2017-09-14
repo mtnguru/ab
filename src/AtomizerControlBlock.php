@@ -227,6 +227,13 @@ class AtomizerControlBlock {
           '#default_value' => $defaultValue,
           '#options' => $controlConf[3],
         ];
+        // Hide the control -- #proton--color--style
+        // @TODO - make this general and apply to all types
+        if (!empty($controlConf[4])) {
+          if (!empty($controlConf[4]['hidden'])) {
+            $containerClasses[] = 'az-hidden';
+          }
+        }
         $addValue = true;
         break;
 

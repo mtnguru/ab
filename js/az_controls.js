@@ -418,18 +418,20 @@
      * @returns
      */
     var getDefault = function getDefault(id, index) {
-      var element = $('#' + id, viewer.context);
-      if (element.length) {
-        if (element[0].className.indexOf('az-control-range') > -1 ||
-          element[0].className.indexOf('az-control-rotation') > -1 ||
-          element[0].className.indexOf('az-control-position') > -1) {
+      var $element = $('#' + id, viewer.context);
+      if ($element.length) {
+        if ($element.hasClass('az-control-range') ||
+            $element.hasClass('az-control-rotation') ||
+            $element.hasClass('az-control-position')) {
           if (index) {
             return $('#' + id + '--' + index + '--az-slider', viewer.context)[0].value;
           } else {
             return $('#' + id + '--az-slider', viewer.context)[0].value;
           }
+        } else if ($element.hasClass('az-control-radios')) {
+          return $('input[name=' + $element.attr('id') + ']:checked').val();
         } else {
-          return element[0].value;
+          return $element.val();
         }
       } else {
         console.log('atomizer_controls.js - control not found - ' + id);
