@@ -54,7 +54,7 @@ Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
   function setDefaults() {
     userAtomFile = localStorage.getItem('atomizer_viewer_atom');
     if (userAtomFile && userAtomFile != 'undefined') {
-      var selectyml = document.getElementById('atom--selectyml');
+      var selectyml = $('#atom--selectyml', viewer.context)[0];
       if (selectyml) {
         select = selectyml.querySelector('select');
         select.value = userAtomFile;

@@ -15,7 +15,7 @@
     var themeDirectory = viewer.atomizer.themeDirectory;
     var currentThemeName = '';
 //var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'decalet'];
-    var saveMessage = document.getElementById('theme--message');
+    var saveMessage = $('#theme--message', viewer.context)[0];
 
     /**
      * Load a theme yml file and make it the current theme set.
@@ -75,7 +75,7 @@
      * @param response
      */
     var updateThemeSelect = function updateThemeSelect(response) {
-      var select = document.getElementById('theme--selectyml--select');
+      var select = $('#theme--selectyml--select', viewer.context)[0];
 
       // Remove current options from theme select widget
       while (select.hasChildNodes()) {
@@ -94,7 +94,7 @@
       select.value = currentSet.filepath.replace(/^.*[\\\/]/, '');
 
       // Clear the Name and File name fields
-      var inputs = document.getElementById('theme--saveNewName').value = '';
+      var inputs = $('#theme--saveNewName', viewer.context)[0].value = '';
 
       saveMessage.innerHTML = 'Theme saved successfully';
       setTimeout(function () { saveMessage.innerHTML = ''; }, 3000);
@@ -147,10 +147,10 @@
             }
             var element;
 
-            element = document.getElementById(id);
+            element = $('#' + id)[0];
             if (element) element.value = def;
 
-            element = document.getElementById(id + '--az-value');
+            element = $('#' + id + '--az-value')[0];
             if (element) element.value = def;
           }
           // else defaultValue is not an array, set the one value
@@ -165,11 +165,11 @@
             if (!controlsOnly) {
               applyControl(id, defaultSet.settings[id].defaultValue);
             }
-            var element = document.getElementById(id);
+            var element = $('#' + id)[0];
             if (element) {
               if (element.className.indexOf('az-control-range') > -1) {
-                document.getElementById(id + '--az-slider').value = def;
-                document.getElementById(id + '--az-value').value = def;
+                $('#' + id + '--az-slider').val(def);
+                $('#' + id + '--az-value').val(def);
               } else {
                 element.value = def;
               }
@@ -421,7 +421,7 @@
           saveTheme(currentSet);
           break;
         case 'theme--saveNewButton':
-          var name = document.getElementById('theme--saveNewName').value;
+          var name = $('#theme--saveNewName').val();
           if (name.length) {
             var filename = name.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_');
             if (filename.indexOf('.yml') == -1) {

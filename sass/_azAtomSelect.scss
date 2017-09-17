@@ -9,10 +9,33 @@
 
 #views-exposed-form-az-atom-select-nuclei {
   font-size: 12px;
-} 
+}
+
+
 
 // Select atom View block
 #view-select-atom {
+  border-radius: 8px;
+  form.views-exposed-form {
+    .form-item {
+      width: 100%;
+      margin: .25em;
+      label {
+        display: inline-block;
+        width: 34%;
+        margin: 0;
+      }
+      input,
+      select {
+        display: inline-block;
+        width: 60%;
+        max-width: 300px;
+        margin: 0 2%;
+        padding: .2em 1em;
+      }
+    }
+  }
+
   .close-button {
     position: absolute;
     padding: .5em;
@@ -21,41 +44,42 @@
     &:hover {
       background-color: #477DCA;
     }
-//  @extend .az-fa-close;
   }
-}
 
-.view-content {
+  .view-content {
 
-  table.views-table {
-    width: 100%;
-    font-size: 13px;
-    th {
-      font-weight: normal;
-      font-size: 100%;
-      border: solid 1px $color-border;
-      background: $color-button;
-      text-align: center;
-      a {
-        color: white;
-      }
-      &.views-field-field-atomic-number,
-      &.views-field-field__p {
-        text-align: right;
-      }
-    }
-    td {
-      border: solid 1px $color-border;
-      &.is-active {
-        background: $color-active;
-      }
-      &.views-field-field-atomic-number,
-      &.views-field-field__p {
+    table.views-table {
+      width: 100%;
+      font-size: 13px;
+      th {
+        font-weight: normal;
+        font-size: 100%;
+        border: solid 1px #6fffa0;
+        background: $color-button;
         text-align: center;
+        a {
+          color: white;
+        }
+        &.views-field-field-atomic-number,
+        &.views-field-field__p {
+          text-align: right;
+        }
+
+      }
+      td {
+        border: solid 1px #6fffa0;
+        &.is-active {
+          background: $color-active;
+        }
+        &.views-field-field-atomic-number,
+        &.views-field-field__p {
+          text-align: center;
+        }
       }
     }
   }
 }
+
 
 body#landing_page-atom-builder {
   .ui-widget-overlay {

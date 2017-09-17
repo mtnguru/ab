@@ -269,6 +269,9 @@
       }
     };
 
+    /**
+     * Create the visibleProtons and hoverProtons lists.
+     */
     function createProtonLists() {
       hoverProtons = [];
       visibleProtons = [];
@@ -326,7 +329,7 @@
 //    nucletLabel.innerHTML = '<span class="az-label">Nuclet ID: </span><span class="az-id"> ' + id + '</span>';
       // Set the state of the nuclet
       if (nuclet.az.conf.state != 'hydrogen' && nuclet.az.conf.state != 'helium') {
-        document.getElementById("nuclet--state--" + nuclet.az.conf.state).checked = true;
+        $('#nuclet--state--' + nuclet.az.conf.state).attr('checked', true);
         nucletAngleSlider.value = nuclet.az.conf.attachAngle || 1;
         nucletAngleValue.value = nuclet.az.conf.attachAngle || 1;
       }
@@ -425,7 +428,7 @@
     function setDefaults() {
       userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');
       if (userAtomFile && userAtomFile != 'undefined') {
-        var selectyml = document.getElementById('atom--selectyml');
+        var selectyml = $('#atom--selectyml', viewer.context)[0];
         if (selectyml) {
           select = selectyml.querySelector('select');
           select.value = userAtomFile;
@@ -467,34 +470,30 @@
     nucletAngleSlider.addEventListener('input', onAngleChanged);
     nucletDelete.addEventListener('click', onNucletDelete);
 
-    // Add event listeners to the nuclet edit form
-    var $radios = $controlsForm.find('.nuclet--state');
-    for(var i = $radios.length - 1; i > 0; i--) {
-      radios[i][0].onclick = function (event) {
-        if (event.target.tagName == 'INPUT') {
-          editNuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
-          createProtonLists();
-          viewer.render();
-        }
+    // Add event listeners to the nuclet edit form state radio buttons
+    var $radios = $('#edit-nuclet-state .az-control-radios', viewer.context);
+    $radios.click(function (event) {
+      if (event.target.tagName == 'INPUT') {
+        editNuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
+        createProtonLists();
+        viewer.render();
+        setEditNuclet(editNuclet);
       }
-      radios[i].id = radios[i].id + '--' + radios[i].value;
-    }
+      $(this).attr('id', $(this).attr('id') + '--' + $(this).val());
+    });
 
     // Add event listeners to mode form
-    var radios = $('.az-controls-form', viewer.context).find('.mouse--mode');
-    for(var i = radios.length - 1; i > 0; i--) {
-      radios[i].onclick = function (event) {
-        if (event.target.tagName == 'INPUT') {
-          console.log('mode: ' + event.target.value);
-          mouseMode = event.target.value;
-//      viewer.render();
+    var $radios = $('#blocks--mouse-mode .az-control-radios', viewer.context);
+    $radios.click(function (event) {
+      if (event.target.tagName == 'INPUT') {
+        console.log('mode: ' + event.target.value);
+        mouseMode = event.target.value;
+        $(this).attr('id', $(this).id + '--' + $(this).val());
+        if ($(this).attr('checked') == 'checked') {
+          mouseMode = $(this).val();
         }
       }
-      radios[i].id = radios[i].id + '--' + radios[i].value;
-      if (radios[i].checked) {
-        mouseMode = radios[i].value;
-      }
-    }
+    });
 
     return {
       createView: createView,

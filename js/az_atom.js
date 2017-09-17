@@ -11,7 +11,7 @@
     var viewer = _viewer;
     var atom;
     var atomConf;
-    var atomInformation = document.getElementById('atom--information');
+    var atomInformation = $('#atom--information', viewer.context)[0];
     var $viewSelectAtom = $('#view-select-atom');
     var loadCallback;
 
@@ -374,7 +374,7 @@
      * @param response
      */
     var savedYml = function (response) {
-      var select = document.getElementById('theme--selectyml').querySelector('select');
+      var select = $('#theme--selectyml')[0].querySelector('select');
       // Remove current options
     }
 
@@ -511,10 +511,10 @@
 
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
-      var selectAtom = document.getElementsByClassName('select-atom');
-      if (selectAtom.length) {
-        for (var i = 0; i < selectAtom.length; i++) {
-          selectAtom[i].addEventListener('click', onSelectAtom, false);
+      var $selectAtoms = $('.select-atom', $(viewer.context).parents('article'));
+      if ($selectAtoms) {
+        for (var i = 0; i < $selectAtoms.length; i++) {
+          $selectAtoms[i].addEventListener('click', onSelectAtom, false);
         }
 //    jQuery('#az-dialog').dialog('option', 'draggable', true);
       }
@@ -537,7 +537,7 @@
         addSelectAtomEventListeners();
 
         // If this is the node-atom-form being opened then fill in the atomic structure field.
-        var nodeForm = document.getElementsByClassName('node-atom-form')[0];
+        var nodeForm = $('.node-atom-form')[0];
         if (nodeForm) {
           var atomicStructure = nodeForm.getElementsByClassName('field--name-field-atomic-structure')[0];
           var textarea = atomicStructure.getElementsByTagName('textarea')[0];

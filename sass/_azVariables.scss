@@ -1,17 +1,17 @@
 
-$color-controls: #fcf0d0;
-$color-controls-wrapper: #f0e0c0;
-$color-active: #f1e1c1;
-$color-border: #b39235;
+$color-controls: #305;
+$color-controls-wrapper: lighten($color-controls, 20%);
+$color-active: lighten(#102e4a,15%);
+$color-border: #c3a235;
 
 $color-grey-dark: #282a2c;
 $color-grey-light: #999;
 $color-grey-lighter: #ccc;
 
-$color-button: #006688;
-$color-button-selected: #006688;
-$color-button-hover: #005577;
-$color-button-inactive: #999;
+$color-button: #5887ff;
+$color-button-selected: #00ddff;
+$color-button-hover: #00bbdd;
+$color-button-inactive: #bda;
 
 $color-popup: #fff9ec;
 $color-text: #555;
