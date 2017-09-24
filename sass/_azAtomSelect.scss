@@ -11,8 +11,6 @@
   font-size: 12px;
 }
 
-
-
 // Select atom View block
 #view-select-atom {
   border-radius: 8px;
@@ -31,7 +29,7 @@
         width: 60%;
         max-width: 300px;
         margin: 0 2%;
-        padding: .2em 1em;
+        padding: .2em .5em;
       }
     }
   }
@@ -39,10 +37,10 @@
   .close-button {
     position: absolute;
     padding: .5em;
-    background: #d0d0d0;
+    background: #a0a0a0;
     right: 20px;
     &:hover {
-      background-color: #477DCA;
+      background-color: #5887FF;
     }
   }
 

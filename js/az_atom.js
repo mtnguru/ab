@@ -232,13 +232,11 @@
       atom.az.nuclets[nuclet.az.id] = nuclet;
 
       if (nucletConf.nuclets) {
-        viewer.render();
         for (var id in nucletConf.nuclets) {
           createNuclet(id, nucletConf.nuclets[id], nuclet);
           activateNeutralProtons(id.charAt(id.length-1), nuclet, false, false);
         }
       }
-      viewer.render();
 
       return nucletOuterShell;
     }
