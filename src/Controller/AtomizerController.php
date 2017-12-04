@@ -152,13 +152,13 @@ class AtomizerController extends ControllerBase {
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
           'dialogClass' => 'az-dialog',
-          'width' => '520px',
+          'width' => '600px',
           'draggable' => true,
           'autoResize' => false,
           'position' => ['my' => 'right top', 'at' => 'right-10 top-10'],
         ]),
         'data-drupal-selector' => "edit-link",
-        'id' =>"edit-link--2",
+        'id' =>"edit-link",
       ],
     ];
     $data['link'] = render($link);

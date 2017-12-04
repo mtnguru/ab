@@ -64,7 +64,7 @@
     position: relative;
 
     legend {
-      font-size: 1.4em;
+      padding: 0 5px;
     }
 
     .form-item {
@@ -264,8 +264,9 @@
   .form-type-radio {
     label {
     }
+
     .form-radio {
-      margin: 0 0 0 15px;
+      margin: 0;
     }
 
     .form-item-radio {
@@ -298,16 +299,19 @@
     display: inline;
   }
 
-  #blocks--animations {
-    .form-item-selectyml {
-      margin-bottom: .5em;
-    }
-  }
-
   #blocks--animation--wrapper {
     display: flex;
     justify-content: space-around;
     margin-bottom: 1em;
+  }
+
+  legend {
+
+  }
+  #blocks--mouse-mode {
+    legend {
+      display: none;
+    }
   }
 
   #blocks--theme {
@@ -320,6 +324,12 @@
 
   #blocks--buttons {
     border: none;
+  }
+
+  #blocks--animations {
+    .form-item-selectyml {
+      margin-bottom: .5em;
+    }
   }
 
   #blocks--animation--wrapper,

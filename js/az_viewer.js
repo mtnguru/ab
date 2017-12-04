@@ -24,7 +24,7 @@
 //Physijs.scripts.ammo =   '/modules/custom/atomizer/js/libs/ammo.js';
 
     var render = function render () {
-//  viewer.scene.simulate();
+//    viewer.scene.simulate();
       viewer.renderer.render(viewer.scene, viewer.camera);
     };
 
@@ -51,8 +51,8 @@
       var attr = {};
       // Look for a parent with class 'az-atomizer'
       var el = canvasContainer;
-      while ((el = el.parentElement) && !el.classList.contains('az-atomizer'));
-      if (el) {
+      while ((el = el.parentElement) && !el.classList.contains('az-view-mode-atomizer'));
+      if (el && el.attributes['data-az']) {
         var value = el.attributes['data-az'].value;
         var pairs = value.split(' ');
         for (var pair in pairs) {
@@ -87,7 +87,7 @@
 
       // Create and position the scene
       viewer.scene = new THREE.Scene();
-//  viewer.scene = new Physijs.Scene();
+//    viewer.scene = new Physijs.Scene();
       viewer.scene.position.set(0,0,0);
 
       // Make controls

@@ -152,7 +152,13 @@ function atomizer_views_post_render($view, &$output, $cache) {
   return;
 }
 
-function atomizer_node_view(array &$build, NodeInterface $node, $display, $view_mode) {
+/**
+ * @param array $build
+ * @param \Drupal\node\NodeInterface $node
+ * @param $display
+ * @param $view_mode
+ */
+function atomizer_node_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, $display, $view_mode) {
 //if ($node->getType() == 'book') {
 //  $build['#cache']['max-age'] = 0;
 //}

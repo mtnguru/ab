@@ -269,6 +269,9 @@
             atomInformation.innerHTML = result.data.teaser;
           }
           jQuery('#atom--save a').replaceWith(result.data.link);
+          if (Drupal.attachBehaviors) {
+            Drupal.attachBehaviors('#atom--save a');
+          }
 
           if (atom) {
             // Remove any atom's currently displayed
@@ -535,7 +538,7 @@
         addSelectAtomEventListeners();
 
         // If this is the node-atom-form being opened then fill in the atomic structure field.
-        var nodeForm = $('.node-atom-form')[0];
+        var nodeForm = $('.node-atom-form, .node-atom-edit-form')[0];
         if (nodeForm) {
           var atomicStructure = nodeForm.getElementsByClassName('field--name-field-atomic-structure')[0];
           var textarea = atomicStructure.getElementsByTagName('textarea')[0];
