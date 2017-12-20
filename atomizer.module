@@ -181,10 +181,11 @@ function atomizer_preprocess_block(&$variables){
 function atomizer_preprocess_node(&$variables) {
   $type = $variables['node']->getType();
   $nid = $variables['node']->id();
-  \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  node type ' . $type . ' nid ' . $nid);
   switch ($type) {
 
     case 'atomizer':
+      \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  node type ' . $type . ' nid ' . $nid);
+
       // Read in configuration yml file
       if (!empty($variables['node']->field_configuration_file)) {
         \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  has field_configuration_file');
