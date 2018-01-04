@@ -11,6 +11,7 @@ var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var pngquant = require('imagemin-pngquant');
 var sassGlob = require('gulp-sass-glob');
+var obfuscator = require('gulp-javascript-obfuscator');
 
 gulp.task('imagemin', function () {
     return gulp.src('images/*')
@@ -50,22 +51,34 @@ gulp.task('scripts', function() {
 
 gulp.task('uglify', function() {
   gulp.src('js/src/**/*.js')
+    .pipe(gup.dest('js'))
     .pipe(uglify('main.js'))
-    .pipe(gulp.dest('js'))
 });
 
 /**
  * This task minifies javascript in the js/js-src folder and places them in the js directory.
  */
 gulp.task('compress', function() {
-  return gulp.src('./js/src/*.js')
-    .pipe(sourcemaps.init())
-    .pipe(uglify())
-    .pipe(sourcemaps.write('./maps'))
-    .pipe(gulp.dest('./js/min'))
+  return gulp.src(['./js/src/**/*.js'])
+//return gulp.src([
+//    './js/src/az_base.js',
+//    './js/src/az_viewer.js',
+//    './js/src/az_controls.js',
+//    './js/src/az_theme.js',
+//    './js/src/az.js',
+//    './js/src/az_sprites.js',
+//    './js/src/az_shapes.js',
+//    './js/src/az_nuclet.js',
+//    './js/src/az_atom.js',
+//    './js/src/az_animation.js'
+//  ])
+    .pipe(obfuscator())
+    .pipe(gulp.dest('./js/min/'))
+    .pipe(concat('az_obfuscate.js'))
+    .pipe(gulp.dest('./js/min/'))
     .pipe(notify({
-      title: "JS Minified",
-      message: "All JS files in the theme have been minified.",
+      title: "JS Obfuscator",
+      message: "All JS files in atomizer have been obfuscated.",
       onLast: true
     }));
 });
@@ -74,9 +87,9 @@ gulp.task('compress', function() {
 gulp.task('watch', function(){
 //  livereload.listen();
 
+    gulp.watch(['js/src/**/*.js'], ['compress']);
     gulp.watch('sass/**/*.scss', ['sass']);
 
-    gulp.watch(['js/src/**/*.js'], ['scripts', 'compress']);
 
 //  gulp.watch(['css/styles.css', '**/*.twig', 'js/*.js'], function (files){
 //      livereload.changed(files)

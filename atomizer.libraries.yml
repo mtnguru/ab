@@ -20,15 +20,50 @@ atomizer-base:
   dependencies:
     - core/drupal.ajax
 
+atomizer-obfuscator:
+  js:
+    js/threejs/three.js: {}
+    js/threejs/renderers/Projector.js: {}
+    js/threejs/controls/OrbitControls.js: {}
+    js/libs/screenfull.js: {}
+    js/min/az_base.js: {}
+    js/min/az_viewer.js: {}
+    js/min/az_controls.js: {}
+    js/min/az_theme.js: {}
+    js/min/az.js: {}
+    js/min/az_sprites.js: {}
+    js/min/az_shapes.js: {}
+    js/min/az_nuclet.js: {}
+    js/min/az_atom.js: {}
+    js/min/az_animation.js: {}
+  css:
+    component:
+      css/atomizer.css: {}
+  dependencies:
+    - core/drupal.ajax
+
 atomizer-atom-builder:
   js:
     js/src/producers/prod_atom_builder.js: {}
+
+atomizer-atom-builder-obfuscator:
+  js:
+    js/min/producers/prod_atom_builder.js: {}
 
 atomizer-atom-viewer:
   js:
     js/src/producers/prod_atom_viewer.js: {}
 
+atomizer-atom-viewer-obfuscator:
+  js:
+    js/min/producers/prod_atom_viewer.js: {}
+
 atomizer-platonic-solids:
   js:
     js/src/producers/prod_platonic_solids.js: {}
+
+atomizer-platonic-solids-obfuscator:
+  js:
+    js/min/producers/prod_platonic_solids.js: {}
+
 

@@ -1,6 +1,5 @@
 /**
  * @file - az_viewer.js
- *
  */
 
 
