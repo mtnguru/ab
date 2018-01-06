@@ -108,8 +108,8 @@
      * @returns {boolean}
      */
     function onButtonClicked(event) {
-
       event.preventDefault();
+
       var args = this.id.split("--");
       switch (args[1]) {
         case 'selectyml':
@@ -150,39 +150,27 @@
     }
 
     function popupDialog(response) {
-      if ($popup == null) {
-        $html = '<div class="' + + '"></div>';
-        var $popup = $('#blocks--popup', viewer.context);
-        $html =
-          '<div class="az-popup">' +
-          '<div class="az-popup-titlebar">' +
-          '<div class="az-popup-title">' +
-          'Yo Dude' +
-          '</div>' +
-          '</div>' +
-          '<div class="az-popup-content">' +
-          'Hey James' +
-          '</div>' +
-          '</div>';
-
+      for (var i = 0; i < response.length; i++) {
+        if (response[i].command == 'renderNodeCommand') {
+          var $popup = $('#' + response[i].data.popupId);
+          if ($popup != null) {
+            $popup.html(response[i].htmlContents);
+          }
+        }
       }
-
-      // Declare this as a block - it'll have already been rendered then.
-      // create a div,
-      // place html into it
-      // give the div a title area and close button in the upper right.
     }
 
     function onPopupNode(event) {
       event.preventDefault();
       var nid = $(event.target).data('nid');
       var viewMode = $(event.target).data('viewmode');
+      var blockid = $(event.target).data('blockid');
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/loadYml',
+        '/ajax-ab/renderNode',
         {
           nid: nid,
           viewMode: viewMode,
-          popupId: 'popupNode'
+          popupId: blockid
         },
         popupDialog
       );

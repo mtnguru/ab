@@ -1,5 +1,9 @@
 @import "_azVariables.scss";
 
+$color-bright-yellow: #e0ff49;
+$color-white: #faf0ff;
+$color-link: #7fffB0;
+
 .az-wrapper {
   &.az-float-controls {
     .az-controls-wrapper {
@@ -15,6 +19,7 @@
       top: .25em;
       left: .25em;
       padding: .25em;
+      border: 1px solid transparent;
       &:hover {
         background: $color-controls-wrapper;
         border: 1px solid $color-border;
@@ -25,19 +30,25 @@
 
 // Atom Builder Controls form
 .az-controls-wrapper {
-// .block-atomizer-controls {
-  width: 200px;
+  width: 220px;
   vertical-align: top;
   display: inline-block;
   margin-right: .5em;
   border-radius: 8px;
-  color: #eeb;
+  color: $color-white;
 
   form {
     width: 100%;
   }
 
+  h2 {
+    a {
+      color: $color-link;
+    }
+  }
+
   label {
+    color: $color-bright-yellow;
     font-size: 12px;
   }
 
@@ -92,7 +103,7 @@
     width: 80%;
     a {
       display: block;
-      color: white;
+      color: $color-white;
       background: $color_button;
       border-radius: 6px;
       padding: 3px 0;
@@ -104,7 +115,7 @@
   .az-control.button,
   .button-wrapper > div,
   .link-button {
-    color: white;
+    color: $color-white;
     background: $color_button;
     border-radius: 6px;
     padding: 6px 0;
@@ -124,8 +135,8 @@
     border-radius: 8px;
 
     hr {
-      margin: 10px 0 5px;
-      border-top: 1px solid #bbb;
+      margin: 5px 0;
+      border-top: 1px solid $color-border;
     }
   }
 
@@ -133,6 +144,7 @@
     font-size: 16px;
     font-weight: bold;
     margin: 0 0 .5em;
+    color: $color-bright-yellow;
   }
 
   .az-label {
@@ -148,6 +160,7 @@
   .az-control-text {
     font-size: 100%;
     .text-label {
+      color: $color-bright-yellow;
       display: inline-block;
       width: 8em;
     }

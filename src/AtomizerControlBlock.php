@@ -156,6 +156,12 @@ class AtomizerControlBlock {
           '#type' => 'button',
           '#value' => $controlConf[0],
         ];
+        if ($controlConf[1] == 'popup-node') {
+          $control['popup'] = [
+            '#type' => 'container',
+            '#attributes' => ['class' => ['az-popup']],
+          ];
+        }
         if (!empty($controlConf[2])) {
           foreach ($controlConf[2] as $key => $value) {
             if (preg_match('/^data\-/', $key)) {
@@ -400,14 +406,15 @@ class AtomizerControlBlock {
       $block['#title'] = $blockConf['title'];
     }
 
-    // Create each control
-    foreach ($blockConf['controls'] as $controlName => $controlConf) {
-      $idArgs = explode('--', $controlName);
-      if (!empty($idArgs[1]) && $idArgs[1] == 'wrapper') {
-        $block[$controlName] = AtomizerControlBlock::create('blocks', $controlName, $controlConf, $theme);
-      }
-      else {
-        $block[$controlName] = AtomizerControlBlock::makeControl($controlName, $controlConf, $theme);
+    if (!empty($blockConf['controls'])) {
+      foreach ($blockConf['controls'] as $controlName => $controlConf) {
+        $idArgs = explode('--', $controlName);
+        if (!empty($idArgs[1]) && $idArgs[1] == 'wrapper') {
+          $block[$controlName] = AtomizerControlBlock::create('blocks', $controlName, $controlConf, $theme);
+        }
+        else {
+          $block[$controlName] = AtomizerControlBlock::makeControl($controlName, $controlConf, $theme);
+        }
       }
     }
     return $block;

@@ -37,16 +37,12 @@ class AtomizerController extends ControllerBase {
   public function renderNode() {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $path = drupal_get_path('module', 'atomizer') . '/' . $data['filepath'];
-    if (!file_exists($path)) {
-       $path =  dirname($path) . '/Default.yml';
-       $data['message'] = 'Could not find ' . $data['filepath'] . ' -- Default.yml file loaded.';
-       $data['filepath'] = $path;
-       $data['filename'] = 'Default.yml';
-    }
+    $nid = $data['nid'];
+    $snippet = \Drupal::entityManager()->getStorage('node')->load($nid);
+    $htmlContents = \Drupal::entityTypeManager()->getViewBuilder('node')->view($snippet, 'full');
+
     $response = new AjaxResponse();
-    $htmlContents = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath']));
-    $response->addCommand(new RenderNodeCommand($data, $htmlContents));
+    $response->addCommand(new RenderNodeCommand($data, render($htmlContents)));
 
     return $response;
   }

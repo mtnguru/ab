@@ -1,54 +1,22 @@
-Wow, been a long time.  We fixed saving the current atom - so cool.  What next?
+What next?  The builder is in pretty good shape.  A quick style option?  Have it be the 
 
-Make an Atom Viewer - What does that mean
-
-Protect the code.
-Minimize it James.  Take the atomizer off github.  Create my own local repository.  Submit it like any other code.
-
-Figure out right not how to minimize and uglify code.
+Write something.
 
 
 
+Save what I have?
+I broke createNuclet into pieces.
+Add to the faces whether they are transparent or not - az_transparent = true
+When I save the atom save their transparency.
 
+There is only one reactive state.
+On the atom page show the current list of states that are selected.   This really isn't needed is it,.
+Display the name of the reactive state.
+Create a select list of current states of this atom.
+It will work much like the current select for style files.
 
-Get the articles to display correctly
-User page
-User dashboard
-Content 
+Have a new button, they 
 
-Start every day by writing something - it's the most critical thing to do right now.
-
-
-
-
-What next?
-
-
-
-
-Make the nuclet a true popup - take it out of the controls lists   Have the styler just be for themes. 
-
-Atom - Fieldset
-Themes - Fieldset
-Mode - popup
-Nuclet - popup
-
-Have mode and Nuclet be popups. - Place icon with buttons
-Buttons
-   REset camera
-   Select atom
-   Full Screen 
-   Mode
-   Nuclet
-
-Fix the atom builder.
-The nuclet form needs to work again.
-
-Implement the dialogs?
-Make the mode form a dialog to start with.  I can have a control block of type dialog.
-Or do I use my new files?    It's a different game there.
-Make the dialogs draggable.
-I did that with 
 
 
 

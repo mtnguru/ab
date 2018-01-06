@@ -4,3 +4,9 @@ atomizer display structure:
 atomizer display atom builder:
   title: 'Atomizer Display Atom Builder'
   description: 'Display the Atom Builder.'
+atomizer display atom viewer:
+  title: 'Atomizer Display Atom Viewer'
+  description: 'Allow user to view all the atoms.'
+atomizer load raw js:
+  title: 'Atomizer Load Raw JS'
+  description: 'Load the raw JavaScript instead of obfuscated JS.'
