@@ -3,6 +3,9 @@ $color-controls: #305;
 $color-controls-wrapper: lighten($color-controls, 20%);
 $color-active: lighten(#102e4a,15%);
 $color-border: #7fffb0;
+$color-white: #faf0ff;
+$color-link: #7fffB0;
+$color-background: #102E4A;
 
 $color-grey-dark: #282a2c;
 $color-grey-light: #999;
@@ -12,6 +15,7 @@ $color-button: #5887ff;
 $color-button-selected: #00ddff;
 $color-button-hover: #00bbdd;
 $color-button-inactive: #bda;
+$color-label: #E0ff49;
 
 $color-popup: #fff9ec;
 $color-text: #555;

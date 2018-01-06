@@ -1,15 +1,11 @@
 @import "_azVariables.scss";
 
-$color-bright-yellow: #e0ff49;
-$color-white: #faf0ff;
-$color-link: #7fffB0;
-
 .az-wrapper {
   &.az-float-controls {
     .az-controls-wrapper {
       float: left;
       background: $color-controls-wrapper;
-      border: 1px solid $color-border;
+      border: 2px solid $color-border;
       padding: .5em .25em;
     }
   }
@@ -19,10 +15,10 @@ $color-link: #7fffB0;
       top: .25em;
       left: .25em;
       padding: .25em;
-      border: 1px solid transparent;
+      border: 2px solid transparent;
       &:hover {
         background: $color-controls-wrapper;
-        border: 1px solid $color-border;
+        border: 2px solid $color-border;
       }
     }
   }
@@ -48,7 +44,7 @@ $color-link: #7fffB0;
   }
 
   label {
-    color: $color-bright-yellow;
+    color: $color-label;
     font-size: 12px;
   }
 
@@ -127,16 +123,16 @@ $color-link: #7fffB0;
   }
 
   .control-block {
-    font-size: 12px;
+    font-size: 14px;
     background: $color-controls;
     padding: .5em .75em;
-    border: 1px solid $color-border;
+    border: 2px solid $color-border;
     margin-top: .5em;
     border-radius: 8px;
 
     hr {
       margin: 5px 0;
-      border-top: 1px solid $color-border;
+      border-top: 2px solid $color-border;
     }
   }
 
@@ -144,7 +140,7 @@ $color-link: #7fffB0;
     font-size: 16px;
     font-weight: bold;
     margin: 0 0 .5em;
-    color: $color-bright-yellow;
+    color: $color-label;
   }
 
   .az-label {
@@ -160,7 +156,7 @@ $color-link: #7fffB0;
   .az-control-text {
     font-size: 100%;
     .text-label {
-      color: $color-bright-yellow;
+      color: $color-label;
       display: inline-block;
       width: 8em;
     }
@@ -235,7 +231,7 @@ $color-link: #7fffB0;
   .form-type-color {
     margin: 0;
     &not:first-child {
-      border-top: 1px solid #aaa;
+      border-top: 2px solid #aaa;
       padding-top: 10px;
     }
 
@@ -332,6 +328,16 @@ $color-link: #7fffB0;
       padding: 1em 0 0;
       margin: 0;
       border: 0;
+    }
+
+    .form-item-theme--selectblock {
+      label {
+        font-size: 16px;
+        color: $color-label;
+      }
+    }
+    hr {
+      margin-top: 15px;
     }
   }
 
