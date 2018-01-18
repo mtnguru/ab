@@ -11,7 +11,7 @@ use Drupal\Component\Utility\Xss;
  * @package Drupal\atomizer
  */
 class AtomizerInit {
-  static $js_loaded = false;
+
 
   static public function start($config) {
     // Read in the config/atomizer file
@@ -68,15 +68,21 @@ class AtomizerInit {
       ),
     );
 
-    // Load raw JavaScript files if on host az or user has permission.
-    if ('az' == \Drupal::service('request_stack')->getCurrentRequest()->server->get('SERVER_NAME') ||
-        \Drupal::currentUser()->hasPermission('atomizer load raw js')) {
-      if (!empty($atomizer_config['librariesDev'])) {
-        $build['atomizer']['#attached']['library'] = $atomizer_config['librariesDev'];
+    $js_loaded = drupal_static('atomizer_js_loaded', false);
+    if (!$js_loaded) {
+      // Load raw JavaScript files if on host az or user has permission.
+      if ('az' == \Drupal::service('request_stack')
+          ->getCurrentRequest()->server->get('SERVER_NAME') ||
+        \Drupal::currentUser()->hasPermission('atomizer load raw js')
+      ) {
+        if (!empty($atomizer_config['librariesDev'])) {
+          $build['atomizer']['#attached']['library'] = $atomizer_config['librariesDev'];
+        }
       }
-    } else { // else load the obfuscated JavaScript files
-      if (!empty($atomizer_config['libraries'])) {
-        $build['atomizer']['#attached']['library'] = $atomizer_config['libraries'];
+      else { // else load the obfuscated JavaScript files
+        if (!empty($atomizer_config['libraries'])) {
+          $build['atomizer']['#attached']['library'] = $atomizer_config['libraries'];
+        }
       }
     }
     return $build;

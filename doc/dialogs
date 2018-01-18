@@ -51,7 +51,7 @@ dialogs:
           mode--outer-faces: Outer Faces
   atom:
     title: Atom
-    icon: dot-circle-o
+    icon: bullseye
     display: popup
     items:
       atom--info: ['', node, $VIEW_MODE]

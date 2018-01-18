@@ -56,7 +56,7 @@
         var pairs = value.split(' ');
         for (var pair in pairs) {
           if (!pairs.hasOwnProperty(pair)) continue;
-          var pieces = pairs[pair].split('-');
+          var pieces = pairs[pair].split('=');
           attr[pieces[0]] = pieces[1];
         }
       }
