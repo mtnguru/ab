@@ -70,6 +70,7 @@ class AtomizerInit {
 
     $js_loaded = drupal_static('atomizer_js_loaded', false);
     if (!$js_loaded) {
+      $js_loaded = true;
       // Load raw JavaScript files if on host az or user has permission.
       if ('az' == \Drupal::service('request_stack')
           ->getCurrentRequest()->server->get('SERVER_NAME') ||
