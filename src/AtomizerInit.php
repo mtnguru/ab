@@ -77,6 +77,10 @@ class AtomizerInit {
       ) {
         if (!empty($atomizer_config['librariesDev'])) {
           $build['atomizer']['#attached']['library'] = $atomizer_config['librariesDev'];
+        } else {
+          if (!empty($atomizer_config['libraries'])) {
+            $build['atomizer']['#attached']['library'] = $atomizer_config['libraries'];
+          }
         }
       }
       else { // else load the obfuscated JavaScript files
