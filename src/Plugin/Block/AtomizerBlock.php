@@ -70,8 +70,8 @@ class AtomizerBlock extends BlockBase {
     if (!empty($config['atomizer_configuration'])) {
       $atomizer_config = $config['atomizer_configuration'];
     }
-    else if (!empty($config['atomizer_config'])) {
-      $atomizer_config = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_config']));
+    else if (!empty($config['atomizer_file'])) {
+      $atomizer_config = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_file']));
     }
     else {
       return;

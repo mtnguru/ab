@@ -90,7 +90,7 @@ class AtomizerFormatter extends FormatterBase {
 
     foreach ($items as $delta => $item) {
       // Read in the config/atomizer file
-      $nid = $items->getEntity()->nid->value;
+      $nid = $item->getEntity()->nid->value;
       $config = [
         'atom_id' => 1,
         'atomizer_id' => 'Atomizer Viewer ' . $nid,
