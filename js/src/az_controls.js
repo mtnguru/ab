@@ -313,7 +313,7 @@
      */
     function createCameraTrackballControls() {
       var controls = new THREE.OrbitControls(viewer.camera, viewer.renderer.domElement);
-      controls.rotateSpeed =   .25;
+      controls.rotateSpeed =   .45;
       controls.zoomSpeed =     .5;
       controls.panSpeed =      .5;
       controls.enableZoom =    true;

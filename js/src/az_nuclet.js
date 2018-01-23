@@ -320,15 +320,15 @@
         case 'sphere':
           geometry = new THREE.SphereGeometry(
             compConf.radius || viewer.theme.get('proton--radius'),
-            compConf.widthSegments || 36,
-            compConf.heightSegments || 36
+            compConf.widthSegments || 20,
+            compConf.heightSegments || 20
           );
           break;
         case 'electron':
           geometry = new THREE.SphereGeometry(
             compConf.radius || viewer.theme.get('electron--radius'),
-            compConf.widthSegments || 24,
-            compConf.heightSegments || 24
+            compConf.widthSegments || 10,
+            compConf.heightSegments || 10
           );
           break;
         case 'octahedron':
@@ -648,10 +648,8 @@
       var opacity = viewer.theme.get('proton--opacity');
       for (p in compConf.protons) {
         if (!compConf.protons.hasOwnProperty(p)) continue;
-        var visible = (azNuclet.conf.protons.indexOf(parseInt(p)) > -1);
         compConf.protons[p].visible = (azNuclet.conf.protons.indexOf(parseInt(p)) > -1);
         var proton = makeProton(compConf.protons[p], opacity, geometry.vertices[p], azNuclet);
-//          addObject('protons', proton);
         azNuclet.protons[p] = proton;
       }
       return azNuclet.protons;
@@ -831,7 +829,7 @@
       }
 
       if (compConf.axes) {
-        nucletGroup.add(createAxes(groupName, compConf.axes, geometry));
+//      nucletGroup.add(createAxes(groupName, compConf.axes, geometry));
       }
 
       if (compConf.wireframe) {
@@ -858,15 +856,15 @@
       }
 
       if (compConf.vertexids) {
-        nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
+//      nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
       }
 
       if (compConf.faceids) {
-        nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
+//      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
       }
 
       if (compConf.particleids) {
-        nucletGroup.add(viewer.sprites.createVerticeIds(compConf.particleids, geometry));
+//      nucletGroup.add(viewer.sprites.createVerticeIds(compConf.particleids, geometry));
       }
       return geometry;
     }

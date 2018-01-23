@@ -42,7 +42,7 @@
     }
 
     /**
-     * Search backward up the parent chain and extract an data-az attributes.
+     * Search backward up the parent chaa
      *
      * @param canvasContainer
      */

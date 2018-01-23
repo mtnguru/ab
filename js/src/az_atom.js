@@ -275,8 +275,8 @@
 
           if (atom) {
             // Remove any atom's currently displayed
-            viewer.scene.remove(atom);
             az = atom.az;
+            deleteAtom(atom);
           } else {
             az = {nuclets: {}}
           }
@@ -309,6 +309,13 @@
 
       return atom;
     };
+
+    var deleteAtom = function deleteAtom (atom) {
+      for (var n in atom.az.nuclets) {
+        viewer.nuclet.deleteNuclet(atom.az.nuclets[n]);
+      }
+      viewer.scene.remove(atom);
+    }
 
     /**
      * Check all valence rings and color active/inactive rings - count total Active and update atom information.
@@ -560,6 +567,7 @@
       changeNucletState: changeNucletState,
       changeNucletAngle: changeNucletAngle,
       createAtom: createAtom,
+      deleteAtom: deleteAtom,
       deleteNuclet: deleteNuclet,
       getNuclet: getNuclet,
       getYmlDirectory: function () { return 'config/atom'; },
