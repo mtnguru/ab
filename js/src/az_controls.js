@@ -370,8 +370,8 @@
 
     /**
      * Save the current mouse position - X, Y
-     * When the user moves the mouse, if the producer has a intersected handler,
-     * then * build a list of intersected objects and call the producers intersected handler.
+     * When the user moves the mouse, if the producer has an intersected handler,
+     * then build a list of intersected objects and call the producers intersected handler.
      * @param event
      */
     function onMouseMove(event) {

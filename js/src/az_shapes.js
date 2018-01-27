@@ -4,9 +4,6 @@
  */
 
 Drupal.atomizer.shapesC = function (_viewer) {
-  var viewer = _viewer;
-  var axes = ['x', 'y', 'z'];
-
   /**
    * Create the icosahedron geometry.
    *
@@ -22,6 +19,16 @@ Drupal.atomizer.shapesC = function (_viewer) {
       0,  1,  t,    0, -1,  t,    0,  1, -t,   0, -1, -t,
       t,  0,  1,    t,  0, -1,   -t,  0, -1,  -t,  0,  1,
       1,  t,  0,   -1,  t,  0,    1, -t,  0,  -1, -t,  0
+      // The invisible neutron positions.
+
+//    1.9197063907443,1.7431021759466,1.7651180413022,
+//    2.8555615478674,0.17282948323074,0.99775880481776,
+//    2.8555615478674,0.17282948323074,-0.99775880481776,
+//    1.9197063907443,1.7431021759466,-1.7651180413022,
+//    -1.9197063907443,1.7431021759466,-1.7651180413022,
+//    -2.8555615478674,0.17282948323074,-0.99775880481776,
+//    -2.8555615478674,0.17282948323074,0.99775880481776,
+//    -1.9197063907443,1.7431021759466,1.7651180413022
     ];
 
     var indices = [
@@ -85,7 +92,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
       -2.8555615478674,0.17282948323074,-0.99775880481776,
       -2.8555615478674,0.17282948323074,0.99775880481776,
       -1.9197063907443,1.7431021759466,1.7651180413022,
-       2.85,1.90,0,
+      2.85,1.90,0,
       -2.85,1.90,0
     ];
 
@@ -114,7 +121,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
 
     this.type = 'BackboneGeometry';
     this.parameters = { radius: radius, detail: detail };
-  };
+  }
 
   backboneGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   backboneGeometry.prototype.constructor = backboneGeometry;
@@ -281,7 +288,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
       {  // 5
         'indices': [2, 5, 4, 3],
         'faces': [10, 11]
-      },
+      }
     ];
   }
 

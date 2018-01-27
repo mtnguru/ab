@@ -721,7 +721,8 @@
 
     function createElectrons(groupName, geometry, compConf, nucletConf) {
       var opacity = viewer.theme.get('electron--opacity') || 1;
-      var scale = viewer.theme.get(groupName + '--scale');
+//    var scale = viewer.theme.get(groupName + '--scale');
+      var scale = compConf.scale;
       var electrons = [];
       for (var e in compConf.electrons) {
         if (!compConf.electrons.hasOwnProperty(e)) continue;
@@ -953,7 +954,7 @@
           break;
         case 'carbon':
         case 'icosahedron':
-          protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+          protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
           electrons = [0, 1, 2, 3, 4, 5];
       }
 
