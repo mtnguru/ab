@@ -6,6 +6,8 @@
  */
 
 use Drupal\atomizer\AtomizerFiles;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Component\Serialization\Yaml;
@@ -27,6 +29,8 @@ function atomizer_help($route_name, RouteMatchInterface $route_match) {
   }
 }
 
+////////////////////// Atom Form Alters //////////////////////////
+
 /**
  * Implements hook_form_FORM_ID_alter().
  *
@@ -35,21 +39,8 @@ function atomizer_help($route_name, RouteMatchInterface $route_match) {
  * @param $form
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  */
-function atomizer_form_node_atom_form_alter(&$form, FormStateInterface $form_state) {
-//$form['field_atomic_structure']['#access'] = false;
+function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
   $form['actions']['preview']['#access'] = false;
-  $form['actions']['submit']['#access'] = true;
-  $form['actions']['publish']['#value'] = t('Create New');
-  $form['actions']['unpublish']['#access'] = false;
-
-  $form['title']['widget'][0]['value']['#title'] = t('Atom Name');
-
-  unset($form['field__inner_electrons']['widget'][0]['value']['#description']);
-  unset($form['field__outer_electrons']['widget'][0]['value']['#description']);
-  unset($form['field__p']['widget'][0]['value']['#description']);
-  unset($form['field_element']['widget'][0]['target_id']['#description']);
-  unset($form['field_stability']['widget']['#description']);
-  unset($form['field_isotope']['widget'][0]['value']['#description']);
 
   $form['path']['#access'] = false;
 
@@ -64,8 +55,72 @@ function atomizer_form_node_atom_form_alter(&$form, FormStateInterface $form_sta
     }
   }
 
+  $form['actions']['submit']['#submit'][] = '_atomizer_atom_form_submit';
+  $form['actions']['submit']['#attributes']['class'][] = 'use-ajax-submit';
+//foreach (array_keys($form['actions']) as $action) {
+//  if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+//    $form['actions'][$action]['#submit'][] = '_atomizer_atom_form_submit';
+//  }
+//}
+}
+
+function _atomizer_atom_form_submit(&$form, FormStateInterface &$form_state) {
+  $response = new AjaxResponse();
+  $response->addCommand(new CloseModalDialogCommand());
+  $form_state->setResponse($response);
+}
+
+
+
+
+function _atomizer_what_is_this_form_alter_for (&$form, FormStateInterface $form_state) {
+  // Set the field_configuration_file option to the list of files in atomizer/config/atomizers.
+  $form['field_configuration_file']['#access'] = false;
+  $entity = $form_state->getFormObject()->getEntity();
+  $configFile = $entity->field_configuration_file->value;
+  $form['field_config'] = [
+    '#type' => 'select',
+    '#title' => t('Configuration file'),
+    '#default_value' => $configFile,
+    '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/'),
+  ];
+
+  $form['#validate'][] = 'atomizer_form_node_atomizer_validate';
+  foreach (array_keys($form['actions']) as $action) {
+    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+      $form['actions'][$action]['#submit'][] = 'atomizer_form_node_atomizer_submit';
+    }
+  }
+}
+
+/**
+ * Atomizer Edit form alterations - node-atomizer-form
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function atomizer_form_node_atom_edit_form_alter (&$form, FormStateInterface $form_state) {
+  _atomizer_atom_form_alter($form, $form_state);
+}
+
+/**
+ * Atomizer Edit form alterations - node-atomizer-edit-form
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function atomizer_form_node_atom_form_alter (&$form, FormStateInterface $form_state) {
+  _atomizer_atom_form_alter($form, $form_state);
+}
+
+function atomizer_views_pre_render($view) {
+  return $view;
+}
+
+function atomizer_views_post_render($view, &$output, $cache) {
   return;
 }
+
 
 function atomizer_form_atomizer_controls_form_alter (&$form, FormStateInterface $form_state) {
   return;
@@ -114,7 +169,29 @@ function atomizer_form_alter (&$form, FormStateInterface $form_state) {
   return;
 }
 
-function _atomizer_node_form_alter (&$form, FormStateInterface $form_state) {
+////////////////////// Atomizer Form Alters//////////////////////////
+
+/**
+ * Atomizer Edit form alterations - node-atomizer-form
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function atomizer_form_node_atomizer_form_alter (&$form, FormStateInterface $form_state) {
+  _atomizer_atomizer_form_alter($form, $form_state);
+}
+
+/**
+ * Atomizer Edit form alterations - node-atomizer-edit-form
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function atomizer_form_node_atomizer_edit_form_alter (&$form, FormStateInterface $form_state) {
+  _atomizer_atomizer_form_alter($form, $form_state);
+}
+
+function _atomizer_atomizer_form_alter (&$form, FormStateInterface $form_state) {
   // Set the field_configuration_file option to the list of files in atomizer/config/atomizers.
   $form['field_configuration_file']['#access'] = false;
   $entity = $form_state->getFormObject()->getEntity();
@@ -127,31 +204,11 @@ function _atomizer_node_form_alter (&$form, FormStateInterface $form_state) {
   ];
 
   $form['#validate'][] = 'atomizer_form_node_atomizer_validate';
-//foreach (array_keys($form['actions']) as $action) {
-//  if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
-//    $form['actions'][$action]['#submit'][] = 'atomizer_form_node_atomizer_submit';
-//  }
-//}
-}
-
-/**
- * Atomizer Edit form alterations - node-atomizer-form
- *
- * @param $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- */
-function atomizer_form_node_atomizer_form_alter (&$form, FormStateInterface $form_state) {
-  _atomizer_node_form_alter($form, $form_state);
-}
-
-/**
- * Atomizer Edit form alterations - node-atomizer-edit-form
- *
- * @param $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- */
-function atomizer_form_node_atomizer_edit_form_alter (&$form, FormStateInterface $form_state) {
-  _atomizer_node_form_alter($form, $form_state);
+  foreach (array_keys($form['actions']) as $action) {
+    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+      $form['actions'][$action]['#submit'][] = 'atomizer_form_node_atomizer_submit';
+    }
+  }
 }
 
 function atomizer_form_node_atomizer_submit (&$form, FormStateInterface &$form_state) {
@@ -163,13 +220,7 @@ function atomizer_form_node_atomizer_validate (&$form, FormStateInterface $form_
   return;
 }
 
-function atomizer_views_pre_render($view) {
-  return $view;
-}
 
-function atomizer_views_post_render($view, &$output, $cache) {
-  return;
-}
 
 /**
  * @param array $build

@@ -18,6 +18,7 @@ atomizer-base:
     component:
       css/atomizer.css: {}
   dependencies:
+    - core/drupal.dialog.ajax
     - core/drupal.ajax
 
 atomizer-obfuscator:
@@ -40,6 +41,7 @@ atomizer-obfuscator:
     component:
       css/atomizer.css: {}
   dependencies:
+    - core/drupal.dialog.ajax
     - core/drupal.ajax
 
 atomizer-atom-builder:
