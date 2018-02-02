@@ -10,6 +10,9 @@ atomizer display atom viewer:
 atomizer embed atoms:
   title: 'Atomizer Embed Atoms'
   description: 'Allow user to embed atoms in WYSIWYG - must also have ability to use "Admin HTML" edit mode.'
+atomizer display all atoms:
+  title: 'Atomizer Display All Atoms'
+  description: 'Allow user to view unpublished atoms.'
 atomizer load raw js:
   title: 'Atomizer Load Raw JS'
   description: 'Load the raw JavaScript instead of obfuscated JS.'

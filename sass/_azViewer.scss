@@ -2,8 +2,12 @@
 
 .field--name-field-atomic-structure {
   .az-canvas-wrapper {
+    overflow: hidden;
+    border-radius: 10px;
+    width: 100%;
+    margin-bottom: 20px;
     canvas {
-//    width: 100%;
+      margin-bottom: -10px;
     }
   }
 }
@@ -27,12 +31,6 @@
 .az-wrapper {
   width: 100%;
   outline: none;
-}
-
-.az-canvas-wrapper {
-  overflow: hidden;
-  border-radius: 10px;
-  width: 100%;
 }
 
 .az-wrapper {

@@ -272,7 +272,11 @@ function atomizer_preprocess_node(&$variables) {
 
           // Add view block if defined.
           if (!empty($atomizerConfig['view'])) {
-            $variables['content']['view_' . $atomizerConfig['view']] = views_embed_view('az_atom', $atomizerConfig['view']);
+            $view = $atomizerConfig['view'];
+            if (\Drupal::currentUser()->hasPermission('atomizer display all atoms')) {
+              $view .= '_all';
+            }
+            $variables['content']['view_' . $atomizerConfig['view']] = views_embed_view('az_atom', $view);
           }
           $blockManager = \Drupal::service('plugin.manager.block');
           $variables['content']['atomizer_block'] = $blockManager->createInstance('atomizer_block', [
