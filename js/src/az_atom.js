@@ -268,9 +268,12 @@
           if (atomInformation) {
             atomInformation.innerHTML = result.data.teaser;
           }
-          jQuery('#atom--save a').replaceWith(result.data.link);
-          if (Drupal.attachBehaviors) {
-            Drupal.attachBehaviors('#atom--save a');
+          var $save = $('#atom--save a');
+          if ($save.length) {
+            $save.replaceWith(result.data.link);
+            if (Drupal.attachBehaviors) {
+              Drupal.attachBehaviors('#atom--save a');
+            }
           }
 
           if (atom) {

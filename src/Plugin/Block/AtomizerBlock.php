@@ -21,11 +21,11 @@ class AtomizerBlock extends BlockBase {
   public function blockForm($form, FormStateInterface $form_state) {
 
     // Give the viewer a name so the controls block can connect to it.
-    $form['atomizer_id'] = [
+    $form['atomizerId'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Atomizer ID'),
       '#description' => $this->t('Give this instance of the atomizer an ID - not needed in this instance?'),
-      '#default_value' => isset($this->configuration['atomizer_id']) ? $this->configuration['atomizer_id'] : 'Atomizer',
+      '#default_value' => isset($this->configuration['atomizerId']) ? $this->configuration['atomizerId'] : 'Atomizer',
     ];
 
     $control_files = file_scan_directory(drupal_get_path('module','atomizer') . '/config/controls', '/\.yml/');
@@ -33,19 +33,19 @@ class AtomizerBlock extends BlockBase {
     foreach ($control_files as $file) {
       $control_options[$file->filename] = $file->name;
     }
-    $form['control_file'] = [
+    $form['controlFile'] = [
       '#type' => 'select',
       '#title' => $this->t('Control Set file'),
       '#description' => $this->t(''),
-      '#default_value' => isset($this->configuration['control_file']) ? $this->configuration['control_file'] : 'base',
+      '#default_value' => isset($this->configuration['controlFile']) ? $this->configuration['controlFile'] : 'base',
       '#options' => $control_options,
     ];
 
-    $form['atomizer_file'] = [
+    $form['atomizerFile'] = [
       '#type' => 'select',
       '#title' => $this->t('Atomizer file'),
       '#description' => $this->t(''),
-      '#default_value' => isset($this->configuration['atomizer_file']) ? $this->configuration['atomizer_file'] : 'default',
+      '#default_value' => isset($this->configuration['atomizerFile']) ? $this->configuration['atomizerFile'] : 'default',
       '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/'),
     ];
     return $form;
@@ -55,9 +55,9 @@ class AtomizerBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['atomizer_id'] = $form_state->getValue('atomizer_id');
-    $this->configuration['control_file'] = $form_state->getValue('control_file');
-    $this->configuration['atomizer_file'] = $form_state->getValue('atomizer_file');
+    $this->configuration['atomizerId'] = $form_state->getValue('atomizerId');
+    $this->configuration['controlFile'] = $form_state->getValue('controlFile');
+    $this->configuration['atomizerFile'] = $form_state->getValue('atomizerFile');
   }
 
   /**
@@ -66,67 +66,6 @@ class AtomizerBlock extends BlockBase {
   public function build() {
     $config = $this->getConfiguration();
 
-    // If this is an atomizer CT then get configuration from Atomizer node.
-    if (!empty($config['atomizer_configuration'])) {
-      $atomizer_config = $config['atomizer_configuration'];
-    }
-    else if (!empty($config['atomizer_file'])) {
-      $atomizer_config = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizer_file']));
-    }
-    else {
-      return;
-    }
-    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $atomizer_config['controlFile']));
-    $controlSet['filename'] = $atomizer_config['controlFile'];
-
-    // Create the controls form
-    $controls['form'] = \Drupal::formBuilder()->getForm('Drupal\atomizer\Form\AtomizerControlsForm', $controlSet);
-    $controls['form']['#attributes'] = ['class' => ['az-controls-form']];
-    $controls['form']['#attached'] =  [
-      'library' => ['atomizer/atomizer-js'],
-      'drupalSettings' => [
-        'atomizer' => [
-          $atomizer_config['atomizerId'] => [
-            'atomizerId' =>  $atomizer_config['atomizerId'],
-            'controlSet' =>  $controlSet,
-            'theme' => $controls['form']['#az-theme'],
-          ],
-        ],
-      ],
-    ];
-
-    $atomizer = AtomizerInit::start($config);
-    $build = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => ['az-wrapper'],
-        'tabindex' => 1,
-      ],
-      '#cache' => [
-        'max-age' => 0,
-      ],
-      'content' => [
-        '#type' => 'container',
-        '#attributes' => [
-          'id' => 'az-id-' . $atomizer_config['atomizerId'],
-          'class' => ['az-atomizer-wrapper'],
-        ],
-        'atomizer' => $atomizer['atomizer'],
-        'controls' => [
-          '#type' => 'container',
-          '#weight' => -10,
-          '#attributes' => ['class' => ['az-controls-wrapper']],
-          'controls' => $controls,
-        ],
-      ],
-    ];
-
-    if (!empty($atomizer_config['classes'])) {
-      foreach ($atomizer_config['classes'] as $class) {
-        $build['#attributes']['class'][] = $class;
-      }
-    }
-
-    return $build;
+    return AtomizerInit::build($config);
   }
 }

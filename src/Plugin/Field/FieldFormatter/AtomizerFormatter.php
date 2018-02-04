@@ -27,15 +27,14 @@ use Drupal\atomizer\AtomizerInit;
  */
 class AtomizerFormatter extends FormatterBase {
 
-//private static $fileList;
-
   /**
    * {@inheritdoc}
    */
   public static function defaultSettings() {
     return array(
       'atomizer' => 'atomizer_viewer',
-      'atomizer_class' => '',
+      'atomizerClass' => '',
+      'control' => '',
     );
   }
 
@@ -43,22 +42,31 @@ class AtomizerFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
+    $atomizerFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
     $atomizer = $this->getSetting('atomizer');
-    $atomizer_class = $this->getSetting('atomizer_class');
+    $atomizerClass = $this->getSetting('atomizerClass');
+
+    $controlFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/controls', '/\.yml/');
+    $control = $this->getSetting('control');
 
     $elements['atomizer'] = array(
       '#type' => 'select',
-      '#options' => $fileList,
+      '#options' => $atomizerFiles,
       '#title' => t('Atomizer mode'),
       '#default_value' => ($atomizer) ? $atomizer : $this->defaultSettings()['atomizer'],
       '#required' => TRUE,
     );
-    $elements['atomizer_class'] = array(
+    $elements['control'] = array(
+      '#type' => 'select',
+      '#options' => $controlFiles,
+      '#title' => t('Control file'),
+      '#default_value' => ($control) ? $control : $this->defaultSettings()['control'],
+      '#required' => TRUE,
+    );
+    $elements['atomizerClass'] = array(
       '#type' => 'textfield',
       '#title' => t('Class'),
-      '#default_value' => ($atomizer_class) ? $atomizer_class : $this->defaultSettings()['atomizer_class'],
-      '#required' => TRUE,
+      '#default_value' => ($atomizerClass) ? $atomizerClass : $this->defaultSettings()['atomizerClass'],
     );
 
     return $elements;
@@ -69,14 +77,18 @@ class AtomizerFormatter extends FormatterBase {
    */
   public function settingsSummary() {
     $summary = array();
-    $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
-
+    $atomizerFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
     $atomizer = $this->getSetting('atomizer');
-    $atomizer = ($atomizer) ? $atomizer : defaultSettings()['atomizer'];
-    $summary[] = t('Atomizer: @atomizer', array('@atomizer' => $fileList[$atomizer]));
+    $atomizer = ($atomizer) ? $atomizer : $this->defaultSettings()['atomizer'];
+    $summary[] = t('Atomizer: @atomizer', array('@atomizer' => $atomizerFiles[$atomizer]));
 
-    $atomizer_class = $this->getSetting('atomizer_class');
-    $summary[] = t('Class: @class', array('@class' => $atomizer_class));
+    $controlFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/controls', '/\.yml/');
+    $control = $this->getSetting('control');
+    $control = ($control) ? $control : $this->defaultSettings()['control'];
+    $summary[] = t('Control file: @control', array('@control' => $controlFiles[$control]));
+
+    $atomizerClass = $this->getSetting('atomizerClass');
+    $summary[] = t('Class: @class', array('@class' => $atomizerClass));
 
     return $summary;
   }
@@ -89,18 +101,17 @@ class AtomizerFormatter extends FormatterBase {
     $elements = array();
 
     foreach ($items as $delta => $item) {
-      // Read in the config/atomizer file
       $nid = $item->getEntity()->nid->value;
       $config = [
-        'atom_id' => 1,
-        'atomizer_id' => 'Atomizer Viewer ' . $nid,
-        'atomizer_file' => $this->getSetting('atomizer'),
-        'atomizer_class' => $this->getSetting('atomizer_class'),
-        'label' => 'Atomizer Embed',
+        'atomizerId' => 'atomizer_formatter_' . $nid,
+        'atomizerFile' => $this->getSetting('atomizer'),
+        'atomizerClass' => $this->getSetting('atomizerClass'),
+        'controlFile' => $this->getSetting('control'),
+        'label' => 'Atomizer Formatter',
         'nid' => $nid,
       ];
 
-      $elements[$delta] = AtomizerInit::start($config);
+      $elements[$delta] = AtomizerInit::build($config);
     }
 
     return $elements;

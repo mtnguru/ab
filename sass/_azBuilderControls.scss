@@ -10,6 +10,7 @@
     }
   }
   &.az-overlay-controls {
+    position: relative;
     .az-controls-wrapper {
       position: absolute;
       top: .25em;
@@ -332,7 +333,7 @@
 
     .form-item-theme--selectblock {
       label {
-        font-size: 16px;
+        font-size: 14px;
         color: $color-label;
       }
     }
@@ -373,6 +374,27 @@
       }
       &:hover {
         color: $color-button-hover;
+      }
+    }
+  }
+}
+
+article.atomizer_minimal {
+  .az-wrapper {
+    .az-controls-wrapper {
+      width: auto;
+      margin-right: 0;
+      right: .1em;
+      top: .1em;
+      left: auto;
+
+    }
+
+    #blocks-buttons {
+      .az-control {
+        .fa {
+          font-size: 60%;
+        }
       }
     }
   }

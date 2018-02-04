@@ -49,8 +49,8 @@
     function getDataAttr(canvasContainer) {
       var attr = {};
       // Look for a parent with class 'az-atomizer'
-      var el = canvasContainer;
-      while ((el = el.parentElement) && !el.classList.contains('az-view-mode-atomizer'));
+      var el = viewer.canvasContainer;
+      while ((el = el.parentElement) && !el.classList.contains('az-embed'));
       if (el && el.attributes['data-az']) {
         var value = el.attributes['data-az'].value;
         var pairs = value.split(' ');

@@ -20,18 +20,18 @@ class AtomizerViewer extends BlockBase {
   public function blockForm($form, FormStateInterface $form_state) {
 
     // Give the atomizer the controls block can connect to it.
-    $form['atomizer_id'] = [
+    $form['atomizerId'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Atomizer ID'),
       '#description' => $this->t('Give this atomizer the same id as that assigned the Atomizer Control block'),
-      '#default_value' => isset($this->configuration['atomizer_id']) ? $this->configuration['atomizer_id'] : 'Atomizer',
+      '#default_value' => isset($this->configuration['atomizerId']) ? $this->configuration['atomizerId'] : 'Atomizer',
     ];
 
-    $form['atomizer_file'] = [
+    $form['atomizerFile'] = [
       '#type' => 'select',
       '#title' => $this->t('Atomizer file'),
       '#description' => $this->t(''),
-      '#default_value' => isset($this->configuration['atomizer_file']) ? $this->configuration['atomizer_file'] : 'default',
+      '#default_value' => isset($this->configuration['atomizerFile']) ? $this->configuration['atomizerFile'] : 'default',
       '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/'),
     ];
 
@@ -42,8 +42,8 @@ class AtomizerViewer extends BlockBase {
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['atomizer_id'] = $form_state->getValue('atomizer_id');
-    $this->configuration['atomizer_file'] = $form_state->getValue('atomizer_file');
+    $this->configuration['atomizerId'] = $form_state->getValue('atomizerId');
+    $this->configuration['atomizerFile'] = $form_state->getValue('atomizerFile');
   }
 
   /**

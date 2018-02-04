@@ -19,22 +19,22 @@ class AtomizerControls extends BlockBase {
   public function blockForm($form, FormStateInterface $form_state) {
 
     // Give the viewer a name so the controls block can connect to it.
-    $form['atomizer_id'] = array(
+    $form['atomizerId'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Atomizer ID'),
       '#description' => $this->t('Enter the same name as that given the Atomizer Viewer block'),
-      '#default_value' => isset($this->configuration['atomizer_id']) ? $this->configuration['atomizer_id'] : 'Atomizer',
+      '#default_value' => isset($this->configuration['atomizerId']) ? $this->configuration['atomizerId'] : 'Atomizer',
     );
 
     $control_files = file_scan_directory(drupal_get_path('module','atomizer') . '/config/controls', '/\.yml/');
     foreach ($control_files as $file) {
       $control_options[$file->filename] = $file->name;
     }
-    $form['control_file'] = array(
+    $form['controlFile'] = array(
       '#type' => 'select',
       '#title' => $this->t('Control Set file'),
       '#description' => $this->t(''),
-      '#default_value' => isset($this->configuration['control_file']) ? $this->configuration['control_file'] : 'base',
+      '#default_value' => isset($this->configuration['controlFile']) ? $this->configuration['controlFile'] : 'base',
       '#options' => $control_options,
     );
     return $form;
@@ -44,8 +44,8 @@ class AtomizerControls extends BlockBase {
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['atomizer_id'] = $form_state->getValue('atomizer_id');
-    $this->configuration['control_file'] = $form_state->getValue('control_file');
+    $this->configuration['atomizerId'] = $form_state->getValue('atomizerId');
+    $this->configuration['controlFile'] = $form_state->getValue('controlFile');
   }
 
   /**
@@ -55,8 +55,8 @@ class AtomizerControls extends BlockBase {
     $config = $this->getConfiguration();
 
     // Read in the controls file
-    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $config['control_file']));
-    $controlSet['filename'] = $config['control_file'];
+    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $config['controlFile']));
+    $controlSet['filename'] = $config['controlFile'];
 
     // Create the form
     $render['form'] = \Drupal::formBuilder()->getForm('Drupal\atomizer\Form\AtomizerControlsForm', $controlSet);
@@ -66,8 +66,8 @@ class AtomizerControls extends BlockBase {
       'library' => array('atomizer/atomizer-js'),
       'drupalSettings' => array(
         'atomizer' => array(
-          $config['atomizer_id'] => array(
-            'atomizerId' =>  $config['atomizer_id'],
+          $config['atomizerId'] => array(
+            'atomizerId' =>  $config['atomizerId'],
             'controlSet' =>  $controlSet,
             'theme' => $render['form']['#az-theme'],
           ),

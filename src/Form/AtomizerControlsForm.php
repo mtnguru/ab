@@ -64,7 +64,8 @@ class AtomizerControlsForm extends FormBase {
     }
 
     // Set options for the theme block selector control
-    if (isset($controlSet['blocks']['theme'])) {
+    if (isset($controlSet['blocks']['theme']) &&
+        isset($controlSet['blocks']['theme']['controls']['theme--selectBlock'])) {
       $options = $controlSet['blocks']['theme']['controls']['theme--selectBlock'][3];
       foreach ($options as $key) {
         $form['blocks']['theme']['theme--selectBlock']['#options'][$key] = $controlSet['blocks'][$key]['title'];

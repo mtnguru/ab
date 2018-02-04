@@ -280,9 +280,9 @@ function atomizer_preprocess_node(&$variables) {
           }
           $blockManager = \Drupal::service('plugin.manager.block');
           $variables['content']['atomizer_block'] = $blockManager->createInstance('atomizer_block', [
-              'atomizer_id' => $atomizerConfig['atomizerId'],
-              'control_file' => $atomizerConfig['controlFile'],
-              'atomizer_file' => $configFile,
+            'atomizerId' => $atomizerConfig['atomizerId'],
+            'controlFile' => $atomizerConfig['controlFile'],
+            'atomizerFile' => $configFile,
           ])->build();
 //        $variables['content']['atomizer_block'] = $view->view($atomizer_block);
         }

@@ -206,15 +206,15 @@
     }
 
     function showThemeBlock() {
-      for (var i=0; i < selectBlock.length; i++) {
-        if (selectBlock[i].selected) {
-          var blockName = selectBlock[i].id.split('--')[1];
-          showSelectedThemeBlock($(blockName));
+      if (selectBlock) {
+        if (!selectBlock.value) {
+          selectBlock[0].selected = true;
         }
+        showSelectedThemeBlock();
       }
     }
 
-    function showSelectedThemeBlock($block) {
+    function showSelectedThemeBlock() {
       // Hide all .control-block's in theme block.
       $('#blocks--theme .control-block').addClass('az-hidden');
 
@@ -240,9 +240,11 @@
       if (!form) return;
 
       showThemeBlock();
-      selectBlock.addEventListener("change", function(e) {
-        showSelectedThemeBlock($('#blocks--' + e.value));
-      });
+      if (selectBlock) {
+        selectBlock.addEventListener("change", function (e) {
+          showSelectedThemeBlock($('#blocks--' + e.value));
+        });
+      }
 
       // Set up event listeners
       for (var controlId in viewer.atomizer.theme.settings) {
