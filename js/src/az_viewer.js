@@ -71,6 +71,7 @@
       var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-canvas-wrapper';
       viewer.canvasContainer = $('#' + containerId)[0];
       viewer.dataAttr = getDataAttr(viewer.canvasContainer);
+      viewer.theme.addDataAttr();
       viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
       viewer.canvasWidth = viewer.canvasContainer.clientWidth;
       if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {

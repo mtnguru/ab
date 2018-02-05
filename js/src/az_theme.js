@@ -51,6 +51,14 @@
       }
     };
 
+    var addDataAttr = function () {
+      for (var name in viewer.dataAttr) {
+        if (currentSet.settings[name]) {
+          currentSet.settings[name].defaultValue = viewer.dataAttr[name];
+        }
+      }
+    };
+
     /**
      * The current theme set was saved, now re-list the theme set directory with AJAX.
      *
@@ -155,10 +163,12 @@
           }
           // else defaultValue is not an array, set the one value
         } else {
-          if (defaultSet.settings[id]) {
-            def = defaultSet.settings[id].defaultValue;
+          if (viewer.dataAttr && viewer.dataAttr[id]) {
+            def = viewer.dataAttr[id];
+          } else if (defaultSet.settings[id]) {
+              def = defaultSet.settings[id].defaultValue;
           } else {
-//        alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
+//          alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
             console.log('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
           }
           if (updateAll || currentSet.settings[id].defaultValue != def) {
@@ -481,6 +491,7 @@
       buttonClicked: buttonClicked,
       applyControl: applyControl,
       loadYml: loadYml,
+      addDataAttr: addDataAttr,
       get: get,
       set: set,
       getCurrentControls: function() { return currentSet.settings; },
