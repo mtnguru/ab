@@ -85,7 +85,7 @@
 
     /**
      * When the user has clicked on an add nuclet button,
-     * create the new nuclet with a carbon ending.
+     * create the new nuclet with a lithium ending.
      *
      * @param event
      */
