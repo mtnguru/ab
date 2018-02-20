@@ -65,6 +65,7 @@
       );
       nuclet = nucletOuterShell.children[0].children[0];
       setValenceRings();
+      showStats();
 
       return nuclet;
     }

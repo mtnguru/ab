@@ -325,11 +325,10 @@
       var id = nuclet.az.id;
       createNucletList(viewer.atom.atom);
       $nucletFormBlock.insertAfter($nucletList.find('.nuclet-' + id));
-//    var nucletLabel = document.getElementById('nuclet--id');
-//    nucletLabel.innerHTML = '<span class="az-label">Nuclet ID: </span><span class="az-id"> ' + id + '</span>';
       // Set the state of the nuclet
       if (nuclet.az.conf.state != 'hydrogen' && nuclet.az.conf.state != 'helium') {
-        $('#nuclet--state--' + nuclet.az.conf.state).attr('checked', true);
+        var $select = $('#nuclet--state--' + nuclet.az.conf.state);
+        $select[0].checked = true;
         nucletAngleSlider.value = nuclet.az.conf.attachAngle || 1;
         nucletAngleValue.value = nuclet.az.conf.attachAngle || 1;
       }
@@ -476,6 +475,9 @@
 
       // Add event listeners to the nuclet edit form state radio buttons
       var $radios = $('#edit-nuclet-state .az-control-radios', viewer.context);
+      $radios.once('az-processed').each(function() {
+        $(this).attr('id', 'nuclet--state--' + $(this).val());
+      });
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {
           editNuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
@@ -483,7 +485,8 @@
           viewer.render();
           setEditNuclet(editNuclet);
         }
-        $(this).attr('id', $(this).attr('id') + '--' + $(this).val());
+//      $(this).attr('id', $(this).attr('id') + '--' + $(this).val());
+//      $(this).attr('id', 'nuclet--state--' + $(this).val());
       });
     }
 

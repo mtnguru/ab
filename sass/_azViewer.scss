@@ -36,13 +36,13 @@
 .az-wrapper {
   &.az-overlay-controls {
     .az-canvas-wrapper {
-//    width: calc(100% - 210px);
+      width: 100%;
     }
   }
 
   &.az-float-controls {
     .az-canvas-wrapper {
-      width: calc(100% - 230px);
+      width: calc(100% - 250px);
     }
   }
 }
@@ -51,6 +51,7 @@
 .block-atomizer-viewer {
 
   display: inline-block;
+  width: 100%;
 //display: block;
   canvas {
 //  border-radius: 10px;
