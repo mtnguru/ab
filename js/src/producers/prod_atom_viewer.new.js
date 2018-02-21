@@ -70,7 +70,7 @@
     function onNucletAddButton(event) {
       var id = event.target.id.split('-',2)[1];
       var nuclet = viewer.atom.addNuclet(id);
-      viewer.atom.setValenceRings();
+      viewer.atom.updateValenceRings();
       createProtonLists();
       setEditNuclet(nuclet);
       viewer.render();
@@ -204,11 +204,11 @@
                 if (proton.az.optional) {
                   proton.az.visible = !proton.az.visible;
                   proton.material.visible = proton.az.visible;
-                  viewer.atom.setValenceRings();
+                  viewer.atom.updateValenceRings();
                   createProtonLists();
                   viewer.render();
                 }
-                viewer.atom.showStats();
+                viewer.atom.updateProtonCount();
               }
               break;
 

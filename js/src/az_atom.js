@@ -64,12 +64,20 @@
         parent
       );
       nuclet = nucletOuterShell.children[0].children[0];
-      setValenceRings();
-      showStats();
+      updateValenceRings();
+      updateProtonCount();
 
       return nuclet;
     }
 
+    /**
+     * Show/unshow protons on neutral endings
+     *
+     * @param side
+     * @param nuclet
+     * @param activate
+     * @param show
+     */
     function activateNeutralProtons(side, nuclet, activate, show) {
       // Activate/Deactivate the neutral ending protons.
       var np = (side == '0') ? [12,13,14,15,20] : [16,17,18,19,21];
@@ -80,6 +88,12 @@
       }
     }
 
+    /**
+     * Given an id, return corresponding nuclet
+     *
+     * @param id
+     * @returns {null}
+     */
     function getNuclet(id) {
       return (atom.az.nuclets[id]) ? atom.az.nuclets[id] : null;
     }
@@ -113,8 +127,8 @@
 
       // Create the new nuclet
       var nucletOuterShell = createNuclet(id, conf, parent);
-      setValenceRings();
-      showStats();
+      updateValenceRings();
+      updateProtonCount();
       return nucletOuterShell.children[0].children[0];
     }
 
@@ -131,8 +145,8 @@
 
       // Activate the neutral ending protons on the parent but don't show.
       activateNeutralProtons(id.charAt(id.length-1), parent, true, false);
-      setValenceRings();
-      showStats();
+      updateValenceRings();
+      updateProtonCount();
     }
 
     /**
@@ -257,7 +271,7 @@
     };
 
     /**
-     * Create an atom
+     * Callback from ajax call to load and display an atom.
      *
      * @param results
      */
@@ -289,8 +303,6 @@
           atom.az.nid = result.data.nid;
           viewer.producer.atomLoaded(atom);
 
-//        var link = document.getElementById('atom--save').querySelector('a');
-//        link.setAttribute('href', '/node/' + result.data.nid + '/edit');
           if (loadCallback) {
             loadCallback();
           }
@@ -305,8 +317,8 @@
       atom.az = {nuclets: {}};
       viewer.atom.atom = atom;
       createNuclet('N0', atomConf, atom);
-      setValenceRings();
-      showStats();
+      updateValenceRings();
+      updateProtonCount();
 
       viewer.scene.add(atom);
       viewer.render();
@@ -314,17 +326,21 @@
       return atom;
     };
 
+    /**
+     * Delete an atom - calls recursive function deleteNuclet
+     * @param atom
+     */
     var deleteAtom = function deleteAtom (atom) {
       for (var n in atom.az.nuclets) {
         viewer.nuclet.deleteNuclet(atom.az.nuclets[n]);
       }
       viewer.scene.remove(atom);
-    }
+    };
 
     /**
      * Check all valence rings and color active/inactive rings - count total Active and update atom information.
      */
-    function setValenceRings() {
+    function updateValenceRings() {
       var numActive = 0;
       var activeColor = viewer.theme.get('valence-active--color');
       var inactiveColor = viewer.theme.get('valence-inactive--color');
@@ -349,7 +365,10 @@
       return;
     }
 
-    function showStats() {
+    /**
+     * Show the number of protons
+     */
+    function updateProtonCount() {
       var numProtons = 0;
       var numNuclets = 0;
       var numUnclassified = 0;
@@ -578,8 +597,8 @@
       loadAtom: loadAtom,
       overwriteYml: overwriteYml,
       saveYml: saveYml,
-      setValenceRings: setValenceRings,
-      showStats: showStats
+      updateValenceRings: updateValenceRings,
+      updateProtonCount: updateProtonCount
     };
   };
 
