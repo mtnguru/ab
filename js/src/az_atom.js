@@ -252,7 +252,6 @@
           activateNeutralProtons(id.charAt(id.length-1), nuclet, false, false);
         }
       }
-
       return nucletOuterShell;
     }
 
@@ -362,7 +361,6 @@
           }
         }
       }
-      return;
     }
 
     /**
@@ -455,19 +453,6 @@
       if (button.id == 'atom--select') {
         $viewSelectAtom.toggleClass('enabled');
       }
-
-//  location.href = 'ajax-ab/loadAtomForm';
-      /*
-       if (id == 'atom--new') {
-       Drupal.atomizer.base.doAjax(
-       '/ajax-ab/loadAtomForm',
-       { component: 'atom'
-       },
-       dialogDisplayed  // function to call on completion.
-       );
-       // Run AJAX command to popup node-atom-form
-       }
-       */
     };
 
     $('#atom--select-close').click(function () {
@@ -484,7 +469,6 @@
       var nid = event.target.id.split('-')[1];
       loadAtom(nid, null);
       event.preventDefault();
-      return;
     }
 
     /**

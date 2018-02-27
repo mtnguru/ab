@@ -265,9 +265,18 @@
 
                 case 'scale':
 //              var scale = (node.scaleInit) ? value * node.scaleInit : value;
-                  var scale = value;
-                  console.log('applyControl  configuration ' + scale);
-                  node.scale.set(scale, scale, scale);
+                  if (args[0] == 'protonVertexid') {
+                    if (!node.initScale) {
+                      node.initScale = node.scale.clone();
+                    }
+                    node.scale.x = value * node.initScale.x;
+                    node.scale.y = value * node.initScale.y;
+                    node.scale.z = value * node.initScale.z;
+                  } else {
+                    var scale = value;
+                    console.log('applyControl  configuration ' + scale);
+                    node.scale.set(scale, scale, scale);
+                  }
                   break;
 
                 case 'width':
@@ -284,8 +293,10 @@
                   if (argNames[0] == 'proton') {
                     if (node.az.active) {
                       node.material.opacity = opacity;
-                      node.material.visible = visible;
-                      node.material.transparent = transparent;
+                      if (node.az.visible) {
+                        node.material.visible = visible;
+                        node.material.transparent = transparent;
+                      }
                     }
                   } else if (argNames[0].indexOf('Wireframe') > -1) {
                     if (node.name == 'dodecaWireframe' ||

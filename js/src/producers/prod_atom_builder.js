@@ -216,15 +216,17 @@
               var intersects = viewer.controls.findIntersects(visibleProtons);
               if (intersects.length == 0) {
                 // Pop down the nuclet edit dialog.
+                if (editNuclet) {
+                  viewer.nuclet.highlight(editNuclet, false);
+                }
                 $nucletFormBlock.addClass('az-hidden');
                 editNuclet = undefined;
                 return false;
               } else {
                 // Initialize to current nuclet.
-                editNuclet = intersects[0].object.parent.parent;
+                setEditNuclet(intersects[0].object.parent.parent);
                 $nucletFormBlock.removeClass('az-hidden');
                 $nucletFormBlock.insertAfter($nucletList.find('.' + editNuclet.name));
-                setEditNuclet(editNuclet);
                 return false;
               }
               break;
@@ -324,15 +326,22 @@
     function setEditNuclet(nuclet) {
       var id = nuclet.az.id;
       createNucletList(viewer.atom.atom);
+      if (editNuclet) {
+        viewer.nuclet.highlight(editNuclet, false);
+      }
+      viewer.nuclet.highlight(nuclet, true);
+      viewer.render();
+
+      // Move the nuclet edit form to the appropriate nuclet
       $nucletFormBlock.insertAfter($nucletList.find('.nuclet-' + id));
-      // Set the state of the nuclet
+
+      // Initialize the nuclet form
       if (nuclet.az.conf.state != 'hydrogen' && nuclet.az.conf.state != 'helium') {
         var $select = $('#nuclet--state--' + nuclet.az.conf.state);
         $select[0].checked = true;
         nucletAngleSlider.value = nuclet.az.conf.attachAngle || 1;
         nucletAngleValue.value = nuclet.az.conf.attachAngle || 1;
       }
-
       // Show/Hide the delete, angle and attach points
       if (id == 'N0') {
         nucletDelete.classList.add('az-hidden');
@@ -353,6 +362,7 @@
         $('#edit-nuclet-grow-0').removeClass('az-hidden');
         $('#edit-nuclet-grow-1').removeClass('az-hidden');
       }
+      // Add buttons to add nuclet.
       createNucletAttachItem(id + '0', nucletAttach0);
       createNucletAttachItem(id + '1', nucletAttach1);
       editNuclet = nuclet;
@@ -416,6 +426,10 @@
             $nucletFormBlock.removeClass('az-hidden');
           }
           else {
+            if (editNuclet) {
+              viewer.nuclet.highlight(editNuclet, false);
+              viewer.render();
+            }
             $nucletFormBlock.addClass('az-hidden');
           }
         });
@@ -465,7 +479,6 @@
       viewer.view.ghostProton = viewer.nuclet.makeProton({type: 'ghost'}, 1, {x: 300, y: 50, z: 0}, {state: 'default'});
     };
 
-
     /////////// Attach event listeners
 
     if ($nucletFormBlock.length) {
@@ -480,10 +493,10 @@
       });
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {
-          editNuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
+          var nuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
           createProtonLists();
+          setEditNuclet(nuclet);
           viewer.render();
-          setEditNuclet(editNuclet);
         }
 //      $(this).attr('id', $(this).attr('id') + '--' + $(this).val());
 //      $(this).attr('id', 'nuclet--state--' + $(this).val());
@@ -492,7 +505,7 @@
 
     var mouseBlock = $('#blocks--mouse-mode', viewer.context)[0];
     if (mouseBlock) {
-      // Add event listeners to mode form
+      // Add event listeners to mouse mode form radio buttons
       var $radios = $('#blocks--mouse-mode .az-control-radios', viewer.context);
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {

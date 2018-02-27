@@ -1,3 +1,56 @@
+Done - Made vertices work again.
+Done - Highlight the selected nuclet.
+Select 3 protons, draw a triangle
+calculate the fourth point and put the ghost proton there.
+Then save those positions in the nuclet files - have to add extra protons to the icosahedron, final, initial.
+
+
+
+Add ability to move protons around in reference to a nuclet.
+
+Calculating the 4th point of a tetrahedron.
+
+Average your three points to get the center of the triangle:
+
+center = (a + b + c) / 3
+Calculate the normal vector by taking the cross product of two of the sides:
+
+normal = (c - a) x (b - a)
+Normalize the normal vector (make it of unit length):
+
+unit_normal = normal / |normal|
+Scale the normal by the height of regular tetrahedron:
+
+scaled_normal = unit_normal * sqrt(2/3)
+Now, your two points are:
+
+top = center + scaled_normal
+bottom = center - scaled_norma
+
+
+
+
+Add ability to move protons around in reference to a nuclet.Average your three points to get the center of the triangle:
+
+center = (a + b + c) / 3
+Calculate the normal vector by taking the cross product of two of the sides:
+
+normal = (c - a) x (b - a)
+Normalize the normal vector (make it of unit length):
+
+unit_normal = normal / |normal|
+Scale the normal by the height of regular tetrahedron:
+
+scaled_normal = unit_normal * sqrt(2/3)
+Now, your two points are:
+
+top = center + scaled_normal
+bottom = center - scaled_normal
+
+
+
+
+
 What next?  The builder is in pretty good shape.  A quick style option?  Have it be the 
 
 Write something.

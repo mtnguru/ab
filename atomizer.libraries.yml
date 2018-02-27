@@ -68,4 +68,14 @@ atomizer-platonic-solids-obfuscator:
   js:
     js/min/producers/prod_platonic_solids.js: {}
 
+atomizer-platonic-duals:
+  js:
+    js/src/producers/prod_platonic_duals.js: {}
+
+atomizer-platonic-duals-obfuscator:
+  js:
+    js/min/producers/prod_platonic_duals.js: {}
+
+
+
 
