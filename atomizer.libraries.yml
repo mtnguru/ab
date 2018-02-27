@@ -76,6 +76,14 @@ atomizer-platonic-duals-obfuscator:
   js:
     js/min/producers/prod_platonic_duals.js: {}
 
+atomizer-ico-dodeca:
+  js:
+    js/src/producers/prod_ico_dodeca.js: {}
+
+atomizer-ico-dodeca-obfuscator:
+  js:
+    js/min/producers/prod_ico_dodeca.js: {}
+
 
 
 

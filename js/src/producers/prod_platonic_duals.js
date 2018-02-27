@@ -8,7 +8,6 @@ Drupal.atomizer.producers.platonic_dualsC = function (_viewer) {
   viewer.controls = Drupal.atomizer.controlsC(viewer);
   viewer.nuclet = Drupal.atomizer.nucletC(viewer);
   viewer.atom = Drupal.atomizer.atomC(viewer);
-  var atomFilename;
 
   var createView = function () {
 
