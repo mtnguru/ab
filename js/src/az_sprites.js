@@ -102,15 +102,23 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 	    visible: (opacity >.03) ? true : false
 		};
 
+		var protonRadius = viewer.theme.get('proton--radius');
+
 		for (var i = 0; i < geometry.vertices.length; i++)
 		{
 			var spritey = makeTextSprite( " " + i + " ", parameters);
 			spritey.name = name + 'Vertexid';
 
-			var scale = 2.0;
-			spritey.position.x = scale * geometry.vertices[i].x;
-			spritey.position.y = scale * geometry.vertices[i].y;
-			spritey.position.z = scale * geometry.vertices[i].z;
+			spritey.position.copy(geometry.vertices[i]);
+			spritey.position.setLength(spritey.position.length() + protonRadius * 1.5);
+//	  spritey.position.multiplyScalar(2.0);
+//  	spritey.position.x = scale * geometry.vertices[i].x;
+//  	spritey.position.y = scale * geometry.vertices[i].y;
+//  	spritey.position.z = scale * geometry.vertices[i].z;
+//	spritey.position.x = 50 + geometry.vertices[i].x;
+//	spritey.position.y = 50 + geometry.vertices[i].y;
+//	spritey.position.z = 50 + geometry.vertices[i].z;
+
 			verticeIds.add( spritey );
 		}
 		var scale = 1;

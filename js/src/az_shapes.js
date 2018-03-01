@@ -12,7 +12,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
    * @param radius
    * @param detail
    */
-  function icosahedronGeometry ( radius, detail ) {
+  function icosahedronGeometry (state, radius, detail ) {
     var t = ( 1 + Math.sqrt( 5 ) ) / 2;
 
     var vertices = [
@@ -57,6 +57,27 @@ Drupal.atomizer.shapesC = function (_viewer) {
     THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
     this.type = 'IcosahedronGeometry';
     this.parameters = { radius: radius, detail: detail };
+
+    switch (state) {
+      case 'beryllium':
+/*      this.azfaces = [
+          {'indices': [5, 19, 14, 10, 15], 'faces': [0, 1, 2] },      // 0
+          {'indices': [1, 2, 9, 19, 5], 'faces': [3, 4, 5] },         // 1
+          {'indices': [9, 18, 13, 14, 19], 'faces': [6, 7, 8] },      // 2
+          {'indices': [10, 11, 12, 13, 14], 'faces': [9, 10, 11] },   // 3
+          {'indices': [6, 15, 10, 11, 16], 'faces': [12, 13, 14] },   // 4
+          {'indices': [0, 1, 5, 15, 6], 'faces': [15, 16, 17] },      // 5
+          {'indices': [2, 3, 8, 18, 9], 'faces': [18, 19, 20] },      // 6
+          {'indices': [8, 17, 12, 13, 18], 'faces': [21, 22, 23] },   // 7
+          {'indices': [7, 16, 11, 12, 17], 'faces': [24, 25, 26] },   // 8
+          {'indices': [0, 6, 16, 7, 4], 'faces': [27, 28, 29] },      // 9
+          {'indices': [0, 1, 2, 3, 4], 'faces': [30, 31, 32] },       // 10
+          {'indices': [3, 4, 7, 17, 8], 'faces': [33, 34, 35] }       // 11
+        ]; */
+        break;
+      case 'boron':
+        break;
+    }
   }
   icosahedronGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   icosahedronGeometry.prototype.constructor = icosahedronGeometry;
@@ -155,17 +176,17 @@ Drupal.atomizer.shapesC = function (_viewer) {
 
     var indices = [
       15, 10, 14,    15, 14, 19,    15, 19,  5,  //  0
-      5, 19,  9,     5,  9,  2,     5,  2,  1,  //  1
+      5, 19,  9,     5,  9,  2,     5,  2,  1,   //  1
       14, 13, 18,    14, 18,  9,    14,  9, 19,  //  2
       10, 11, 12,    10, 12, 13,    10, 13, 14,  //  3
-      6, 16, 11,     6, 11, 10,     6, 10, 15,  //  4
-      0,  6, 15,     0, 15,  5,     0,  5,  1,  //  5
-      9, 18,  8,     9,  8,  3,     9,  3,  2,  //  6
+      6, 16, 11,     6, 11, 10,     6, 10, 15,   //  4
+      0,  6, 15,     0, 15,  5,     0,  5,  1,   //  5
+      9, 18,  8,     9,  8,  3,     9,  3,  2,   //  6
       13, 12, 17,    13, 17,  8,    13,  8, 18,  //  7
       17, 12, 11,    17, 11, 16,    17, 16,  7,  //  8
-      4,  7, 16,     4, 16,  6,     4,  6,  0,  //  9
-      3,  4,  0,     3,  0,  1,     3,  1,  2,  // 10
-      8, 17,  7,     8,  7,  4,     8,  4,  3   // 11
+      4,  7, 16,     4, 16,  6,     4,  6,  0,   //  9
+      3,  4,  0,     3,  0,  1,     3,  1,  2,   // 10
+      8, 17,  7,     8,  7,  4,     8,  4,  3    // 11
     ];
 
     THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
@@ -178,54 +199,18 @@ Drupal.atomizer.shapesC = function (_viewer) {
     };
 
     this.azfaces = [
-      {  // 0
-        'indices': [5, 19, 14, 10, 15],
-        'faces': [0, 1, 2]
-      },
-      {  // 1
-        'indices': [1, 2, 9, 19, 5],
-        'faces': [3, 4, 5]
-      },
-      {  // 2
-        'indices': [9, 18, 13, 14, 19],
-        'faces': [6, 7, 8]
-      },
-      {  // 3
-        'indices': [10, 11, 12, 13, 14],
-        'faces': [9, 10, 11]
-      },
-      {  // 4
-        'indices': [6, 15, 10, 11, 16],
-        'faces': [12, 13, 14]
-      },
-      {  // 5
-        'indices': [0, 1, 5, 15, 6],
-        'faces': [15, 16, 17]
-      },
-      {  // 6
-        'indices': [2, 3, 8, 18, 9],
-        'faces': [18, 19, 20]
-      },
-      {  // 7
-        'indices': [8, 17, 12, 13, 18],
-        'faces': [21, 22, 23]
-      },
-      {  // 8
-        'indices': [7, 16, 11, 12, 17],
-        'faces': [24, 25, 26]
-      },
-      {  // 9
-        'indices': [0, 6, 16, 7, 4],
-        'faces': [27, 28, 29]
-      },
-      {  // 10
-        'indices': [0, 1, 2, 3, 4],
-        'faces': [30, 31, 32]
-      },
-      {  // 11
-        'indices': [3, 4, 7, 17, 8],
-        'faces': [33, 34, 35]
-      }
+      {'indices': [5, 19, 14, 10, 15], 'faces': [0, 1, 2] },    // 0
+      {'indices': [1, 2, 9, 19, 5], 'faces': [3, 4, 5] },       // 1
+      {'indices': [9, 18, 13, 14, 19], 'faces': [6, 7, 8] },    // 2
+      {'indices': [10, 11, 12, 13, 14], 'faces': [9, 10, 11] }, // 3
+      {'indices': [6, 15, 10, 11, 16], 'faces': [12, 13, 14] }, // 4
+      {'indices': [0, 1, 5, 15, 6], 'faces': [15, 16, 17] },    // 5
+      {'indices': [2, 3, 8, 18, 9], 'faces': [18, 19, 20] },    // 6
+      {'indices': [8, 17, 12, 13, 18], 'faces': [21, 22, 23] }, // 7
+      {'indices': [7, 16, 11, 12, 17], 'faces': [24, 25, 26] }, // 8
+      {'indices': [0, 6, 16, 7, 4], 'faces': [27, 28, 29] },    // 9
+      {'indices': [0, 1, 2, 3, 4], 'faces': [30, 31, 32] },     // 10
+      {'indices': [3, 4, 7, 17, 8], 'faces': [33, 34, 35] }     // 11
     ];
   }
 
@@ -257,7 +242,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
 
     THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
 
-    this.type = 'DodecahedronGeometry';
+    this.type = 'CubeGeometry';
 
     this.parameters = {
       radius: radius,
@@ -265,30 +250,12 @@ Drupal.atomizer.shapesC = function (_viewer) {
     };
 
     this.azfaces = [
-      {  // 0
-        'indices': [0, 1, 2, 3],
-        'faces': [0, 1]
-      },
-      {  // 1
-        'indices': [4, 5, 6, 7],
-        'faces': [2, 3]
-      },
-      {  // 2
-        'indices': [0, 3, 4, 7],
-        'faces': [4, 5]
-      },
-      {  // 3
-        'indices': [1, 6, 5, 2],
-        'faces': [6, 7]
-      },
-      {  // 4
-        'indices': [0, 7, 6, 1],
-        'faces': [8, 9]
-      },
-      {  // 5
-        'indices': [2, 5, 4, 3],
-        'faces': [10, 11]
-      }
+      {'indices': [0, 1, 2, 3], 'faces': [0, 1] },  // 0
+      {'indices': [4, 5, 6, 7], 'faces': [2, 3] },  // 1
+      {'indices': [0, 3, 4, 7], 'faces': [4, 5] },  // 2
+      {'indices': [1, 6, 5, 2], 'faces': [6, 7] },  // 3
+      {'indices': [0, 7, 6, 1], 'faces': [8, 9] },  // 4
+      {'indices': [2, 5, 4, 3], 'faces': [10, 11] } // 5
     ];
   }
 
@@ -298,7 +265,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
   var getGeometry = function (type, state, radius, height, detail) {
     switch (type) {
       case 'icosahedron':
-        return new icosahedronGeometry(radius, detail);
+        return new icosahedronGeometry(state, radius, detail);
       case 'dodecahedron':
         return new dodecahedronGeometry(radius, detail);
       case 'decahedron':

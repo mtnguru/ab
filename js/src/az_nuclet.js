@@ -123,6 +123,7 @@
     function createGeometryWireframe(id, scale, geometry, rotation) {
 
       var opacity = viewer.theme.get(id + '--opacity');
+
       var wireframe = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
         color: viewer.theme.get(id + '--color'),
         opacity: opacity,
@@ -131,6 +132,7 @@
         wireframe: true,
         wireframeLinewidth: viewer.theme.get(id + '--linewidth')
       }));
+
       wireframe.scale.set(scale, scale, scale);
       wireframe.name = id;
       if (rotation) {
@@ -165,6 +167,8 @@
      * @returns {THREE.Group}
      */
     function createGeometryLines(id, scale, geometry, rotation) {
+
+      if (!geometry.azfaces) return null;
 
       var opacity = viewer.theme.get(id + '--opacity');
       var material = new THREE.LineBasicMaterial({
@@ -420,10 +424,9 @@
         case 'boron':
         case 'beryllium':
         case 'icosahedron':
-          return viewer.shapes.getGeometry('icosahedron', 'final', scale, null, detail);
+          return viewer.shapes.getGeometry('icosahedron', shape, scale, null, detail);
         case 'decahedron':
           return viewer.shapes.getGeometry('decahedron', 'final', scale, height, detail);
-          break;
         case 'line':
           var lineGeometry = new THREE.Geometry();
           var pos = protonRadius * 2;
@@ -771,11 +774,13 @@
 
     function createWireframe(name, geometry, compConf) {
       var wireframe;
-      if (compConf.shape == 'dodecahedron' || compConf.shape == 'hexahedron') {
+      if (compConf.shape == 'dodecahedron' ||
+          compConf.shape == 'hexahedron' ||
+          compConf.shape == 'beryllium' ||
+          compConf.shape == 'boron') {
         wireframe = createGeometryLines(
           name,
           compConf.scale + .02,
-//      1 + .02,
           geometry,
           compConf.rotation || null
         );
@@ -783,7 +788,6 @@
         wireframe = createGeometryWireframe(
           name,
           compConf.scale + .02,
-//      1 + .02,
           geometry,
           compConf.rotation || null
         );
@@ -849,7 +853,10 @@
       }
 
       if (compConf.wireframe) {
-        nucletGroup.add(createWireframe(groupName + 'Wireframe', geometry, compConf));
+        var wireframe = createWireframe(groupName + 'Wireframe', geometry, compConf);
+        if (wireframe) {
+          nucletGroup.add(wireframe);
+        }
       }
 
       if (compConf.faces) {
