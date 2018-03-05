@@ -918,7 +918,7 @@
         }
       }
 
-      if (compConf.neutrons) {
+      if (compConf.neutrinos) {
         var neutrons = createNeutrons(geometry, compConf, azNuclet);
         for (var p = 0; p < neutrons.length; p++) {
           if (neutrons[p]) {
