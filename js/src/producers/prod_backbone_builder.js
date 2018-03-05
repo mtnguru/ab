@@ -125,6 +125,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
 
       // Create a new ghost Proton
       viewer.view.ghostProton = viewer.nuclet.makeProton(
+        0,
         'ghost',
         viewer.theme.get('proton--opacity'),
         {x: 300, y: 50, z: 0}
@@ -365,6 +366,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
         var protonConf = atomConf.protons[pid];
         var position = geometry.vertices[p];
         var proton = viewer.nuclet.makeProton(
+          0,
           'default',
           viewer.theme.get('proton--opacity'),
           {
@@ -470,6 +472,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       z = 50;
       // Create ghost proton
       proton = viewer.nuclet.makeProton(
+        0,
         'default',
         viewer.theme.get('proton--opacity'),
         {x: x, y: y, z: z}
@@ -480,6 +483,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
 
       // Create ghost proton
       proton = viewer.nuclet.makeProton(
+        0,
         'default',
         viewer.theme.get('proton--opacity'),
         {x: x, y: y, z: -z}
@@ -510,6 +514,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
 
     // Create ghost proton
     viewer.view.ghostProton = viewer.nuclet.makeProton(
+      0,
       'ghost',
       viewer.theme.get('proton--opacity'),
       {x: 300, y: 50, z: 0}

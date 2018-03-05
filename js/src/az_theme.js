@@ -13,6 +13,7 @@
     var currentSet = {};
     var defaultSet = {};
     var themeDirectory = viewer.atomizer.themeDirectory;
+    var loadedColors = {};
     var currentThemeName = '';
 //var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'decalet'];
     var saveMessage = $('#theme--message', viewer.context)[0];
@@ -23,9 +24,6 @@
      * @param results
      */
     var loadYml = function (results) {
-      // Save the theme file name in browser local storage.
-      localStorage.setItem('atomizer_theme_file', results[0].data.filename);
-
       // Set the theme select list to the currently loaded file.
       $('#blocks--theme select.form-select').val(results[0].data.filename);
 
@@ -398,14 +396,18 @@
      * @param id
      * @param type
      */
-    var set = function set(value, id, type) {
+    var set = function set(value, id) {
+      currentSet.settings[id]['defaultValue'] = value;
+    };
+
+    var setInit = function setInit(value, id, type) {
       if (!currentSet.settings[id]) {
         currentSet.settings[id] = {
           'defaultValue': value,
           'type': type
         }
       } else {
-//    currentSet.settings[id]['defaultValue'] = value;
+//      currentSet.settings[id]['defaultValue'] = value;
       }
     };
 
@@ -435,6 +437,23 @@
         return viewer.controls.getDefault(sid, index);
       }
     };
+
+    function getColor(_name, doHighlight) {
+      name = (doHighlight) ? _name + '-highlight' : _name;
+      if (!loadedColors[name]) {
+        var color = viewer.theme.get(_name);
+        if (doHighlight) {
+          var percent = -15;
+          var num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, G = (num >> 8 & 0x00FF) + amt, B = (num & 0x0000FF) + amt;
+          color = "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+        }
+        if (!color) {
+          alert('color is null ' + _name);
+        }
+        loadedColors[name] = new THREE.Color().setHex(parseInt(color.replace(/#/, "0x")), 16);
+      }
+      return loadedColors[name];
+    }
 
     var buttonClicked = function buttonClicked (target) {
       switch (target.id) {
@@ -479,11 +498,7 @@
       }
     };
 
-    // Get theme file from browser local storage if it exists.
-    var themeFile = localStorage.getItem('atomizer_theme_file');
-    if (!themeFile || themeFile == 'undefined') {
-      themeFile = viewer.view.defaultTheme;
-    }
+    var themeFile = viewer.view.defaultTheme;
     viewer.view.themePath = viewer.atomizer.themeDirectory + '/' + themeFile;
 
     // Load theme file
@@ -503,8 +518,10 @@
       applyControl: applyControl,
       loadYml: loadYml,
       addDataAttr: addDataAttr,
-      get: get,
+      setInit: setInit,
       set: set,
+      get: get,
+      getColor: getColor,
       getCurrentControls: function() { return currentSet.settings; },
       getYmlDirectory:    function () { return themeDirectory; }
     };

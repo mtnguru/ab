@@ -460,7 +460,7 @@
       viewer.view.atom = viewer.atom.loadAtom((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
 
       // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
-      viewer.view.ghostProton = viewer.nuclet.makeProton({type: 'ghost'}, 1, {x: 300, y: 50, z: 0}, {state: 'default'});
+      viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, 1, {x: 300, y: 50, z: 0}, {state: 'default'});
     };
 
 

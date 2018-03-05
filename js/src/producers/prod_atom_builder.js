@@ -116,9 +116,10 @@
             var proton = highlightedProton.object;
 
             // Change the proton back to it's original color and visibility.
-            var color = viewer.theme.get('proton-' + proton.az.type + '--color');
-            proton.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
+            var color =viewer.theme.getColor(proton.name + '--color');
+            proton.material.color = color;
             proton.material.visible = proton.az.visible;
+            highlightedProton = null;
           }
 
           if (objects.length) {
@@ -127,9 +128,10 @@
 
             // Highlight the proton
             highlightedProton = objects[0];
-            highlightedProton.object.material.visible = true;
-            var color = viewer.theme.get('proton-ghost--color');
-            highlightedProton.object.material.color.setHex(parseInt(color.replace(/#/, "0x")), 16);
+            var proton = highlightedProton.object;
+            proton.material.visible = true;
+            var color =viewer.theme.getColor('proton-ghost--color');
+            proton.material.color = color;
           }
           break;
 
@@ -476,7 +478,7 @@
       viewer.view.atom = viewer.atom.loadAtom((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
 
       // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
-      viewer.view.ghostProton = viewer.nuclet.makeProton({type: 'ghost'}, 1, {x: 300, y: 50, z: 0}, {state: 'default'});
+      viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, 1, {x: 300, y: 50, z: 0});
     };
 
     /////////// Attach event listeners

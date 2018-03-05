@@ -57,6 +57,7 @@ class AtomizerControlBlock {
 
       case 'selectyml':
 
+        $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/' . $controlConf[4], '/\.yml/');
         $control = [
           '#type' => 'container',
           '#attributes' => ['class' => ['selectyml']],
@@ -67,7 +68,7 @@ class AtomizerControlBlock {
             '#attributes' => [
               'id' => $id . '--select',
             ],
-            '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/' . $controlConf[4], '/\.yml/'),
+            '#options' => $fileList,
           ],
           /*          'overwrite_button' => array(
                         '#type' => 'item',
@@ -83,6 +84,9 @@ class AtomizerControlBlock {
                       ) */
         ];
         $containerClasses[] = 'selectyml';
+        if (count($fileList) <= 1) {
+          $containerClasses[] = 'az-hidden';
+        }
         $addValue = true;
         break;
 

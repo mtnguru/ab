@@ -191,13 +191,13 @@
           switch (control.type) {
             case 'color':
             case 'range':
-              viewer.theme.set(control.defaultValue, id, control.type);
+              viewer.theme.setInit(control.defaultValue, id, control.type);
               break;
             case 'rotation':
             case 'position':
               var sid;
               sid = id + '--az-slider';
-              viewer.theme.set(control.defaultValue, sid, control.type);
+              viewer.theme.setInit(control.defaultValue, sid, control.type);
               break;
           }
           // Make sure that theme has default values for all controls
@@ -261,7 +261,7 @@
             case 'position':
               var sid = id + '--az-slider';
               $('#' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
-              viewer.theme.set(control.defaultValue, sid, control.type);
+              viewer.theme.setInit(control.defaultValue, sid, control.type);
               break;
             case 'saveyml':
               var elem = $('#' + id + '--button', viewer.context)[0];

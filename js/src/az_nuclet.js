@@ -12,6 +12,7 @@
  * @returns {
  *   {makeObject: makeObject,
  *    makeProton: makeProton,
+ *    getProtonName: getProtonName,
  *    showProtons: showProtons,
  *    createNuclet: createNuclet,
  *    deleteNuclet: deleteNuclet,
@@ -26,7 +27,6 @@
     var viewer = _viewer;
     var constants = Drupal.atomizer.base.constants;
     var axes = ['x', 'y', 'z'];
-    var protonColors = {};
 
     var protonRadius = viewer.theme.get('proton--radius');
     var electronRadius = viewer.theme.get('electron--radius');
@@ -151,7 +151,7 @@
 //  }
       addObject(id, wireframe);
       return wireframe;
-    };
+    }
 
     /**
      * Create a wireframe of lines.
@@ -289,8 +289,8 @@
       for (var p = 0; p < nuclet.az.protons.length; p++) {
         if (nuclet.az.protons[p]) {
           var proton = nuclet.az.protons[p];
-          var name = makeProtonName(nuclet.az, proton.az.type);
-          proton.material.color = getColor(name, doHighlight);
+          var name = getProtonName(proton.az) + '--color';
+          proton.material.color = viewer.theme.getColor(name, doHighlight);
         }
       }
     }
@@ -420,11 +420,11 @@
     function createGeometry(shape, state, scale, height, detail) {
       switch (shape) {
         case 'neutral':
-        case 'lithium':
         case 'boron':
         case 'beryllium':
         case 'icosahedron':
           return viewer.shapes.getGeometry('icosahedron', shape, scale, null, detail);
+        case 'lithium':
         case 'decahedron':
           return viewer.shapes.getGeometry('decahedron', 'final', scale, height, detail);
         case 'line':
@@ -445,56 +445,103 @@
       }
     }
 
-    function makeProtonName(azNuclet, protonType) {
+    function getProtonName(conf) {
+      var colorType = viewer.theme.get('proton--color-style');
+      if (!colorType) { colorType = 'nuclet'; }
+
+      name = 'proton-default';
+      switch (conf.type) {
+        case 'grey':
+          name = 'proton-default';
+          break;
+        case 'ghost':
+          name = 'proton-ghost';
+          break;
+        case 'neutron':
+          name = 'neutron';
+          break;
+        case 'proton':
+          switch (colorType) {
+            case 'default':
+              break;
+            case 'pairs':
+              name = 'proton-' + conf.pairs;
+              break;
+            case 'rings':
+              name = 'proton-' + conf.rings;
+              break;
+            case 'alpha3':
+              name = 'proton-' + conf.alpha3;
+              break;
+            case 'nuclet':
+              if (conf.nuclet) {
+                var state = conf.nuclet.state;
+                // If hydrogen or helium return the default color.
+                if (state === 'hydrogen' || state === 'helium') {
+                  name = 'proton-default';
+                } else if (conf.pairs === 'neutral') {
+                  name = 'proton-neutral';
+                } else if (conf.nuclet.state === 'initial') {
+                  name = (conf.id < 12) ? 'proton-initial' : 'proton-neutral';
+                } else {
+                  name = 'proton-' + state;
+                }
+              } else {
+                name = 'proton-default';
+              }
+              break;
+
+            default:
+              name = 'proton-default';
+              break;
+          }
+          break;
+
+      }
+      return name;
+    }
+
+    function makeProtonName(conf) {
+      name = 'proton';
+      return;
       var colorType;
       colorType = viewer.theme.get('proton--color-style');
       if (!colorType) {
         colorType = 'nuclet';
       }
 
-      if (colorType === 'nuclet' && azNuclet && azNuclet.state && azNuclet.state !== undefined) {
+      if (colorType === 'nuclet' && conf.nuclet && conf.nuclet && conf.nuclet !== undefined) {
         // If hydrogen or helium return the default color.
-        if (azNuclet.state === 'hydrogen' || azNuclet.state === 'helium') {
+        if (conf.nuclet.state === 'hydrogen' || conf.nuclet.state === 'helium') {
           return 'proton-default';
         }
 
-        if (protonType === 'neutral') {
+        if (conf.pairs === 'neutral') {
           return 'proton-neutral';
         }
-        if (azNuclet.state === 'initial') {
+        if (conf.nuclet.state === 'initial') {
           var caps = [12, 13, 14, 15, 16, 17, 18, 19];
           for (var c = 0; c < caps.length; c++) {
-            if (azNuclet.conf.protons.indexOf(caps[c]) === -1) {
+            if (conf.nuclet.conf.protons.indexOf(caps[c]) === -1) {
               return 'proton-initial';
             }
           }
           return 'proton-capped';
         }
-        return 'proton-' + azNuclet.state;
+        return 'proton-' + conf.nuclet.state;
       }
-      else if (colorType === 'proton' && protonType && protonType !== undefined) {
-        return 'proton-' + protonType;
+      else if (colorType === 'pairs' && conf.pairs && conf.pairs !== undefined) {
+        return 'proton-' + conf.pairs;
+      }
+      else if (colorType === 'rings' && conf.pairs && conf.rings !== undefined) {
+        return 'proton-' + conf.rings;
+      }
+      else if (colorType === 'alpha3' && conf.alpha3 && conf.alpha3 !== undefined) {
+        return 'proton-' + conf.alpha3;
       }
       else {
         return 'proton-default';
       }
-    }
-
-    function getColor(_name, highlight) {
-      name = (highlight) ? _name + '-highlight' : _name;
-      if (!protonColors[name]) {
-        var color = viewer.theme.get(_name + '--color');
-        if (highlight) {
-          var percent = -15;
-          var num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, G = (num >> 8 & 0x00FF) + amt, B = (num & 0x0000FF) + amt;
-          color = "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
-        }
-        if (!color) {
-          alert('color is null ' + _name);
-        }
-        protonColors[name] = new THREE.Color().setHex(parseInt(color.replace(/#/, "0x")), 16);
-      }
-      return protonColors[name];
     }
 
     /**
@@ -506,13 +553,18 @@
      *
      * @returns {*}
      */
-    function makeProton(conf, opacity, pos, azNuclet) {
+    function makeProton(id, conf, opacity, pos, azNuclet) {
 
       var az = {
-        type: conf.type || 'default',
+        id: id,
+        type: conf.type || 'proton',
+        pairs: conf.pairs || 'default',
+        alpha3: conf.alpha3 || 'default',
+        rings: conf.rings || 'default',
         visible: ('visible' in conf) ? conf.visible : true,
         optional: conf.optional || false,
-        active: conf.active || true
+        active: conf.active || true,
+        nuclet: azNuclet
       };
 
       var opacity = viewer.theme.get('proton--opacity');
@@ -524,13 +576,14 @@
         visible = (az.visible === false) ? false : (opacity > constants.visibleThresh);
       }
 
+      var name = getProtonName(az);
       var proton = makeObject('proton',
         {
           phong: {
-            color: getColor(makeProtonName(azNuclet, az.type)),
+            color: viewer.theme.getColor(name + '--color'),
             opacity: opacity,
             transparent: (opacity < constants.transparentThresh),
-            visible: visible,
+            visible: visible
           }
         },
         {
@@ -666,11 +719,46 @@
         for (p in compConf.protons) {
           if (!compConf.protons.hasOwnProperty(p)) continue;
           compConf.protons[p].visible = (azNuclet.conf.protons.indexOf(parseInt(p)) > -1);
-          var proton = makeProton(compConf.protons[p], opacity, geometry.vertices[p], azNuclet);
+          var proton = makeProton(p, compConf.protons[p], opacity, geometry.vertices[p], azNuclet);
           azNuclet.protons[p] = proton;
         }
       }
       return azNuclet.protons;
+    }
+
+    function createNeutrons(geometry, compConf, azNuclet) {
+      azNuclet.neutrons = [];
+      if (compConf.neutrons) {
+        var opacity = viewer.theme.get('proton--opacity');
+        for (var n in compConf.neutrons) {
+          if (!compConf.neutrons.hasOwnProperty(n)) continue;
+          compConf.neutrons[n].visible = true;
+          compConf.neutrons[n].type = 'neutron';
+
+          // Get the 3 vertices
+          var vA = geometry.vertices[compConf.neutrons[n][0]];
+          var vB = geometry.vertices[compConf.neutrons[n][1]];
+          var vC = geometry.vertices[compConf.neutrons[n][2]];
+
+          // Calculate face normal
+          var cb = new THREE.Vector3();
+          var ab = new THREE.Vector3();
+          cb.subVectors( vC, vA );
+          ab.subVectors( vB, vA );
+          cb.cross( ab );
+          cb.normalize();
+          cb.multiplyScalar(Math.sqrt(2/3) * 100);
+
+          // Calculate centroid
+          var pos = new THREE.Vector3();
+          pos = pos.add(vA).add(vB).add(vC).divideScalar(3);
+          pos.add(cb);
+
+          var neutron = makeProton(n, compConf.neutrons[n], opacity, pos, azNuclet);
+          azNuclet.neutrons[n] = neutron;
+        }
+      }
+      return azNuclet.neutrons;
     }
 
     function createValenceRings(compConf, azNuclet) {
@@ -826,6 +914,15 @@
         for (var p = 0; p < protons.length; p++) {
           if (protons[p]) {
             nucletGroup.add(protons[p]);
+          }
+        }
+      }
+
+      if (compConf.neutrons) {
+        var neutrons = createNeutrons(geometry, compConf, azNuclet);
+        for (var p = 0; p < neutrons.length; p++) {
+          if (neutrons[p]) {
+            nucletGroup.add(neutrons[p]);
           }
         }
       }
@@ -1213,6 +1310,7 @@
     return {
       makeObject: makeObject,
       makeProton: makeProton,
+      getProtonName: getProtonName,
       showProtons: showProtons,
       createNuclet: createNuclet,
       deleteNuclet: deleteNuclet,
