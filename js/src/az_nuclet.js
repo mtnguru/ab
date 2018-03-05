@@ -918,14 +918,14 @@
         }
       }
 
-      if (compConf.neutrinos) {
+/*    if (compConf.neutrinos) {
         var neutrons = createNeutrons(geometry, compConf, azNuclet);
         for (var p = 0; p < neutrons.length; p++) {
           if (neutrons[p]) {
             nucletGroup.add(neutrons[p]);
           }
         }
-      }
+      } */
 
       if (compConf.valence) {
         createValenceRings(compConf, azNuclet);
