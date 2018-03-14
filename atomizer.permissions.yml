@@ -16,3 +16,14 @@ atomizer display all atoms:
 atomizer load raw js:
   title: 'Atomizer Load Raw JS'
   description: 'Load the raw JavaScript instead of obfuscated JS.'
+atomizer atoms development:
+  title: 'Atomizer Atoms Development'
+  description: 'User can view "development" atoms'
+atomizer atoms members:
+  title: 'Atomizer Atoms Members'
+  description: 'User can view "members" atoms'
+atomizer atoms trusted:
+  title: 'Atomizer Atoms Trusted'
+  description: 'User can view "trusted" atoms'
+
+

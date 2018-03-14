@@ -30,7 +30,7 @@ class AtomizerControlBlock {
         '#default_value' => $defaultValue,
         '#attributes' => [
           'id' => $valueId,
-          'class' => [$valueClass],
+          'class' => [$valueClass, $valueId],
         ],
       ],
       'range' => [
@@ -41,7 +41,7 @@ class AtomizerControlBlock {
         '#step' => $step,
         '#attributes' => [
           'id' => $sliderId,
-          'class' => [$sliderClass],
+          'class' => [$sliderClass, $sliderId],
         ],
       ],
     ];
@@ -67,6 +67,7 @@ class AtomizerControlBlock {
             '#default_value' => $controlConf[2],
             '#attributes' => [
               'id' => $id . '--select',
+              'class' => [$id . '--select'],
             ],
             '#options' => $fileList,
           ],
@@ -114,13 +115,13 @@ class AtomizerControlBlock {
                       ), */
           'save_button' => [
             '#type' => 'item',
-            '#prefix' => '<div id="' . $id . '--button" class="button-wrapper">',
+            '#prefix' => '<div class="' . $id . ' button-wrapper">',
             '#suffix' => '</div>',
             '#markup' => t('Save'),
           ],
           'overwrite_message' => [
             '#type' => 'item',
-            '#prefix' => '<div id="' . $id . '--message" class="message-wrapper">',
+            '#prefix' => '<div class="' . $id . ' message-wrapper">',
             '#suffix' => '</div>',
             '#markup' => t(''),
           ]
@@ -366,7 +367,7 @@ class AtomizerControlBlock {
         break;
 
       case 'label':
-        $control = ['#markup' => "<div id='$controlName' class='az-label'>$controlConf[0]</div>"];
+        $control = ['#markup' => "<div class='az-label $controlName'>$controlConf[0]</div>"];
         break;
 
       case 'hr':
@@ -382,9 +383,10 @@ class AtomizerControlBlock {
         'defaultValue' => $defaultValue,
       ];
     }
-    $control['#attributes']['id'] = $id;
+    $containerClasses[] = $id;
     $control['#attributes']['name'] = $id;
     $control['#attributes']['class'] = $containerClasses;
+    $control['#attributes']['id'] = $id;
 
     return $control;
   }
@@ -403,7 +405,7 @@ class AtomizerControlBlock {
       '#type' => 'container',
       '#attributes' => [
         'id' => $type . '--' . $blockName,
-        'class' => ['control-block'],
+        'class' => ['control-block', $type . '--' . $blockName],
       ],
     ];
     if (!empty($blockConf['title'])) {

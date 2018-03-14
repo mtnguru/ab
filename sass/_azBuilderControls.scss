@@ -217,11 +217,11 @@
     }
   }
 
-  #style--name {
+  .style--name {
     width: 100%;
   }
 
-  #style--newfilename {
+  .style--newfilename {
     width: 132px;
     margin-left: 10px;
   }
@@ -258,7 +258,7 @@
     }
   }
 
-  #control-particles {
+  .control-particles {
     .form-type-color {
       margin: 2px 0;
     }
@@ -310,22 +310,16 @@
     display: inline;
   }
 
-  #blocks--animation--wrapper {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 1em;
-  }
-
   legend {
 
   }
-  #blocks--mouse-mode {
+  .blocks--mouse-mode {
     legend {
       display: none;
     }
   }
 
-  #blocks--theme {
+  .blocks--theme {
     .control-block {
       padding: 1em 0 0;
       margin: 0;
@@ -343,18 +337,34 @@
     }
   }
 
-  #blocks--buttons {
+  .blocks--buttons {
     border: none;
   }
 
-  #blocks--animations {
+  .blocks--information {
+    article > h3 {
+      display: none;
+    }
+  }
+
+  .blocks--properties {
+    .field {
+      clear: both;
+    }
+  }
+
+  .blocks--animations {
     .form-item-selectyml {
       margin-bottom: .5em;
     }
   }
 
-  #blocks--animation--wrapper,
-  #blocks--buttons {
+  .blocks--animation--wrapper {
+    margin-bottom: 1em;
+  }
+
+  .blocks--animation--wrapper,
+  .blocks--buttons {
     display: flex;
     justify-content: space-around;
     font-size: 115%;
@@ -391,7 +401,7 @@ article.atomizer_minimal {
 
     }
 
-    #blocks-buttons {
+    .blocks-buttons {
       .az-control {
         .fa {
           font-size: 60%;

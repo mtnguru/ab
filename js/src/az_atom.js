@@ -11,8 +11,8 @@
     var viewer = _viewer;
     var atom;
     var atomConf;
-    var atomInformation = $('#atom--information', viewer.context)[0];
-    var $viewSelectAtom = $('#view-select-atom');
+    var atomInformation = $('.atom--information', viewer.context)[0];
+    var atomProperties = $('.atom--properties', viewer.context)[0];
     var loadCallback;
 
     /**
@@ -280,13 +280,16 @@
         var result = results[i];
         if (result.command == 'loadAtomCommand') {
           if (atomInformation) {
-            atomInformation.innerHTML = result.data.teaser;
+            atomInformation.innerHTML = result.data.information;
           }
-          var $save = $('#atom--save a');
+          if (atomProperties) {
+            atomProperties.innerHTML = result.data.properties;
+          }
+          var $save = $('.atom--save a', viewer.context);
           if ($save.length) {
             $save.replaceWith(result.data.link);
             if (Drupal.attachBehaviors) {
-              Drupal.attachBehaviors('#atom--save a');
+              Drupal.attachBehaviors('.atom--save a');
             }
           }
 
@@ -384,7 +387,7 @@
         }
       }
 
-      $('#atom--num-protons .text-value').html(numProtons);
+      $('.atom--num-protons .text-value', viewer.context).html(numProtons);
     }
 
     /**
@@ -403,7 +406,7 @@
      * @param response
      */
     var savedYml = function (response) {
-      var select = $('#theme--selectyml')[0].querySelector('select');
+      var select = $('.theme--selectyml', viewer.context)[0].querySelector('select');
       // Remove current options
     }
 
@@ -451,12 +454,12 @@
      */
     var buttonClicked = function buttonClicked(button) {
       if (button.id == 'atom--select') {
-        $viewSelectAtom.toggleClass('enabled');
+        $(viewer.context).toggleClass('select-atom-enabled');
       }
     };
 
-    $('#atom--select-close').click(function () {
-      $viewSelectAtom.toggleClass('enabled');
+    $('.atom--select-close').click(function () {
+      $(viewer.context).removeClass('select-atom-enabled');
     });
 
     /**
@@ -466,8 +469,7 @@
      */
     function onSelectAtom(event) {
       // Extract the node id from class nid
-      var nid = event.target.id.split('-')[1];
-      loadAtom(nid, null);
+      loadAtom($(event.target).data('nid'), null);
       event.preventDefault();
     }
 
@@ -526,7 +528,15 @@
 
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
-      var $selectAtoms = $('.select-atom', $(viewer.context).parents('article'));
+      var $shit = $('#az-page-select-atom', viewer.context);
+      var $shitty = $('#az-page-select-atom .page-content', viewer.context);
+      var $shittier = $('#az-page-select-atom .page-content .stream-container', viewer.context);
+      var $shittiest = $('#az-page-select-atom .page-content .stream-container table', viewer.context);
+//    var $selectAtoms = $('.atom-name, .atom-number', viewer.context);
+//    var $selectAtoms = $('.atom-name', viewer.context);
+      var $selectAtoms = $('.atom-name');
+//    var $d = $('.atomic-number', viewer.context);
+      var $d = $('.atomic-number');
       if ($selectAtoms) {
         for (var i = 0; i < $selectAtoms.length; i++) {
           $selectAtoms[i].addEventListener('click', onSelectAtom, false);

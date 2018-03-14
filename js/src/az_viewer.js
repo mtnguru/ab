@@ -69,7 +69,7 @@
       // Retrieve canvas dimensions and set renderer size to that.
 
       var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-canvas-wrapper';
-      viewer.canvasContainer = $('#' + containerId)[0];
+      viewer.canvasContainer = $('.' + containerId, viewer.context)[0];
       viewer.dataAttr = getDataAttr(viewer.canvasContainer);
       viewer.theme.addDataAttr();
       viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
@@ -236,7 +236,7 @@
     Drupal.behaviors.atomizer_viewer = {
       // Attach functions are executed by Drupal upon page load or ajax loads.
       attach: function (context, settings) {
-        var $dialogs = $('.az-dialog');
+        var $dialogs = $('.az-dialog', viewer.context);
         $dialogs.each(function ($dialog) {
           if (!$(this).hasClass('az-dialog-processed')) {
             $(this).addClass('az-dialog-processed');

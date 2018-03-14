@@ -15,17 +15,17 @@
     var mouseMode = 'none';
     var editNuclet;
 
-    var $nucletBlock = $('#blocks--nuclet-list', viewer.context);
-    var $nucletList =  $('#nuclet--list');
-    var $nucletFormBlock = $('#blocks--nuclet-form');
+    var $nucletBlock = $('.blocks--nuclet-list', viewer.context);
+    var $nucletList =  $('.nuclet--list', viewer.context);
+    var $nucletFormBlock = $('.blocks--nuclet-form', viewer.context);
     if ($nucletFormBlock.length) {
-      var nucletAngle =       $('#nuclet--attachAngle', viewer.context)[0];
-      var nucletAngleSlider = $('#nuclet--attachAngle--az-slider', viewer.context)[0]
-      var nucletAngleValue =  $('#nuclet--attachAngle--az-value', viewer.context)[0];
-      var nucletDelete =      $('#nuclet--delete', viewer.context)[0];
+      var nucletAngle =       $('.nuclet--attachAngle', viewer.context)[0];
+      var nucletAngleSlider = $('.nuclet--attachAngle--az-slider', viewer.context)[0]
+      var nucletAngleValue =  $('.nuclet--attachAngle--az-value', viewer.context)[0];
+      var nucletDelete =      $('.nuclet--delete', viewer.context)[0];
 
-      var nucletAttach0 =     $('#edit-nuclet-grow-0', viewer.context)[0];
-      var nucletAttach1 =     $('#edit-nuclet-grow-1', viewer.context)[0];
+      var nucletAttach0 =     $('.edit-nuclet-grow-0', viewer.context)[0];
+      var nucletAttach1 =     $('.edit-nuclet-grow-1', viewer.context)[0];
     }
 
     var hoverInnerFaces = [];
@@ -339,7 +339,7 @@
 
       // Initialize the nuclet form
       if (nuclet.az.conf.state != 'hydrogen' && nuclet.az.conf.state != 'helium') {
-        var $select = $('#nuclet--state--' + nuclet.az.conf.state);
+        var $select = $('.nuclet--state--' + nuclet.az.conf.state, viewer.context);
         $select[0].checked = true;
         nucletAngleSlider.value = nuclet.az.conf.attachAngle || 1;
         nucletAngleValue.value = nuclet.az.conf.attachAngle || 1;
@@ -355,14 +355,14 @@
 
       if (nuclet.az.conf.state != 'initial' &&
           nuclet.az.conf.state != 'final') {
-        $('#nuclet--grow-label').addClass('az-hidden');
-        $('#edit-nuclet-grow-0').addClass('az-hidden');
-        $('#edit-nuclet-grow-1').addClass('az-hidden');
+        $('.nuclet--grow-label', viewer.context).addClass('az-hidden');
+        $('.edit-nuclet-grow-0', viewer.context).addClass('az-hidden');
+        $('.edit-nuclet-grow-1', viewer.context).addClass('az-hidden');
       }
       else {
-        $('#nuclet--grow-label').removeClass('hidden');
-        $('#edit-nuclet-grow-0').removeClass('az-hidden');
-        $('#edit-nuclet-grow-1').removeClass('az-hidden');
+        $('.nuclet--grow-label', viewer.context).removeClass('hidden');
+        $('.edit-nuclet-grow-0', viewer.context).removeClass('az-hidden');
+        $('.edit-nuclet-grow-1', viewer.context).removeClass('az-hidden');
       }
       // Add buttons to add nuclet.
       createNucletAttachItem(id + '0', nucletAttach0);
@@ -416,7 +416,7 @@
 
       // Save the nuclet form before overwriting the list.
       if ($nucletFormBlock.length) {
-        $nucletFormBlock.insertAfter($('#blocks--nuclet-list'));
+        $nucletFormBlock.insertAfter($('.blocks--nuclet-list'), viewer.context);
         $nucletList.html(addNucletToList('N0', 0));
 
         $nucletButtons = $nucletList.find('.nuclet');
@@ -446,7 +446,7 @@
     function setDefaults() {
       userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');
       if (userAtomFile && userAtomFile != 'undefined') {
-        var selectyml = $('#atom--selectyml', viewer.context)[0];
+        var selectyml = $('.atom--selectyml', viewer.context)[0];
         if (selectyml) {
           select = selectyml.querySelector('select');
           select.value = userAtomFile;
@@ -489,7 +489,7 @@
       nucletDelete.addEventListener('click', onNucletDelete);
 
       // Add event listeners to the nuclet edit form state radio buttons
-      var $radios = $('#edit-nuclet-state .az-control-radios', viewer.context);
+      var $radios = $('.edit-nuclet-state .az-control-radios', viewer.context);
       $radios.once('az-processed').each(function() {
         $(this).attr('id', 'nuclet--state--' + $(this).val());
       });
@@ -505,10 +505,10 @@
       });
     }
 
-    var mouseBlock = $('#blocks--mouse-mode', viewer.context)[0];
+    var mouseBlock = $('.blocks--mouse-mode', viewer.context)[0];
     if (mouseBlock) {
       // Add event listeners to mouse mode form radio buttons
-      var $radios = $('#blocks--mouse-mode .az-control-radios', viewer.context);
+      var $radios = $('.blocks--mouse-mode .az-control-radios', viewer.context);
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {
           console.log('mode: ' + event.target.value);

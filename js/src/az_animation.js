@@ -14,12 +14,12 @@
     var animation;
     var animateFile;
     var animateConf;
-    var $selectAnimation = $('#animation--selectyml select');
+    var $selectAnimation = $('.animation--selectyml select');
     var timeouts = {};
     var currentAtom = -1;
     var atomIndex = null;
 
-    var $wrapper = $('#blocks--animation--wrapper');
+    var $wrapper = $('.blocks--animation--wrapper');
     var $buttons = $wrapper.find('.az-button');
 
     var loadYml = function (results) {

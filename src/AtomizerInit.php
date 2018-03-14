@@ -43,30 +43,6 @@ class AtomizerInit {
       }
     }
 
-    // Build atomizer container with canvas - attach drupalSettings
-    $atomizer = [
-      $atomizer_config['atomizerId'] => [
-        '#type' => 'container',
-        '#attributes' => [
-          'class' => ['az-canvas-wrapper'],
-          'id' => $atomizer_config['atomizerId'] . '-canvas-wrapper'
-        ],
-        'canvas' => [
-          '#markup' => '<canvas class="az-canvas"></canvas>',
-          '#allowed_tags' => array_merge(Xss::getHtmlTagList(), ['canvas'])
-        ],
-      ],
-      '#attached' => [
-        'drupalSettings' => [
-          'atomizer' => [
-            $atomizerId => $atomizer_config,
-          ],
-          'atomizer_config' => [
-            'objects' => $objects,
-          ],
-        ],
-      ],
-    ];
 
     $build = [
       '#type' => 'container',
@@ -83,7 +59,57 @@ class AtomizerInit {
           'id' => 'az-id-' . $atomizerId,
           'class' => ['az-atomizer-wrapper'],
         ],
-        'atomizer' => $atomizer,
+      ],
+    ];
+
+    // Build the select-atom dialog.
+    if (!empty($atomizer_config['select']) && $atomizer_config['select'] == 'select_atom') {
+      $perm = ['public'];
+      if (\Drupal::currentUser()->hasPermission('atomizer atoms development')) { $perm[] = 'development'; }
+      if (\Drupal::currentUser()->hasPermission('atomizer atoms members'))     { $perm[] = 'members'; }
+      if (\Drupal::currentUser()->hasPermission('atomizer atoms trusted'))     { $perm[] = 'trusted'; }
+
+      $build['content']['select_atom'] = _az_content_build_block('select-atom', [
+        'type' => 'entity-table',
+        'id' => 'select-atom',
+        'sort' => 'select-atom',
+        'title' => 'Select Atom',
+        'fields' => [
+          'nfd' => ['nid', 'title'],
+          'nfan' => ['field_atomic_number_value'],
+        ],
+        'more' => 'none',
+//      'status' => NODE_PUBLISHED, // Make this dependent on user?
+        'types' => 'atom',
+        'approval' => $perm,
+        'viewMode' => 'teaser_short',
+        'class' => 'block-border',
+        'load' => 'immediate',
+        'empty' => 'NO DISPLAY'
+      ]);
+    }
+
+    // Build atomizer container with canvas - attach drupalSettings
+    $build['content']['atomizer'] = [
+      $atomizer_config['atomizerId'] => [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['az-canvas-wrapper', $atomizer_config['atomizerId'] . '-canvas-wrapper'],
+        ],
+        'canvas' => [
+          '#markup' => '<canvas class="az-canvas"></canvas>',
+          '#allowed_tags' => array_merge(Xss::getHtmlTagList(), ['canvas'])
+        ],
+      ],
+      '#attached' => [
+        'drupalSettings' => [
+          'atomizer' => [
+            $atomizerId => $atomizer_config,
+          ],
+          'atomizer_config' => [
+            'objects' => $objects,
+          ],
+        ],
       ],
     ];
 
@@ -124,6 +150,7 @@ class AtomizerInit {
         '#attributes' => ['class' => ['az-controls-wrapper']],
         'controls' => $controls,
       ];
+
     }
 
     if (!empty($atomizer_config['classes'])) {
@@ -131,6 +158,8 @@ class AtomizerInit {
         $build['#attributes']['class'][] = $class;
       }
     }
+
+    // Attach the atomizer js libraries if we haven't already done it.
     $js_loaded = &drupal_static('atomizer_js_loaded', false);
     if (!$js_loaded) {
 //    $js_loaded = true;

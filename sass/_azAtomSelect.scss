@@ -7,78 +7,76 @@
   }
 }
 
-#views-exposed-form-az-atom-select-nuclei {
-  font-size: 12px;
-}
-
 // Select atom View block
-#view-select-atom {
+#az-page-select-atom {
   border-radius: 8px;
+  margin-bottom: 0;
+  border: 2px solid $color-border;
 
   h2 {
     font-size: 120%;
   }
 
-  form.views-exposed-form {
-    .form-item {
-      width: 100%;
-      margin: .25em;
-      label {
-        display: inline-block;
-        width: 34%;
-        margin: 0;
-      }
-      input,
-      select {
-        display: inline-block;
-        width: 60%;
-        max-width: 300px;
-        margin: 0 2%;
-        padding: .2em .5em;
-      }
-    }
+  .title-container {
+    background-color: $color-controls-wrapper;
+    border-radius-topleft: 10px;
+    border-radius-topright: 10px;
+    margin: 0;
   }
 
   .close-button {
     position: absolute;
-    padding: .5em;
+    padding: .4em;
     background: #a0a0a0;
-    right: 20px;
+    right: 15px;
     &:hover {
       background-color: $color-button;
     }
   }
 
-  .view-content {
+  .page-content {
+    background-color: $color-controls;
+    position: absolute;
+    top: 45px;
+    bottom: 3px;
+    right: 0;
+    left: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
-    table.views-table {
-      width: 100%;
-      font-size: 13px;
-      th {
-        font-weight: normal;
-        font-size: 100%;
-        border: solid 1px #6fffa0;
-        background: $color-button;
+    &::-webkit-scrollbar {
+      background-color: $color-controls;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-controls-wrapper;
+      -webkit-border-radius: 5px;
+    }
+  }
+
+  table {
+    th {
+      &.views-field-field-atomic-number,
+      &.views-field-field__p {
+        text-align: right;
+      }
+    }
+
+    td {
+      background-color: $color-controls;
+      font-size: 14px;
+      padding: 1px;
+      &.is-active {
+        background: $color-active;
+      }
+      &.views-field-field-atomic-number,
+      &.views-field-field__p {
         text-align: center;
-        a {
-          color: white;
-        }
-        &.views-field-field-atomic-number,
-        &.views-field-field__p {
-          text-align: right;
-        }
+      }
+    }
 
-      }
-      td {
-        border: solid 1px #6fffa0;
-        &.is-active {
-          background: $color-active;
-        }
-        &.views-field-field-atomic-number,
-        &.views-field-field__p {
-          text-align: center;
-        }
-      }
+    tbody {
+      border: 0;
     }
   }
 }

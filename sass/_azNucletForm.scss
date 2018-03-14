@@ -3,7 +3,7 @@
 // Atom Builder Controls form
 form.az-controls-form {
 
-  #blocks--nuclet-list {
+  .blocks--nuclet-list {
     .nuclet {
       font-size: 14px;
     }
@@ -25,7 +25,7 @@ form.az-controls-form {
     }
   }
 
-  #blocks--nuclet-list {
+  .blocks--nuclet-list {
     .atom--num-protons--label {
       font-size: 16px;
       font-weight: bold;
@@ -44,7 +44,7 @@ form.az-controls-form {
     }
   }
 
-  #blocks--nuclet-form {
+  .blocks--nuclet-form {
 //  position: absolute;
 //  z-index: 100;
     padding: 5px;
@@ -82,8 +82,8 @@ form.az-controls-form {
       font-family: "New Courier";
     }
 
-    #edit-nuclet-grow-0,
-    #edit-nuclet-grow-1 {
+    .edit-nuclet-grow-0,
+    .edit-nuclet-grow-1 {
 
       label {
         display: inline-block;

@@ -271,13 +271,35 @@ function atomizer_preprocess_node(&$variables) {
           $atomizer_block->save();
 
           // Add view block if defined.
-          if (!empty($atomizerConfig['view'])) {
-            $view = $atomizerConfig['view'];
-            if (\Drupal::currentUser()->hasPermission('atomizer display all atoms')) {
-              $view .= '_all';
-            }
-            $variables['content']['view_select_atom'] = views_embed_view('az_atom', $view);
-          }
+/*        if (!empty($atomizerConfig['view'])) {
+//          $view = $atomizerConfig['view'];
+//          if (\Drupal::currentUser()->hasPermission('atomizer display all atoms')) {
+//            $view .= '_all';
+//          }
+//          $variables['content']['view_select_atom'] = views_embed_view('az_atom', $view);
+
+
+            $variables['content']['view_select_atom'] = [
+              '#type' => 'container',
+              'markup' => ['#markup' => 'Wow cool'],
+            ];
+            $variables['content']['view_select_atom'] = _az_content_build_block('select-atom', [
+              'type' => 'entity-table',
+              'id' => 'select-atom',
+              'sort' => 'select-atom',
+              'fields' => [
+                'nfd' => ['nid', 'title'],
+                'nfan' => ['field_atomic_number_value'],
+              ],
+              'more' => 'none',
+//            'status' => NODE_PUBLISHED, // Make this dependent on user?
+              'types' => 'atom',
+              'approval' => ['members', 'public', 'development', 'trusted'],
+              'viewMode' => 'teaser_short',
+              'empty' => 'NO DISPLAY'
+            ]);
+          } */
+
           $blockManager = \Drupal::service('plugin.manager.block');
           $variables['content']['atomizer_block'] = $blockManager->createInstance('atomizer_block', [
             'atomizerId' => $atomizerConfig['atomizerId'],

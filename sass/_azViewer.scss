@@ -29,7 +29,10 @@
 }
 
 .az-wrapper {
+  position: relative;
+//@include clearfix;
   width: 100%;
+
   outline: none;
 }
 
@@ -42,7 +45,7 @@
 
   &.az-float-controls {
     .az-canvas-wrapper {
-      width: calc(100% - 250px);
+      width: calc(100% - 460px);
     }
   }
 }

@@ -15,7 +15,7 @@
     var cameraTrackballControls;
     var objectTrackballControls;
     var mouseMode = 'none';
-    var selectBlock = $('#theme--selectBlock', viewer.context)[0];
+    var selectBlock = $('.theme--selectBlock', viewer.context)[0];
     var $popup;
 
     // Variables for detecting items mouse is hovering over.
@@ -78,9 +78,9 @@
     function onControlChanged(event) {
       var args = this.id.split("--");
       if (this.className.indexOf('az-slider') > -1) {
-        $('#' + args[0] + '--' + args[1] + '--' + args[2] + '--az-value', viewer.context)[0].value = event.target.value;
+        $('.' + args[0] + '--' + args[1] + '--' + args[2] + '--az-value', viewer.context)[0].value = event.target.value;
       } else if (this.className.indexOf('az-control-range') > -1) {
-        $('#' + this.id + '--az-value', viewer.context)[0].value = event.target.value;
+        $('.' + this.id + '--az-value', viewer.context)[0].value = event.target.value;
       }
       viewer.theme.applyControl(this.id, event.target.value);
     }
@@ -152,7 +152,7 @@
     function popupDialog(response) {
       for (var i = 0; i < response.length; i++) {
         if (response[i].command == 'renderNodeCommand') {
-          var $popup = $('#' + response[i].data.popupId);
+          var $popup = $('.' + response[i].data.popupId, viewer.context);
           if ($popup != null) {
             $popup.html(response[i].htmlContents);
           }
@@ -162,9 +162,9 @@
 
     function onPopupNode(event) {
       event.preventDefault();
-      var nid = $(event.target).data('nid');
-      var viewMode = $(event.target).data('viewmode');
-      var blockid = $(event.target).data('blockid');
+      var nid = $(event.target, viewer.context).data('nid');
+      var viewMode = $(event.target, viewer.context).data('viewmode');
+      var blockid = $(event.target, viewer.context).data('blockid');
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/renderNode',
         {
@@ -186,7 +186,7 @@
       for (var controlId in viewer.atomizer.theme.settings) {
         var control = viewer.atomizer.theme.settings[controlId];
         var id = controlId.replace(/_/g, "-");
-        var element = $('#' + id, viewer.context)[0];
+        var element = $('.' + id, viewer.context)[0];
         if (element || control.type == 'rotation' || control.type == 'position') {
           switch (control.type) {
             case 'color':
@@ -216,10 +216,10 @@
 
     function showSelectedThemeBlock() {
       // Hide all .control-block's in theme block.
-      $('#blocks--theme .control-block').addClass('az-hidden');
+      $('.blocks--theme .control-block', viewer.context).addClass('az-hidden');
 
-      // get value of #theme--selectBlock and move block into theme block.
-      var $selectedBlock = $('#blocks--' + selectBlock.value);
+      // get value of .theme--selectBlock and move block into theme block.
+      var $selectedBlock = $('.blocks--' + selectBlock.value, viewer.context);
       $selectedBlock.insertAfter($(selectBlock));
       $selectedBlock.removeClass('az-hidden');
     }
@@ -242,7 +242,7 @@
       showThemeBlock();
       if (selectBlock) {
         selectBlock.addEventListener("change", function (e) {
-          showSelectedThemeBlock($('#blocks--' + e.value));
+          showSelectedThemeBlock($('.blocks--' + e.value, viewer.context));
         });
       }
 
@@ -250,7 +250,7 @@
       for (var controlId in viewer.atomizer.theme.settings) {
         var control = viewer.atomizer.theme.settings[controlId];
         var id = controlId.replace(/_/g, "-");
-        var element = $('#' + id, viewer.context)[0];
+        var element = $('.' + id, viewer.context)[0];
         if (element || control.type == 'rotation' || control.type == 'position') {
           switch (control.type) {
             case 'color':
@@ -260,12 +260,12 @@
             case 'rotation':
             case 'position':
               var sid = id + '--az-slider';
-              $('#' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
+              $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
               viewer.theme.setInit(control.defaultValue, sid, control.type);
               break;
             case 'saveyml':
-              var elem = $('#' + id + '--button', viewer.context)[0];
-              $('#' + id + '--button', viewer.context)[0].addEventListener("click", onButtonClicked);
+              var elem = $('.' + id + '--button', viewer.context)[0];
+              $('.' + id + '--button', viewer.context)[0].addEventListener("click", onButtonClicked);
               break;
             case 'selectyml':
               element.addEventListener("change", selectYmlChanged);
@@ -285,15 +285,15 @@
 
       // Initialize the theme block select list - move form elements into
       // Initialize toggle-block buttons
-      $('.toggle-block').click(function(e) {
-        var $block = $('#' + $(this).data('blockid'));
+      $('.toggle-block', viewer.context).click(function(e) {
+        var $block = $('.' + $(this).data('blockid'), viewer.context);
         if ($block.hasClass('az-hidden')) {
           var blockid = $(this).data('blockid');
           $block.removeClass('az-hidden');
           $(this).addClass('az-selected');
 
           // Move selected block to immediately after buttons.
-          $block.insertAfter($('#blocks--buttons'));
+          $block.insertAfter($('.blocks--buttons', viewer.context));
 
           // If this is the theme block then move selected control block into it.
           if (blockid === 'blocks--theme') {
@@ -408,18 +408,18 @@
      * @returns
      */
     var getDefault = function getDefault(id, index) {
-      var $element = $('#' + id, viewer.context);
+      var $element = $('.' + id, viewer.context);
       if ($element.length) {
         if ($element.hasClass('az-control-range') ||
             $element.hasClass('az-control-rotation') ||
             $element.hasClass('az-control-position')) {
           if (index) {
-            return $('#' + id + '--' + index + '--az-slider', viewer.context)[0].value;
+            return $('.' + id + '--' + index + '--az-slider', viewer.context)[0].value;
           } else {
-            return $('#' + id + '--az-slider', viewer.context)[0].value;
+            return $('.' + id + '--az-slider', viewer.context)[0].value;
           }
         } else if ($element.hasClass('az-control-radios')) {
-          return $('input[name=' + $element.attr('id') + ']:checked').val();
+          return $('input[name=' + $element.attr('id') + ']:checked', viewer.context).val();
         } else {
           return $element.val();
         }

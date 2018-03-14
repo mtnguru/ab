@@ -320,8 +320,8 @@
         case 'sphere':
           geometry = new THREE.SphereGeometry(
             compConf.radius || viewer.theme.get('proton--radius'),
-            compConf.widthSegments || 20,
-            compConf.heightSegments || 20
+            compConf.widthSegments || 36,
+            compConf.heightSegments || 36
           );
           break;
         case 'electron':
