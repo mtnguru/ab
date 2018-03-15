@@ -528,20 +528,11 @@
 
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
-      var $shit = $('#az-page-select-atom', viewer.context);
-      var $shitty = $('#az-page-select-atom .page-content', viewer.context);
-      var $shittier = $('#az-page-select-atom .page-content .stream-container', viewer.context);
-      var $shittiest = $('#az-page-select-atom .page-content .stream-container table', viewer.context);
-//    var $selectAtoms = $('.atom-name, .atom-number', viewer.context);
-//    var $selectAtoms = $('.atom-name', viewer.context);
-      var $selectAtoms = $('.atom-name');
-//    var $d = $('.atomic-number', viewer.context);
-      var $d = $('.atomic-number');
+      var $selectAtoms = $('.atom-name, atomic-number');
       if ($selectAtoms) {
         for (var i = 0; i < $selectAtoms.length; i++) {
           $selectAtoms[i].addEventListener('click', onSelectAtom, false);
         }
-//    jQuery('#az-dialog').dialog('option', 'draggable', true);
       }
     }
 
