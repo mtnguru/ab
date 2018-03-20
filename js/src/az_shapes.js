@@ -147,6 +147,16 @@ Drupal.atomizer.shapesC = function (_viewer) {
   backboneGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   backboneGeometry.prototype.constructor = backboneGeometry;
 
+  /*
+    lithium
+    beryllium
+    boron 10
+    boron 11
+    carbon
+    initial
+    final
+  */
+
   /**
    * Create the Dodecahedron geometry.
    *
