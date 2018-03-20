@@ -54,6 +54,12 @@
     }
   }
 
+  .atom-name.atom-active,
+  .atomic-number.atom-active {
+    background-color: lighten($color-controls, 15%);
+    display: block;
+  }
+
   table {
     th {
       &.views-field-field-atomic-number,

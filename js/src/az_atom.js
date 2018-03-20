@@ -13,6 +13,7 @@
     var atomConf;
     var atomInformation = $('.atom--information', viewer.context)[0];
     var atomProperties = $('.atom--properties', viewer.context)[0];
+    var $atomSelect = $('.atom-name, .atomic-number');
     var loadCallback;
 
     /**
@@ -285,6 +286,10 @@
           if (atomProperties) {
             atomProperties.innerHTML = result.data.properties;
           }
+          if ($atomSelect.length > 0) {
+            $atomSelect.removeClass('atom-active');
+            $('.atom-select-' + result.data.nid, viewer.context).addClass('atom-active');
+          }
           var $save = $('.atom--save a', viewer.context);
           if ($save.length) {
             $save.replaceWith(result.data.link);
@@ -528,12 +533,7 @@
 
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
-      var $selectAtoms = $('.atom-name, atomic-number');
-      if ($selectAtoms) {
-        for (var i = 0; i < $selectAtoms.length; i++) {
-          $selectAtoms[i].addEventListener('click', onSelectAtom, false);
-        }
-      }
+      $atomSelect.click(onSelectAtom);
     }
 
     /**
