@@ -18,19 +18,20 @@
     var $nucletBlock = $('.blocks--nuclet-list', viewer.context);
     var $nucletList =  $('.nuclet--list', viewer.context);
     var $nucletFormBlock = $('.blocks--nuclet-form', viewer.context);
+    var $nucletButtons;
     if ($nucletFormBlock.length) {
       var nucletAngle =       $('.nuclet--attachAngle', viewer.context)[0];
       var nucletAngleSlider = $('.nuclet--attachAngle--az-slider', viewer.context)[0]
       var nucletAngleValue =  $('.nuclet--attachAngle--az-value', viewer.context)[0];
       var nucletDelete =      $('.nuclet--delete', viewer.context)[0];
 
-      var nucletAttach0 =     $('.edit-nuclet-grow-0', viewer.context)[0];
-      var nucletAttach1 =     $('.edit-nuclet-grow-1', viewer.context)[0];
+      var nucletAttach0 =     $('#edit-nuclet-grow-0', viewer.context)[0];
+      var nucletAttach1 =     $('#edit-nuclet-grow-1', viewer.context)[0];
     }
 
     var hoverInnerFaces = [];
     var hoverOuterFaces = [];
-    var hoverProtons = [];
+    var optionalProtons = [];
     var visibleProtons = [];
     var highlightedProton;
     var highlightedFace;
@@ -85,9 +86,11 @@
       switch (mouseMode) {
         case 'none':
           return null;
-        case 'protons':
-          return hoverProtons;
-        case 'nuclets':
+        case 'protonsAdd':
+          return optionalProtons;
+        case 'protonsColor':
+          return visibleProtons;
+        case 'nucletsEdit':
           return visibleProtons;
         case 'inner-faces':
           return viewer.objects.icosaFaces;
@@ -105,7 +108,7 @@
       switch (mouseMode) {
         case 'none':
           return [];
-        case 'protons':
+        case 'protonsAdd':
           var opacity = viewer.theme.get('proton--opacity');
 
           // If there is already a highlighted proton
@@ -135,7 +138,10 @@
           }
           break;
 
-        case 'nuclets':
+        case 'protonsColor':
+          break;
+
+        case 'nucletsEdit':
 //      Get the nuclet form working, display all current nuclets in a tree.
           break;
 
@@ -199,8 +205,8 @@
             case 'none':
               break;
 
-            case 'protons':
-              var intersects = viewer.controls.findIntersects(hoverProtons);
+            case 'protonsAdd':
+              var intersects = viewer.controls.findIntersects(optionalProtons);
               if (intersects.length) {
                 var proton = intersects[0].object;
                 if (proton.az.optional) {
@@ -214,7 +220,13 @@
               }
               break;
 
-            case 'nuclets':
+            case 'protonsColor':
+              var intersects = viewer.controls.findIntersects(visibleProtons);
+              if (intersects.length == 0) {
+              }
+              break;
+
+            case 'nucletsEdit':
               var intersects = viewer.controls.findIntersects(visibleProtons);
               if (intersects.length == 0) {
                 // Pop down the nuclet edit dialog.
@@ -274,10 +286,10 @@
     };
 
     /**
-     * Create the visibleProtons and hoverProtons lists.
+     * Create the visibleProtons and optionalProtons lists.
      */
     function createProtonLists() {
-      hoverProtons = [];
+      optionalProtons = [];
       visibleProtons = [];
       var nuclets = viewer.atom.az().nuclets;
       for (var id in nuclets) {
@@ -285,7 +297,7 @@
           var protons = nuclets[id].az.protons;
           for (var p = 0; p < protons.length; p++) {
             if (protons[p]) {
-              if (protons[p].az.active)  hoverProtons.push(protons[p]);
+              if (protons[p].az.active)   optionalProtons.push(protons[p]);
               if (protons[p].az.visible)  visibleProtons.push(protons[p]);
             }
           }
@@ -339,7 +351,7 @@
 
       // Initialize the nuclet form
       if (nuclet.az.conf.state != 'hydrogen' && nuclet.az.conf.state != 'helium') {
-        var $select = $('.nuclet--state--' + nuclet.az.conf.state, viewer.context);
+        var $select = $('#nuclet--state--' + nuclet.az.conf.state, viewer.context);
         $select[0].checked = true;
         nucletAngleSlider.value = nuclet.az.conf.attachAngle || 1;
         nucletAngleValue.value = nuclet.az.conf.attachAngle || 1;
@@ -444,7 +456,7 @@
      * Set Default values for any forms.
      */
     function setDefaults() {
-      userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');
+      var userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');
       if (userAtomFile && userAtomFile != 'undefined') {
         var selectyml = $('.atom--selectyml', viewer.context)[0];
         if (selectyml) {
@@ -489,7 +501,7 @@
       nucletDelete.addEventListener('click', onNucletDelete);
 
       // Add event listeners to the nuclet edit form state radio buttons
-      var $radios = $('.edit-nuclet-state .az-control-radios', viewer.context);
+      var $radios = $('#edit-nuclet-state .az-control-radios', viewer.context);
       $radios.once('az-processed').each(function() {
         $(this).attr('id', 'nuclet--state--' + $(this).val());
       });

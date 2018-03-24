@@ -68,7 +68,7 @@
       rotationAxis.crossVectors( objectAxis, finalAxis ).normalize();
 
       // calculate the angle between the element axis vector and rotation vector
-      radians = Math.acos(objectAxis.dot(finalAxis) );
+      var radians = Math.acos(objectAxis.dot(finalAxis) );
 
       // set the quaternion
       object.quaternion.setFromAxisAngle(rotationAxis, (negate) ? -radians : radians);

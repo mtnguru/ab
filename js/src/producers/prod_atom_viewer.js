@@ -52,7 +52,7 @@ Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
    * Set Default values for any forms.
    */
   function setDefaults() {
-    userAtomFile = localStorage.getItem('atomizer_viewer_atom');
+    var userAtomFile = localStorage.getItem('atomizer_viewer_atom');
     if (userAtomFile && userAtomFile != 'undefined') {
       var selectyml = $('#atom--selectyml', viewer.context)[0];
       if (selectyml) {

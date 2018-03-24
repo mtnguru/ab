@@ -168,7 +168,7 @@
      */
     function createGeometryLines(id, scale, geometry, rotation) {
 
-      if (!geometry.azfaces) return null;
+      if (!geometry.indices && !geometry.azfaces) return null;
 
       var opacity = viewer.theme.get(id + '--opacity');
       var material = new THREE.LineBasicMaterial({
@@ -179,20 +179,40 @@
         linewidth: viewer.theme.get(id + '--linewidth')
       });
 
+      var vertex;
       var lines = new THREE.Group();
       lines.name = id;
-      for (var f = 0; f < geometry.azfaces.length; f++) {
-        var face = geometry.azfaces[f];
-        var lineGeometry = new THREE.Geometry();
-        var vertex;
-        for (var v = 0; v < face.indices.length; v++) {
-          vertex = geometry.vertices[face.indices[v]];
-          lineGeometry.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
-        }
-        vertex = geometry.vertices[face.indices[0]];
-        lineGeometry.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
-        lines.add(new THREE.Line(lineGeometry, material));
+      if (geometry.azfaces) { // dodecahedron - maybe more
+        for (var f = 0; f < geometry.azfaces.length; f++) {
+          var face = geometry.azfaces[f];
+          var lineGeometry = new THREE.Geometry();
+          for (var v = 0; v < face.indices.length; v++) {
+            vertex = geometry.vertices[face.indices[v]];
+            lineGeometry.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+          }
+          vertex = geometry.vertices[face.indices[0]];
+          lineGeometry.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+
+          lines.add(new THREE.Line(lineGeometry, material));
+        }
+      } else {
+        var vids = ['a', 'b', 'c', 'd', 'e'];
+        for (var f = 0; f < geometry.faces.length; f++) {
+          var lineGeometry = new THREE.Geometry();
+          var face = geometry.faces[f];
+          for (var v = 0; v < vids.length; v++) {
+            if (vids[v] in face) {
+              vertex = geometry.vertices[face[vids[v]]];
+              lineGeometry.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+            }
+          }
+          vertex = geometry.vertices[face['a']];
+          lineGeometry.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+
+          lines.add(new THREE.Line(lineGeometry, material));
+        }
+
       }
       lines.scale.set(scale, scale, scale);
 
@@ -419,12 +439,19 @@
      */
     function createGeometry(shape, state, scale, height, detail) {
       switch (shape) {
-        case 'neutral':
-        case 'boron':
         case 'beryllium':
+        case 'boron':
+        case 'boron10':
+        case 'boron11':
+        case 'carbon':
+        case 'lithium':
+          return viewer.shapes.getGeometry('nuclet', shape, scale, null, detail);
+        case 'initial':
+        case 'final':
+          return viewer.shapes.getGeometry('backbone', shape, scale, null, detail);
+        case 'neutral':
         case 'icosahedron':
           return viewer.shapes.getGeometry('icosahedron', shape, scale, null, detail);
-        case 'lithium':
         case 'decahedron':
           return viewer.shapes.getGeometry('decahedron', 'final', scale, height, detail);
         case 'line':
@@ -457,8 +484,8 @@
         case 'ghost':
           name = 'proton-ghost';
           break;
-        case 'neutron':
-          name = 'neutron';
+        case 'neutral':
+          name = 'neutral';
           break;
         case 'proton':
           switch (colorType) {
@@ -481,6 +508,8 @@
                   name = 'proton-default';
                 } else if (conf.pairs === 'neutral') {
                   name = 'proton-neutral';
+                } else if (conf.pairs === 'neutron') {
+                  name = 'proton-neutron';
                 } else if (conf.nuclet.state === 'initial') {
                   name = (conf.id < 12) ? 'proton-initial' : 'proton-neutral';
                 } else {
@@ -499,49 +528,6 @@
 
       }
       return name;
-    }
-
-    function makeProtonName(conf) {
-      name = 'proton';
-      return;
-      var colorType;
-      colorType = viewer.theme.get('proton--color-style');
-      if (!colorType) {
-        colorType = 'nuclet';
-      }
-
-      if (colorType === 'nuclet' && conf.nuclet && conf.nuclet && conf.nuclet !== undefined) {
-        // If hydrogen or helium return the default color.
-        if (conf.nuclet.state === 'hydrogen' || conf.nuclet.state === 'helium') {
-          return 'proton-default';
-        }
-
-        if (conf.pairs === 'neutral') {
-          return 'proton-neutral';
-        }
-        if (conf.nuclet.state === 'initial') {
-          var caps = [12, 13, 14, 15, 16, 17, 18, 19];
-          for (var c = 0; c < caps.length; c++) {
-            if (conf.nuclet.conf.protons.indexOf(caps[c]) === -1) {
-              return 'proton-initial';
-            }
-          }
-          return 'proton-capped';
-        }
-        return 'proton-' + conf.nuclet.state;
-      }
-      else if (colorType === 'pairs' && conf.pairs && conf.pairs !== undefined) {
-        return 'proton-' + conf.pairs;
-      }
-      else if (colorType === 'rings' && conf.pairs && conf.rings !== undefined) {
-        return 'proton-' + conf.rings;
-      }
-      else if (colorType === 'alpha3' && conf.alpha3 && conf.alpha3 !== undefined) {
-        return 'proton-' + conf.alpha3;
-      }
-      else {
-        return 'proton-default';
-      }
     }
 
     /**
@@ -672,43 +658,6 @@
             protonRadius * .0998889113026354
           );
           break;
-
-        case 'beryllium':
-          vids = [0, 2];
-          for (p = 0; p < vids.length; p++) {
-            geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.2;
-          }
-          geometry.vertices[9].set(0, protonRadius * 0.2, 0);
-          break;
-
-        case 'boron':
-          vids = [0, 2];
-          for (p = 0; p < vids.length; p++) {
-            geometry.vertices[vids[p]].x = geometry.vertices[vids[p]].x * 1.23;
-            geometry.vertices[vids[p]].y = geometry.vertices[vids[p]].y * 0.95;
-          }
-          vids = [4, 5, 6, 7];
-          for (p = 0; p < vids.length; p++) {
-            geometry.vertices[vids[p]].z = geometry.vertices[vids[p]].z * 0.85;
-          }
-          geometry.vertices[9].set(0, protonRadius * 0.95, 0);
-          break;
-
-        case 'lithium':
-          // Move the top center proton to the correct position.
-          geometry.vertices[9].set(
-            0,
-            protonRadius * 0.1616236535868876,
-            protonRadius * .0998889113026354
-          );
-          break;
-
-        case 'initial':
-        case 'final':
-          break;
-
-        case 'carbon':
-          break;
       }
 
       // Create protons
@@ -719,8 +668,10 @@
         for (p in compConf.protons) {
           if (!compConf.protons.hasOwnProperty(p)) continue;
           compConf.protons[p].visible = (azNuclet.conf.protons.indexOf(parseInt(p)) > -1);
-          var proton = makeProton(p, compConf.protons[p], opacity, geometry.vertices[p], azNuclet);
-          azNuclet.protons[p] = proton;
+          if (geometry.vertices[p]) {
+            var proton = makeProton(p, compConf.protons[p], opacity, geometry.vertices[p], azNuclet);
+            azNuclet.protons[p] = proton;
+          }
         }
       }
       return azNuclet.protons;
@@ -753,6 +704,8 @@
           var pos = new THREE.Vector3();
           pos = pos.add(vA).add(vB).add(vC).divideScalar(3);
           pos.add(cb);
+
+          console.log(pos.x/50 + ', ' + pos.y/50 + ', ' + pos.z/50 + ',     ');
 
           var neutron = makeProton(n, compConf.neutrons[n], opacity, pos, azNuclet);
           azNuclet.neutrons[n] = neutron;
@@ -863,12 +816,18 @@
     function createWireframe(name, geometry, compConf) {
       var wireframe;
       if (compConf.shape == 'dodecahedron' ||
+          compConf.shape == 'carbon' ||
+          compConf.shape == 'lithium' ||
           compConf.shape == 'hexahedron' ||
           compConf.shape == 'beryllium' ||
-          compConf.shape == 'boron') {
+          compConf.shape == 'initial' ||
+          compConf.shape == 'final' ||
+          compConf.shape == 'boron' ||
+          compConf.shape == 'boron10' ||
+          compConf.shape == 'boron11') {
         wireframe = createGeometryLines(
           name,
-          compConf.scale + .02,
+          compConf.scale,
           geometry,
           compConf.rotation || null
         );
@@ -918,24 +877,17 @@
         }
       }
 
-/*    if (compConf.neutrinos) {
+      if (compConf.neutrons) {
         var neutrons = createNeutrons(geometry, compConf, azNuclet);
         for (var p = 0; p < neutrons.length; p++) {
           if (neutrons[p]) {
             nucletGroup.add(neutrons[p]);
           }
         }
-      } */
+      }
 
       if (compConf.valence) {
         createValenceRings(compConf, azNuclet);
-      }
-
-      if (compConf.tetrahedrons) {
-        var tetrahedrons = createTetrahedrons(compConf, geometry, azNuclet);
-        for (var t = 0; t < tetrahedrons.length; t++) {
-          nucletGroup.add(tetrahedrons[t]);
-        }
       }
 
       if (compConf.electrons) {
@@ -946,7 +898,14 @@
       }
 
       if (compConf.axes) {
-//      nucletGroup.add(createAxes(groupName, compConf.axes, geometry));
+        nucletGroup.add(createAxes(groupName, compConf.axes, geometry));
+      }
+
+      if (compConf.tetrahedrons) {
+        var tetrahedrons = createTetrahedrons(compConf, geometry, azNuclet);
+        for (var t = 0; t < tetrahedrons.length; t++) {
+          nucletGroup.add(tetrahedrons[t]);
+        }
       }
 
       if (compConf.wireframe) {
@@ -972,16 +931,16 @@
           azNuclet.reactiveState
         );
         nucletGroup.add(faces);
-//    viewer.objects['selectFace'] = [faces];
+  //    viewer.objects['selectFace'] = [faces];
       }
 
-      if (compConf.vertexids) {
-        nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
-      }
+//    if (compConf.vertexids) {
+//      nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
+//    }
 
-      if (compConf.faceids) {
+//    if (compConf.faceids) {
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
-      }
+//    }
 
       if (compConf.particleids) {
         nucletGroup.add(viewer.sprites.createVerticeIds(compConf.particleids, geometry));
@@ -1063,7 +1022,12 @@
           electrons = [0, 1, 2];
           break;
         case 'boron':
+        case 'boron10':
           protons = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11];
+          electrons = [0, 1, 2];
+          break;
+        case 'boron11':
+          protons = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11];
           electrons = [0, 1, 2];
           break;
         case 'initial':
@@ -1086,8 +1050,9 @@
       if (id != 'N0') {
         var i = nuclet.az.conf.protons.indexOf(10);
         if (i > -1) nuclet.az.conf.protons[i] = undefined;
+
         // If this is a child nuclet and it's boron then remove one proton from the base boron.
-        if (nuclet.az.conf.state === 'boron') {
+        if (nuclet.az.conf.state === 'boron10' && nuclet.az.conf.state === 'boron') {
           var i = nuclet.az.conf.protons.indexOf(0);
           if (i > -1) {
             nuclet.az.conf.protons[i] = undefined;

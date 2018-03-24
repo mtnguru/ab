@@ -19,68 +19,170 @@ Drupal.atomizer.shapesC = function (_viewer) {
       0,  1,  t,    0, -1,  t,    0,  1, -t,   0, -1, -t,
       t,  0,  1,    t,  0, -1,   -t,  0, -1,  -t,  0,  1,
       1,  t,  0,   -1,  t,  0,    1, -t,  0,  -1, -t,  0
-      // The invisible neutron positions.
-
-//    1.9197063907443,1.7431021759466,1.7651180413022,
-//    2.8555615478674,0.17282948323074,0.99775880481776,
-//    2.8555615478674,0.17282948323074,-0.99775880481776,
-//    1.9197063907443,1.7431021759466,-1.7651180413022,
-//    -1.9197063907443,1.7431021759466,-1.7651180413022,
-//    -2.8555615478674,0.17282948323074,-0.99775880481776,
-//    -2.8555615478674,0.17282948323074,0.99775880481776,
-//    -1.9197063907443,1.7431021759466,1.7651180413022
     ];
 
     var indices = [
-      9,  0,  8,
-      9,  8,  2,
-      10,  1, 11,
-      10, 11,  3,
-      8,  0,  4,
-      1,  4,  0,
-      10,  4,  1,
-      4,  5,  8,
-      10,  5,  4,
-      2,  8,  5,
-      5,  3,  2,
-      10,  3,  5,
-      9,  2,  6,
-      6,  2,  3,
-      3, 11,  6,
-      9,  6,  7,
-      7,  6, 11,
-      9,  7,  0,
-      0,  7,  1,
-      11,  1, 7
+      9,  0,  8,     9,  8,  2,     10,  1, 11,     10, 11,  3,
+      8,  0,  4,     1,  4,  0,     10,  4,  1,      4,  5,  8,
+     10,  5,  4,     2,  8,  5,      5,  3,  2,     10,  3,  5,
+      9,  2,  6,     6,  2,  3,      3, 11,  6,      9,  6,  7,
+      7,  6, 11,     9,  7,  0,      0,  7,  1,     11,  1,  7
     ];
 
-    THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
+    THREE.PolyhedronGeometry.call(this, vertices, indices, radius, detail);
     this.type = 'IcosahedronGeometry';
-    this.parameters = { radius: radius, detail: detail };
+    this.parameters = {radius: radius, detail: detail};
+  }
+  icosahedronGeometry.prototype = Object.create(THREE.PolyhedronGeometry.prototype);
+  icosahedronGeometry.prototype.constructor = icosahedronGeometry;
 
+  /**
+   * Create the geometry for nuclets based on the icosahedron.
+   *
+   * @param state
+   * @param radius
+   * @param detail
+   */
+
+  function nucletGeometry ( state, radius, detail ) {
+
+    // Create a perfect Icosahedron
+    var t = ( 1 + Math.sqrt( 5 ) ) / 2;
+    var vertices = [
+       t,  1,  0,    t, -1,  0,   -t,  1,  0,
+      -t, -1,  0,    1,  0, -t,   -1,  0, -t,
+      -1,  0,  t,    1,  0,  t,    0,  t, -1,
+       0,  t,  1,    0, -t, -1,    0, -t,  1,
+    ];
+
+    this.indices = [];
     switch (state) {
-      case 'beryllium':
-/*      this.azfaces = [
-          {'indices': [5, 19, 14, 10, 15], 'faces': [0, 1, 2] },      // 0
-          {'indices': [1, 2, 9, 19, 5], 'faces': [3, 4, 5] },         // 1
-          {'indices': [9, 18, 13, 14, 19], 'faces': [6, 7, 8] },      // 2
-          {'indices': [10, 11, 12, 13, 14], 'faces': [9, 10, 11] },   // 3
-          {'indices': [6, 15, 10, 11, 16], 'faces': [12, 13, 14] },   // 4
-          {'indices': [0, 1, 5, 15, 6], 'faces': [15, 16, 17] },      // 5
-          {'indices': [2, 3, 8, 18, 9], 'faces': [18, 19, 20] },      // 6
-          {'indices': [8, 17, 12, 13, 18], 'faces': [21, 22, 23] },   // 7
-          {'indices': [7, 16, 11, 12, 17], 'faces': [24, 25, 26] },   // 8
-          {'indices': [0, 6, 16, 7, 4], 'faces': [27, 28, 29] },      // 9
-          {'indices': [0, 1, 2, 3, 4], 'faces': [30, 31, 32] },       // 10
-          {'indices': [3, 4, 7, 17, 8], 'faces': [33, 34, 35] }       // 11
-        ]; */
+
+      case 'lithium':
+        // Assign indices to the 10 faces.
+        this.indices = [
+          1, 4,10,    4, 5,10,    3, 5,10,   3,10,11,   1,10,11,
+          1, 4, 9,    4, 5, 9,    3, 5, 9,   3, 9,11,   1, 9,11
+        ];
+
+        // Append the Neutron vertices - almost the same as neutral endings.
+        vertices.push.apply(vertices, [
+               0,  1.679, -1.198,
+          -1.809,  0.988, -0.080,
+          -1.118, -0.129,  1.729,
+           1.118, -0.129,  1.729,
+           1.809,  0.988, -0.080
+        ]);
+
+        // Move the 9th center proton down
+        vertices[27] = 0;
+        vertices[28] = 0.1616;
+        vertices[29] = .09989;
         break;
+
+      case 'beryllium':
+
+        this.indices = [
+          1, 4,10,    4, 5,10,    3, 5,10,   3,10,11,   1,10,11,
+          1, 4, 9,    4, 5, 9,    3, 5, 9,   1, 7, 9,   6, 7,9,
+          3, 6, 9,    3, 6,11,   1, 7,11,   6, 7,11,
+        ];
+
+        // Push protons 0 and 2 out in 'x' a little
+        vertices[0] = vertices[0] * 1.2;
+        vertices[6] = vertices[0] * 1.2;
+
+        // Move the 9th center proton down
+        vertices[27] = 0;
+        vertices[28] = 0.2;
+        vertices[29] = 0;
+        break;
+
       case 'boron':
+      case 'boron10':
+      case 'boron11':
+        this.indices = [
+          1, 4,10,    4, 5,10,    3, 5,10,   3,10,11,   1,10,11,
+          0, 4, 9,    4, 5, 9,    2, 5, 9,   0, 7, 9,   6, 7, 9,
+          2, 6, 9,    3, 6,11,    1, 7,11,   6, 7,11,   1, 0, 7,
+          0, 4, 1,    2, 3, 5,    2, 3, 6
+        ];
+
+        // Push protons 0 and 2 out in 'x' and 'y' a little
+        vertices[0]  = vertices[0]  * 1.23; // 0.x
+        vertices[1]  = vertices[1]  *  .95; // 0.y
+        vertices[6]  = vertices[6]  * 1.23; // 2.x
+        vertices[7]  = vertices[7]  *  .95; // 2.y
+
+        // Move protons 4, 5, 6, 7 in a little in 'z'
+        vertices[14] = vertices[14] * .85;  // 4.z
+        vertices[17] = vertices[17] * .85;  // 5.z
+        vertices[20] = vertices[20] * .85;  // 6.z
+        vertices[23] = vertices[23] * .85;  // 7.z
+
+        // Move the 9th center proton down
+        vertices[27] = 0;      // 9.x
+        vertices[28] = 0.95;   // 9.y
+        vertices[29] = 0;      // 9.z
+        break;
+
+      case 'carbon':
+        this.indices = [
+          9,  0,  8,     9,  8,  2,     10,  1, 11,     10, 11,  3,
+          8,  0,  4,     1,  4,  0,     10,  4,  1,      4,  5,  8,
+          10,  5,  4,     2,  8,  5,      5,  3,  2,     10,  3,  5,
+          9,  2,  6,     6,  2,  3,      3, 11,  6,      9,  6,  7,
+          7,  6, 11,     9,  7,  0,      0,  7,  1,     11,  1,  7
+        ];
+
+        // Append the Neutron vertices - almost the same as neutral endings.
+        vertices.push.apply(vertices, [
+          1.8155, 1.8155,-1.8155,
+          2.9375,      0,-1.1220,
+          2.9375,      0, 1.1220,
+          1.8155, 1.8155, 1.8155,
+         -1.8155, 1.8155,-1.8155,
+         -2.9375,      0,-1.1220,
+         -2.9375,      0, 1.1220,
+         -1.8155, 1.8155, 1.8155
+        ]);
         break;
     }
+
+
+    // Set geometry vertices
+    var numVertices = vertices.length / 3;
+    this.vertices = [];
+    for (var v = 0; v < numVertices; v++) {
+      var offset = v * 3;
+      var x = vertices[offset] * radius;
+      var y = vertices[offset + 1] * radius;
+      var z = vertices[offset + 2] * radius;
+
+      var vertice = new THREE.Vector3(x, y, z);
+      vertice.index = v;
+      this.vertices.push(vertice);
+    }
+
+    // Create the faces
+    var p = this.vertices;
+    this.faces = [];
+    for ( var i = 0, j = 0, l = this.indices.length; i < l; i += 3, j ++ ) {
+
+      var v1 = p[this.indices[i]];
+      var v2 = p[this.indices[i + 1]];
+      var v3 = p[this.indices[i + 2]];
+
+      this.faces[ j ] = new THREE.Face3( v1.index, v2.index, v3.index, [ v1.clone(), v2.clone(), v3.clone() ] );
+
+    }
+
+    this.type = 'IcoGeometry';
+    this.parameters = { radius: radius, detail: detail };
   }
-  icosahedronGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
-  icosahedronGeometry.prototype.constructor = icosahedronGeometry;
+
+  nucletGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
+  nucletGeometry.prototype.constructor = nucletGeometry;
 
   /**
    * Create the backbone geometry.
@@ -93,28 +195,36 @@ Drupal.atomizer.shapesC = function (_viewer) {
 
   function backboneGeometry ( state, radius, detail ) {
     var vertices = [
-      1.3584752137243,1.0361372789803,0,
-      1.5425983561874,-0.95086776219312,0,
-      -1.3584752137243,1.0361372789803,0,
-      -1.5425983561874,-0.95086776219312,0,
-      0.99043524980164,0,-1.6512282239033,
-      -0.99043524980164,0,-1.6512282239033,
-      -0.99043524980164,0,1.6512282239033,
-      0.99043524980164,0,1.6512282239033,
-      0,1.6749956538651,-1.2913717329017,
-      0,1.6749956538651,1.2913717329017,
-      0,-1.605,-1,
-      0,-1.605,1,
-      1.9197063907443,1.7431021759466,1.7651180413022,
-      2.8555615478674,0.17282948323074,0.99775880481776,
-      2.8555615478674,0.17282948323074,-0.99775880481776,
-      1.9197063907443,1.7431021759466,-1.7651180413022,
-      -1.9197063907443,1.7431021759466,-1.7651180413022,
-      -2.8555615478674,0.17282948323074,-0.99775880481776,
-      -2.8555615478674,0.17282948323074,0.99775880481776,
-      -1.9197063907443,1.7431021759466,1.7651180413022,
-      2.85,1.90,0,
-      -2.85,1.90,0
+       1.358,  1.036,      0,
+       1.542, -0.950,      0,
+      -1.358,  1.036,      0,
+      -1.542, -0.950,      0,
+       0.990,      0, -1.651,
+      -0.990,      0, -1.651,
+      -0.990,      0,  1.651,
+       0.990,      0,  1.651,
+           0,  1.674, -1.291,
+           0,  1.674,  1.291,
+           0, -1.605,     -1,
+           0, -1.605,      1,
+       1.919,  1.743,  1.765,
+       2.855,  0.172,  0.997,
+       2.855,  0.172, -0.997,
+       1.919,  1.743, -1.765,
+      -1.919,  1.743, -1.765,
+      -2.855,  0.172, -0.997,
+      -2.855,  0.172,  0.997,
+      -1.919,  1.743,  1.765,
+       2.850,  1.900,      0,
+      -2.850,  1.900,      0
+    ];
+
+    this.indices = [
+      9,  0,  8,     9,  8,  2,     10,  1, 11,     10, 11,  3,
+      8,  0,  4,     1,  4,  0,     10,  4,  1,      4,  5,  8,
+     10,  5,  4,     2,  8,  5,      5,  3,  2,     10,  3,  5,
+      9,  2,  6,     6,  2,  3,      3, 11,  6,      9,  6,  7,
+      7,  6, 11,     9,  7,  0,      0,  7,  1,     11,  1,  7
     ];
 
     var percent = .094;
@@ -128,7 +238,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
       var y = vertices[offset + 1] * radius;
       var z = vertices[offset + 2] * radius;
 
-      // When completing the lithium ring, the carbon ring is squeezed and the gap is changed.{
+      // When completing the lithium ring, the carbon ring is squeezed and the gap is changed.
       if (state == 'final') {
         if (v == 0 || v == 2) {
           x = x * (1 - percent);
@@ -137,25 +247,29 @@ Drupal.atomizer.shapesC = function (_viewer) {
           z = z * (1 + percent);
         }
       }
-      this.vertices.push(new THREE.Vector3(x, y, z));
+      var vertice = new THREE.Vector3(x, y, z);
+      vertice.index = v;
+      this.vertices.push(vertice);
+    }
+
+    // Create the faces
+    var p = this.vertices;
+    this.faces = [];
+    for (var i=0, j=0, l=this.indices.length; i < l; i += 3, j++) {
+
+      var v1 = p[this.indices[i]];
+      var v2 = p[this.indices[i + 1 ]];
+      var v3 = p[this.indices[i + 2 ]];
+
+      this.faces[j] = new THREE.Face3(v1.index, v2.index, v3.index, [v1.clone(), v2.clone(), v3.clone()]);
     }
 
     this.type = 'BackboneGeometry';
-    this.parameters = { radius: radius, detail: detail };
+    this.parameters = {radius: radius, detail: detail};
   }
 
   backboneGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   backboneGeometry.prototype.constructor = backboneGeometry;
-
-  /*
-    lithium
-    beryllium
-    boron 10
-    boron 11
-    carbon
-    initial
-    final
-  */
 
   /**
    * Create the Dodecahedron geometry.
@@ -173,15 +287,15 @@ Drupal.atomizer.shapesC = function (_viewer) {
 
     var vertices = [
       1,  1,  1,     r,  t,  0,
-      -r,  t,  0,    -1,  1,  1,
+     -r,  t,  0,    -1,  1,  1,
       0,  r,  t,     1,  1, -1,
       t,  0,  r,     0, -r,  t,
-      -t,  0,  r,    -1,  1, -1,
+     -t,  0,  r,    -1,  1, -1,
       1, -1, -1,     r, -t,  0,
-      -r, -t,  0,    -1, -1, -1,
+     -r, -t,  0,    -1, -1, -1,
       0, -r, -t,     t,  0, -r,
       1, -1,  1,    -1, -1,  1,
-      -t,  0, -r,     0,  r, -t
+     -t,  0, -r,     0,  r, -t
     ];
 
     var indices = [
@@ -274,6 +388,10 @@ Drupal.atomizer.shapesC = function (_viewer) {
 
   var getGeometry = function (type, state, radius, height, detail) {
     switch (type) {
+      case 'nuclet':
+        return new nucletGeometry(state, radius, detail);
+      case 'backbone':
+        return new backboneGeometry(state, radius, detail);
       case 'icosahedron':
         return new icosahedronGeometry(state, radius, detail);
       case 'dodecahedron':

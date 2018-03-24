@@ -142,6 +142,10 @@
     var reset = function reset(controlsOnly, updateAll) {
       var def;
       for (var id in currentSet.settings) {
+        if (!currentSet.settings.hasOwnProperty(id)) continue;
+        console.log(id);
+        if (!currentSet.settings[id].defaultValue) continue;
+
         // if defaultValue defines an array then set all elements.
         if (Object.prototype.toString.call(currentSet.settings[id].defaultValue) === '[object Array]') {  // If it's an array
           var comp = id.split('--');
@@ -298,8 +302,15 @@
                     }
                   } else if (argNames[0].indexOf('Wireframe') > -1) {
                     if (node.name == 'dodecaWireframe' ||
-                      node.name == 'dodecaOutWireframe' ||
-                      node.name == 'hexaWireframe') {
+                        node.name == 'dodecaOutWireframe' ||
+                        node.name == 'icosaWireframe' ||
+                        node.name == 'icosaOutWireframe' ||
+                        node.name == 'lithiumWireframe' ||
+                        node.name == 'berylliumWireframe' ||
+                        node.name == 'boron11Wireframe' ||
+                        node.name == 'boron10Wireframe' ||
+                        node.name == 'carbonWireframe' ||
+                        node.name == 'hexaWireframe') {
                       for (var i = 0; i < node.children.length; i++) {
                         node.children[i].material.opacity = opacity;
                         node.children[i].material.visible = visible;
@@ -332,6 +343,13 @@
                   if (argNames[0].indexOf('Wireframe') > -1) {
                     if (node.name == 'dodecaWireframe' ||
                       node.name == 'dodecaOutWireframe' ||
+                      node.name == 'icosaWireframe' ||
+                      node.name == 'icosaOutWireframe' ||
+                      node.name == 'lithiumWireframe' ||
+                      node.name == 'berylliumWireframe' ||
+                      node.name == 'boron11Wireframe' ||
+                      node.name == 'boron10Wireframe' ||
+                      node.name == 'carbonWireframe' ||
                       node.name == 'hexaWireframe') {
                       for (var i = 0; i < node.children.length; i++) {
                         node.children[i].material.linewidth = value;
@@ -357,6 +375,13 @@
                       if (argNames[0].indexOf('Wireframe') > -1) {
                         if (node.name == 'dodecaWireframe' ||
                           node.name == 'dodecaOutWireframe' ||
+                          node.name == 'icosaWireframe' ||
+                          node.name == 'icosaOutWireframe' ||
+                          node.name == 'lithiumWireframe' ||
+                          node.name == 'berylliumWireframe' ||
+                          node.name == 'boron11Wireframe' ||
+                          node.name == 'boron10Wireframe' ||
+                          node.name == 'carbonWireframe' ||
                           node.name == 'hexaWireframe') {
                           for (var i = 0; i < node.children.length; i++) {
                             node.children[i].material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);

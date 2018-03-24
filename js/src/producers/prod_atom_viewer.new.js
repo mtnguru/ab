@@ -25,6 +25,7 @@
 
     var $nucletList =  $('#nuclet--list');
     var $nucletFormBlock = $('#blocks--nuclet-form');
+    var $nucletButtons;
 
     var $controlsForm = $('.az-controls-form', viewer.context);
 
@@ -426,7 +427,7 @@
      * Set Default values for any forms.
      */
     function setDefaults() {
-      userAtomFile = localStorage.getItem('atomizer_viewer_atom_nid');
+      var userAtomFile = localStorage.getItem('atomizer_viewer_atom_nid');
       if (userAtomFile && userAtomFile != 'undefined') {
         var selectyml = $('#atom--selectyml', viewer.context)[0];
         if (selectyml) {

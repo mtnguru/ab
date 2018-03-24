@@ -208,11 +208,15 @@
 
         // Create normalized axis of vector to rotate to.
         //  The following 4 lines adjust the angle, position and length of the grow axis.
-        var angleOrigin = new THREE.Vector3(0, 31, 0);
-        var origin = new THREE.Vector3(0, 13, 0);
+//      var angleOrigin = new THREE.Vector3(0, 31, 0);
+//      var origin = new THREE.Vector3(0, 13, 0);
+//      growPt.y = growPt.y + 11;
+//      var attachScale = 2.28;
+
+        var angleOrigin = new THREE.Vector3(0, 28, 0);
+        var origin = new THREE.Vector3(0, 6, 0);
         growPt.y = growPt.y + 11;
-//      var attachScale = 2.42;
-        var attachScale = 2.28;
+        var attachScale = 2.37;
 
         var attachVertice = nuclet.az.protonGeometry.vertices[attachId];
         var initialAxis = attachVertice.clone().normalize();
@@ -300,8 +304,11 @@
 
           if (atom) {
             // Remove any atom's currently displayed
-            az = atom.az;
+//          az = atom.az;
             deleteAtom(atom);
+            atom = null;
+            az = null;
+            viewer.atom.atom = null;
           } else {
             az = {nuclets: {}}
           }
@@ -549,8 +556,10 @@
     Drupal.behaviors.atomizer_atom = {
       attach: function (context, settings) {
         var value = '';
+        $(context).find('#az-page-select-atom').once('selectAtomAttached').each(function () {
+          addSelectAtomEventListeners();
+        });
 
-        addSelectAtomEventListeners();
 
         // If this is the node-atom-form being opened then fill in the atomic structure field.
         var nodeForm = $('.node-atom-form, .node-atom-edit-form')[0];
