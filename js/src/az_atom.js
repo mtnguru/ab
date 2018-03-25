@@ -304,7 +304,6 @@
 
           if (atom) {
             // Remove any atom's currently displayed
-//          az = atom.az;
             deleteAtom(atom);
             atom = null;
             az = null;

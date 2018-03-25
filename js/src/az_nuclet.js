@@ -338,11 +338,16 @@
           break;
         case 'proton':
         case 'sphere':
-          geometry = new THREE.SphereGeometry(
-            compConf.radius || viewer.theme.get('proton--radius'),
-            compConf.widthSegments || 36,
-            compConf.heightSegments || 36
-          );
+          if (makeObject.protonGeometry) {
+            geometry = makeObject.protonGeometry;
+          } else {
+            geometry = new THREE.SphereGeometry(
+              compConf.radius || viewer.theme.get('proton--radius'),
+              compConf.widthSegments || 36,
+              compConf.heightSegments || 36
+            );
+            makeObject.protonGeometry = geometry;
+          }
           break;
         case 'electron':
           geometry = new THREE.SphereGeometry(
@@ -594,14 +599,12 @@
      * @param proton
      */
     function deleteProtons(protons) {
-      /*
-       // Remove the proton from the viewer.objects.protons array
-       for (var p = 0; p < protons.length; p++) {
-       var proton = protons[p];
-       // Remove protons from the objects.protons array
-       viewer.objects.protons = viewer.objects.protons.filter(function (e) {return e !== proton;})
-       }
-       */
+      // Remove the proton from the viewer.objects.protons array
+//    for (var p = 0; p < protons.length; p++) {
+//      var proton = protons[p];
+//      // Remove protons from the objects.protons array
+//      viewer.objects.protons = viewer.objects.protons.filter(function (e) {return e !== proton;})
+//    }
     }
 
     /**
@@ -703,7 +706,11 @@
           // Calculate centroid
           var pos = new THREE.Vector3();
           pos = pos.add(vA).add(vB).add(vC).divideScalar(3);
-          pos.add(cb);
+          if (compConf.neutrons[n][3]) {
+            pos.sub(cb);
+          } else {
+            pos.add(cb);
+          }
 
           console.log(pos.x/50 + ', ' + pos.y/50 + ', ' + pos.z/50 + ',     ');
 
@@ -915,7 +922,7 @@
         }
       }
 
-      if (compConf.faces) {
+/*    if (compConf.faces) {
         var reactiveState;
         if (compConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
           var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
@@ -933,7 +940,7 @@
         nucletGroup.add(faces);
   //    viewer.objects['selectFace'] = [faces];
       }
-
+*/
 //    if (compConf.vertexids) {
 //      nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
 //    }
