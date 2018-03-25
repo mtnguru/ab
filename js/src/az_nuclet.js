@@ -31,6 +31,8 @@
     var protonRadius = viewer.theme.get('proton--radius');
     var electronRadius = viewer.theme.get('electron--radius');
 
+    var protonGeometry;
+
     /*
      computeFaceNormals: function () {
      var cb = new THREE.Vector3(), ab = new THREE.Vector3();
@@ -338,15 +340,15 @@
           break;
         case 'proton':
         case 'sphere':
-          if (makeObject.protonGeometry) {
-            geometry = makeObject.protonGeometry;
+          if (protonGeometry) {
+            geometry = protonGeometry;
           } else {
             geometry = new THREE.SphereGeometry(
               compConf.radius || viewer.theme.get('proton--radius'),
               compConf.widthSegments || 36,
               compConf.heightSegments || 36
             );
-            makeObject.protonGeometry = geometry;
+            protonGeometry = geometry;
           }
           break;
         case 'electron':
