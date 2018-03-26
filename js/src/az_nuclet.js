@@ -32,6 +32,7 @@
     var electronRadius = viewer.theme.get('electron--radius');
 
     var protonGeometry;
+    var electronGeometry;
 
     /*
      computeFaceNormals: function () {
@@ -352,11 +353,16 @@
           }
           break;
         case 'electron':
-          geometry = new THREE.SphereGeometry(
-            compConf.radius || viewer.theme.get('electron--radius'),
-            compConf.widthSegments || 10,
-            compConf.heightSegments || 10
-          );
+          if (electronGeometry) {
+            geometry = electronGeometry;
+          } else {
+            geometry = new THREE.SphereGeometry(
+              compConf.radius || viewer.theme.get('electron--radius'),
+              compConf.widthSegments || 10,
+              compConf.heightSegments || 10
+            );
+            electronGeometry = geometry;
+          }
           break;
         case 'octahedron':
           geometry = new THREE.OctahedronGeometry(compConf.length || 3);

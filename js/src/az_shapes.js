@@ -4,6 +4,8 @@
  */
 
 Drupal.atomizer.shapesC = function (_viewer) {
+
+  var savedGeometries = [];
   /**
    * Create the icosahedron geometry.
    *
@@ -387,22 +389,28 @@ Drupal.atomizer.shapesC = function (_viewer) {
   cubeGeometry.prototype.constructor = cubeGeometry;
 
   var getGeometry = function (type, state, radius, height, detail) {
+    if (savedGeometries[type][state]) {
+      return savedGeometries[type][state];
+    }
+    var geometry;
     switch (type) {
       case 'nuclet':
-        return new nucletGeometry(state, radius, detail);
+        geometry = new nucletGeometry(state, radius, detail);
       case 'backbone':
-        return new backboneGeometry(state, radius, detail);
+        geometry = new backboneGeometry(state, radius, detail);
       case 'icosahedron':
-        return new icosahedronGeometry(state, radius, detail);
+        geometry = new icosahedronGeometry(state, radius, detail);
       case 'dodecahedron':
-        return new dodecahedronGeometry(radius, detail);
+        geometry = new dodecahedronGeometry(radius, detail);
       case 'decahedron':
-        return createBiPyramid(5, radius, height, detail);
+        geometry = createBiPyramid(5, radius, height, detail);
       case 'hexahedron':
-        return new cubeGeometry(radius, detail);
+        geometry = new cubeGeometry(radius, detail);
       case 'backbone':
-        return new backboneGeometry(state, radius, detail);
+        geometry = new backboneGeometry(state, radius, detail);
     }
+    savedGeometries[type][state] = geometry;
+    return geometry;
   };
 
   function createPyramid(n, rad, len) {
