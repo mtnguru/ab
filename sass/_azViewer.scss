@@ -1,5 +1,18 @@
 @import "azVariables";
 
+body.atomizer-atom-builder {
+  div.main-wrapper {
+    main.outer-wrapper {
+      padding: 15px 15px 10px;
+    }
+  }
+  article.atomizer {
+    .node__links {
+      display: none;
+    }
+  }
+}
+
 .field--name-field-atomic-structure {
   .az-canvas-wrapper {
     overflow: hidden;

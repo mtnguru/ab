@@ -10,5 +10,7 @@
     "issues": "https://www.drupal.org/project/issues/atomizer",
     "source": "http://cgit.drupalcode.org/atomizer"
   },
-  "require": { }
+  "require": {
+    "acquia/lightning": "~3.0.1"
+  }
 }

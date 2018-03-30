@@ -389,25 +389,21 @@ Drupal.atomizer.shapesC = function (_viewer) {
   cubeGeometry.prototype.constructor = cubeGeometry;
 
   var getGeometry = function (type, state, radius, height, detail) {
-    if (savedGeometries[type][state]) {
+    if (savedGeometries[type] && savedGeometries[type][state]) {
       return savedGeometries[type][state];
     }
     var geometry;
     switch (type) {
-      case 'nuclet':
-        geometry = new nucletGeometry(state, radius, detail);
-      case 'backbone':
-        geometry = new backboneGeometry(state, radius, detail);
-      case 'icosahedron':
-        geometry = new icosahedronGeometry(state, radius, detail);
-      case 'dodecahedron':
-        geometry = new dodecahedronGeometry(radius, detail);
-      case 'decahedron':
-        geometry = createBiPyramid(5, radius, height, detail);
-      case 'hexahedron':
-        geometry = new cubeGeometry(radius, detail);
-      case 'backbone':
-        geometry = new backboneGeometry(state, radius, detail);
+      case 'nuclet':       geometry = new nucletGeometry(state, radius, detail); break;
+      case 'backbone':     geometry = new backboneGeometry(state, radius, detail); break;
+      case 'icosahedron':  geometry = new icosahedronGeometry(state, radius, detail); break;
+      case 'dodecahedron': geometry = new dodecahedronGeometry(radius, detail); break;
+      case 'decahedron':   geometry = createBiPyramid(5, radius, height, detail); break;
+      case 'hexahedron':   geometry = new cubeGeometry(radius, detail); break;
+      case 'backbone':     geometry = new backboneGeometry(state, radius, detail); break;
+    }
+    if (!savedGeometries[type]) {
+      savedGeometries[type] = {};
     }
     savedGeometries[type][state] = geometry;
     return geometry;

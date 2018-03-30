@@ -75,8 +75,7 @@
       viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
       viewer.canvasWidth = viewer.canvasContainer.clientWidth;
       if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
-        var windowRatio = window.innerHeight / window.innerWidth;
-        viewer.canvasHeight = viewer.canvasWidth * windowRatio;
+        viewer.canvasHeight = window.innerHeight - 220;
       } else {
         viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
       }
@@ -110,8 +109,7 @@
         // Get container width and calculate new height
         viewer.canvasWidth  = viewer.canvasContainer.clientWidth;
         if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
-          var windowRatio = window.innerHeight / window.innerWidth;
-          viewer.canvasHeight = viewer.canvasWidth * windowRatio;
+          viewer.canvasHeight = window.innerHeight - 220;
         } else {
           viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
         }
