@@ -14,11 +14,13 @@ body.page-node-type-atomizer {
 }
 
 .field--name-field-atomic-structure {
+  .az-atomizer-wrapper {
+    margin-bottom: 20px;
+  }
   .az-canvas-wrapper {
     overflow: hidden;
 //  border-radius: 10px;
     width: 100%;
-    margin-bottom: 20px;
     canvas {
       margin-bottom: -10px;
     }

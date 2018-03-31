@@ -393,21 +393,54 @@
 
 article.atomizer_minimal {
   .az-wrapper {
+
     .az-controls-wrapper {
-      width: auto;
+      width: 170px;
       margin-right: 0;
-      right: .1em;
       top: .1em;
-      left: auto;
+      left: .1em;
 
-    }
-
-    .blocks-buttons {
-      .az-control {
+      #blocks--buttons {
+        padding: 0;
         .fa {
-          font-size: 60%;
+          font-size: 80%;
         }
       }
+
+      #blocks--theme {
+        padding: .2em .5em;
+        margin-top: .2em;
+      }
+
+      #blocks--help {
+        font-size: 13px;
+        .field--name-body {
+          margin-bottom: 0;
+        }
+
+        p {
+          color: $color-label;
+        }
+
+        ul {
+          margin: .4em 0;
+
+          li {
+            padding: 0;
+          }
+        }
+      }
+
+      .form-type-select {
+        margin: .3em 0;
+      }
+      .az-value {
+        width: 2em;
+      }
+      .az-slider {
+        width: 35%;
+      }
+
     }
   }
 }
