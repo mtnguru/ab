@@ -238,13 +238,16 @@ class AtomizerControlBlock {
           '#default_value' => $defaultValue,
           '#options' => $controlConf[3],
         ];
-        // Hide the control -- #proton--color--style
-        // @TODO - make this general and apply to all types
-        if (!empty($controlConf[4])) {
-          if (!empty($controlConf[4]['hidden'])) {
-            $containerClasses[] = 'az-hidden';
-          }
+        if (!empty($controlConf[4]['directory'])) {
+          $control['#attributes']['data-directory'] = $controlConf[4]['directory'];
         }
+//      // Hide the control -- #proton--color--style
+//      // @TODO - make this general and apply to all types
+//      if (!empty($controlConf[4])) {
+//        if (!empty($controlConf[4]['hidden'])) {
+//          $containerClasses[] = 'az-hidden';
+//        }
+//      }
         $addValue = true;
         break;
 
@@ -262,8 +265,7 @@ class AtomizerControlBlock {
         $control = [
           '#type' => 'select',
           '#title' => $controlConf[0],
-//          '#default_value' => $defaultValue,
-          '#default_value' => 'dude',
+          '#default_value' => $defaultValue,
         ];
         $addValue = true;
         break;

@@ -14,8 +14,6 @@
     var defaultSet = {};
     var themeDirectory = viewer.atomizer.themeDirectory;
     var loadedColors = {};
-    var currentThemeName = '';
-//var nucletNames = ['monolet', 'tetralet', 'octalet', 'icosalet', 'decalet'];
     var saveMessage = $('#theme--message', viewer.context)[0];
 
     /**
@@ -25,7 +23,10 @@
      */
     var loadYml = function (results) {
       // Set the theme select list to the currently loaded file.
-      $('#blocks--theme select.form-select').val(results[0].data.filename);
+
+//    var $radios = $('#blocks--selectTheme #theme--select--' + results[0].data.themeId, viewer.context);
+      var $radios = $('#theme--select--' + results[0].data.themeId, viewer.context);
+      $radios.prop('checked', true);
 
       if (results[0].ymlContents) {
         results[0].ymlContents.filepath = results[0].data.filepath;
@@ -64,15 +65,18 @@
      */
 // The current theme set has been saved,
     var savedYml = function (response) {
-      saveMessage.innerHTML = '.... Loading Theme list';
-      Drupal.atomizer.base.doAjax(
-        '/ajax-ab/listDirectory',
-        {
-          directory: themeDirectory,
-          component: 'theme'
-        },
-        updateThemeSelect
-      );
+      saveMessage.innerHTML = 'Theme saved successfully';
+      setTimeout(function () { saveMessage.innerHTML = ''; }, 3000);
+
+//    saveMessage.innerHTML = '.... Loading Theme list';
+//    Drupal.atomizer.base.doAjax(
+//      '/ajax-ab/listDirectory',
+//      {
+//        directory: themeDirectory,
+//        component: 'theme'
+//      },
+//      updateThemeSelect
+//    );
     };
 
     /**
@@ -144,7 +148,7 @@
       for (var id in currentSet.settings) {
         if (!currentSet.settings.hasOwnProperty(id)) continue;
         console.log(id);
-        if (!currentSet.settings[id].defaultValue) continue;
+        if (!currentSet.settings[id]) continue;
 
         // if defaultValue defines an array then set all elements.
         if (Object.prototype.toString.call(currentSet.settings[id].defaultValue) === '[object Array]') {  // If it's an array
@@ -174,7 +178,7 @@
             console.log('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
           }
           if (updateAll || currentSet.settings[id].defaultValue != def) {
-            if (!controlsOnly) {
+            if (!controlsOnly && defaultSet.settings[id]) {
               applyControl(id, defaultSet.settings[id].defaultValue);
             }
             var element = $('#' + id)[0];
@@ -266,7 +270,6 @@
                   break;
 
                 case 'scale':
-//              var scale = (node.scaleInit) ? value * node.scaleInit : value;
                   if (args[0] == 'protonVertexid') {
                     if (!node.initScale) {
                       node.initScale = node.scale.clone();
@@ -284,7 +287,10 @@
                 case 'width':
                 case 'depth':
                   if (argNames[0] == 'plane') {
-                    node.geometry = THREE.PlaneBufferGeometry(currentSet['plane--width'], currentSet['plane--depth']);
+                    node.geometry = THREE.PlaneBufferGeometry(
+                      currentSet['settings']['plane--width'],
+                      currentSet['settings']['plane--depth']
+                    );
                   }
                   break;
 
@@ -453,12 +459,13 @@
       if (index) {
         sid += '--' + index;
       }
-      if (idArgs[1] == 'position' || idArgs[1] == 'rotation') {
-        sid += '--az-slider';
-      }
+//    if (idArgs[1] == 'position' || idArgs[1] == 'rotation' || idArgs[1] == 'scale' || idArgs[1] == 'opacity') {
+//      sid += '--az-slider';
+//    }
       if (currentSet.settings[sid]) {
         return currentSet.settings[sid]['defaultValue'];
-      } else {
+      } else
+      {
         return viewer.controls.getDefault(sid, index);
       }
     };
@@ -479,6 +486,23 @@
       }
       return loadedColors[name];
     }
+
+    var radioClicked = function radioClicked (target) {
+      switch (target.name) {
+        case 'theme--select':
+          var file = target.value;
+          var directory = $(target).parents('fieldset').data('directory');
+          Drupal.atomizer.base.doAjax(
+            '/ajax-ab/loadYml',
+            { component: 'theme--select',
+              filepath: 'config/themes/' + directory + '/' + file + '.yml',
+              themeId: event.target.value
+            },
+            loadYml
+          );
+          break;
+      }
+    };
 
     var buttonClicked = function buttonClicked (target) {
       switch (target.id) {
@@ -523,14 +547,14 @@
       }
     };
 
-    var themeFile = viewer.view.defaultTheme;
-    viewer.view.themePath = viewer.atomizer.themeDirectory + '/' + themeFile;
+    var themeId = viewer.view.defaultTheme;
+    viewer.view.themePath = viewer.atomizer.themeDirectory + '/' + themeId + '.yml' ;
 
     // Load theme file
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/loadYml',
       { filepath: viewer.view.themePath,
-        filename: themeFile,
+        themeId: viewer.view.defaultTheme,
         directory: themeDirectory,
         component: 'theme'
       },
@@ -539,6 +563,7 @@
 
     // Return references to functions available for external use.
     return {
+      radioClicked: radioClicked,
       buttonClicked: buttonClicked,
       applyControl: applyControl,
       loadYml: loadYml,
@@ -547,7 +572,7 @@
       set: set,
       get: get,
       getColor: getColor,
-      getCurrentControls: function() { return currentSet.settings; },
+//    getCurrentControls: function() { return currentSet.settings; },
       getYmlDirectory:    function () { return themeDirectory; }
     };
   };

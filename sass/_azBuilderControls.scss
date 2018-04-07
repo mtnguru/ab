@@ -6,7 +6,7 @@
       float: left;
       background: $color-controls-wrapper;
       border: 2px solid $color-border;
-      padding: .5em .25em;
+      padding: 3px;
     }
   }
   &.az-overlay-controls {
@@ -31,7 +31,7 @@
   vertical-align: top;
   display: inline-block;
   margin-right: 10px;
-  border-radius: 8px;
+  border-radius: 12px;
   color: $color-white;
 
   form {
@@ -127,9 +127,9 @@
   .control-block {
     font-size: 14px;
     background: $color-controls;
-    padding: .5em .75em;
+    padding: 5px 10px;
     border: 2px solid $color-border;
-    margin-top: .5em;
+    margin-top: 4px;
     border-radius: 8px;
 
     hr {
@@ -141,7 +141,7 @@
   .az-header {
     font-size: 16px;
     font-weight: bold;
-    margin: 0 0 .5em;
+    margin: 2px 0 5px;
     color: $color-label;
   }
 
@@ -388,6 +388,13 @@
         color: $color-button-hover;
       }
     }
+  }
+
+}
+
+article.atomizer-basic {
+  #edit-theme-select {
+    margin-left: 15px;
   }
 }
 

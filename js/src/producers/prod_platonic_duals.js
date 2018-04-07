@@ -12,6 +12,7 @@ Drupal.atomizer.producers.platonic_dualsC = function (_viewer) {
   var createView = function () {
 
     var atom;
+    var radians = 90 / 360 * 2 * Math.PI;
 
     // Tetrahedron/Tetrahedron
     atom = viewer.atom.createAtom({state: 'tetrahedron' });
@@ -21,7 +22,6 @@ Drupal.atomizer.producers.platonic_dualsC = function (_viewer) {
 
     atom = viewer.atom.createAtom({ state: 'tetrahedron' });
     atom.position.set(  400, 0, 150);
-    var radians = 90 / 360 * 2 * Math.PI;
     atom.rotation['init_y'] = radians;
     atom.rotation['x'] = radians;
 
@@ -49,16 +49,20 @@ Drupal.atomizer.producers.platonic_dualsC = function (_viewer) {
     // Icosahedron/Dedecahedron/Icosahedron
     atom = viewer.atom.createAtom({ state: 'icosahedron' });
     atom.position.set(  0, 0, -150);
-    var scale = 1.25;
+    var scale = 1.15;
     atom.scale.set(scale,scale,scale);
+    atom.rotation['init_y'] = radians;
+    atom.rotation['x'] = radians;
 
     atom = viewer.atom.createAtom({ state: 'dodecahedron' });
     atom.position.set(  0, 0, -150);
 
     atom = viewer.atom.createAtom({ state: 'icosahedron' });
     atom.position.set(  0, 0, -150);
-    var scale = 1.90;
+    var scale = 1.70;
     atom.scale.set(scale,scale,scale);
+    atom.rotation['init_y'] = radians;
+    atom.rotation['x'] = radians;
 
 
     return;

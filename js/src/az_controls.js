@@ -14,7 +14,7 @@
     var constants = Drupal.atomizer.base.constants;
     var cameraTrackballControls;
     var objectTrackballControls;
-    var mouseMode = 'none';
+    var cameraMode = 'none';
     var selectBlock = $('.theme--selectBlock', viewer.context)[0];
     var $popup;
 
@@ -27,9 +27,9 @@
      *
      * @param newMode
      */
-    function changeMode(newMode) {
+    function changeCameraMode(newMode) {
 
-      switch (mouseMode) {
+      switch (cameraMode) {
         case 'atom_builder':
           cameraTrackballControls.dispose();
           delete cameraTrackballControls;
@@ -50,8 +50,8 @@
           break;
       }
 
-      mouseMode = newMode;
-      switch (mouseMode) {
+      cameraMode = newMode;
+      switch (cameraMode) {
         case 'atom_builder':
           cameraTrackballControls = createCameraTrackballControls();
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
@@ -77,12 +77,14 @@
      */
     function onControlChanged(event) {
       var args = this.id.split("--");
+      var id = this.id;
       if (this.className.indexOf('az-slider') > -1) {
-        $('.' + args[0] + '--' + args[1] + '--' + args[2] + '--az-value', viewer.context)[0].value = event.target.value;
+        id = id.replace('--az-slider', '');
+        $('#' + id + '--az-value', viewer.context)[0].value = event.target.value;
       } else if (this.className.indexOf('az-control-range') > -1) {
-        $('.' + this.id + '--az-value', viewer.context)[0].value = event.target.value;
+        $('#' + id + '--az-value', viewer.context)[0].value = event.target.value;
       }
-      viewer.theme.applyControl(this.id, event.target.value);
+      viewer.theme.applyControl(id, event.target.value);
     }
 
     /**
@@ -149,6 +151,13 @@
       return false;
     }
 
+    function onRadioClicked(event) {
+      var args = this.id.split("--");
+      if (viewer[args[0]] && viewer[args[0]].radioClicked) {
+        viewer[args[0]].radioClicked(event.target);
+      }
+    }
+
     function popupDialog(response) {
       for (var i = 0; i < response.length; i++) {
         if (response[i].command == 'renderNodeCommand') {
@@ -191,16 +200,13 @@
           switch (control.type) {
             case 'color':
             case 'range':
-              viewer.theme.setInit(control.defaultValue, id, control.type);
-              break;
+            case 'opacity':
+            case 'scale':
             case 'rotation':
             case 'position':
-              var sid;
-              sid = id + '--az-slider';
-              viewer.theme.setInit(control.defaultValue, sid, control.type);
+              viewer.theme.setInit(control.defaultValue, id, control.type);
               break;
           }
-          // Make sure that theme has default values for all controls
         }
       }
     }
@@ -254,14 +260,14 @@
         if (element || control.type == 'rotation' || control.type == 'position') {
           switch (control.type) {
             case 'color':
-            case 'range':
               element.addEventListener("input", onControlChanged);
               break;
+            case 'range':
             case 'rotation':
             case 'position':
               var sid = id + '--az-slider';
               $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
-              viewer.theme.setInit(control.defaultValue, sid, control.type);
+              viewer.theme.setInit(control.defaultValue, id, control.type);
               break;
             case 'saveyml':
               var elem = $('.' + id + '--button', viewer.context)[0];
@@ -274,6 +280,10 @@
             case 'button':
             case 'toggle':
               element.addEventListener("click", onButtonClicked);
+              break;
+            case 'radios':
+              var $radios = $(element).find('input');
+              $radios.click(onRadioClicked);
               break;
             case 'popup-node':
               element.addEventListener("click", onPopupNode);
@@ -414,9 +424,9 @@
             $element.hasClass('az-control-rotation') ||
             $element.hasClass('az-control-position')) {
           if (index) {
-            return $('.' + id + '--' + index + '--az-slider', viewer.context)[0].value;
+            return $('#' + id + '--' + index + '--az-slider', viewer.context)[0].value;
           } else {
-            return $('.' + id + '--az-slider', viewer.context)[0].value;
+            return $('#' + id + '--az-slider', viewer.context)[0].value;
           }
         } else if ($element.hasClass('az-control-radios')) {
           return $('input[name=' + $element.attr('id') + ']:checked', viewer.context).val();
@@ -437,8 +447,7 @@
       initializeControls();
 
       // Set the current mouse mode.
-//  changeMode(viewer.theme.get('mouse--mode'));
-      changeMode('atom_builder');
+      changeCameraMode('atom_builder');
 
       // Set any default values the producer may have.
       if (viewer.producer.setDefaults) viewer.producer.setDefaults();

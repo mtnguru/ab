@@ -12,7 +12,7 @@
     var viewer = _viewer;
     var atom;
 
-    var mouseMode = 'none';
+    var mouseMode = $('#blocks--mouse-mode input[name=mouse--mode]:checked', viewer.context).val();
     var editNuclet;
 
     var $nucletBlock = $('.blocks--nuclet-list', viewer.context);
@@ -86,6 +86,8 @@
       switch (mouseMode) {
         case 'none':
           return null;
+        case 'electronsAdd':
+          return visibleProtons;
         case 'protonsAdd':
           return optionalProtons;
         case 'protonsColor':
@@ -100,16 +102,19 @@
     };
 
     /**
-     * User has hovered over a proton, set transparency to .5.
+     * User has hovered over a proton, reset last highlighted proton to original color
+     * Make the current hovered proton pink.
      *
      * @param event
      */
     var hovered = function hovered(objects) {
       switch (mouseMode) {
         case 'none':
-          return [];
+          return;
+
+        case 'protonsColor':
+        case 'electronsAdd':
         case 'protonsAdd':
-          var opacity = viewer.theme.get('proton--opacity');
 
           // If there is already a highlighted proton
           if (highlightedProton) {
@@ -119,35 +124,30 @@
             var proton = highlightedProton.object;
 
             // Change the proton back to it's original color and visibility.
-            var color =viewer.theme.getColor(proton.name + '--color');
-            proton.material.color = color;
-            proton.material.visible = proton.az.visible;
+            highlightedProton.object.material.color = viewer.theme.getColor(proton.name + '--color');
+            highlightedProton.object.material.visible = proton.az.visible;
             highlightedProton = null;
           }
 
           if (objects.length) {
             // Return if this proton isn't optional
-            if (!objects[0].object.az.optional || !objects[0].object.az.active) return;
+            if (!objects[0].object.az.active) return;
+            if (mouseMode == 'protonsAdd') {
+              if (!objects[0].object.az.optional) return;
+            }
 
             // Highlight the proton
             highlightedProton = objects[0];
-            var proton = highlightedProton.object;
-            proton.material.visible = true;
-            var color =viewer.theme.getColor('proton-ghost--color');
-            proton.material.color = color;
+            highlightedProton.object.material.visible = true;
+            highlightedProton.object.material.color = viewer.theme.getColor('proton-ghost--color');
           }
           break;
 
-        case 'protonsColor':
-          break;
-
         case 'nucletsEdit':
-//      Get the nuclet form working, display all current nuclets in a tree.
+          // Don't do anything when hovering.
           break;
 
         case 'inner-faces':
-          var opacity = viewer.theme.get('icosaFaces--opacity--az-slider');
-
           // If there is already a highlighted proton
           if (highlightedFace) {
             if (objects.length && highlightedFace == objects[0]) return;
@@ -168,8 +168,6 @@
           break;
 
         case 'outer-faces':
-          var opacity = viewer.theme.get(' icosaOutFaces--opacity');
-
           // If there is already a highlighted proton
           if (highlightedOuterFace) {
             if (objects.length && highlightedOuterFace == objects[0]) return;
@@ -195,62 +193,89 @@
      * @param event
      * @returns {boolean}
      */
-    var mouseClick = function mouseClick(event) {
-      switch (event.which) {
+    function mouseClick(event) {
+      event.preventDefault();
+      switch (mouseMode) {
+        case 'none':
+          break;
 
-        case 1:       // Left mouse click
-        case 3:       // Right click
-          event.preventDefault();
-          switch (mouseMode) {
-            case 'none':
-              break;
+        case 'electronsAdd':
+          var intersects = viewer.controls.findIntersects(visibleProtons);
+          if (intersects.length) {
+            var proton = intersects[0].object;
+            switch (event.which) {
+              case 1:       // Left click - select
+                highlightedProton.object.material.color = viewer.theme.getColor(proton.name + '--color');
+                break;
+              case 3:
+                highlightedProton.object.material.color = viewer.theme.getColor(proton.name + '--color');
+                break;
+            }
+            viewer.render();
+          }
+          break;
 
-            case 'protonsAdd':
-              var intersects = viewer.controls.findIntersects(optionalProtons);
-              if (intersects.length) {
-                var proton = intersects[0].object;
+        case 'protonsAdd':
+          var intersects = viewer.controls.findIntersects(optionalProtons);
+          if (intersects.length) {
+            var proton = intersects[0].object;
+            switch (event.which) {
+              case 1:       // Left click - select
                 if (proton.az.optional) {
                   proton.az.visible = !proton.az.visible;
                   proton.material.visible = proton.az.visible;
                   viewer.atom.updateValenceRings();
                   createProtonLists();
-                  viewer.render();
                 }
                 viewer.atom.updateProtonCount();
-              }
-              break;
+                break;
+              case 3:       // Right click - deselect
+                break;
+            }
+            viewer.render();
+          }
+          break;
 
-            case 'protonsColor':
-              var intersects = viewer.controls.findIntersects(visibleProtons);
-              if (intersects.length == 0) {
-              }
-              break;
+        case 'protonsColor':
+          var intersects = viewer.controls.findIntersects(visibleProtons);
+          if (intersects.length == 0) {
+            var proton = intersects[0].object;
+            switch (event.which) {
+              case 1:       // Left click - select
+                break;
+              case 3:       // Right click - select
+                break;
+            }
+          }
+          break;
 
-            case 'nucletsEdit':
-              var intersects = viewer.controls.findIntersects(visibleProtons);
-              if (intersects.length == 0) {
-                // Pop down the nuclet edit dialog.
-                if (editNuclet) {
-                  viewer.nuclet.highlight(editNuclet, false);
-                }
-                $nucletFormBlock.addClass('az-hidden');
-                editNuclet = undefined;
-                return false;
-              } else {
-                // Initialize to current nuclet.
-                setEditNuclet(intersects[0].object.parent.parent);
-                $nucletFormBlock.removeClass('az-hidden');
-                $nucletFormBlock.insertAfter($nucletList.find('.' + editNuclet.name));
-                return false;
-              }
-              break;
+        case 'nucletsEdit':
+          var intersects = viewer.controls.findIntersects(visibleProtons);
+          if (intersects.length == 0) {
+            // Pop down the nuclet edit dialog.
+            if (editNuclet) {
+              viewer.nuclet.highlight(editNuclet, false);
+            }
+            $nucletFormBlock.addClass('az-hidden');
+            editNuclet = undefined;
+            return false;
+          } else {
+            // Initialize to current nuclet.
+            setEditNuclet(intersects[0].object.parent.parent);
+            $nucletFormBlock.removeClass('az-hidden');
+            $nucletFormBlock.insertAfter($nucletList.find('.' + editNuclet.name));
+            return false;
+          }
+          break;
 
-            case 'inner-faces':
-              var objects = viewer.controls.findIntersects(hoverInnerFaces);
-              if (objects.length) {
-                var oldFaces = objects[0].object;
-                var face = objects[0].face;
+        case 'inner-faces':
+          var objects = viewer.controls.findIntersects(hoverInnerFaces);
+          if (objects.length) {
+            var oldFaces = objects[0].object;
+            var face = objects[0].face;
 
+            switch (event.which) {
+              case 1:       // Left click - select
                 for (var i = 0; i < oldFaces.geometry.faces.length; i++) {
                   if (oldFaces.geometry.faces[i] === face) {
                     var index = oldFaces.geometry.reactiveState.indexOf(i);
@@ -262,7 +287,6 @@
                     break;
                   }
                 }
-
                 viewer.objects.icosaFaces = null;
                 var faces = viewer.nuclet.createGeometryFaces(
                   oldFaces.name,
@@ -279,9 +303,13 @@
                 nucletGroup.remove(oldFaces);
                 nucletGroup.add(faces);
                 viewer.render();
-              }
-              break;
+                break;
+
+              case 3:
+                break;
+            }
           }
+          break;
       }
     };
 

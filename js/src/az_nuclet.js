@@ -60,11 +60,11 @@
      * @param geometry
      * @returns {THREE.LineSegments}
      */
-    function createAxes(name, conf, geometry) {
+    function createAxis(name, conf, geometry) {
       var axisGeometry = new THREE.Geometry();
-      var opacity = viewer.theme.get(name + 'Axes--opacity');
+      var opacity = viewer.theme.get(name + 'Axis--opacity');
       var lineMaterial = new THREE.LineBasicMaterial({
-        color: viewer.theme.get(name + 'Axes--color'),
+        color: viewer.theme.get(name + 'Axis--color'),
         opacity: opacity,
         transparent: (opacity < constants.transparentThresh),
         visible: (opacity > constants.visibleThresh),
@@ -81,7 +81,7 @@
       if (conf.scale) {
         axes.scale.set(conf.scale, conf.scale, conf.scale);
       }
-      axes.name = name + 'Axes';
+      axes.name = name + 'Axis';
       return axes;
     }
 
@@ -358,8 +358,8 @@
           } else {
             geometry = new THREE.SphereGeometry(
               compConf.radius || viewer.theme.get('electron--radius'),
-              compConf.widthSegments || 10,
-              compConf.heightSegments || 10
+              compConf.widthSegments || 20,
+              compConf.heightSegments || 20
             );
             electronGeometry = geometry;
           }
@@ -419,22 +419,18 @@
       }
 
       // Set rotation
-      if (pos.rotation) {
-        if (pos.rotation.x) {
-          object.rotation.x = pos.rotation.x;
+      if (pos) {
+        if (pos.rotation) {
+          if (pos.rotation.x) { object.rotation.x = pos.rotation.x; }
+          if (pos.rotation.y) { object.rotation.y = pos.rotation.y; }
+          if (pos.rotation.z) { object.rotation.z = pos.rotation.z; }
         }
-        if (pos.rotation.y) {
-          object.rotation.y = pos.rotation.y;
-        }
-        if (pos.rotation.z) {
-          object.rotation.z = pos.rotation.z;
-        }
-      }
 
-      // Position the object
-      object.position.x = pos.x || 0;
-      object.position.y = pos.y || 0;
-      object.position.z = pos.z || 0;
+        // Position the object
+        object.position.x = pos.x || 0;
+        object.position.y = pos.y || 0;
+        object.position.z = pos.z || 0;
+      }
 
       object.name = name;
 
@@ -647,7 +643,7 @@
      *
      * @returns {THREE.AxisHelper}
      */
-    function createHelperAxes(name, length, linewidth) {
+    function createHelperAxis(name, length, linewidth) {
       var opacity = viewer.theme.get(name + '--opacity');
       var axis = new THREE.AxisHelper(length);
       axis.name = name;
@@ -793,37 +789,118 @@
       return azNuclet.tetrahedrons;
     }
 
-    function createElectrons(groupName, geometry, compConf, nucletConf) {
+    /**
+     * Use the object/nuclet config to create electrons - this may go away.
+     *
+     * @param groupName
+     * @param geometry
+     * @param compConf
+     * @param nucletConf
+     * @returns {Array}
+     */
+    function createElectrons(geometry, compConf, nucletConf) {
       var opacity = viewer.theme.get('electron--opacity') || 1;
-//    var scale = viewer.theme.get(groupName + '--scale');
       var scale = compConf.scale;
       var electrons = [];
+      var pos = new THREE.Vector3(0,0,0);
       for (var e in compConf.electrons) {
         if (!compConf.electrons.hasOwnProperty(e)) continue;
-        if (nucletConf.electrons && !nucletConf.electrons.contains(e)) continue;
+//      if (nucletConf.electrons && !nucletConf.electrons.contains(e)) continue;
         var vertice = geometry.vertices[e];
-        var electron = makeObject('electron',
-          {
-            phong: {
-              color: viewer.theme.get('electron--color'),
-              opacity: opacity,
-              transparent: (opacity < constants.transparentThresh),
-              visible: (opacity > constants.visibleThresh)
-            }
-          },
-          {
-            scale: viewer.theme.get('proton--scale'),
-            radius: electronRadius
-          },
-          {
-            x: vertice.x * scale,
-            y: vertice.y * scale,
-            z: vertice.z * scale
-          }
-        );
-        electron.name = 'electron';
-        addObject('electrons', electron);
+//      pos.setScalar(0);
+        pos.copy(vertice).multiplyScalar(scale);
+        var electron = createNElectron('electron2', geometry, pos, null);
         electrons[e] = electron;
+      }
+      return electrons;
+    }
+
+    function createNElectron (name, geometry, epos, vertices) {
+      var electronGroup = new THREE.Group();
+      electronGroup.name = name;
+      addObject(name, electronGroup);
+
+      var pos = new THREE.Vector3();
+      if (epos) {
+        pos.copy(epos);
+      } else {
+        var vA, vB, vC;
+        if (vertices.length == 2) {
+          vA = geometry.vertices[vertices[0]];
+          vB = geometry.vertices[vertices[1]];
+          pos = pos.add(vA).add(vB).divideScalar(2);
+        }
+
+        if (vertices.length == 3) {
+          // Get the 3 vertices
+          vA = geometry.vertices[vertices[0]];
+          vB = geometry.vertices[vertices[1]];
+          vC = geometry.vertices[vertices[2]];
+          pos = pos.add(vA).add(vB).add(vC).divideScalar(3);
+        }
+      }
+
+      // Make the electron core
+      var coreOpacity = viewer.theme.get(name + '-core--opacity') || 1;
+      var core = makeObject('electron',
+        {
+          phong: {
+            color: viewer.theme.get(name + '-core--color'),
+            opacity: coreOpacity,
+            transparent: (coreOpacity < constants.transparentThresh),
+            visible: (coreOpacity > constants.visibleThresh)
+          }
+        },
+        {
+          scale: viewer.theme.get(name + '-core--scale'),
+          radius: electronRadius
+        },
+        pos
+      );
+      core.name = name + '-core';
+      electronGroup.add(core);
+
+      // Make the electron pair
+      var fieldOpacity = viewer.theme.get(name + '-field--opacity') || 1;
+      var field = makeObject('proton',
+        {
+          phong: {
+            color: viewer.theme.get(name + '-field--color'),
+            opacity: fieldOpacity,
+            transparent: (fieldOpacity < constants.transparentThresh),
+            visible: (fieldOpacity > constants.visibleThresh)
+          }
+        },
+        {
+          scale: viewer.theme.get(name + '-field--scale'),
+          radius: protonRadius
+        },
+        pos
+      );
+      field.name = name + '-field';
+
+      electronGroup.add(field);
+      return electronGroup;
+    }
+
+    /**
+     * Given a list of sets of vertices, make an electron for each set.
+     * If 3 vertices in set, put it in the center of the triangle.
+     * If 2 vertices in set, put it between the two protons.
+     *
+     * @param groupName
+     * @param geometry
+     * @param compConf
+     * @param nucletConf
+     * @returns {Array}
+     */
+    function createNElectrons(groupName, geometry, compConf, nucletConf) {
+//    var scale = viewer.theme.get(groupName + '--scale');
+      var electrons = [];
+      for (var e in nucletConf.electrons) {
+        if (!nucletConf.electrons.hasOwnProperty(e)) continue;
+        var electron = createNElectron('electron1', geometry, null, nucletConf.electrons[e]);
+        electrons.push(electron);
       }
       return electrons;
     }
@@ -868,7 +945,7 @@
       geometry.scaleInit = compConf.scale;
 
       var radians;
-      if (geoGroup.rotation) {
+      if (geoGroup.rotate) {
         if (geoGroup.rotation.x) {
           radians = geoGroup.rotation['x'] / 360 * 2 * Math.PI;
           geometry.applyMatrix(new THREE.Matrix4().makeRotationX(radians));
@@ -880,6 +957,13 @@
         if (geoGroup.rotation.z) {
           radians = geoGroup.rotation['z'] / 360 * 2 * Math.PI;
           geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(radians));
+        }
+      }
+
+      if (compConf.nelectrons && azNuclet.conf.electrons) {
+        var nelectrons = createNElectrons(groupName, geometry, compConf, azNuclet.conf);
+        for (var e = 0; e < nelectrons.length; e++) {
+          nucletGroup.add(nelectrons[e]);
         }
       }
 
@@ -906,14 +990,14 @@
       }
 
       if (compConf.electrons) {
-        var electrons = createElectrons(groupName, geometry, compConf, azNuclet.conf);
+        var electrons = createElectrons(geometry, compConf, azNuclet.conf);
         for (var e = 0; e < electrons.length; e++) {
           nucletGroup.add(electrons[e]);
         }
       }
 
       if (compConf.axes) {
-        nucletGroup.add(createAxes(groupName, compConf.axes, geometry));
+        nucletGroup.add(createAxis(groupName, compConf.axes, geometry));
       }
 
       if (compConf.tetrahedrons) {
@@ -930,7 +1014,7 @@
         }
       }
 
-/*    if (compConf.faces) {
+      if (compConf.faces) {
         var reactiveState;
         if (compConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
           var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
@@ -948,7 +1032,7 @@
         nucletGroup.add(faces);
   //    viewer.objects['selectFace'] = [faces];
       }
-*/
+
 //    if (compConf.vertexids) {
 //      nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
 //    }
@@ -1085,7 +1169,7 @@
       }
 
       // Create nuclet helper axes.
-      nuclet.add(createHelperAxes('nucletAxes', protonRadius * 6, 1));
+      nuclet.add(createHelperAxis('nucletAxis', protonRadius * 6, 1));
 
       //// Set the nuclet rotation
       if (nuclet.az.conf.rotation) {
@@ -1100,11 +1184,11 @@
       }
 
       //// Add attachAxis line
-      var geometry = createGeometry('icosahedron', '', protonRadius, 1);
-      geometry.applyMatrix(new THREE.Matrix4().makeRotationY(90 / 360 * 2 * Math.PI));
-      var line = createLine('attach', [geometry.vertices[9], geometry.vertices[10]], viewer.theme.get('attachLines--opacity'));
-      line.scale.set(5, 5, 5);
-      nuclet.add(line);
+//    var geometry = createGeometry('icosahedron', '', protonRadius, 1);
+//    geometry.applyMatrix(new THREE.Matrix4().makeRotationY(90 / 360 * 2 * Math.PI));
+//    var line = createLine('attach', [geometry.vertices[9], geometry.vertices[10]], viewer.theme.get('attachLines--opacity'));
+//    line.scale.set(5, 5, 5);
+//    nuclet.add(line);
 
       //// Create inner shell
       var innerShell = new THREE.Object3D();
@@ -1112,7 +1196,7 @@
       innerShell.add(nuclet);
 
       // Create inner shell helper axis
-      innerShell.add(createHelperAxes('nucletInnerAxes', protonRadius * 5, 3));
+      innerShell.add(createHelperAxis('nucletInnerAxis', protonRadius * 5, 3));
 
       //// Create outer shell
       var outerShell = new THREE.Object3D();
@@ -1120,7 +1204,7 @@
       outerShell.add(innerShell);
 
       // Create outer shell helper axis
-      outerShell.add(createHelperAxes('nucletOuterAxes', protonRadius * 4, 5));
+      outerShell.add(createHelperAxis('nucletOuterAxis', protonRadius * 4, 5));
 
       //// Set the nucletShell position
       if (nuclet.az.conf.position) {

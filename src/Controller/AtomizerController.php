@@ -60,7 +60,7 @@ class AtomizerController extends ControllerBase {
        $path =  dirname($path) . '/Default.yml';
        $data['message'] = 'Could not find ' . $data['filepath'] . ' -- Default.yml file loaded.';
        $data['filepath'] = $path;
-       $data['filename'] = 'Default.yml';
+       $data['themeId'] = 'default';
     }
     $response = new AjaxResponse();
     $ymlContents = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath']));

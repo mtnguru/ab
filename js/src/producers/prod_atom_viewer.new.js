@@ -139,7 +139,7 @@
           break;
 
         case 'inner-faces':
-          var opacity = viewer.theme.get('icosaFaces--opacity--az-slider');
+          var opacity = viewer.theme.get('icosaFaces--opacity');
 
           // If there is already a highlighted proton
           if (highlightedFace) {
