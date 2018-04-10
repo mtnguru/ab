@@ -344,6 +344,7 @@
                 if (selectedNElectron) {
                   deselectNElectron(selectedNElectron);
                 }
+
               }
               break;
 
