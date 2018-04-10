@@ -143,6 +143,10 @@
     font-weight: bold;
     margin: 2px 0 5px;
     color: $color-label;
+    &:before {
+      margin-right: 10px;
+      color: $color-button-selected;
+    }
   }
 
   .az-label {

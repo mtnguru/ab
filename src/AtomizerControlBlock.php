@@ -365,7 +365,11 @@ class AtomizerControlBlock {
         break;
 
       case 'header':
-        $control = ['#markup' => "<div class='az-header'>$controlConf[0]</div>"];
+        if (!empty($controlConf[2])) {
+          $control = ['#markup' => "<div class='az-header az-$controlConf[2]'>$controlConf[0]</div>"];
+        } else {
+          $control = ['#markup' => "<div class='az-header'>$controlConf[0]</div>"];
+        }
         break;
 
       case 'label':
