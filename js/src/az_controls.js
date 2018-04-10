@@ -403,7 +403,7 @@
       mouse.x =  (event.offsetX / viewer.canvasWidth) * 2 - 1;
       mouse.y = -(event.offsetY / viewer.canvasHeight) * 2 + 1;
       if (viewer.producer.mouseClick) {
-//    event.preventDefault();
+//      event.preventDefault();
         return viewer.producer.mouseClick(event);
       }
     }

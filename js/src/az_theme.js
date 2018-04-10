@@ -25,8 +25,8 @@
       // Set the theme select list to the currently loaded file.
 
 //    var $radios = $('#blocks--selectTheme #theme--select--' + results[0].data.themeId, viewer.context);
-      var $radios = $('#theme--select--' + results[0].data.themeId, viewer.context);
-      $radios.prop('checked', true);
+      var $radio = $('#theme--select--' + results[0].data.themeId, viewer.context);
+      $radio.prop('checked', true);
 
       if (results[0].ymlContents) {
         results[0].ymlContents.filepath = results[0].data.filepath;
@@ -470,19 +470,31 @@
       }
     };
 
-    function getColor(_name, doHighlight) {
-      name = (doHighlight) ? _name + '-highlight' : _name;
+    function getColor(_name, highlight) {
+      var name = (highlight) ? _name + '-' + highlight : _name;
       if (!loadedColors[name]) {
         var color = viewer.theme.get(_name);
-        if (doHighlight) {
-          var percent = -15;
-          var num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, G = (num >> 8 & 0x00FF) + amt, B = (num & 0x0000FF) + amt;
-          color = "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+        var percent;
+        var num;
+        var amt, R, G, B;
+        switch (highlight) {
+          case 'darken':
+            percent = -15;
+            num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, G = (num >> 8 & 0x00FF) + amt, B = (num & 0x0000FF) + amt;
+            color = "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+            break;
+          case 'lighten':
+            percent = 15;
+            num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, G = (num >> 8 & 0x00FF) + amt, B = (num & 0x0000FF) + amt;
+            color = "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+            break;
         }
         if (!color) {
           alert('color is null ' + _name);
         }
         loadedColors[name] = new THREE.Color().setHex(parseInt(color.replace(/#/, "0x")), 16);
+        loadedColors[name].hex = color;
+        loadedColors[name].name = name;
       }
       return loadedColors[name];
     }

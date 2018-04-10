@@ -308,12 +308,11 @@
       return faces;
     }
 
-    function highlight(nuclet, doHighlight) {
-      for (var p = 0; p < nuclet.az.protons.length; p++) {
-        if (nuclet.az.protons[p]) {
-          var proton = nuclet.az.protons[p];
-          var name = getProtonName(proton.az) + '--color';
-          proton.material.color = viewer.theme.getColor(name, doHighlight);
+    function highlight(nuclet, highlight) {
+      highlight = highlight || false;
+      for (var id in nuclet.az.protons) {
+        if (nuclet.az.protons.hasOwnProperty(id)) {
+          setProtonColor(nuclet.az.protons[id], null, highlight);
         }
       }
     }
@@ -809,37 +808,18 @@
         var vertice = geometry.vertices[e];
 //      pos.setScalar(0);
         pos.copy(vertice).multiplyScalar(scale);
-        var electron = createNElectron('electron2', geometry, pos, null);
-        electrons[e] = electron;
+        var electron = createNElectron('electron2', pos);
+        electrons.push(electron);
       }
       return electrons;
     }
 
-    function createNElectron (name, geometry, epos, vertices) {
+    function createNElectron (name, pos) {
       var electronGroup = new THREE.Group();
       electronGroup.name = name;
-      addObject(name, electronGroup);
-
-      var pos = new THREE.Vector3();
-      if (epos) {
-        pos.copy(epos);
-      } else {
-        var vA, vB, vC;
-        if (vertices.length == 2) {
-          vA = geometry.vertices[vertices[0]];
-          vB = geometry.vertices[vertices[1]];
-          pos = pos.add(vA).add(vB).divideScalar(2);
-        }
-
-        if (vertices.length == 3) {
-          // Get the 3 vertices
-          vA = geometry.vertices[vertices[0]];
-          vB = geometry.vertices[vertices[1]];
-          vC = geometry.vertices[vertices[2]];
-          pos = pos.add(vA).add(vB).add(vC).divideScalar(3);
-        }
-      }
-
+      electronGroup.az = {
+        type: name
+      };
       // Make the electron core
       var coreOpacity = viewer.theme.get(name + '-core--opacity') || 1;
       var core = makeObject('electron',
@@ -894,15 +874,22 @@
      * @param nucletConf
      * @returns {Array}
      */
-    function createNElectrons(groupName, geometry, compConf, nucletConf) {
-//    var scale = viewer.theme.get(groupName + '--scale');
-      var electrons = [];
+    function createNElectrons(geometry, nucletConf) {
+      var nelectrons = [];
       for (var e in nucletConf.electrons) {
         if (!nucletConf.electrons.hasOwnProperty(e)) continue;
-        var electron = createNElectron('electron1', geometry, null, nucletConf.electrons[e]);
-        electrons.push(electron);
+        var pos = new THREE.Vector3();
+        var vertices = nucletConf.electrons[e];
+        for (var v = 0; v < vertices.length; v++) {
+          pos.add(geometry.vertices[vertices[v]]);
+        }
+        pos.divideScalar(vertices.length);
+        var nelectron = createNElectron('electron1', pos);
+        nelectron.az.vertices = vertices;
+        nelectron.az.id = 'E' + nelectrons.length;
+        nelectrons.push(nelectron);
       }
-      return electrons;
+      return nelectrons;
     }
 
     function createWireframe(name, geometry, compConf) {
@@ -961,9 +948,11 @@
       }
 
       if (compConf.nelectrons && azNuclet.conf.electrons) {
-        var nelectrons = createNElectrons(groupName, geometry, compConf, azNuclet.conf);
+        var nelectrons = createNElectrons(geometry, azNuclet.conf);
         for (var e = 0; e < nelectrons.length; e++) {
           nucletGroup.add(nelectrons[e]);
+          nelectrons[e].az.nuclet = azNuclet;
+          azNuclet.nelectrons[nelectrons[e].az.id] = nelectrons[e];
         }
       }
 
@@ -971,6 +960,7 @@
         var protons = createProtons(geometry, compConf, azNuclet);
         for (var p = 0; p < protons.length; p++) {
           if (protons[p]) {
+            protons[p].az.nucletGroup = nucletGroup;
             nucletGroup.add(protons[p]);
           }
         }
@@ -980,6 +970,7 @@
         var neutrons = createNeutrons(geometry, compConf, azNuclet);
         for (var p = 0; p < neutrons.length; p++) {
           if (neutrons[p]) {
+            neutrons[p].az.nucletGroup = nucletGroup;
             nucletGroup.add(neutrons[p]);
           }
         }
@@ -993,6 +984,8 @@
         var electrons = createElectrons(geometry, compConf, azNuclet.conf);
         for (var e = 0; e < electrons.length; e++) {
           nucletGroup.add(electrons[e]);
+          electrons[e].az.nuclet = azNuclet;
+          azNuclet.electrons[electrons[e].az.id] = electrons[e];
         }
       }
 
@@ -1097,52 +1090,28 @@
         protonRadius: protonRadius,
         conf: nucletConf,
         id: id,
-        state: nucletConf.state
+        state: nucletConf.state,
+        protons: [],
+        electrons: {},
+        nelectrons: {}
       };
 
       nuclet.geo = drupalSettings.atomizer_config.objects[nucletConf.state];
 
       var protons;
-      var electrons;
       switch (nuclet.az.state) {
-        case 'dodecahedron':
-//        protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-          break;
-        case 'neutral':
-          protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
-          electrons = [0, 1, 2, 3, 4, 5];
-          break;
-        case 'lithium':
-          protons = [0, 1, 3, 4, 5, 9, 11];
-          electrons = [0, 1, 2];
-          break;
-        case 'beryllium':
-          protons = [1, 3, 4, 5, 6, 7, 9, 10, 11];
-          electrons = [0, 1, 2];
-          break;
+        case 'dodecahedron': protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]; break;
+        case 'neutral':   protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]; break;
+        case 'lithium':   protons = [0, 1, 3, 4, 5, 9, 11]; break;
+        case 'beryllium': protons = [1, 3, 4, 5, 6, 7, 9, 10, 11]; break;
         case 'boron':
-        case 'boron10':
-          protons = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11];
-          electrons = [0, 1, 2];
-          break;
-        case 'boron11':
-          protons = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11];
-          electrons = [0, 1, 2];
-          break;
+        case 'boron10':   protons = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11]; break;
+        case 'boron11':   protons = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11]; break;
         case 'initial':
-        case 'final':
-          protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
-          electrons = [0, 1, 2, 3, 4, 5];
-          break;
-        case 'carbon':
-//      case 'icosahedron':
-          protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-          electrons = [0, 1, 2, 3, 4, 5];
-      }
+        case 'final':     protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]; break;
+        case 'carbon':    protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];  break; }
 
       // If the configuration for protons and electrons is not set then use the default values set above.
-      // @TODO This needs to be pulled from configuration, get rid of the above switch statement.
-      if (!nuclet.az.conf.electrons) nuclet.az.conf.electrons = electrons;
       if (!nuclet.az.conf.protons) nuclet.az.conf.protons = protons;
 
       // Remove the attach proton if this isn't 'N0'
@@ -1370,10 +1339,40 @@
       }
     }
 
+    function clearSelectedProtons () {
+
+    }
+
+    function setProtonColor(proton, name, highlight) {
+      var color;
+      highlight = highlight || false;
+      if (name) {
+        if (name == 'original') {
+          proton.material.color = viewer.theme.getColor(proton.name + '--color', highlight);
+          if (proton.az.tmpColor) {
+            delete proton.az.tmpColor;
+          }
+          if (proton.az.selected) {
+            delete proton.az.selected;
+          }
+          return;
+        }
+        proton.az.tmpColor = viewer.theme.getColor('proton-' + name + '--color', highlight);
+      }
+      if (proton.az.selected) {
+        proton.material.color = viewer.theme.getColor('proton-ghost--color', highlight);
+      } else if (proton.az.tmpColor) {
+        proton.material.color = viewer.theme.getColor(proton.az.tmpColor.name, highlight);
+      } else {
+        proton.material.color = viewer.theme.getColor(proton.name + '--color', highlight);
+      }
+    }
+
     // Return references to class functions - makes this into a pseudo-class.
     return {
       makeObject: makeObject,
       makeProton: makeProton,
+      createNElectron: createNElectron,
       getProtonName: getProtonName,
       showProtons: showProtons,
       createNuclet: createNuclet,
@@ -1382,7 +1381,8 @@
       createGeometryWireframe: createGeometryWireframe,
       createGeometryFaces: createGeometryFaces,
       highlight: highlight,
-      protonRadius: protonRadius
+      protonRadius: protonRadius,
+      setProtonColor: setProtonColor,
     };
   };
 

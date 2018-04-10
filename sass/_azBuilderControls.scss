@@ -316,7 +316,7 @@
   }
   .blocks--mouse-mode {
     legend {
-      display: none;
+      border-radius: 5px;
     }
   }
 
@@ -390,6 +390,23 @@
     }
   }
 
+  .proton--colors {
+
+    .proton-color {
+      position: absolute;
+      left: 9px;
+      margin-top: 1px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      &#proton-original-color {
+        background-color: #444444;
+      }
+      &.selected {
+        border: 2px solid $color-white;
+      }
+    }
+  }
 }
 
 article.atomizer-basic {

@@ -75,7 +75,7 @@
       viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
       viewer.canvasWidth = viewer.canvasContainer.clientWidth;
       if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
-        viewer.canvasHeight = window.innerHeight - 220;
+        viewer.canvasHeight = window.innerHeight - 170;
       } else {
         viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
       }
@@ -108,10 +108,14 @@
       window.addEventListener('resize', function () {
         // Get container width and calculate new height
         viewer.canvasWidth  = viewer.canvasContainer.clientWidth;
-        if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
-          viewer.canvasHeight = window.innerHeight - 220;
+        if (fullScreen) {
+          viewer.canvasHeight = window.innerHeight;
         } else {
-          viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
+          if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
+            viewer.canvasHeight = window.innerHeight - 170;
+          } else {
+            viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
+          }
         }
         viewer.canvas.width = viewer.canvasWidth;
         viewer.canvas.height = viewer.canvasHeight;

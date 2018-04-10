@@ -537,6 +537,9 @@
       return addNucletToStructure('N0', '');
     }
 
+    /**
+     * Ad event listeners for when a user selects an atom.
+     */
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
       $atomSelect.click(onSelectAtom);
