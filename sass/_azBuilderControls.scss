@@ -33,6 +33,7 @@
   margin-right: 10px;
   border-radius: 12px;
   color: $color-white;
+  z-index: 1;
 
   form {
     width: 100%;
@@ -141,7 +142,7 @@
   .az-header {
     font-size: 16px;
     font-weight: bold;
-    margin: 2px 0 5px;
+    margin: 0 0 5px;
     color: $color-label;
     &:before {
       margin-right: 10px;
@@ -230,6 +231,9 @@
     margin-left: 10px;
   }
 
+  .form-item-selectyml {
+    margin-top: 0;
+  }
   .selectyml {
     font-size: 125%;
   }
@@ -394,6 +398,28 @@
     }
   }
 
+  #blocks--help {
+    .field--name-body {
+      margin-bottom: 0;
+    }
+
+    p {
+      color: $color-label;
+      margin-bottom: 5px;
+    }
+
+    ul {
+      margin: .4em 0;
+
+      li {
+        padding: 0;
+        &:before {
+          color: $color-button-selected;
+        }
+      }
+    }
+  }
+
   .proton--colors {
 
     .proton-color {
@@ -411,7 +437,7 @@
       }
     }
   }
-}
+} // .az-controls-wrapper
 
 article.atomizer-basic {
   #edit-theme-select {
@@ -429,8 +455,9 @@ article.atomizer_minimal {
       left: .1em;
 
       .az-header {
-        margin: .4em 0 0;
+        margin: 0 0 .4em;
       }
+
       #blocks--buttons {
         padding: 0;
         .fa {
@@ -451,6 +478,7 @@ article.atomizer_minimal {
 
         p {
           color: $color-label;
+          margin-bottom: 5px;
         }
 
         ul {

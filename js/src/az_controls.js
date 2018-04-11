@@ -161,7 +161,7 @@
     function popupDialog(response) {
       for (var i = 0; i < response.length; i++) {
         if (response[i].command == 'renderNodeCommand') {
-          var $popup = $('.' + response[i].data.popupId, viewer.context);
+          var $popup = $('#' + response[i].data.popupId + ' .container', viewer.context);
           if ($popup != null) {
             $popup.html(response[i].htmlContents);
           }

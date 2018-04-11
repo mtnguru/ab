@@ -373,7 +373,7 @@
                     nelectron.az.id = id;
                     nelectron.az.nuclet = nuclet;
                     nuclet.nelectrons[id] = nelectron;
-                    nuclet.protons[0].az.nucletGroup.add(nelectron);
+                    nuclet.protons[1].az.nucletGroup.add(nelectron);
                     setElectronColor(nelectron, false, true);
                     selectedProtons = [];
                   }

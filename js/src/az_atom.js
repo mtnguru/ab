@@ -523,6 +523,29 @@
         }
         out += ']\n';
 
+        // Add the nelectrons.
+        out += spacing + 'electrons: ['
+        var nl = 0;
+        for (var e in nuclet.az.nelectrons) {
+          if (nuclet.az.nelectrons.hasOwnProperty(e)) {
+            var electron = nuclet.az.nelectrons[e];
+            if (nl++) {
+              out += ', ' ;
+            }
+
+            var np = 0;
+            out += '[';
+            for (var v = 0; v < electron.az.vertices.length; v++) {
+              if (np++) {
+                out += ', ' ;
+              }
+              out += electron.az.vertices[v];
+            }
+            out += ']';
+          }
+        }
+        out += ']\n';
+
         // Recursively add the children nuclets.
         var grow0 = atom.az.nuclets[id + '0'];
         var grow1 = atom.az.nuclets[id + '1'];
