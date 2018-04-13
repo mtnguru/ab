@@ -147,7 +147,7 @@
       var def;
       for (var id in currentSet.settings) {
         if (!currentSet.settings.hasOwnProperty(id)) continue;
-        console.log(id);
+//      console.log(id);
         if (!currentSet.settings[id]) continue;
 
         // if defaultValue defines an array then set all elements.
@@ -279,7 +279,7 @@
                     node.scale.z = value * node.initScale.z;
                   } else {
                     var scale = value;
-                    console.log('applyControl  configuration ' + scale);
+//                  console.log('applyControl  configuration ' + scale);
                     node.scale.set(scale, scale, scale);
                   }
                   break;

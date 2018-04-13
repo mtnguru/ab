@@ -293,12 +293,23 @@
         }
       }
 
-      // Initialize the theme block select list - move form elements into
-      // Initialize toggle-block buttons
+      // Block header event handler.
+      $('.toggle-block', viewer.context).each(function () {
+        var blockName = $(this).data('blockid').split('--')[1];
+        var $block = $('#blocks--' + blockName, viewer.context);
+        $block.find('.az-header').click(function (ev) {
+          $block.addClass('az-hidden');
+          $('#blocks--buttons #toggle--' + blockName, viewer.context).removeClass('az-selected');
+        });
+      });
+
+      // Top Button bar event handlers
       $('.toggle-block', viewer.context).click(function(e) {
         var $block = $('.' + $(this).data('blockid'), viewer.context);
         if ($block.hasClass('az-hidden')) {
           var blockid = $(this).data('blockid');
+
+          // Make the block visition and set the button to selected.
           $block.removeClass('az-hidden');
           $(this).addClass('az-selected');
 
@@ -314,6 +325,8 @@
           $(this).removeClass('az-selected');
         }
       });
+
+
 
       return false;
     }

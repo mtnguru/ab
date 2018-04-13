@@ -93,7 +93,7 @@
   .form-item-theme--selectblock {
     margin: 0 0 10px;
     select {
-      font-size: 125%;
+      font-size: 120%;
     }
   }
 
@@ -145,7 +145,7 @@
     margin: 0 0 5px;
     color: $color-label;
     &:before {
-      margin-right: 10px;
+      margin-right: 5px;
       color: $color-button-selected;
     }
   }
