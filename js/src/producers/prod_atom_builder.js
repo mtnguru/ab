@@ -17,30 +17,30 @@
     var editNuclet;
 
     var $nucletBlock = $('.blocks--nuclet-list', viewer.context);
-    var $nucletList =  $('.nuclet--list', viewer.context);
+    var $nucletList = $('.nuclet--list', viewer.context);
     var $nucletFormBlock = $('.blocks--nuclet-form', viewer.context);
     var $nucletButtons;
 
     var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
     var protonColor;
     if ($nucletFormBlock.length) {
-      var nucletAngle =       $('.nuclet--attachAngle', viewer.context)[0];
+      var nucletAngle = $('.nuclet--attachAngle', viewer.context)[0];
       var nucletAngleSlider = $('.nuclet--attachAngle--az-slider', viewer.context)[0]
-      var nucletAngleValue =  $('.nuclet--attachAngle--az-value', viewer.context)[0];
-      var nucletDelete =      $('.nuclet--delete', viewer.context)[0];
+      var nucletAngleValue = $('.nuclet--attachAngle--az-value', viewer.context)[0];
+      var nucletDelete = $('.nuclet--delete', viewer.context)[0];
 
-      var nucletAttach0 =     $('#edit-nuclet-grow-0', viewer.context)[0];
-      var nucletAttach1 =     $('#edit-nuclet-grow-1', viewer.context)[0];
+      var nucletAttach0 = $('#edit-nuclet-grow-0', viewer.context)[0];
+      var nucletAttach1 = $('#edit-nuclet-grow-1', viewer.context)[0];
     }
 
-    var hoverInnerFaces  = [];
-    var hoverOuterFaces  = [];
-    var optionalProtons  = [];
-    var visibleProtons   = [];
-    var selectedProtons  = [];
+    var hoverInnerFaces = [];
+    var hoverOuterFaces = [];
+    var optionalProtons = [];
+    var visibleProtons = [];
+    var selectedProtons = [];
     var selectedNElectron = null;
     var visibleNElectrons = [];
-    var visibleParticles  = [];
+    var visibleParticles = [];
     var highlightedProton;
     var highlightedNElectron;
     var highlightedFace;
@@ -80,7 +80,7 @@
      * @param event
      */
     function onNucletAddButton(event) {
-      var id = event.target.id.split('-',2)[1];
+      var id = event.target.id.split('-', 2)[1];
       var nuclet = viewer.atom.addNuclet(id);
       viewer.atom.updateValenceRings();
       createIntersectLists();
@@ -130,20 +130,22 @@
             // Return if the proton is already highlighted
             if (objects.length && highlightedProton == objects[0].object) return;
 
-
             // Change the proton back to it's original color and visibility.
+            viewer.nuclet.setProtonColor(highlightedProton, null);
             if (highlightedProton.az.selected) {
               highlightedProton.material.color = viewer.theme.getColor('proton-ghost--color');
-            } else if (highlightedProton.az.tmpColor) {
-              highlightedProton.material.color = highlightedProton.az.tmpColor;
             } else {
-              highlightedProton.material.color = viewer.theme.getColor(highlightedProton.name + '--color');
+              viewer.nuclet.setProtonColor(highlightedProton, null);
             }
+//            highlightedProton.material.color = highlightedProton.az.tmpColor;
+//          } else {
+//            highlightedProton.material.color = viewer.theme.getColor(highlightedProton.name + '--color');
+//          }
             highlightedProton.material.visible = highlightedProton.az.visible;
             highlightedProton = null;
           }
 
-          // If there is already a highlighted proton then set it back to original color
+          // If there is already a highlighted electron then set it back to original color
           if (highlightedNElectron) {
             // Return if the proton is already highlighted
             if (objects.length && highlightedNElectron == objects[0].object.parent) return;
@@ -225,7 +227,7 @@
             if (!electron.az.vertices.hasOwnProperty(v)) continue;
             proton = nuclet.protons[electron.az.vertices[v]];
             proton.az.selected = true;
-            viewer.nuclet.setProtonColor(proton, null, true);
+            viewer.nuclet.setProtonColor(proton, null);
           }
         }
       } else {
@@ -236,12 +238,11 @@
             if (!electron.az.vertices.hasOwnProperty(v)) continue;
             proton = nuclet.protons[electron.az.vertices[v]];
             proton.az.selected = false;
-            viewer.nuclet.setProtonColor(proton, null, false);
+            viewer.nuclet.setProtonColor(proton, null);
           }
 
         }
       }
-      return;
     }
 
     /**
@@ -452,7 +453,7 @@
                     pos.divideScalar(len);
                     var nelectron = viewer.nuclet.createNElectron('electron1', pos);
                     nelectron.az.vertices = vertices;
-                    var id = 'N' +  nElectronsId++;
+                    var id = 'N' + nElectronsId++;
                     nelectron.az.id = id;
                     nelectron.az.nuclet = nuclet;
                     nuclet.nelectrons[id] = nelectron;
@@ -461,7 +462,7 @@
                     selectedProtons = [];
                   }
 
-                // ELECTRON
+                  // ELECTRON
                 } else {
                   electron = objects[0].object.parent;
                   if (electron == selectedNElectron) {
@@ -582,7 +583,7 @@
       }
 
       if (nuclet.az.conf.state != 'initial' &&
-          nuclet.az.conf.state != 'final') {
+        nuclet.az.conf.state != 'final') {
         $('.nuclet--grow-label', viewer.context).addClass('az-hidden');
         $('.edit-nuclet-grow-0', viewer.context).addClass('az-hidden');
         $('.edit-nuclet-grow-1', viewer.context).addClass('az-hidden');
@@ -636,8 +637,12 @@
         var grow0 = atom.az.nuclets[id + '0'];
         var grow1 = atom.az.nuclets[id + '1'];
         if (grow0 || grow1) {
-          if (grow0) { out += addNucletToList(id + '0', shell + 1); }
-          if (grow1) { out += addNucletToList(id + '1', shell + 1); }
+          if (grow0) {
+            out += addNucletToList(id + '0', shell + 1);
+          }
+          if (grow1) {
+            out += addNucletToList(id + '1', shell + 1);
+          }
         }
         return out;
       }
@@ -648,7 +653,7 @@
         $nucletList.html(addNucletToList('N0', 0));
 
         $nucletButtons = $nucletList.find('.nuclet');
-        $nucletButtons.click(function(e) {
+        $nucletButtons.click(function (e) {
           var nucletName = e.target.innerHTML.split(' ')[0];
           var nuclet = viewer.atom.getNuclet(nucletName);
           if ($nucletFormBlock.hasClass('az-hidden') || nuclet !== editNuclet) {
@@ -703,7 +708,7 @@
 
       // Load and display the default atom
       var userAtomNid = localStorage.getItem('atomizer_builder_atom_nid');
-      viewer.view.atom = viewer.atom.loadAtom((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
+      viewer.atom.loadAtom((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
 
       // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
       viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, 1, {x: 300, y: 50, z: 0});

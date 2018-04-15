@@ -314,7 +314,20 @@
 
           createAtom(result.data.atomConf['N0']);
           atom.az.nid = result.data.nid;
+          if (viewer.dataAttr['atom--position--x']) {
+            if (!atom.position) atom.position = new THREE.Vector3();
+            atom.position.x = viewer.dataAttr['atom--position--x'];
+          }
+          if (viewer.dataAttr['atom--position--y']) {
+            if (!atom.position) atom.position = new THREE.Vector3();
+            atom.position.y = viewer.dataAttr['atom--position--y'];
+          }
+          if (viewer.dataAttr['atom--position--z']) {
+            if (!atom.position) atom.position = new THREE.Vector3();
+            atom.position.z = viewer.dataAttr['atom--position--z'];
+          }
           viewer.producer.atomLoaded(atom);
+          viewer.render();
 
           if (loadCallback) {
             loadCallback();

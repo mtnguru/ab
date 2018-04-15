@@ -247,6 +247,16 @@
               nodeNames[0].indexOf('face') > -1 &&
               nodeNames[0].charAt(0) == args[0].charAt(0)) {
               ok = true;
+            } else if (argNames[0] == 'proton' && nodeNames[0] == 'proton') {
+              if (node.az && node.az.tmpColor) {
+                if (args[0] == node.az.tmpColor.name.split("--")[0]) {
+                  ok = true;
+                }
+              } else {
+                if (args[0] == node.name) {
+                  ok = true;
+                }
+              }
             } else {
               if (argNames.length == 2) {
                 if (args[0] == node.name) {
@@ -459,9 +469,6 @@
       if (index) {
         sid += '--' + index;
       }
-//    if (idArgs[1] == 'position' || idArgs[1] == 'rotation' || idArgs[1] == 'scale' || idArgs[1] == 'opacity') {
-//      sid += '--az-slider';
-//    }
       if (currentSet.settings[sid]) {
         return currentSet.settings[sid]['defaultValue'];
       } else
@@ -495,6 +502,7 @@
         loadedColors[name] = new THREE.Color().setHex(parseInt(color.replace(/#/, "0x")), 16);
         loadedColors[name].hex = color;
         loadedColors[name].name = name;
+        loadedColors[name].base = _name;
       }
       return loadedColors[name];
     }

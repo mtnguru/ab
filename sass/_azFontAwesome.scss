@@ -1,18 +1,18 @@
-.fa-futbol-o {
-  font-size: 90%;
-}
-
-.fa-dot-circle-o {
-  font-size: 120%;
-  margin-top: -3px;
-}
-
 .az-fa {
   font-family: FontAwesome;
   padding-right: .3em;
   width: (18em/14);
   text-align: center;
   font-weight: 400;
+}
+
+
+.az-fa-info-circle,
+.az-fa-dot-circle-o,
+.fa-info-circle,
+.fa-dot-circle-o {
+  font-size: 120% !important;
+  margin-top: -1px;
 }
 
 .az-fa-adjust:before            { @extend .az-fa; content: "\f042"; }

@@ -68,9 +68,6 @@
       // Canvas size is set through CSS.
       // Retrieve canvas dimensions and set renderer size to that.
 
-      var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-canvas-wrapper';
-      viewer.canvasContainer = $('.' + containerId, viewer.context)[0];
-      viewer.dataAttr = getDataAttr(viewer.canvasContainer);
       viewer.theme.addDataAttr();
       viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
       viewer.canvasWidth = viewer.canvasContainer.clientWidth;
@@ -267,6 +264,14 @@
     viewer.makeScene = makeScene;
     viewer.atomizer = atomizer;
     viewer.view = atomizer.views[atomizer.defaultView];
+
+    var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-canvas-wrapper';
+    viewer.canvasContainer = $('.' + containerId, viewer.context)[0];
+    viewer.dataAttr = getDataAttr(viewer.canvasContainer);
+
+    if (viewer.dataAttr['theme']) {
+      viewer.atomizer.views[viewer.atomizer.defaultView].defaultTheme = viewer.dataAttr['theme'];
+    }
 
     // Load theme
     viewer.theme = Drupal.atomizer.themeC(viewer, makeScene);

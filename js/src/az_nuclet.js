@@ -310,6 +310,7 @@
 
     function highlight(nuclet, highlight) {
       highlight = highlight || false;
+      nuclet.az.highlight = highlight;
       for (var id in nuclet.az.protons) {
         if (nuclet.az.protons.hasOwnProperty(id)) {
           setProtonColor(nuclet.az.protons[id], null, highlight);
@@ -1107,12 +1108,14 @@
         case 'boron':
         case 'boron10':   protons = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11]; break;
         case 'boron11':   protons = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11]; break;
-        case 'initial':
+        case 'carbon':    protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];  break;
+        case 'initial':   protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]; break;
         case 'final':     protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]; break;
-        case 'carbon':    protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];  break; }
+      }
 
       // If the configuration for protons and electrons is not set then use the default values set above.
       if (!nuclet.az.conf.protons) nuclet.az.conf.protons = protons;
+
 
       // Remove the attach proton if this isn't 'N0'
       if (id != 'N0') {
@@ -1343,9 +1346,9 @@
 
     }
 
-    function setProtonColor(proton, name, highlight) {
+    function setProtonColor(proton, name) {
       var color;
-      highlight = highlight || false;
+      highlight = (proton.az.nuclet.highlight) ? proton.az.nuclet.highlight : false;
       if (name) {
         if (name == 'original') {
           proton.material.color = viewer.theme.getColor(proton.name + '--color', highlight);
@@ -1362,7 +1365,7 @@
       if (proton.az.selected) {
         proton.material.color = viewer.theme.getColor('proton-ghost--color', highlight);
       } else if (proton.az.tmpColor) {
-        proton.material.color = viewer.theme.getColor(proton.az.tmpColor.name, highlight);
+        proton.material.color = viewer.theme.getColor(proton.az.tmpColor.base, highlight);
       } else {
         proton.material.color = viewer.theme.getColor(proton.name + '--color', highlight);
       }
@@ -1382,7 +1385,7 @@
       createGeometryFaces: createGeometryFaces,
       highlight: highlight,
       protonRadius: protonRadius,
-      setProtonColor: setProtonColor,
+      setProtonColor: setProtonColor
     };
   };
 
