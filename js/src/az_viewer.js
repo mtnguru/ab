@@ -15,7 +15,7 @@
     var spotlights = [];
     var viewer = {
       objects: {},
-      context: $('#az-id-' + atomizer.atomizerId.toLowerCase())
+      context: $('#azid-' + atomizer.atomizerId.toLowerCase())
     };
     var fullScreen = false;
 

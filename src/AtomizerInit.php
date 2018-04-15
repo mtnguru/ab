@@ -11,10 +11,11 @@ use Drupal\Component\Utility\Xss;
  * @package Drupal\atomizer
  */
 class AtomizerInit {
-
+  public static $idNum = 0;
 
   static function build($config) {
-    $atomizerId = $config['atomizerId'] = str_replace(['_', ' '], '-', strtolower($config['atomizerId']));
+    $atomizerId = $config['atomizerId'] = str_replace(['_', ' '], '-', strtolower($config['atomizerId'])) . '--' . self::$idNum;
+    self::$idNum++;
 // Read in the config/atomizer file
     if (empty($config['atomizer_configuration'])) {
       $atomizer_config = Yaml::decode(file_get_contents(
@@ -56,7 +57,7 @@ class AtomizerInit {
       'content' => [
         '#type' => 'container',
         '#attributes' => [
-          'id' => 'az-id-' . $atomizerId,
+          'id' => 'azid-' . $atomizerId,
           'class' => ['az-atomizer-wrapper'],
         ],
       ],

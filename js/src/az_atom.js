@@ -314,6 +314,8 @@
 
           createAtom(result.data.atomConf['N0']);
           atom.az.nid = result.data.nid;
+
+          // Move atom position
           if (viewer.dataAttr['atom--position--x']) {
             if (!atom.position) atom.position = new THREE.Vector3();
             atom.position.x = viewer.dataAttr['atom--position--x'];
@@ -325,6 +327,24 @@
           if (viewer.dataAttr['atom--position--z']) {
             if (!atom.position) atom.position = new THREE.Vector3();
             atom.position.z = viewer.dataAttr['atom--position--z'];
+          }
+
+//        if (!atom.rotation) atom.rotation = new THREE.Vector3();
+//        atom.rotation.x =  30 / 360 * 2 * Math.PI;
+//        atom.rotation.z = -45 / 360 * 2 * Math.PI;
+
+          // Rotate atom
+          if (viewer.dataAttr['atom--rotation--x']) {
+            if (!atom.rotation) atom.rotation = new THREE.Vector3();
+            atom.rotation.x = viewer.dataAttr['atom--rotation--x'] * Math.PI / 180;
+          }
+          if (viewer.dataAttr['atom--rotation--y']) {
+            if (!atom.rotation) atom.rotation = new THREE.Vector3();
+            atom.rotation.y = viewer.dataAttr['atom--rotation--y'] * Math.PI / 180;
+          }
+          if (viewer.dataAttr['atom--rotation--z']) {
+            if (!atom.rotation) atom.rotation = new THREE.Vector3();
+            atom.rotation.z = viewer.dataAttr['atom--rotation--z'] * Math.PI / 180;
           }
           viewer.producer.atomLoaded(atom);
           viewer.render();

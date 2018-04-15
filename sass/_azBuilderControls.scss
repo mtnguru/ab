@@ -70,6 +70,7 @@
     }
   }
 
+
   fieldset.form-composite {
     position: relative;
 
@@ -357,6 +358,9 @@
   }
 
   .blocks--properties {
+    h2 {
+      margin-bottom: 5px;
+    }
     .field {
       clear: both;
     }
