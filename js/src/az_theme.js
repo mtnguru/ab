@@ -248,14 +248,18 @@
               nodeNames[0].charAt(0) == args[0].charAt(0)) {
               ok = true;
             } else if (argNames[0] == 'proton' && nodeNames[0] == 'proton') {
-              if (node.az && node.az.tmpColor) {
-                if (args[0] == node.az.tmpColor.name.split("--")[0]) {
-                  ok = true;
+              if (args[1] == 'color') {
+                if (node.az && node.az.tmpColor) {
+                  if (args[0] == node.az.tmpColor.name.split("--")[0]) {
+                    ok = true;
+                  }
+                } else {
+                  if (args[0] == node.name) {
+                    ok = true;
+                  }
                 }
               } else {
-                if (args[0] == node.name) {
-                  ok = true;
-                }
+                ok = true;
               }
             } else {
               if (argNames.length == 2) {
