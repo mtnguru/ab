@@ -287,7 +287,7 @@
     }
 
     .form-radio {
-      margin: 0;
+      margin-right: 5px;
     }
 
     .form-item-radio {
@@ -453,25 +453,30 @@ article.atomizer_minimal {
   .az-wrapper {
 
     .az-controls-wrapper {
-      width: 170px;
+      width: 160px;
       margin-right: 0;
       top: .1em;
-      left: .1em;
+      right: .1em;
+      left: auto;
 
       .az-header {
         margin: 0 0 .4em;
       }
 
+      article.type-snippet ul li::before {
+        margin-right: 5px;
+      }
       #blocks--buttons {
         padding: 0;
         .fa {
-          font-size: 80%;
+          font-size: 75%;
         }
       }
 
-      #blocks--theme {
+      #blocks--selectTheme {
         padding: .2em .5em;
         margin-top: .2em;
+        font-size: 12px;
       }
 
       #blocks--help {
