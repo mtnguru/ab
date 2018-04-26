@@ -41,6 +41,14 @@ body.page-node-type-atomizer {
     width: 100%;
     height: 100%;
   }
+
+  .copyright {
+    position: absolute;
+    bottom: 3px;
+    right: 1px;
+    opacity: .5;
+    font-size: 80%;
+  }
 }
 
 .az-wrapper {
@@ -68,19 +76,18 @@ body.page-node-type-atomizer {
 .az-canvas-wrapper,
 .block-atomizer-viewer {
 
+  position: relative;
   display: inline-block;
   width: 100%;
-//display: block;
   canvas {
 //  border-radius: 10px;
   }
 
-
   > div {
-    width: 100%;
-    canvas {
-      width: 100%;
-    }
+//  width: 100%;
+//  canvas {
+//    width: 100%;
+//  }
   }
 }
 

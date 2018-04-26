@@ -44,7 +44,6 @@ class AtomizerInit {
       }
     }
 
-
     $build = [
       '#type' => 'container',
       '#attributes' => [
@@ -100,6 +99,9 @@ class AtomizerInit {
         'canvas' => [
           '#markup' => '<canvas class="az-canvas"></canvas>',
           '#allowed_tags' => array_merge(Xss::getHtmlTagList(), ['canvas'])
+        ],
+        'copyright' => [
+          '#markup' => '<div title="Copyright 2018 by Ethereal Matters, LLC" class="az-fa-copyright copyright"></div>'
         ],
       ],
       '#attached' => [
