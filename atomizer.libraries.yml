@@ -1,3 +1,5 @@
+# Atomizer base files
+
 atomizer-base:
   js:
     js/threejs/three.js: {}
@@ -44,6 +46,8 @@ atomizer-obfuscator:
     - core/drupal.dialog.ajax
     - core/drupal.ajax
 
+# Atom Builder
+
 atomizer-atom-builder:
   js:
     js/src/producers/prod_atom_builder.js: {}
@@ -51,6 +55,8 @@ atomizer-atom-builder:
 atomizer-atom-builder-obfuscator:
   js:
     js/min/producers/prod_atom_builder.js: {}
+
+# Atom Viewer
 
 atomizer-atom-viewer:
   js:
@@ -60,6 +66,18 @@ atomizer-atom-viewer-obfuscator:
   js:
     js/min/producers/prod_atom_viewer.js: {}
 
+# Periodic Table
+
+atomizer-periodic-table:
+  js:
+    js/src/producers/prod_periodic-table.js: {}
+
+atomizer-periodic-table-obfuscator:
+  js:
+    js/min/producers/prod_periodic-table.js: {}
+
+# Platonic Solids
+
 atomizer-platonic-solids:
   js:
     js/src/producers/prod_platonic_solids.js: {}
@@ -68,6 +86,8 @@ atomizer-platonic-solids-obfuscator:
   js:
     js/min/producers/prod_platonic_solids.js: {}
 
+# Platonic Solids Duals
+
 atomizer-platonic-duals:
   js:
     js/src/producers/prod_platonic_duals.js: {}
@@ -75,6 +95,8 @@ atomizer-platonic-duals:
 atomizer-platonic-duals-obfuscator:
   js:
     js/min/producers/prod_platonic_duals.js: {}
+
+# Icosahedron - Dodecahedron
 
 atomizer-ico-dodeca:
   js:
