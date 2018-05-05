@@ -26,9 +26,9 @@ form.az-controls-form {
   }
 
   .blocks--nuclet-list {
-    .atom--num-protons--label {
+    .atom--num-protons--label,
+    .atom--num-electrons--label {
       font-size: 16px;
-      font-weight: bold;
     }
 
     .text-label {
@@ -45,15 +45,17 @@ form.az-controls-form {
   }
 
   .blocks--nuclet-form {
-//  position: absolute;
-//  z-index: 100;
     padding: 5px;
     background: $color-controls-wrapper;
     border: solid 1px $color-border;
     border-radius: 8px;
+    margin-bottom: 5px;
 
     .form-item {
       margin: 0;
+      &.nuclet--state {
+        margin-bottom: 5px;
+      }
     }
 
     .az-slider {
@@ -80,6 +82,10 @@ form.az-controls-form {
 
     textarea#edit-field-atomic-structure-0-value {
       font-family: "New Courier";
+    }
+
+    .nuclet--delete {
+      margin-top: 5px;
     }
 
     #edit-nuclet-grow-0,

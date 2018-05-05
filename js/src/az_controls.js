@@ -17,6 +17,7 @@
     var cameraMode = 'none';
     var selectBlock = $('.theme--selectBlock', viewer.context)[0];
     var $popup;
+    var img = document.createElement('IMG'); // Storage for current image.
 
     // Variables for detecting items mouse is hovering over.
     var raycaster;
@@ -117,6 +118,7 @@
         case 'selectyml':
           viewer[args[0]].overwriteYml();
           break;
+
         case 'saveyml':
           var wrapper  = $('3' + args[0] + '--saveyml', viewer.context)[0];
           var name = wrapper.querySelector('input[name=name]').value;
@@ -136,6 +138,10 @@
             });
           }
           break;
+
+        case 'snapshot':
+          break;
+
         default:
           if (args[0] === 'viewer') {
             viewer.buttonClicked(event.target);
@@ -309,7 +315,7 @@
         if ($block.hasClass('az-hidden')) {
           var blockid = $(this).data('blockid');
 
-          // Make the block visition and set the button to selected.
+          // Make the block visible and set the button to selected.
           $block.removeClass('az-hidden');
           $(this).addClass('az-selected');
 
@@ -326,7 +332,61 @@
         }
       });
 
+      $('#controls--snapshot', viewer.context).click(function () {
 
+        // Play the click sound
+        var audio = $(this).find('audio')[0];
+        audio.volume = .1;
+        audio.play();
+
+        // Save the current size of the canvas
+        var width = viewer.canvas.width;
+        var height = viewer.canvas.height;
+
+        // Change canvas size to 2560x2560 pixels
+        viewer.canvas.width = 2560;
+        viewer.canvas.height= 2560;
+        viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
+        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+        viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
+        viewer.camera.updateProjectionMatrix();
+        viewer.render();
+//      img = viewer.scene.components.screenshot.getCanvas('perspective').toDataURL('image/jpeg')
+
+        // Create image from canvas
+        img = viewer.canvas.toDataURL('image/jpeg');
+
+        // Put canvas back to original size.
+        viewer.canvas.width = width;
+        viewer.canvas.height = height;
+        viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
+        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+        viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
+        viewer.camera.updateProjectionMatrix();
+        viewer.render();
+
+        var filename = viewer.scene.az.atomName.replace(/ /g, "-");
+
+        // Make ajax call to save it
+        Drupal.atomizer.base.doAjax(
+          '/ajax-ab/save-image',
+          {
+            atomNid: viewer.scene.az.atomNid,
+            action: 'save-image',
+            filename: filename,
+            directory: 'atoms',
+            overwrite: false,
+            sceneName: viewer.scene.az.atomName,
+            imgBase64: img
+          },
+          imageSaved
+        );
+
+        function imageSaved(response) {
+          var fart = response;
+          return;
+        }
+      });
 
       return false;
     }
@@ -383,9 +443,6 @@
         var raycaster = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
         viewer.render();
         var intersectedObjects = raycaster.intersectObjects(objects);
-        if (intersectedObjects.length) {
-          var dude = 1;
-        }
         return intersectedObjects;
       }
       else {

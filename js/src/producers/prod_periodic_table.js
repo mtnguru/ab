@@ -352,7 +352,7 @@
                       viewer.atom.updateValenceRings();
                       createIntersectLists();
                     }
-                    viewer.atom.updateProtonCount();
+                    viewer.atom.updateParticleCount();
                     break;
                   case 3:       // Right click - deselect
                     break;

@@ -209,7 +209,7 @@
                   createProtonLists();
                   viewer.render();
                 }
-                viewer.atom.updateProtonCount();
+                viewer.atom.updateParticleCount();
               }
               break;
 

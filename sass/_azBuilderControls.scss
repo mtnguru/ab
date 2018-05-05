@@ -27,7 +27,7 @@
 
 // Atom Builder Controls form
 .az-controls-wrapper {
-  width: 220px;
+  width: 235px;
   vertical-align: top;
   display: inline-block;
   margin-right: 10px;
@@ -73,8 +73,10 @@
 
   fieldset.form-composite {
     position: relative;
+    margin-bottom: 5px;
 
     legend {
+      border-radius: 8px;
       padding: 0 5px;
     }
 
@@ -164,7 +166,8 @@
   .az-control-text {
     font-size: 100%;
     .text-label {
-      color: $color-label;
+//    color: $color-label;
+      font-weight: bold;
       display: inline-block;
       width: 8em;
     }

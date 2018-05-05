@@ -144,11 +144,14 @@ class AtomizerControlBlock {
               'class' => ['use-ajax'],
               'data-dialog-type' => $controlConf[2],
               'data-dialog-options' => Json::encode([
-                'dialogClass' => 'az-dialog',
+                'dialogClass' => 'az-dialog az-atom-form',
                 'width' => '600px',
                 'draggable' => TRUE,
                 'autoResize' => FALSE,
-                'position' => ['my' => 'right top', 'at' => 'right-10 top-10'],
+                'position' => [
+                  'my' => 'center top',
+                  'at' => 'center top'
+                ],
               ]),
             ],
           ],
@@ -156,6 +159,7 @@ class AtomizerControlBlock {
         break;
 
       case 'button':
+      case 'snapshot':
       case 'popup-node':
         $control = [
           '#type' => 'button',
@@ -176,6 +180,18 @@ class AtomizerControlBlock {
               }
             } else if ($key == 'class') {
               $containerClasses[] = $value;
+            } else if ($key == 'sound-file') {
+              $containerClasses[] = 'sound-file';
+              $filepath = '/' . drupal_get_path('module', 'atomizer') . '/assets/' . $value;
+              $soundId = str_replace ('.', '-', $value);
+              $control['sound_file'] = [
+                '#type' => 'inline_template',
+                '#template' => '{{ embed_sound|raw }}',
+                '#context' => [
+//                'embed_sound' => '<embed src="' . $filepath . '" autostart="false" width="0" height="0" id="' . $soundId . '" enablejavascript="true">',
+                  'embed_sound' => '<audio src="' . $filepath . '" preload></audio>',
+                ],
+              ];
             } else if ($key == 'font-awesome') {
               $control = [
                 '#type' => 'container',

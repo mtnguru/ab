@@ -44,7 +44,7 @@ body.page-node-type-atomizer {
 
   .copyright {
     position: absolute;
-    bottom: 3px;
+    bottom: 5px;
     right: 1px;
     opacity: .5;
     font-size: 70%;
@@ -68,7 +68,7 @@ body.page-node-type-atomizer {
 
   &.az-float-controls {
     .az-canvas-wrapper {
-      width: calc(100% - 460px);
+      width: calc(100% - 450px);
     }
   }
 }

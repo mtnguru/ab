@@ -87,16 +87,24 @@ Drupal.atomizer.shapesC = function (_viewer) {
         this.indices = [
           1, 4,10,    4, 5,10,    3, 5,10,   3,10,11,   1,10,11,
           1, 4, 9,    4, 5, 9,    3, 5, 9,   1, 7, 9,   6, 7,9,
-          3, 6, 9,    3, 6,11,   1, 7,11,   6, 7,11,
+          3, 6, 9,    3, 6,11,    1, 7,11,   6, 7,11,
         ];
 
-        // Push protons 0 and 2 out in 'x' a little
-        vertices[0] = vertices[0] * 1.2;
-        vertices[6] = vertices[0] * 1.2;
+        // Move protons 1 and 3 up a little
+        vertices[3]  = vertices[3]  * .80;  // 1.x
+        vertices[4]  = vertices[4]  * .80;  // 1.y
+        vertices[9]  = vertices[9]  * .80;  // 3.x
+        vertices[10] = vertices[10] * .80;  // 3.y
+
+        // Push protons 4, 5, 6, 7 in 'z' a little
+        vertices[14] = vertices[14] * 1.0;  // 4.z
+        vertices[17] = vertices[17] * 1.0;  // 5.z
+        vertices[20] = vertices[20] * 1.0;  // 6.z
+        vertices[23] = vertices[23] * 1.0;  // 7.z
 
         // Move the 9th center proton down
         vertices[27] = 0;
-        vertices[28] = 0.2;
+        vertices[28] = 0.60;
         vertices[29] = 0;
         break;
 
@@ -229,7 +237,6 @@ Drupal.atomizer.shapesC = function (_viewer) {
       7,  6, 11,     9,  7,  0,      0,  7,  1,     11,  1,  7
     ];
 
-    var percent = .094;
 
     // Set geometry vertices
     var numVertices = vertices.length / 3;
@@ -241,7 +248,17 @@ Drupal.atomizer.shapesC = function (_viewer) {
       var z = vertices[offset + 2] * radius;
 
       // When completing the lithium ring, the carbon ring is squeezed and the gap is changed.
+      if (state == 'initial') {
+        percent = .00;
+        if (v == 0 || v == 2) {
+          x = x * (1 - percent);
+        }
+        if (v == 8 || v == 9) {
+          z = z * (1 + percent);
+        }
+      }
       if (state == 'final') {
+        percent = .1;
         if (v == 0 || v == 2) {
           x = x * (1 - percent);
         }

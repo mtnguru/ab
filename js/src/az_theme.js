@@ -360,28 +360,31 @@
                   break;
 
                 case 'linewidth':
-                  if (argNames[0].indexOf('Wireframe') > -1) {
+                  var name = argNames[0];
+                  if (name.indexOf('Wireframe') > -1) {
                     if (node.name == 'dodecaWireframe' ||
-                      node.name == 'dodecaOutWireframe' ||
-                      node.name == 'icosaWireframe' ||
-                      node.name == 'icosaOutWireframe' ||
-                      node.name == 'lithiumWireframe' ||
-                      node.name == 'berylliumWireframe' ||
-                      node.name == 'boron11Wireframe' ||
-                      node.name == 'boron10Wireframe' ||
-                      node.name == 'carbonWireframe' ||
-                      node.name == 'hexaWireframe') {
+                        node.name == 'dodecaOutWireframe' ||
+                        node.name == 'icosaWireframe' ||
+                        node.name == 'icosaOutWireframe' ||
+                        node.name == 'lithiumWireframe' ||
+                        node.name == 'berylliumWireframe' ||
+                        node.name == 'boron11Wireframe' ||
+                        node.name == 'boron10Wireframe' ||
+                        node.name == 'carbonWireframe' ||
+                        node.name == 'hexaWireframe') {
                       for (var i = 0; i < node.children.length; i++) {
                         node.children[i].material.linewidth = value;
                         node.children[i].material.visible = (value >.05);
                       }
                     } else {
                       node.material.visible = (value >.05);
+                      node.material.linewidth = value;
                       node.material.wireframeLinewidth = value;
                     }
                   } else {
-                    node.material.linewidth = value;
                     node.material.visible = (value >.05);
+                    node.material.linewidth = value;
+                    node.material.wireframeLinewidth = value;
                   }
                   break;
 

@@ -66,9 +66,21 @@
       );
       nuclet = nucletOuterShell.children[0].children[0];
       updateValenceRings();
-      updateProtonCount();
+      updateParticleCount();
 
       return nuclet;
+    }
+
+    /**
+     * Delete an electron
+     *
+     * @param electron
+     */
+    function deleteNElectron(electron) {
+      electron.az.selected = false;
+      viewer.nuclet.setElectronColor(electron, false, true);
+      electron.parent.remove(electron);
+      delete electron.az.nuclet.nelectrons[electron.az.id];
     }
 
     /**
@@ -79,13 +91,35 @@
      * @param activate
      * @param show
      */
-    function activateNeutralProtons(side, nuclet, activate, show) {
+    function activateNeutralParticles(side, nuclet, activate, show) {
       // Activate/Deactivate the neutral ending protons.
-      var np = (side == '0') ? [12,13,14,15,20] : [16,17,18,19,21];
+
+      // Neutral ending protons
+      var np = (side == '0') ? [12,13,14,15] : [16,17,18,19];
       for (var p = 0; p < np.length; p++) {
         nuclet.az.protons[np[p]].material.visible = show;
         nuclet.az.protons[np[p]].az.visible = show;
         nuclet.az.protons[np[p]].az.active = activate;
+      }
+
+      // Neutrons
+      for (p in nuclet.az.neutrons) {
+        if (nuclet.az.neutrons.hasOwnProperty(p)) {
+          if (p.charAt(1) == side) {
+            nuclet.az.neutrons[p].material.visible = false;
+            nuclet.az.neutrons[p].az.visible = false;
+            nuclet.az.neutrons[p].az.active = activate;
+          }
+        }
+      }
+
+      // Electrons
+      if (!activate && nuclet.az.nelectrons) {
+        for (p in nuclet.az.nelectrons) {
+          if (nuclet.az.nelectrons.hasOwnProperty(p)) {
+            deleteNElectron(nuclet.az.nelectrons[p]);
+          }
+        }
       }
     }
 
@@ -117,19 +151,18 @@
         state: 'lithium',
         attachAngle: 3,
         protons: [10, 1, 4, 5, 3, 11, 9],
-        electrons: [0,1,2]
       };
 
       // Find the parent nuclet
       var parent = atom.az.nuclets[id.slice(0, -1)];
 
       // Deactivate the neutral protons on the parent nuclet
-      activateNeutralProtons(id.charAt(id.length-1), parent, false, false);
+      activateNeutralParticles(id.charAt(id.length-1), parent, false, false);
 
       // Create the new nuclet
       var nucletOuterShell = createNuclet(id, conf, parent);
       updateValenceRings();
-      updateProtonCount();
+      updateParticleCount();
       return nucletOuterShell.children[0].children[0];
     }
 
@@ -145,9 +178,9 @@
       viewer.nuclet.deleteNuclet(nuclet);
 
       // Activate the neutral ending protons on the parent but don't show.
-      activateNeutralProtons(id.charAt(id.length-1), parent, true, false);
+      activateNeutralParticles(id.charAt(id.length-1), parent, true, false);
       updateValenceRings();
-      updateProtonCount();
+      updateParticleCount();
     }
 
     /**
@@ -157,7 +190,7 @@
      */
     function changeNucletAngle(id, angle) {
       var nuclet = atom.az.nuclets[id];
-      nuclet.parent.rotation.y = (nuclet.parent.initial_rotation_y + ((angle - 1) * 72)) / 180 *Math.PI;
+      nuclet.parent.rotation.y = (nuclet.parent.initial_rotation_y + ((angle - 1) * 72.2)) / 180 * Math.PI;
       nuclet.az.conf.attachAngle = angle;
     }
 
@@ -178,7 +211,7 @@
       if (nuclet.az.id != 'N0') {
         var side = nuclet.az.id.substr(nuclet.az.id.length - 1);
         var parentId = nuclet.az.id.slice(0, -1);
-        activateNeutralProtons( side, atom.az.nuclets[parentId], false, false );
+        activateNeutralParticles( side, atom.az.nuclets[parentId], false, false );
         var growId;
         var attachId;
         if (side == 0) {  // left side
@@ -246,7 +279,7 @@
         nucletOuterShell.position.set(attachPt.x, attachPt.y, attachPt.z);
 
         // Set the initial y rotation
-        nucletInnerShell.rotation.y = (nucletInnerShell.initial_rotation_y + (((nucletConf.attachAngle || 1) - 1) * 72)) / 180 *Math.PI;
+        nucletInnerShell.rotation.y = (nucletInnerShell.initial_rotation_y + (((nucletConf.attachAngle || 1) - 1) * 72.2)) / 180 *Math.PI;
       }
 
       atom.az.nuclets[nuclet.az.id] = nuclet;
@@ -254,7 +287,7 @@
       if (nucletConf.nuclets) {
         for (var id in nucletConf.nuclets) {
           createNuclet(id, nucletConf.nuclets[id], nuclet);
-          activateNeutralProtons(id.charAt(id.length-1), nuclet, false, false);
+          activateNeutralParticles(id.charAt(id.length-1), nuclet, false, false);
         }
       }
       return nucletOuterShell;
@@ -314,6 +347,7 @@
 
           createAtom(result.data.atomConf['N0']);
           atom.az.nid = result.data.nid;
+          atom.az.name = result.data.atomName;
 
           // Move atom position
           if (viewer.dataAttr['atom--position--x']) {
@@ -364,7 +398,7 @@
       viewer.atom.atom = atom;
       createNuclet('N0', atomConf, atom);
       updateValenceRings();
-      updateProtonCount();
+      updateParticleCount();
 
       viewer.scene.add(atom);
       viewer.render();
@@ -413,13 +447,16 @@
     /**
      * Show the number of protons
      */
-    function updateProtonCount() {
+    function updateParticleCount() {
       var numProtons = 0;
+      var numElectrons = 0;
       var numNuclets = 0;
       var numUnclassified = 0;
       for (var n in atom.az.nuclets) {
         numNuclets++;
         var nuclet = atom.az.nuclets[n];
+
+        // Add protons
         for (var p in nuclet.az.protons) {
           var proton = nuclet.az.protons[p];
           if (!proton.az) {
@@ -429,9 +466,25 @@
             numProtons++;
           }
         }
+
+        // Add neutrons
+        for (var p in nuclet.az.neutrons) {
+          if (nuclet.az.neutrons.hasOwnProperty(p)) {
+            var neutron = nuclet.az.neutrons[p];
+            if (neutron.az.visible) {
+              numProtons++;
+            }
+          }
+        }
+
+        // Add NElectrons
+        for (var p in nuclet.az.nelectrons) {
+          numElectrons++;
+        }
       }
 
       $('.atom--num-protons .text-value', viewer.context).html(numProtons);
+      $('.atom--num-electrons .text-value', viewer.context).html(numElectrons);
     }
 
     /**
@@ -541,43 +594,47 @@
         }
 
         // Add the protons.
-        out += spacing + 'protons: ['
-        var np = 0;
-        for (var i = 0; i < nuclet.az.protons.length; i++) {
-          if (nuclet.az.protons[i]) {
-            var proton = nuclet.az.protons[i];
-            if (proton.az.active && proton.az.visible) {
-              if (np++) {
-                out += ', ' ;
+        if (nuclet.az.protons && nuclet.az.protons.length) {
+          var nl = 0;
+          for (var i = 0; i < nuclet.az.protons.length; i++) {
+            if (nuclet.az.protons[i]) {
+              var proton = nuclet.az.protons[i];
+              if (proton.az.active && proton.az.visible) {
+                out += (nl++ == 0) ? spacing + 'protons: [' : ', ';
+                out += i;
               }
-              out += i;
             }
           }
+          if (nl) out += ']\n';
         }
-        out += ']\n';
+
+        // Add the neutrons.
+        nl = 0;
+        for (var e in nuclet.az.neutrons) {
+          if (nuclet.az.neutrons.hasOwnProperty(e) && nuclet.az.neutrons[e].az.visible) {
+            out += (nl++ == 0) ? spacing + 'neutrons: [' : ', ';
+            out += nuclet.az.neutrons[e].az.id;
+          }
+        }
+        if (nl) out += ']\n';
 
         // Add the nelectrons.
-        out += spacing + 'electrons: ['
-        var nl = 0;
-        for (var e in nuclet.az.nelectrons) {
-          if (nuclet.az.nelectrons.hasOwnProperty(e)) {
-            var electron = nuclet.az.nelectrons[e];
-            if (nl++) {
-              out += ', ' ;
-            }
-
-            var np = 0;
-            out += '[';
-            for (var v = 0; v < electron.az.vertices.length; v++) {
-              if (np++) {
-                out += ', ' ;
+        if (nuclet.az.nelectrons) {
+          nl = 0;
+          for (var e in nuclet.az.nelectrons) {
+            if (nuclet.az.nelectrons.hasOwnProperty(e)) {
+              var electron = nuclet.az.nelectrons[e];
+              out += (nl++ == 0) ? spacing + 'electrons: [' : ', ';
+              var np = 0;
+              for (var v = 0; v < electron.az.vertices.length; v++) {
+                out += (np++ == 0) ? '[' : ', ';
+                out += electron.az.vertices[v];
               }
-              out += electron.az.vertices[v];
+              if (np) out += ']';
             }
-            out += ']';
           }
+          if (nl) out += ']';
         }
-        out += ']\n';
 
         // Recursively add the children nuclets.
         var grow0 = atom.az.nuclets[id + '0'];
@@ -637,6 +694,7 @@
     return {
       addNuclet: addNuclet,
       addProton: addProton,
+      deleteNElectron: deleteNElectron,
       az: function () { return atom.az; },
       buttonClicked: buttonClicked,
       changeNucletState: changeNucletState,
@@ -650,7 +708,7 @@
       overwriteYml: overwriteYml,
       saveYml: saveYml,
       updateValenceRings: updateValenceRings,
-      updateProtonCount: updateProtonCount
+      updateParticleCount: updateParticleCount
     };
   };
 

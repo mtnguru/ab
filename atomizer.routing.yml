@@ -51,5 +51,11 @@ atomizer.loadAtom:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadAtom'
   requirements:
     _permission: 'access content'
+atomizer.saveImage:
+  path: '/ajax-ab/save-image'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::saveImage'
+  requirements:
+    _permission: 'access content'
 
 

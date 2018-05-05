@@ -1,8 +1,8 @@
 .az-fa {
   font-family: FontAwesome;
-  padding-right: .3em;
-  width: (18em/14);
-  text-align: center;
+//padding-right: .3em;
+//width: (18em/14);
+//text-align: center;
   font-weight: 400;
 }
 
@@ -23,6 +23,7 @@
 .az-fa-bars:before              { @extend .az-fa; content: "\f0c9"; }
 .az-fa-book:before              { @extend .az-fa; content: "\f02d"; }
 .az-fa-calculator:before        { @extend .az-fa; content: "\f1ec"; }
+.az-fa-camera:before            { @extend .az-fa; content: "\f030"; }
 .az-fa-clock-o:before           { @extend .az-fa; content: "\f017"; }
 .az-fa-close:before             { @extend .az-fa; content: "\f00d"; }
 .az-fa-cog:before               { @extend .az-fa; content: "\f013"; }

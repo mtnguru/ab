@@ -90,14 +90,15 @@
       viewer.controls = Drupal.atomizer.controlsC(viewer);
 
       // Create the renderer
-      var parameters = {
+      viewer.renderer = new THREE.WebGLRenderer({
         antialias: true,
-        canvas: viewer.canvas
-      };
-      viewer.renderer = new THREE.WebGLRenderer(parameters);
+        canvas: viewer.canvas,
+        preserveDrawingBuffer: true,
+        shadowEnabled: true
+      });
       viewer.renderer.setClearColor(viewer.theme.get('renderer--color'), 1.0);
       viewer.renderer.setSize(viewer.canvasWidth, viewer.canvasHeight);
-      viewer.renderer.shadowEnabled = true;
+//    viewer.renderer.shadowEnabled = true;
 
       // add the output of the renderer to the html element
       viewer.canvasContainer.appendChild(viewer.renderer.domElement);
