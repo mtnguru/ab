@@ -39,7 +39,7 @@
         success: function (response) {
           if (Array.isArray(response) && response.length > 0) {
             if (response[0].data && response[0].data.message) {
-//            alert(response[0].data.message);
+              alert(response[0].data.message);
             }
             if (successCallback) successCallback(response);
           } else {
@@ -48,7 +48,7 @@
           return false;
         },
         error: function (response) {
-//        alert('atomizer_base doAjax: ' + response.responseText);
+          alert('atomizer_base doAjax: ' + response.responseText);
           (errorCallback) ? errorCallback(response) : successCallback(response);
         }
       });
