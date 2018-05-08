@@ -13,6 +13,7 @@
     var atomConf;
     var atomInformation = $('.atom--information', viewer.context)[0];
     var atomProperties = $('.atom--properties', viewer.context)[0];
+    var sceneName = $('.scene--name', viewer.context)[0];
     var $atomSelect = $('.atom-name, .atomic-number');
     var loadCallback;
 
@@ -317,6 +318,9 @@
       for (var i = 0; i < results.length; i++) {
         var result = results[i];
         if (result.command == 'loadAtomCommand') {
+          if (sceneName) {
+            sceneName.innerHTML = result.data.sceneName;
+          }
           if (atomInformation) {
             atomInformation.innerHTML = result.data.information;
           }

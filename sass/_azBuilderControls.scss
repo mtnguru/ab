@@ -136,6 +136,20 @@
     margin-top: 4px;
     border-radius: 8px;
 
+    &#blocks--sceneName {
+      background-color: inherit;
+      margin-top: 0;
+      border: 0;
+      padding: 0 10px 5px;
+
+      h3 {
+        margin: 0;
+        a {
+          color: $color-link;
+        }
+      }
+    }
+
     hr {
       margin: 5px 0;
       border-top: 2px solid $color-border;
@@ -362,7 +376,7 @@
 
   .blocks--properties {
     h2 {
-      margin-bottom: 5px;
+      display: none;
     }
     .field {
       clear: both;

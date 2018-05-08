@@ -192,7 +192,7 @@ class AtomizerController extends ControllerBase {
     $node = Node::load($data['nid']);
 
     // Render the node/atom using teaser atom_viewer mode.
-    $data['atomName'] = $node->label();
+    $data['sceneName'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';
 
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
     $data['properties'] = render($build);
