@@ -86,7 +86,8 @@
           displayMode = 'mobile';
           viewer.context.addClass('display-mode-' + displayMode);
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
-          var maxHeight = viewer.canvas.width * 1.333;
+//        var maxHeight = viewer.canvas.width * 1.333;
+          var maxHeight = viewer.canvas.width;
           var fullHeight = window.innerHeight - 150;
           viewer.canvas.height = (maxHeight < fullHeight) ? maxHeight : fullHeight;
         } else {
