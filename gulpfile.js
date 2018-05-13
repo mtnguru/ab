@@ -88,9 +88,8 @@ gulp.task('watch', function(){
 //  livereload.listen();
 
     gulp.watch(['js/src/**/*.js'], ['compress']);
-    gulp.watch('sass/**/*.scss', ['sass']);
 
-
+//  gulp.watch('sass/**/*.scss', ['sass']);
 //  gulp.watch(['css/styles.css', '**/*.twig', 'js/*.js'], function (files){
 //      livereload.changed(files)
 //  });

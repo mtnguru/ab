@@ -23,12 +23,10 @@
     var $buttons = $wrapper.find('.az-button');
 
     var loadYml = function (results) {
-      // Save the theme file name in browser local storage.
       animateFile = results[0].data.filename;
       animateConf = results[0].ymlContents;
       localStorage.setItem('atomizer_animation_file', animateFile);
 
-      // Set the theme select list to the currently loaded file.
       $selectAnimation.val(animateFile);
       startAnimation();
     };
@@ -152,6 +150,13 @@
       viewer.render();
     }
 
+    var stopAnimation = function() {
+      state = 'stopped';
+      stopTimers();
+      $buttons.removeClass('az-selected');
+      $(button).addClass('az-selected');
+    }
+
     var buttonClicked = function buttonClicked(button) {
       switch (button.id) {
         case 'animation--play':
@@ -168,10 +173,7 @@
           break;
 
         case 'animation--stop':
-          state = 'stopped';
-          stopTimers();
-          $buttons.removeClass('az-selected');
-          $(button).addClass('az-selected');
+          stopAnimation();
           break;
 
         case 'animation--previous':
@@ -184,7 +186,9 @@
 
     return {
       buttonClicked: buttonClicked,
-      loadYml: loadYml
+      loadYml: loadYml,
+      play: play,
+      stopAnimation: stopAnimation
     };
   };
 })(jQuery);

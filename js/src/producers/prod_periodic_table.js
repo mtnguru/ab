@@ -254,7 +254,7 @@
      * @param event
      * @returns {boolean}
      */
-    function mouseClick(event) {
+    function mouseUp(event) {
 
       function deselectProtons() {
         for (var p in selectedProtons) {
@@ -782,7 +782,7 @@
     return {
       createView: createView,
       setDefaults: setDefaults,
-      mouseClick: mouseClick,
+      mouseUp: mouseUp,
       hoverObjects: hoverObjects,
       hovered: hovered,
       atomLoaded: atomLoaded,

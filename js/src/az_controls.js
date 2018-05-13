@@ -22,9 +22,12 @@
     // Variables for detecting items mouse is hovering over.
     var raycaster;
     var mouse = new THREE.Vector2(-1000, -1000);
+    var mouseDown = new THREE.Vector2(-1000, -1000);
 
     /**
      * Change the mouse mode - builder, move camera, none, etc.
+     *
+     * @NOTE - This function isn't really used - called once with mode atom_builder.
      *
      * @param newMode
      */
@@ -56,7 +59,8 @@
         case 'atom_builder':
           cameraTrackballControls = createCameraTrackballControls();
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
-          viewer.canvasContainer.addEventListener('mouseup', onMouseClick, false);
+          viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
+          viewer.canvasContainer.addEventListener('mouseup',   onMouseUp, false);
           break;
         case 'camera':
           cameraTrackballControls = createCameraTrackballControls();
@@ -299,7 +303,7 @@
         }
       }
 
-      // Block header event handler.
+      // Block header event handler - close block.
       $('.toggle-block', viewer.context).each(function () {
         var blockName = $(this).data('blockid').split('--')[1];
         var $block = $('#blocks--' + blockName, viewer.context);
@@ -313,6 +317,16 @@
       $('.toggle-block', viewer.context).click(function(e) {
         var $block = $('.' + $(this).data('blockid'), viewer.context);
         if ($block.hasClass('az-hidden')) {
+
+          if (viewer.context.hasClass('az-overlay-controls') && viewer.context.hasClass('display-mode-desktop')) {
+            $('.toggle-block', viewer.context).removeClass('az-selected');
+            $('.control-block', viewer.context).each(function () {
+              if (this.id != 'blocks--buttons') {
+                $(this).addClass('az-hidden');
+              }
+            });
+          }
+
           var blockid = $(this).data('blockid');
 
           // Make the block visible and set the button to selected.
@@ -365,7 +379,7 @@
         viewer.camera.updateProjectionMatrix();
         viewer.render();
 
-        var filename = viewer.scene.az.atomName.replace(/ /g, "-");
+        var filename = viewer.scene.az.name.replace(/ /g, "-");
 
         // Make ajax call to save it
         Drupal.atomizer.base.doAjax(
@@ -399,12 +413,12 @@
     function createCameraTrackballControls() {
       var controls = new THREE.OrbitControls(viewer.camera, viewer.renderer.domElement);
       controls.rotateSpeed =   .45;
-      controls.zoomSpeed =     .5;
+      controls.zoomSpeed =     .8;
       controls.panSpeed =      .5;
       controls.enableZoom =    true;
       controls.enablePan =     true;
       controls.enableDamping = true;
-      controls.dampingFactor=  0.3;
+      controls.dampingFactor=  .3;
 
       controls.keys = [65, 83, 68];
       return controls;
@@ -457,8 +471,8 @@
      * @param event
      */
     function onMouseMove(event) {
-      mouse.x =  (event.offsetX / viewer.canvasWidth) * 2 - 1;
-      mouse.y = -(event.offsetY / viewer.canvasHeight) * 2 + 1;
+      mouse.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
+      mouse.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
       if (viewer.producer.hoverObjects) {
         viewer.producer.hovered(findIntersects(viewer.producer.hoverObjects()));
       }
@@ -466,15 +480,32 @@
     }
 
     /**
-     * When user clicks mouse button, call the producers mouseClick function if it exists.
+     * When user clicks mouse button, call the producers mouseDown function if it exists.
      * @param event
      */
-    function onMouseClick(event) {
-      mouse.x =  (event.offsetX / viewer.canvasWidth) * 2 - 1;
-      mouse.y = -(event.offsetY / viewer.canvasHeight) * 2 + 1;
-      if (viewer.producer.mouseClick) {
+    function onMouseDown(event) {
+      mouseDown.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
+      mouseDown.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
+      console.log('onMouseDown ' + mouse.x + ' ' + mouse.y);
+      if (viewer.producer.mouseDown) {
 //      event.preventDefault();
-        return viewer.producer.mouseClick(event);
+        return viewer.producer.mouseDown(event);
+      }
+    }
+
+    /**
+     * When user clicks mouse button, call the producers mouseUp function if it exists.
+     * @param event
+     */
+    function onMouseUp(event) {
+      mouse.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
+      mouse.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
+      var distance = mouse.distanceTo(mouseDown);
+      console.log('onMouseUp ' + mouse.x + ' ' + mouse.y + '  ' + distance);
+
+      if (viewer.producer.mouseUp) {
+//      event.preventDefault();
+        return viewer.producer.mouseUp(event, distance);
       }
     }
 
@@ -513,10 +544,9 @@
      * Initialize all controls.
      */
     var init = function init() {
-//  cameraTrackballControls = createCameraTrackballControls();
       initializeControls();
 
-      // Set the current mouse mode.
+      // Set the current camera mode - this could probably go away.
       changeCameraMode('atom_builder');
 
       // Set any default values the producer may have.
@@ -535,7 +565,6 @@
       init: init,
       getDefault: getDefault,
       findIntersects: findIntersects,
-      cameraTrackballControls: cameraTrackballControls
     }
   };
 })(jQuery);

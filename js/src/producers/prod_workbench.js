@@ -95,7 +95,7 @@ Drupal.atomizer.producers.workbenchC = function (_viewer) {
 
   };
 
-  var mouseClick = function mouseClick() {
+  var mouseUp = function mouseUp() {
 
   };
 
@@ -130,6 +130,6 @@ Drupal.atomizer.producers.workbenchC = function (_viewer) {
     setDefaults: setDefaults,
     intersectObjects: intersectObjects,
     intersected: intersected,
-    mouseClick: mouseClick
+    mouseUp: mouseUp
   };
 };

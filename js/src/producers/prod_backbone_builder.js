@@ -95,7 +95,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
    *
    * @param event
    */
-  var mouseClick = function mouseClick(event) {
+  var mouseUp = function mouseUp(event) {
     if (highlightedFace) {
 
       highlightAttachProtons(highlightedNuclet.protons, highlightedFace);
@@ -541,6 +541,6 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     createView: createView,
     intersectObjects: intersectObjects,
     intersected: intersected,
-    mouseClick: mouseClick,
+    mouseUp: mouseUp,
   };
 };

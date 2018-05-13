@@ -226,7 +226,7 @@
      * @param event
      * @returns {boolean}
      */
-    function mouseClick(event) {
+    function mouseUp(event, distance) {
 
       function deselectProtons() {
         for (var p in selectedProtons) {
@@ -252,10 +252,10 @@
             case 'electronsAdd':
               var objects = viewer.controls.findIntersects(visibleParticles);
               if (objects.length) {          // Object found
-                if (!objects[0].object.az.active) return;
 
                 // PROTON
                 if (objects[0].object.az) {
+                  if (!objects[0].object.az.active) return;
                   // An electron is selected - unselect it.
                   if (selectedNElectron) {
                     deselectNElectron();
@@ -686,7 +686,8 @@
       }
       createNucletList(atom);
       viewer.scene.az = {
-        atomName: atom.az.name,
+        title: atom.az.title, // Use atom title as scene title
+        name: atom.az.name,  // Use atom name as the scene name
         atomNid: atom.az.nid
       };
     };
@@ -775,7 +776,8 @@
     return {
       createView: createView,
       setDefaults: setDefaults,
-      mouseClick: mouseClick,
+      mouseUp: mouseUp,
+//    mouseDown: mouseDown,
       hoverObjects: hoverObjects,
       hovered: hovered,
       atomLoaded: atomLoaded

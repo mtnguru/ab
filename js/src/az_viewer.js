@@ -18,6 +18,7 @@
       context: $('#azid-' + atomizer.atomizerId.toLowerCase())
     };
     var fullScreen = false;
+    var displayMode = ''; // mobile, tablet, desktop
 
 //Physijs.scripts.worker = '/modules/custom/atomizer/js/physijs/physijs_worker.js';
 //Physijs.scripts.ammo =   '/modules/custom/atomizer/js/libs/ammo.js';
@@ -63,6 +64,59 @@
       return attr;
     }
 
+    /**
+     * Set size of the canvas based on screen size
+     */
+    function setSize() {
+      viewer.context.removeClass('display-mode-mobile');
+      viewer.context.removeClass('display-mode-table');
+      viewer.context.removeClass('display-mode-desktop');
+
+      var $atomList = $('#az-page-select-atom', viewer.content);
+
+      // Get container width and calculate new height
+      if (fullScreen) {
+        viewer.canvas.height = window.innerHeight;
+        viewer.canvas.width = window.innerWidth;
+      } else {
+        if (window.innerWidth < 960) {
+          if (displayMode != 'mobile') {
+            $atomList.addClass('az-hidden');
+          }
+          displayMode = 'mobile';
+          viewer.context.addClass('display-mode-' + displayMode);
+          viewer.canvas.width = viewer.canvasContainer.clientWidth;
+          var maxHeight = viewer.canvas.width * 1.333;
+          var fullHeight = window.innerHeight - 150;
+          viewer.canvas.height = (maxHeight < fullHeight) ? maxHeight : fullHeight;
+        } else {
+          if (displayMode != 'desktop') {
+            $atomList.removeClass('az-hidden');
+          }
+          displayMode = 'desktop';
+          viewer.context.addClass('display-mode-' + displayMode);
+          viewer.canvas.width = viewer.canvasContainer.clientWidth;
+          if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
+            viewer.canvas.height = window.innerHeight - 170;
+          } else {
+            viewer.canvas.height = viewer.canvas.width * viewer.atomizer.canvasRatio;
+          }
+          // Now that we set the height, set the width again,
+          // the page scrollbar changes the container width.
+          viewer.canvas.width = viewer.canvasContainer.clientWidth;
+        }
+      }
+
+      if (viewer.renderer) {
+        // Tell the renderer and camera about the new canvas size.
+        viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
+        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+        viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
+        viewer.camera.updateProjectionMatrix();
+        viewer.render();
+      }
+    }
+
     var makeScene = function () {
 
       // Canvas size is set through CSS.
@@ -70,13 +124,8 @@
 
       viewer.theme.addDataAttr();
       viewer.canvas = viewer.canvasContainer.getElementsByTagName('canvas')[0];
-      viewer.canvasWidth = viewer.canvasContainer.clientWidth;
-      if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
-        viewer.canvasHeight = window.innerHeight - 170;
-      } else {
-        viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
-      }
-      viewer.canvas.height = viewer.canvasHeight;
+
+      setSize();
 
       // Create the producer.
       viewer.producer = Drupal.atomizer.producers[viewer.view.producer + 'C'](viewer);
@@ -97,38 +146,18 @@
         shadowEnabled: true
       });
       viewer.renderer.setClearColor(viewer.theme.get('renderer--color'), 1.0);
-      viewer.renderer.setSize(viewer.canvasWidth, viewer.canvasHeight);
+      viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
 //    viewer.renderer.shadowEnabled = true;
 
       // add the output of the renderer to the html element
       viewer.canvasContainer.appendChild(viewer.renderer.domElement);
 
-      window.addEventListener('resize', function () {
-        // Get container width and calculate new height
-        viewer.canvasWidth  = viewer.canvasContainer.clientWidth;
-        if (fullScreen) {
-          viewer.canvasHeight = window.innerHeight;
-        } else {
-          if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
-            viewer.canvasHeight = window.innerHeight - 170;
-          } else {
-            viewer.canvasHeight = viewer.canvasWidth * viewer.atomizer.canvasRatio;
-          }
-        }
-        viewer.canvas.width = viewer.canvasWidth;
-        viewer.canvas.height = viewer.canvasHeight;
+      window.addEventListener('resize', setSize);
 
-        // Tell the renderer and camera about the new canvas size.
-        viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
-        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
-        viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
-        viewer.camera.updateProjectionMatrix();
-        viewer.render();
-      });
       // Create camera, and point it at the scene
       viewer.camera = new THREE.PerspectiveCamera(
         viewer.theme.get('camera--perspective'),
-        viewer.canvasWidth / viewer.canvasHeight,
+        viewer.canvas.width / viewer.canvas.height,
         .1, 10000
       );
       zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
@@ -263,11 +292,13 @@
     // Attach functions for external use
     viewer.render = render;
     viewer.makeScene = makeScene;
+    viewer.getDisplayMode = function() { return displayMode };
     viewer.atomizer = atomizer;
     viewer.view = atomizer.views[atomizer.defaultView];
 
     var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-canvas-wrapper';
-    viewer.canvasContainer = $('.' + containerId, viewer.context)[0];
+//  viewer.canvasContainer = $('.' + containerId, viewer.context)[0];
+    viewer.canvasContainer = $('.az-canvas-wrapper', viewer.context)[0];
     viewer.dataAttr = getDataAttr(viewer.canvasContainer);
 
     if (viewer.dataAttr['theme']) {

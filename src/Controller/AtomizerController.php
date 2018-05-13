@@ -192,7 +192,8 @@ class AtomizerController extends ControllerBase {
     $node = Node::load($data['nid']);
 
     // Render the node/atom using teaser atom_viewer mode.
-    $data['sceneName'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';
+    $data['atomName'] = $node->label();
+    $data['atomTitle'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';
 
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
     $data['properties'] = render($build);
@@ -287,7 +288,7 @@ class AtomizerController extends ControllerBase {
     $media = $this->entityTypeManager->getStorage('media')->create(['bundle' => 'image']);
 
     // Assign the media name
-    $media->name->setValue($data['sceneName']);
+    $media->name->setValue($data['atomName']);
 
     // Get the image and thumbnail values - not sure this does anything.
     $image = $media->get('image')->getValue();

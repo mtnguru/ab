@@ -159,6 +159,7 @@ class AtomizerControlBlock {
         break;
 
       case 'button':
+      case 'text-button':
       case 'snapshot':
       case 'popup-node':
         $control = [
@@ -182,14 +183,19 @@ class AtomizerControlBlock {
               $containerClasses[] = $value;
             } else if ($key == 'sound-file') {
               $containerClasses[] = 'sound-file';
-              $filepath = '/' . drupal_get_path('module', 'atomizer') . '/assets/' . $value;
+              if ($wrapper = \Drupal::service('stream_wrapper_manager')->getViaUri('public://atomizer/' . $value)) {
+                $fileUrl = $wrapper->getExternalUrl();
+//              $filepath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/atomizer/' . $value;
+              }
+
+//            $filepath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/atomizer/' . $value;
               $soundId = str_replace ('.', '-', $value);
               $control['sound_file'] = [
                 '#type' => 'inline_template',
                 '#template' => '{{ embed_sound|raw }}',
                 '#context' => [
 //                'embed_sound' => '<embed src="' . $filepath . '" autostart="false" width="0" height="0" id="' . $soundId . '" enablejavascript="true">',
-                  'embed_sound' => '<audio src="' . $filepath . '" preload></audio>',
+                  'embed_sound' => '<audio src="' . $fileUrl . '" preload></audio>',
                 ],
               ];
             } else if ($key == 'font-awesome') {
@@ -199,6 +205,9 @@ class AtomizerControlBlock {
                   'title' => $controlConf[0],
                 ],
               ];
+              if (!empty($controlConf[2]['label'])) {
+                $control['label'] = ['#markup' => $controlConf[2]['label']];
+              }
               $containerClasses[] = 'az-button';
               $containerClasses[] = 'fa';
               $containerClasses[] = $controlConf[2]['font-awesome'];

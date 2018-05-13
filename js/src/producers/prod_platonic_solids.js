@@ -33,14 +33,14 @@ Drupal.atomizer.producers.platonic_solidsC = function (_viewer) {
   };
 
   var setDefaults = function (){};
-  var mouseClick = function (){viewer.render();}
+  var mouseUp = function (){viewer.render();}
 //var hoverObjects = function () {};
   var hovered = function () {};
 
   return {
     createView: createView,
     setDefaults: setDefaults,
-    mouseClick: mouseClick,
+    mouseUp: mouseUp,
 //  hoverObjects: hoverObjects,
     hovered: hovered
   };

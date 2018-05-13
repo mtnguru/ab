@@ -62,6 +62,22 @@ class AtomizerInit {
       ],
     ];
 
+    // Build the Header region - used for mobile only?
+
+    $build['content']['header'] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['az-header']],
+      'sceneName' => [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['az-scene-name']],
+      ],
+      'selectAtom' => [
+        '#type' => 'button',
+        '#value' => 'Select Atom',
+        '#attributes' => ['id' => 'atom-select-enable'],
+      ],
+    ];
+
     // Build the select-atom dialog.
     if (!empty($atomizer_config['select']) && $atomizer_config['select'] == 'select_atom') {
       $perm = ['public'];
@@ -149,7 +165,7 @@ class AtomizerInit {
 
       $build['content']['controls'] = [
         '#type' => 'container',
-        '#weight' => -10,
+//      '#weight' => -10,
         '#attributes' => ['class' => ['az-controls-wrapper']],
         'controls' => $controls,
       ];
@@ -158,7 +174,7 @@ class AtomizerInit {
 
     if (!empty($atomizer_config['classes'])) {
       foreach ($atomizer_config['classes'] as $class) {
-        $build['#attributes']['class'][] = $class;
+        $build['content']['#attributes']['class'][] = $class;
       }
     }
 

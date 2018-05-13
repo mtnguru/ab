@@ -188,7 +188,7 @@
      * @param event
      * @returns {boolean}
      */
-    var mouseClick = function mouseClick(event) {
+    var mouseUp = function mouseUp(event) {
       switch (event.which) {
 
         case 1:       // Left mouse click
@@ -499,7 +499,7 @@
     return {
       createView: createView,
       setDefaults: setDefaults,
-      mouseClick: mouseClick,
+      mouseUp: mouseUp,
       hoverObjects: hoverObjects,
       hovered: hovered,
       atomLoaded: atomLoaded

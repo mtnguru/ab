@@ -10,11 +10,15 @@
 
     var viewer = _viewer;
     var atom;
-    var atomConf;
+    var $sceneName = $('.scene--name, .az-scene-name', viewer.context);
     var atomInformation = $('.atom--information', viewer.context)[0];
     var atomProperties = $('.atom--properties', viewer.context)[0];
-    var sceneName = $('.scene--name', viewer.context)[0];
-    var $atomSelect = $('.atom-name, .atomic-number');
+
+    var $atomList = $('#az-page-select-atom', viewer.content);
+    var $atomSelectEnable = $('#atom-select-enable', viewer.context);
+    var $atomSelectClose = $atomList.find('.az-close');
+    var $atoms = $('.atom-name, .atomic-number', viewer.context);
+
     var loadCallback;
 
     /**
@@ -318,8 +322,8 @@
       for (var i = 0; i < results.length; i++) {
         var result = results[i];
         if (result.command == 'loadAtomCommand') {
-          if (sceneName) {
-            sceneName.innerHTML = result.data.sceneName;
+          if ($sceneName) {
+            $sceneName.html(result.data.atomTitle);
           }
           if (atomInformation) {
             atomInformation.innerHTML = result.data.information;
@@ -327,8 +331,8 @@
           if (atomProperties) {
             atomProperties.innerHTML = result.data.properties;
           }
-          if ($atomSelect.length > 0) {
-            $atomSelect.removeClass('atom-active');
+          if ($atoms.length > 0) {
+            $atoms.removeClass('atom-active');
             $('.atom-select-' + result.data.nid, viewer.context).addClass('atom-active');
           }
           var $save = $('.atom--save a', viewer.context);
@@ -352,6 +356,7 @@
           createAtom(result.data.atomConf['N0']);
           atom.az.nid = result.data.nid;
           atom.az.name = result.data.atomName;
+          atom.az.title = result.data.atomTitle;
 
           // Move atom position
           if (viewer.dataAttr['atom--position--x']) {
@@ -570,8 +575,6 @@
      */
     function onSelectAtom(event) {
       // Extract the node id from class nid
-      loadAtom($(event.target).data('nid'), null);
-      event.preventDefault();
     }
 
     /**
@@ -659,7 +662,27 @@
      */
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
-      $atomSelect.click(onSelectAtom);
+      $atoms.click(function () {
+        loadAtom($(event.target).data('nid'), null);
+        if (viewer.getDisplayMode() == 'mobile' ||
+            viewer.getDisplayMode() == 'tablet') {
+          $atomList.addClass('az-hidden');
+        }
+        event.preventDefault();
+      });
+
+
+      $atomSelectEnable.click(function () {
+        if ($atomList.hasClass('az-hidden')) {
+          $atomList.removeClass('az-hidden');
+        } else {
+          $atomList.addClass('az-hidden');
+        }
+      });
+
+      $atomSelectClose.click(function () {
+        $atomList.addClass('az-hidden');
+      })
     }
 
     /**
