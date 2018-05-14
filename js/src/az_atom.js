@@ -399,6 +399,12 @@
       }
     };
 
+    /**
+     * Create an atom, most of the work is a call to the recursive function createNuclet.
+     *
+     * @param atomConf
+     * @returns {THREE.Group|*}
+     */
     var createAtom = function createAtom (atomConf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
       atom = new THREE.Group();
@@ -454,7 +460,7 @@
     }
 
     /**
-     * Show the number of protons
+     * Show the number of protons and electrons
      */
     function updateParticleCount() {
       var numProtons = 0;
@@ -564,18 +570,10 @@
       }
     };
 
+    // Set up event handler when user closes atom-select button
     $('.atom--select-close').click(function () {
       $(viewer.context).removeClass('select-atom-enabled');
     });
-
-    /**
-     * User has selected an atom from the select popup, load the atom.
-     *
-     * @param event
-     */
-    function onSelectAtom(event) {
-      // Extract the node id from class nid
-    }
 
     /**
      * Extract the text description of the atom currently displayed.

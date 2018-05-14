@@ -228,6 +228,9 @@
      */
     function mouseUp(event, distance) {
 
+      /**
+       * A electron has been deselected, deselect the protons also.
+       */
       function deselectProtons() {
         for (var p in selectedProtons) {
           if (selectedProtons.hasOwnProperty(p)) {
@@ -238,6 +241,9 @@
         selectedProtons = [];
       }
 
+      /**
+       * Deselect an Electron
+       */
       function deselectNElectron() {
         selectedNElectron.az.selected = false;
         viewer.nuclet.setElectronColor(selectedNElectron, false, true);

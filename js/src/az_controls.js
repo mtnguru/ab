@@ -5,18 +5,15 @@
  * Listen for events and dispense them to the appropriate modules.
  */
 
+// Wrap code in jQuery
 (function ($) {
   Drupal.atomizer.controlsC = function (_viewer, controlSet) {
 
-    var abc = ['a', 'b', 'c'];
-
     var viewer = _viewer;
-    var constants = Drupal.atomizer.base.constants;
     var cameraTrackballControls;
     var objectTrackballControls;
     var cameraMode = 'none';
     var selectBlock = $('.theme--selectBlock', viewer.context)[0];
-    var $popup;
     var img = document.createElement('IMG'); // Storage for current image.
 
     // Variables for detecting items mouse is hovering over.
@@ -81,7 +78,6 @@
      * @param event
      */
     function onControlChanged(event) {
-      var args = this.id.split("--");
       var id = this.id;
       if (this.className.indexOf('az-slider') > -1) {
         id = id.replace('--az-slider', '');
@@ -161,6 +157,11 @@
       return false;
     }
 
+    /**
+     * When a radio button is clicked, call appropriate module.
+     *
+     * @param event
+     */
     function onRadioClicked(event) {
       var args = this.id.split("--");
       if (viewer[args[0]] && viewer[args[0]].radioClicked) {
@@ -168,6 +169,11 @@
       }
     }
 
+    /**
+     * Callback to display popup of rendered node.
+     *
+     * @param response
+     */
     function popupDialog(response) {
       for (var i = 0; i < response.length; i++) {
         if (response[i].command == 'renderNodeCommand') {
@@ -179,6 +185,11 @@
       }
     }
 
+    /**
+     * Ajax call to get a rendered node then popup a dialog to show it in.
+     *
+     * @param event
+     */
     function onPopupNode(event) {
       event.preventDefault();
       var nid = $(event.target, viewer.context).data('nid');
@@ -407,6 +418,12 @@
       return false;
     }
 
+    /**
+     * When a touch event happens, simulate an equivalent mouse event.
+     *
+     * All touch events become mouse events instead - left mouse button only.
+     * @param event
+     */
     function touchHandler(event) {
       var touches = event.changedTouches,
         first = touches[0],
@@ -419,6 +436,13 @@
         default:           return;
       }
 
+      var button = 0;
+      var x = first.clientX;
+      var x1 = viewer.canvas.width * .9;
+      if (viewer.canvas.width * .9 < first.clientX) {
+        button = 1;
+      };
+
       // initMouseEvent(type, canBubble, cancelable, view, clickCount,
       //                screenX, screenY, clientX, clientY, ctrlKey,
       //                altKey, shiftKey, metaKey, button, relatedTarget);
@@ -427,12 +451,15 @@
       simulatedEvent.initMouseEvent(type, true, true, window, 1,
         first.screenX, first.screenY,
         first.clientX, first.clientY, false,
-        false, false, false, 0/*left*/, null);
+        false, false, false, button, null);
 
       first.target.dispatchEvent(simulatedEvent);
 //    event.preventDefault();
     }
 
+    /**
+     * Add event handlers to touch events.
+     */
     function initTouch()
     {
       document.addEventListener("touchstart", touchHandler, true);
