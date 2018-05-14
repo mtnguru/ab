@@ -252,6 +252,8 @@
       // Extract default values to initialize settings
       setThemeDefaults();
 
+      initTouch();
+
       var form = $('.az-controls-form', viewer.context)[0];
       if (!form) return;
 
@@ -428,10 +430,10 @@
         false, false, false, 0/*left*/, null);
 
       first.target.dispatchEvent(simulatedEvent);
-      event.preventDefault();
+//    event.preventDefault();
     }
 
-    function init()
+    function initTouch()
     {
       document.addEventListener("touchstart", touchHandler, true);
       document.addEventListener("touchmove", touchHandler, true);
