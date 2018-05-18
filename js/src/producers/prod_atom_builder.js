@@ -698,6 +698,13 @@
       };
     };
 
+    function changeNuclet(editNuclet, id) {
+      var nuclet = viewer.atom.changeNucletState(editNuclet, id);
+      createIntersectLists();
+      setEditNuclet(nuclet);
+      viewer.render();
+    }
+
     /**
      * Create the view - add any objects to scene.
      */
@@ -727,13 +734,16 @@
       });
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {
-          var nuclet = viewer.atom.changeNucletState(editNuclet, event.target.value);
-          createIntersectLists();
-          setEditNuclet(nuclet);
-          viewer.render();
+          changeNuclet(editNuclet, event.target.value);
         }
 //      $(this).attr('id', $(this).attr('id') + '--' + $(this).val());
 //      $(this).attr('id', 'nuclet--state--' + $(this).val());
+      });
+
+      $radios.siblings('label').click(function (event) {
+        var input =$(this).siblings('input')[0];
+        $(input).prop('checked', true);
+        changeNuclet(editNuclet, input.value);
       });
     }
 

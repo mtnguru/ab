@@ -158,6 +158,20 @@
     }
 
     /**
+     * When a radio button label is clicked, call module with the corresponding input element.
+     *
+     * @param event
+     */
+    function onRadioLabelClicked(event) {
+      var input =$(this).siblings('input')[0];
+      var args = input.id.split("--");
+      $(input).prop('checked', true);
+      if (viewer[args[0]] && viewer[args[0]].radioClicked) {
+        viewer[args[0]].radioClicked($(this).siblings('input')[0]);
+      }
+    }
+
+    /**
      * When a radio button is clicked, call appropriate module.
      *
      * @param event
@@ -307,6 +321,7 @@
             case 'radios':
               var $radios = $(element).find('input');
               $radios.click(onRadioClicked);
+              $radios.siblings('label').click(onRadioLabelClicked);
               break;
             case 'popup-node':
               element.addEventListener("click", onPopupNode);
