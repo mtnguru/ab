@@ -86,32 +86,6 @@
     }
 
     /**
-     * Create a line anywhere in 3d space
-     *
-     * @param name
-     * @param conf
-     * @param geometry
-     * @returns {THREE.LineSegments}
-     */
-    function createLine(name, vertices, opacity) {
-      var lineGeometry = new THREE.Geometry();
-      var lineMaterial = new THREE.LineBasicMaterial({
-        color: 0xff00ff,
-        opacity: opacity,
-        transparent: (opacity < constants.transparentThresh),
-        visible: (opacity > constants.visibleThresh),
-        linewidth: 2
-      });
-      for (var i = 0; i < vertices.length; i++) {
-        var vertice = vertices[i];
-        lineGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
-      }
-      var lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-      lines.name = name + 'Lines';
-      return lines;
-    }
-
-    /**
      * Create a wireframe for a geometry using the standard three.js wireframes.
      *
      * This creates the three.js default wireframes.  These draw triangles.  To create
@@ -1253,13 +1227,6 @@
         }
       }
 
-      //// Add attachAxis line
-//    var geometry = createGeometry('icosahedron', '', protonRadius, 1);
-//    geometry.applyMatrix(new THREE.Matrix4().makeRotationY(90 / 360 * 2 * Math.PI));
-//    var line = createLine('attach', [geometry.vertices[9], geometry.vertices[10]], viewer.theme.get('attachLines--opacity'));
-//    line.scale.set(5, 5, 5);
-//    nuclet.add(line);
-
       //// Create inner shell
       var innerShell = new THREE.Object3D();
       innerShell.name = 'nucletInner-' + id;
@@ -1526,7 +1493,8 @@
       highlight: highlight,
       protonRadius: protonRadius,
       setProtonColor: setProtonColor,
-      setElectronColor: setElectronColor
+      setElectronColor: setElectronColor,
+      getConstants: function () { return constants; }
     };
   };
 

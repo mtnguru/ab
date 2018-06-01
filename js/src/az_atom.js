@@ -216,7 +216,8 @@
       if (nuclet.az.id != 'N0') {
         var side = nuclet.az.id.substr(nuclet.az.id.length - 1);
         var parentId = nuclet.az.id.slice(0, -1);
-        activateNeutralParticles( side, atom.az.nuclets[parentId], false, false );
+        var growNuclet = atom.az.nuclets[parentId];
+        activateNeutralParticles( side, growNuclet, false, false );
         var growId;
         var attachId;
         if (side == 0) {  // left side
@@ -241,7 +242,7 @@
 //      nucletInnerShell.initial_rotation_y = -162;
         }
 
-        var growProton = atom.az.nuclets[parentId].az.protons[growId];
+        var growProton = growNuclet.az.protons[growId];
         var growPt = growProton.position.clone();
 
         // Create normalized axis of vector to rotate to.
@@ -285,6 +286,24 @@
 
         // Set the initial y rotation
         nucletInnerShell.rotation.y = (nucletInnerShell.initial_rotation_y + (((nucletConf.attachAngle || 1) - 1) * 72.2)) / 180 *Math.PI;
+
+        nuclet.az.attachPt = attachPt;
+        // Add attach Axis Lines
+        var opacity = viewer.theme.get('attachLines--opacity');
+        var lineGeometry = new THREE.Geometry();
+        var constants = viewer.nuclet.getConstants();
+        var lineMaterial = new THREE.LineBasicMaterial({
+          color: viewer.theme.get('attachLines--color'),
+          opacity: opacity,
+          transparent: (opacity < viewer.nuclet.getConstants().transparentThresh),
+          visible: (opacity > viewer.nuclet.getConstants().visibleThresh),
+          linewidth: viewer.theme.get('attachLines--linewidth')
+        });
+        lineGeometry.vertices[0] = attachPt.multiplyScalar(viewer.theme.get('attachLines--scale'));
+        lineGeometry.vertices[1] = new THREE.Vector3(0,0,0);
+        var lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+        lines.name = 'attachLines';
+        growNuclet.add(lines);
       }
 
       atom.az.nuclets[nuclet.az.id] = nuclet;
@@ -431,6 +450,20 @@
       }
       viewer.scene.remove(atom);
     };
+
+    var explodeAtom = function explodeAtom(scale) {
+      for (var n in atom.az.nuclets) {
+        var nuclet = atom.az.nuclets[n];
+        if (nuclet.az.id !== 'N0') {
+          nuclet.parent.parent.position.set(
+            nuclet.az.attachPt.x * scale,
+            nuclet.az.attachPt.y * scale,
+            nuclet.az.attachPt.z * scale
+          );
+        }
+      }
+      viewer.render();
+    }
 
     /**
      * Check all valence rings and color active/inactive rings - count total Active and update atom information.
@@ -727,6 +760,7 @@
       createAtom: createAtom,
       deleteAtom: deleteAtom,
       deleteNuclet: deleteNuclet,
+      explodeAtom: explodeAtom,
       getNuclet: getNuclet,
       getYmlDirectory: function () { return 'config/atom'; },
       loadAtom: loadAtom,

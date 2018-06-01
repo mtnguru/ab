@@ -291,6 +291,8 @@
                     node.scale.x = value * node.initScale.x;
                     node.scale.y = value * node.initScale.y;
                     node.scale.z = value * node.initScale.z;
+                  } else if (args[0] == 'attachLines') {
+                    viewer.atom.explodeAtom(value);
                   } else {
                     var scale = value;
 //                  console.log('applyControl  configuration ' + scale);
