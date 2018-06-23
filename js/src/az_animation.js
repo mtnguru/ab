@@ -16,6 +16,12 @@
     var animateConf;
     var $selectAnimation = $('.animation--selectyml select');
     var timeouts = {};
+    var loop;
+    var loopStep;
+    var loopIndex = 0;
+    var loopStepIndex = 0;
+    var loopTimeout;
+    var loopValues
     var currentAtom = -1;
     var atomIndex = null;
 
@@ -77,15 +83,15 @@
     }
 
     function stopTimers() {
-      for (var timeout in animateConf['timers']) {
+      for (var timeout in animateConf.timers) {
         clearTimeout(timeouts[timeout]);
       }
       timeouts = {};
     }
 
     function startTimers() {
-      for (var timerName in animateConf['timers']) {
-        var timerConf = animateConf['timers'][timerName];
+      for (var timerName in animateConf.timers) {
+        var timerConf = animateConf.timers[timerName];
         timeouts[timerName] = setTimeout(function() {
           applyTimer(timerName, timerConf);
         }, timerConf.time);
@@ -95,11 +101,7 @@
     function applyTimer(name, conf) {
       switch (name) {
         case 'loadatoms':
-          if (currentAtom >= conf.atoms.length - 1) {
-            currentAtom = 0;
-          } else {
-            currentAtom++;
-          }
+          currentAtom = (currentAtom >= conf.atoms.length - 1) ? 0 : currentAtom + 1;
 
           stopTimers();
           state = 'paused';
@@ -110,6 +112,27 @@
             continueAnimation;
           });
           break;
+
+        case 'loop':
+          loop = conf;
+          loopValues = [];
+          loopIndex = 0;
+          loopStepIndex = 0;
+          loopStep = loop[loopIndex];
+          if (loopStep.parms) {
+            for (var parm in loopStep.parms) {
+              var vals = loopStep.parms[parm];
+              vals[2] = (vals[0] - vals[1]) / loopStep.steps;
+              vals[3] = vals[0];
+              viewer.theme.applyControl(parm, vals[3]);
+            }
+          }
+
+          loopTimeout = setTimeout(function() {
+            updateLoop(name, conf);
+          }, loopStep.time / loopStep.steps);
+          break;
+
         case 'opacity':
           break
       }
@@ -121,10 +144,55 @@
       animate();
     }
 
+    function updateLoop(name, loop) {
+      // If this step is done increment to next step
+      if (loopStepIndex == loopStep.steps) {
+        loopIndex = (loopIndex + 1 == loop.length) ? 0 : loopIndex + 1;
+        loopStep = loop[loopIndex];
+        loopStepIndex = 0;
+        for (var parm in loopStep.parms) {
+          var vals = loopStep.parms[parm];
+          vals[2] = (vals[0] - vals[1]) / loopStep.steps,
+          vals[3] = vals[0];
+        }
+      }
+
+      if (loopStep.parms) {
+        for (var parm in loopStep.parms) {
+          var vals = loopStep.parms[parm];
+          vals[3] -= vals[2];
+          viewer.theme.applyControl(parm, vals[3]);
+        }
+      }
+
+      loopStepIndex++;
+
+      loopTimeout = setTimeout(function() {
+        updateLoop(name, loop);
+      }, loopStep.time / loopStep.steps);
+    }
+
+    function startLoop() {
+      loopValues = [];
+      loopIndex = 0;
+      loopStepIndex = 0;
+      loopStep = animateConf.loop[loopIndex]
+      if (loopStep.parms) {
+        for (var parm in loopStep.parms) {
+          loopValues[parm] = loopStep.parms[parm];
+          viewer.theme.applyControl(parm, loopValues[parm]);
+        }
+      }
+
+      loopTimeout = setTimeout(function() {
+        updateLoop(timerName, timerConf);
+      }, loopStep.time);
+    }
+
     function startAnimation() {
       state = 'running';
       var key;
-      if (animateConf['timers']) {
+      if (animateConf.timers) {
         if (animateConf.timers.loadatoms) {
           animateConf.timers.loadatoms.time = animateConf.timers.loadatoms.atoms[0].time;
         }
