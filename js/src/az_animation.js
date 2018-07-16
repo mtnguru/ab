@@ -224,6 +224,7 @@
       if (animateConf.animations.rotation) {
         if (animateConf.animations.rotation.name === 'orbitals') {
           advanceOrbitals();
+
         }
       }
 
