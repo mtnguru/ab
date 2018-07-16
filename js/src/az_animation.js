@@ -76,6 +76,9 @@
         if (state == 'paused') {
           state = 'running';
           animate();
+          if (loopStep) {
+            setLoopTimeout();
+          }
         } else {
           startAnimation();
         }
@@ -87,6 +90,10 @@
         clearTimeout(timeouts[timeout]);
       }
       timeouts = {};
+      if (loopTimeout) {
+        clearTimeout(loopTimeout);
+        loopTimeout = null;
+      }
     }
 
     function startTimers() {
@@ -95,6 +102,9 @@
         timeouts[timerName] = setTimeout(function() {
           applyTimer(timerName, timerConf);
         }, timerConf.time);
+      }
+      if (loopStep) {
+        setLoopTimeout();
       }
     }
 
@@ -128,9 +138,7 @@
             }
           }
 
-          loopTimeout = setTimeout(function() {
-            updateLoop(name, conf);
-          }, loopStep.time / loopStep.steps);
+          setLoopTimeout();
           break;
 
         case 'opacity':
@@ -142,6 +150,13 @@
       startTimers();
       state = 'running';
       animate();
+    }
+
+    function setLoopTimeout() {
+      // Set the next timeout
+      loopTimeout = setTimeout(function() {
+        updateLoop(name, loop);
+      }, loopStep.time / loopStep.steps);
     }
 
     function updateLoop(name, loop) {
@@ -164,14 +179,11 @@
           viewer.theme.applyControl(parm, vals[3]);
         }
       }
-
       loopStepIndex++;
-
-      loopTimeout = setTimeout(function() {
-        updateLoop(name, loop);
-      }, loopStep.time / loopStep.steps);
+      setLoopTimeout();
     }
 
+    /*
     function startLoop() {
       loopValues = [];
       loopIndex = 0;
@@ -187,7 +199,7 @@
       loopTimeout = setTimeout(function() {
         updateLoop(timerName, timerConf);
       }, loopStep.time);
-    }
+    } */
 
     function startAnimation() {
       state = 'running';

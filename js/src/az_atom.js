@@ -693,7 +693,7 @@
      */
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
-      $atoms.click(function () {
+      $atoms.click(function (event) {
         loadAtom($(event.target).data('nid'), null);
         if (viewer.getDisplayMode() == 'mobile' ||
             viewer.getDisplayMode() == 'tablet') {
