@@ -335,7 +335,7 @@
       $('.toggle-block', viewer.context).each(function () {
         var blockName = $(this).data('blockid').split('--')[1];
         var $block = $('#blocks--' + blockName, viewer.context);
-        $block.find('.az-header').click(function (ev) {
+        $block.find('.az-block-header').click(function (ev) {
           $block.addClass('az-hidden');
           $('#blocks--buttons #toggle--' + blockName, viewer.context).removeClass('az-selected');
         });
@@ -349,7 +349,7 @@
           if (viewer.context.hasClass('az-overlay-controls') && viewer.context.hasClass('display-mode-desktop')) {
             $('.toggle-block', viewer.context).removeClass('az-selected');
             $('.control-block', viewer.context).each(function () {
-              if (this.id != 'blocks--buttons') {
+              if (this.id != 'blocks--buttons' && this.id != 'blocks--animation--wrapper') {
                 $(this).addClass('az-hidden');
               }
             });
