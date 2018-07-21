@@ -793,7 +793,7 @@
       createView: createView,
       setDefaults: setDefaults,
       mouseUp: mouseUp,
-//    mouseDown: mouseDown,
+      mouseDown: mouseUp,
       hoverObjects: hoverObjects,
       hovered: hovered,
       atomLoaded: atomLoaded
