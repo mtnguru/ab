@@ -187,15 +187,20 @@
         viewer.scene.add(spotlights[i]);
       }
 
-      // Initialize the nuclet, shapes, and sprites modules
-      viewer.nuclet = Drupal.atomizer.nucletC(viewer);
-      viewer.shapes = Drupal.atomizer.shapesC(viewer);
-      viewer.sprites = Drupal.atomizer.spritesC(viewer);
-      viewer.animation = Drupal.atomizer.animationC(viewer);
+      switch (viewer.atomizer.atomizerClass) {
+        case 'atom-builder':
+        case 'atom-viewer':
+        case 'platonic-solids':
+        case 'platonic-duals':
+          // Initialize the nuclet, shapes, and sprites modules
+          break;
+        case 'birkeland':
+          break;
+      }
 
       // Make the back plane
       var color = viewer.theme.get('plane--color');
-      viewer.scene.add(viewer.nuclet.makeObject('plane',
+      viewer.scene.add(Drupal.atomizer.base.makeObject('plane',
         {
           lambert: {
             color: viewer.theme.get('plane--color'),

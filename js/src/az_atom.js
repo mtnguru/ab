@@ -322,7 +322,7 @@
      *
      * @param nid
      */
-    var loadAtom = function loadAtom (nid, callback) {
+    var loadObject = function loadObject (nid, callback) {
       loadCallback = callback;
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadAtom',
@@ -364,7 +364,7 @@
 
           if (atom) {
             // Remove any atom's currently displayed
-            deleteAtom(atom);
+            deleteObject(atom);
             atom = null;
             az = null;
             viewer.atom.atom = null;
@@ -372,7 +372,7 @@
             az = {nuclets: {}}
           }
 
-          createAtom(result.data.atomConf['N0']);
+          createObject(result.data.atomConf['N0']);
           atom.az.nid = result.data.nid;
           atom.az.name = result.data.atomName;
           atom.az.title = result.data.atomTitle;
@@ -408,7 +408,7 @@
             if (!atom.rotation) atom.rotation = new THREE.Vector3();
             atom.rotation.z = viewer.dataAttr['atom--rotation--z'] * Math.PI / 180;
           }
-          viewer.producer.atomLoaded(atom);
+          viewer.producer.objectLoaded(atom);
           viewer.render();
 
           if (loadCallback) {
@@ -424,7 +424,7 @@
      * @param atomConf
      * @returns {THREE.Group|*}
      */
-    var createAtom = function createAtom (atomConf) {
+    var createObject = function createObject (atomConf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
       atom = new THREE.Group();
       atom.name = 'atom';
@@ -444,7 +444,7 @@
      * Delete an atom - calls recursive function deleteNuclet
      * @param atom
      */
-    var deleteAtom = function deleteAtom (atom) {
+    var deleteObject = function deleteObject (atom) {
       for (var n in atom.az.nuclets) {
         viewer.nuclet.deleteNuclet(atom.az.nuclets[n]);
       }
@@ -694,7 +694,7 @@
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
       $atoms.click(function (event) {
-        loadAtom($(event.target).data('nid'), null);
+        loadObject($(event.target).data('nid'), null);
         if (viewer.getDisplayMode() == 'mobile' ||
             viewer.getDisplayMode() == 'tablet') {
           $atomList.addClass('az-hidden');
@@ -757,13 +757,13 @@
       buttonClicked: buttonClicked,
       changeNucletState: changeNucletState,
       changeNucletAngle: changeNucletAngle,
-      createAtom: createAtom,
-      deleteAtom: deleteAtom,
+      createObject: createObject,
+      deleteObject: deleteObject,
       deleteNuclet: deleteNuclet,
       explodeAtom: explodeAtom,
       getNuclet: getNuclet,
       getYmlDirectory: function () { return 'config/atom'; },
-      loadAtom: loadAtom,
+      loadObject: loadObject,
       overwriteYml: overwriteYml,
       saveYml: saveYml,
       updateValenceRings: updateValenceRings,

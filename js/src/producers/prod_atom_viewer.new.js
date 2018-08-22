@@ -437,7 +437,7 @@
       }
     }
 
-    var atomLoaded = function atomLoaded(atom) {
+    var objectLoaded = function objectLoaded(atom) {
       localStorage.setItem('atomizer_viewer_atom_nid', atom.az.nid);
       createProtonLists();
       if (viewer.objects.icosaFaces) {
@@ -458,7 +458,7 @@
 
       // Load and display the default atom
       var userAtomNid = localStorage.getItem('atomizer_viewer_atom_nid');
-      viewer.view.atom = viewer.atom.loadAtom((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
+      viewer.view.atom = viewer.atom.loadObject((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
 
       // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
       viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, 1, {x: 300, y: 50, z: 0}, {state: 'default'});
@@ -502,7 +502,7 @@
       mouseUp: mouseUp,
       hoverObjects: hoverObjects,
       hovered: hovered,
-      atomLoaded: atomLoaded
+      objectLoaded: objectLoaded
     };
   };
 

@@ -19,7 +19,9 @@ use Drupal\Component\Serialization\Yaml;
 
 use Drupal\atomizer\Ajax\RenderNodeCommand;
 use Drupal\atomizer\Ajax\LoadYmlCommand;
+use Drupal\atomizer\Ajax\SaveYmlCommand;
 use Drupal\atomizer\Ajax\LoadAtomCommand;
+use Drupal\atomizer\Ajax\LoadNodeCommand;
 use Drupal\atomizer\Ajax\ListDirectoryCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -106,7 +108,8 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), true);
 
     $response = new AjaxResponse();
-    file_put_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath'], Yaml::encode($data['ymlContents']));
+    $data['succsss'] = file_put_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath'], Yaml::encode($data['ymlContents']));
+    $response->addCommand(new SaveYmlCommand($data));
 
     return $response;
   }
@@ -204,11 +207,7 @@ class AtomizerController extends ControllerBase {
 
     // Get the atomic structure field.
     $field = $node->field_atomic_structure;
-    if (!empty($field)) {
-      $data['atomConf'] = Yaml::decode($field->value);
-    } else {
-      $data['atomConf'] = 'Atom not found';
-    }
+    $data['atomConf'] = (empty($field)) ? 'Object not found' : Yaml::decode($field->value);
 
     $response->addCommand(new LoadAtomCommand($data));
     return $response;
@@ -325,6 +324,47 @@ class AtomizerController extends ControllerBase {
 
     // @TODO - return confirmation message.
     $response = new AjaxResponse();
+    return $response;
+  }
+
+  /**
+   * Load a Birkland current definition file.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response.
+   */
+  public function loadNode() {
+    $response = new AjaxResponse();
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    $node = Node::load($data['nid']);
+
+    // Render the node using teaser atom_viewer mode.
+    $data['nodeName'] = $node->label();
+    $data['nodeTitle'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';
+
+    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
+    $data['properties'] = render($build);
+
+    // Render the node/atom using teaser view mode.
+    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
+    $data['information'] = render($build);
+
+    // Get the atomic structure field.
+    $type = $node->getType();
+    $field = null;
+    switch ($type) {
+      case 'atom':
+        $field = $node->field_atomic_structure;
+        break;
+      case 'birkeland':
+        $field = $node->field_structure;
+        break;
+    }
+    if ($field) {
+      $data['nodeConf'] = (empty($field)) ? 'Node not found' : Yaml::decode($field->value);
+    }
+    $response->addCommand(new LoadNodeCommand($data));
     return $response;
   }
 }

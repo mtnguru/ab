@@ -304,7 +304,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
    * @param results
    */
   var loadYml = function (results) {
-    createAtom(results);
+    createObject(results);
   };
 
   /**
@@ -313,7 +313,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
    * @param filepath
    * @param settings
    */
-  var loadAtom = function loadAtom (filepath, settings) {
+  var loadObject = function loadObject (filepath, settings) {
     // Verify they entered a name.  If not popup an alert. return
     Drupal.atomizer.base.doAjax(
       '/ajax-ab/loadYml',
@@ -321,7 +321,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
         settings: {fart: 'cool'},
         filepath: filepath
       },
-      createAtom
+      createObject
     );
   };
 
@@ -330,7 +330,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
    *
    * @param results
    */
-  var createAtom = function createAtom (results) {
+  var createObject = function createObject (results) {
 
     function createNuclet(num) {
       // Use the proton configuration information to create a geometry.
@@ -527,11 +527,11 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
     viewer.view.ghostTetrahedron = tetrahedron;
 
     // Start loading the default atom.
-//  loadAtom('config/backbone/half_backbone.yml');
+//  loadObject('config/backbone/half_backbone.yml');
     if (buildInitialBackbone) {
-      loadAtom('config/backbone/half_backbone.yml');
+      loadObject('config/backbone/half_backbone.yml');
     } else {
-      loadAtom('config/backbone/back.yml');
+      loadObject('config/backbone/back.yml');
     }
   };
 

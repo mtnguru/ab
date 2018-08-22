@@ -65,7 +65,13 @@
      */
 // The current theme set has been saved,
     var savedYml = function (response) {
-      saveMessage.innerHTML = 'Theme saved successfully';
+      var msg;
+      if (response[0].data.success) {
+        msg = 'Theme saved successfully';
+      } else {
+        msg = 'ERROR: Could not save theme';
+      }
+      saveMessage.innerHTML = msg;
       setTimeout(function () { saveMessage.innerHTML = ''; }, 3000);
 
 //    saveMessage.innerHTML = '.... Loading Theme list';

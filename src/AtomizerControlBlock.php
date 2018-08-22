@@ -48,7 +48,8 @@ class AtomizerControlBlock {
   }
 
   static function makeControl($controlName, $controlConf, &$theme) {
-    $id = str_replace('_', '-', $controlName);
+//  $id = str_replace('_', '-', $controlName);
+    $id = $controlName;
     $control = [];
     $containerClasses = ['az-control', 'az-control-' . $controlConf[1]];
     $defaultValue = (isset($controlConf[2])) ? $controlConf[2] : '';

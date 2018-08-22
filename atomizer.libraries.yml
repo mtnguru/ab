@@ -66,6 +66,18 @@ atomizer-atom-viewer-obfuscator:
   js:
     js/min/producers/prod_atom_viewer.js: {}
 
+# Birkeland Currents
+
+atomizer-birkeland:
+  js:
+    js/src/az_birkeland.js: {}
+    js/src/producers/prod_birkeland.js: {}
+
+atomizer-birkeland-obfuscator:
+  js:
+    js/min/az_birkeland.js: {}
+    js/min/producers/prod_birkeland.js: {}
+
 # Periodic Table
 
 atomizer-periodic-table:

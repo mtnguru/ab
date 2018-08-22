@@ -1,2 +1,0 @@
-THREE.Encodings=function(){if(void 0===THREE.toHalf)throw new Error("THREE.Encodings is required for HDRCubeMapLoader when loading half data.")},THREE.Encodings.RGBEByteToRGBFloat=function(E,o,n,a){var t=E[o+3],H=Math.pow(2,t-128)/255;n[a+0]=E[o+0]*H,n[a+1]=E[o+1]*H,n[a+2]=E[o+2]*H},THREE.Encodings.RGBEByteToRGBHalf=function(E,o,n,a){var t=E[o+3],H=Math.pow(2,t-128)/255;n[a+0]=THREE.toHalf(E[o+0]*H),n[a+1]=THREE.toHalf(E[o+1]*H),n[a+2]=THREE.toHalf(E[o+2]*H)};
-//# sourceMappingURL=../maps/threejs/Encodings.js.map

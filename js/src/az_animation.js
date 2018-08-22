@@ -115,7 +115,7 @@
 
           stopTimers();
           state = 'paused';
-          viewer.atom.loadAtom(conf.atoms[currentAtom].nid, function() {
+          viewer.atom.loadObject(conf.atoms[currentAtom].nid, function() {
             if (conf.atoms[currentAtom].time) {
                conf.time = conf.atoms[currentAtom].time;
             }
@@ -224,8 +224,10 @@
       if (animateConf.animations.rotation) {
         if (animateConf.animations.rotation.name === 'orbitals') {
           advanceOrbitals();
-
         }
+      }
+      if (animateConf.animations.particles) {
+        viewer.birkeland.animate(animateConf);
       }
 
       viewer.render();

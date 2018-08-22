@@ -10,8 +10,7 @@
  *
  * @param _viewer
  * @returns {
- *   {makeObject: makeObject,
- *    makeProton: makeProton,
+ *   {makeProton: makeProton,
  *    getProtonName: getProtonName,
  *    showProtons: showProtons,
  *    createNuclet: createNuclet,
@@ -31,8 +30,8 @@
     var protonRadius = viewer.theme.get('proton--radius');
     var electronRadius = viewer.theme.get('electron--radius');
 
-    var protonGeometry;
-    var electronGeometry;
+    var protonGeometry = null;
+    var electronGeometry = null;
 
     /*
      computeFaceNormals: function () {
@@ -70,6 +69,7 @@
         visible: (opacity > constants.visibleThresh),
         linewidth: 2
       });
+
       for (var i = 0; i < conf.vertices.length; i++) {
         var vertice;
         vertice = geometry.vertices[conf.vertices[i][0]];
@@ -77,11 +77,12 @@
         vertice = geometry.vertices[conf.vertices[i][1]];
         axisGeometry.vertices.push(new THREE.Vector3(vertice.x, vertice.y, vertice.z));
       }
+
       var axes = new THREE.LineSegments(axisGeometry, lineMaterial);
+      axes.name = name + 'Axis';
       if (conf.scale) {
         axes.scale.set(conf.scale, conf.scale, conf.scale);
       }
-      axes.name = name + 'Axis';
       return axes;
     }
 
@@ -122,6 +123,7 @@
           }
         }
       }
+
 //  if (offsetY) {
 //    wireframe.position.y = offsetY * viewer.theme.get('proton--radius');
 //    wireframe.init_offsetY = offsetY * viewer.theme.get('proton--radius');
@@ -160,7 +162,7 @@
       var lines = new THREE.Group();
       lines.name = id;
 
-      if (geometry.azfaces) { // dodecahedron - maybe more
+      if (geometry.azfaces) { // dodecahedron - maybe more?
         for (var f = 0; f < geometry.azfaces.length; f++) {
           var face = geometry.azfaces[f];
           var lineGeometry = new THREE.Geometry();
@@ -186,10 +188,8 @@
           }
           vertex = geometry.vertices[face['a']];
           lineGeometry.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
-
           lines.add(new THREE.Line(lineGeometry, material));
         }
-
       }
       lines.scale.set(scale, scale, scale);
 
@@ -203,6 +203,7 @@
           }
         }
       }
+
 //  if (offsetY) {
 //    lines.position.y = offsetY * viewer.theme.get('proton--radius');
 //    lines.init_offsetY = offsetY * viewer.theme.get('proton--radius');
@@ -290,125 +291,6 @@
           setProtonColor(nuclet.az.protons[id], null, highlight);
         }
       }
-    }
-
-    /**
-     * Make an object - sphere, tetrahedron, line, etc.
-     *
-     * @param name
-     * @param mat
-     * @param geo
-     * @param pos
-     * @returns {*}
-     */
-    function makeObject(name, mat, compConf, pos) {
-      // Set the geometry
-      var geometry;
-      var receiveShadow = false;
-      switch (name) {
-        case 'plane':
-          receiveShadow = true;
-          geometry = new THREE.PlaneGeometry(
-            compConf.width || 1000,
-            compConf.depth || 1000
-          );
-          break;
-        case 'proton':
-        case 'sphere':
-          if (protonGeometry) {
-            geometry = protonGeometry;
-          } else {
-            geometry = new THREE.SphereGeometry(
-              compConf.radius || viewer.theme.get('proton--radius'),
-              compConf.widthSegments || 36,
-              compConf.heightSegments || 36
-            );
-            protonGeometry = geometry;
-          }
-          break;
-        case 'electron':
-          if (electronGeometry) {
-            geometry = electronGeometry;
-          } else {
-            geometry = new THREE.SphereGeometry(
-              compConf.radius || viewer.theme.get('electron--radius'),
-              compConf.widthSegments || 20,
-              compConf.heightSegments || 20
-            );
-            electronGeometry = geometry;
-          }
-          break;
-        case 'octahedron':
-          geometry = new THREE.OctahedronGeometry(compConf.length || 3);
-          break;
-        case 'tetrahedron':
-          geometry = new THREE.TetrahedronGeometry(compConf.length || 3);
-          break;
-        case 'icosahedron':
-          geometry = new THREE.IcosahedronGeometry(compConf.length || 3);
-          break;
-        case 'dodecahedron':
-          geometry = new THREE.DodecahedronGeometry(compConf.length || 3);
-          break;
-        case 'cube':
-          var l = compConf.length || 4;
-          geometry = new THREE.BoxGeometry(l, l, l);
-          break;
-        case 'pentagonalBipyramid':
-          geometry = createBiPyramid(5, compConf.length, compConf.height, 35);
-          break;
-      }
-
-      // Set the Mesh material
-      var materials = [];
-      if (mat.wireframe) {
-        materials.push(new THREE.MeshBasicMaterial(mat.wireframe));
-      }
-      if (mat.lambert) {
-        materials.push(new THREE.MeshLambertMaterial(mat.lambert));
-      }
-      if (mat.phong) {
-        materials.push(new THREE.MeshPhongMaterial(mat.phong));
-      }
-      if (mat.doubleSided) {
-        materials[0].side = THREE.DoubleSide;
-      }
-
-      // Create the object
-      var object;
-      if (materials.length == 1) {
-        if (name == 'proton') {
-//      object = new Physijs.SphereMesh(geometry, materials[0]);
-          object = new THREE.Mesh(geometry, materials[0]);
-        } else {
-          object = new THREE.Mesh(geometry, materials[0]);
-        }
-      } else {
-        object = new THREE.SceneUtils.createMultiMaterialObject(geometry, materials);
-      }
-
-      // Set scale
-      if (compConf.scale) {
-        object.scale.set(compConf.scale, compConf.scale, compConf.scale);
-      }
-
-      // Set rotation
-      if (pos) {
-        if (pos.rotation) {
-          if (pos.rotation.x) { object.rotation.x = pos.rotation.x; }
-          if (pos.rotation.y) { object.rotation.y = pos.rotation.y; }
-          if (pos.rotation.z) { object.rotation.z = pos.rotation.z; }
-        }
-
-        // Position the object
-        object.position.x = pos.x || 0;
-        object.position.y = pos.y || 0;
-        object.position.z = pos.z || 0;
-      }
-
-      object.name = name;
-
-      return object;
     }
 
     /**
@@ -511,7 +393,6 @@
               break;
           }
           break;
-
       }
       return name;
     }
@@ -549,7 +430,7 @@
       }
 
       var name = getProtonName(az);
-      var proton = makeObject('proton',
+      var proton = Drupal.atomizer.base.makeObject('proton',
         {
           phong: {
             color: viewer.theme.getColor(name + '--color'),
@@ -566,8 +447,13 @@
           x: pos.x,
           y: pos.y,
           z: pos.z
-        }
+        },
+        protonGeometry
       );
+      if (!protonGeometry) {
+        protonGeometry = proton.geometry;
+      }
+
       proton.name = name;
       proton.material.visible = visible;
       proton.az = az;
@@ -887,7 +773,7 @@
       };
       // Make the electron core
       var coreOpacity = viewer.theme.get(name + '-core--opacity') || 1;
-      var core = makeObject('electron',
+      var core = Drupal.atomizer.base.makeObject('electron',
         {
           phong: {
             color: viewer.theme.get(name + '-core--color'),
@@ -900,14 +786,19 @@
           scale: viewer.theme.get(name + '-core--scale'),
           radius: electronRadius
         },
-        pos
+        pos,
+        electronGeometry
       );
+      if (!electronGeometry) {
+        electronGeometry = core.geometry;
+      }
       core.name = name + '-core';
       electronGroup.add(core);
 
       // Make the electron pair
       var fieldOpacity = viewer.theme.get(name + '-field--opacity') || 1;
-      var field = makeObject('proton',
+      var field = Drupal.atomizer.base.makeObject(
+        'proton',
         {
           phong: {
             color: viewer.theme.get(name + '-field--color'),
@@ -920,8 +811,12 @@
           scale: viewer.theme.get(name + '-field--scale'),
           radius: protonRadius
         },
-        pos
+        pos,
+        protonGeometry
       );
+      if (!protonGeometry) {
+        protonGeometry = electronGroup.geometry;
+      }
       field.name = name + '-field';
 
       electronGroup.add(field);
@@ -1479,7 +1374,6 @@
 
     // Return references to class functions - makes this into a pseudo-class.
     return {
-      makeObject: makeObject,
       makeProton: makeProton,
       createNElectron: createNElectron,
       getProtonName: getProtonName,

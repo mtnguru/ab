@@ -62,7 +62,7 @@ Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
     }
   }
 
-  var atomLoaded = function atomLoaded(atom) {
+  var objectLoaded = function objectLoaded(atom) {
     localStorage.setItem('atomizer_viewer_atom_nid', atom.az.nid);
   };
 
@@ -74,7 +74,7 @@ Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
     viewer.atom = Drupal.atomizer.atomC(viewer);
 
     // Load and display the default atom - done asynchronously
-    viewer.atom.loadAtom(viewer.atomizer.nid, null);
+    viewer.atom.loadObject(viewer.atomizer.nid, null);
 
     // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
     viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, 1, {x: 300, y: 50, z: 0});
@@ -86,7 +86,7 @@ Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
     mouseUp: mouseUp,
     hoverObjects: hoverObjects,
     hovered: hovered,
-    atomLoaded: atomLoaded
+    objectLoaded: objectLoaded
   };
 };
 

@@ -14,7 +14,8 @@ class AtomizerInit {
   public static $idNum = 0;
 
   static function build($config) {
-    $atomizerId = $config['atomizerId'] = str_replace(['_', ' '], '-', strtolower($config['atomizerId'])) . '--' . self::$idNum;
+//  $atomizerId = $config['atomizerId'] = str_replace(['_', ' '], '-', strtolower($config['atomizerId'])) . '--' . self::$idNum;
+    $atomizerId = str_replace(['_', ' '], '-', strtolower($config['atomizerId'])) . '--' . self::$idNum;
     self::$idNum++;
 // Read in the config/atomizer file
     if (empty($config['atomizer_configuration'])) {
@@ -22,7 +23,8 @@ class AtomizerInit {
         drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizerFile']
       ));
       $atomizer_config['filename']   = $config['atomizerFile'];
-      $atomizer_config['atomizerId'] = $config['atomizerId'];
+      $atomizer_config['atomizerId'] = $atomizerId;
+      $atomizer_config['atomizerClass'] = $config['atomizerId'];
       if (!empty($config['nid'])) {
         $atomizer_config['nid'] = $config['nid'];
       }
@@ -110,7 +112,7 @@ class AtomizerInit {
       $atomizer_config['atomizerId'] => [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['az-canvas-wrapper', $atomizer_config['atomizerId'] . '-canvas-wrapper'],
+          'class' => ['az-canvas-wrapper', $config['atomizerId'] . '-canvas-wrapper'],
         ],
         'canvas' => [
           '#markup' => '<canvas class="az-canvas"></canvas>',

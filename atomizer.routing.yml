@@ -57,5 +57,11 @@ atomizer.saveImage:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::saveImage'
   requirements:
     _permission: 'access content'
+atomizer.loadNode:
+  path: '/ajax-ab/load-node'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::loadNode'
+  requirements:
+    _permission: 'access content'
 
 

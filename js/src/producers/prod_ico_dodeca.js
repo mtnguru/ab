@@ -14,28 +14,28 @@ Drupal.atomizer.producers.ico_dodecaC = function (_viewer) {
 
     // Rings
     viewer.theme.set('rings', 'proton--color-style', 'radios');
-    var atomRings = viewer.atom.createAtom({ protons: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], state: 'icosahedron' });
+    var atomRings = viewer.atom.createObject({ protons: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], state: 'icosahedron' });
     atomRings.position.set(  350, 100, -150);
 
-    atomRings = viewer.atom.createAtom({ state: 'dodecahedron' });
+    atomRings = viewer.atom.createObject({ state: 'dodecahedron' });
     atomRings.position.set(  350, 100, -150);
     atomRings.scale.set(scale,scale,scale);
 
     // Pairs
     viewer.theme.set('pairs', 'proton--color-style', 'radios');
-    var atomPairs = viewer.atom.createAtom({ protons: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], state: 'icosahedron' });
+    var atomPairs = viewer.atom.createObject({ protons: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], state: 'icosahedron' });
     atomPairs.position.set(  0, 100, 100);
 
-    atomPairs = viewer.atom.createAtom({ state: 'dodecahedron' });
+    atomPairs = viewer.atom.createObject({ state: 'dodecahedron' });
     atomPairs.position.set(  0, 100, 100);
     atomPairs.scale.set(scale,scale,scale);
 
     // Triple Alpha
     viewer.theme.set('alpha3', 'proton--color-style', 'radios');
-    var atomAlpha = viewer.atom.createAtom({ protons: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], state: 'icosahedron' });
+    var atomAlpha = viewer.atom.createObject({ protons: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], state: 'icosahedron' });
     atomAlpha.position.set(  -350, 100, -150);
 
-    atomAlpha = viewer.atom.createAtom({ state: 'dodecahedron' });
+    atomAlpha = viewer.atom.createObject({ state: 'dodecahedron' });
     atomAlpha.position.set(  -350, 100, -150);
     atomAlpha.scale.set(scale,scale,scale);
 

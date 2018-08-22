@@ -55,6 +55,116 @@
     }
 
     /**
+     * Make an object - sphere, tetrahedron, line, etc.
+     *
+     * @param name
+     * @param mat
+     * @param geo
+     * @param pos
+     * @returns {*}
+     */
+    function makeObject(name, mat, compConf, pos, geo) {
+      // Set the geometry
+      var receiveShadow = false;
+      if (!geo) {
+        switch (name) {
+          case 'plane':
+            receiveShadow = true;
+            geo = new THREE.PlaneGeometry(
+              compConf.width || 1000,
+              compConf.depth || 1000
+            );
+            break;
+          case 'proton':
+          case 'sphere':
+            geo = new THREE.SphereGeometry(
+              compConf.radius || viewer.theme.get('proton--radius'),
+              compConf.widthSegments || 36,
+              compConf.heightSegments || 36
+            );
+            break;
+          case 'electron':
+            geo = new THREE.SphereGeometry(
+              compConf.radius || viewer.theme.get('electron--radius'),
+              compConf.widthSegments || 20,
+              compConf.heightSegments || 20
+            );
+            break;
+          case 'octahedron':
+            geo = new THREE.OctahedronGeometry(compConf.length || 3);
+            break;
+          case 'tetrahedron':
+            geo = new THREE.TetrahedronGeometry(compConf.length || 3);
+            break;
+          case 'icosahedron':
+            geo = new THREE.IcosahedronGeometry(compConf.length || 3);
+            break;
+          case 'dodecahedron':
+            geo = new THREE.DodecahedronGeometry(compConf.length || 3);
+            break;
+          case 'cube':
+            var l = compConf.length || 4;
+            geo = new THREE.BoxGeometry(l, l, l);
+            break;
+          case 'pentagonalBipyramid':
+            geo = createBiPyramid(5, compConf.length, compConf.height, 35);
+            break;
+        }
+      }
+
+      // Set the Mesh material
+      var materials = [];
+      if (mat.wireframe) {
+        materials.push(new THREE.MeshBasicMaterial(mat.wireframe));
+      }
+      if (mat.lambert) {
+        materials.push(new THREE.MeshLambertMaterial(mat.lambert));
+      }
+      if (mat.phong) {
+        materials.push(new THREE.MeshPhongMaterial(mat.phong));
+      }
+      if (mat.doubleSided) {
+        materials[0].side = THREE.DoubleSide;
+      }
+
+      // Create the object
+      var object;
+      if (materials.length == 1) {
+        if (name == 'proton') {
+//      object = new Physijs.SphereMesh(geo, materials[0]);
+          object = new THREE.Mesh(geo, materials[0]);
+        } else {
+          object = new THREE.Mesh(geo, materials[0]);
+        }
+      } else {
+        object = new THREE.SceneUtils.createMultiMaterialObject(geo, materials);
+      }
+
+      // Set scale
+      if (compConf.scale) {
+        object.scale.set(compConf.scale, compConf.scale, compConf.scale);
+      }
+
+      // Set rotation
+      if (pos) {
+        if (pos.rotation) {
+          if (pos.rotation.x) { object.rotation.x = pos.rotation.x; }
+          if (pos.rotation.y) { object.rotation.y = pos.rotation.y; }
+          if (pos.rotation.z) { object.rotation.z = pos.rotation.z; }
+        }
+
+        // Position the object
+        object.position.x = pos.x || 0;
+        object.position.y = pos.y || 0;
+        object.position.z = pos.z || 0;
+      }
+
+      object.name = name;
+
+      return object;
+    }
+
+    /**
      * Align the axis of an object to another axis.
      *
      * @param object
@@ -174,6 +284,7 @@
       doAjax: doAjax,
       alignObjectToAxis: alignObjectToAxis,
       initDraggable: initDraggable,
+      makeObject: makeObject,
       constants: {
         visibleThresh: .03,
         transparentThresh: .97
