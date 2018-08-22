@@ -710,6 +710,7 @@
      */
     var createView = function () {
       viewer.nuclet = Drupal.atomizer.nucletC(viewer);
+      viewer.atom = Drupal.atomizer.atomC(viewer);
       viewer.shapes = Drupal.atomizer.shapesC(viewer);
       viewer.sprites = Drupal.atomizer.spritesC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
