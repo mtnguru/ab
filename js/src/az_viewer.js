@@ -220,6 +220,8 @@
         }
       ));
 
+      console.log(viewer.producer.log)
+
       viewer.producer.createView();
 
       // Render the initial image

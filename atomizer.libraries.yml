@@ -30,7 +30,7 @@ atomizer-obfuscator:
     js/threejs/controls/OrbitControls.js: {}
     js/libs/screenfull.js: {}
     js/min/az_base.js: {}
-    js/min/az_viewer.js: {}
+    js/src/az_viewer.js: {}
     js/min/az_controls.js: {}
     js/min/az_theme.js: {}
     js/min/az.js: {}
