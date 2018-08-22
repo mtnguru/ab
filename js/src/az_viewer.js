@@ -187,17 +187,6 @@
         viewer.scene.add(spotlights[i]);
       }
 
-      switch (viewer.atomizer.atomizerClass) {
-        case 'atom-builder':
-        case 'atom-viewer':
-        case 'platonic-solids':
-        case 'platonic-duals':
-          // Initialize the nuclet, shapes, and sprites modules
-          break;
-        case 'birkeland':
-          break;
-      }
-
       // Make the back plane
       var color = viewer.theme.get('plane--color');
       viewer.scene.add(Drupal.atomizer.base.makeObject('plane',
@@ -220,11 +209,8 @@
         }
       ));
 
-      console.log(viewer.producer.log)
-
+      // Render the initial scene
       viewer.producer.createView();
-
-      // Render the initial image
       render();
     };
 

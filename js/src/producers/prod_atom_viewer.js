@@ -9,6 +9,11 @@
 Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
   var viewer = _viewer;
 
+  viewer.controls = Drupal.atomizer.controlsC(viewer);
+  viewer.nuclet = Drupal.atomizer.nucletC(viewer);
+  viewer.sprites = Drupal.atomizer.spritesC(viewer);
+  viewer.shapes = Drupal.atomizer.shapesC(viewer);
+  viewer.atom = Drupal.atomizer.atomC(viewer);
   /**
    * Return the objects which are active for hovering
    *
