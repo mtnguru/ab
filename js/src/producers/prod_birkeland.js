@@ -118,14 +118,41 @@
      * Create the view - add any objects to scene.
      */
     var createView = function () {
-//    // Start birkelandC and animationC
+      // Start birkelandC and animationC
       viewer.birkeland = Drupal.atomizer.birkelandC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
 
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
-//    viewer.birkeland.loadObject((!objectNid || objectNid == 'undefined') ? 609 : objectNid);  // Loads a birkeland content type
-      loadBirkeland('default');
+      objectNid = ((!objectNid || objectNid == 'undefined') ? 609 : objectNid);  // Loads a birkeland content type
+      viewer.birkeland.loadObject(objectNid);
+
+      // Set the ID of the scene select radio buttons - scene--select--610
+      var $radios = $('#edit-scene-select .az-control-radios', viewer.context);
+      $radios.once('az-processed').each(function() {
+        var id = 'scene--select--' + $(this).val();
+        $(this).attr('id', id);
+        if ($(this).val() == objectNid) {
+          $(this).prop('checked', true);
+        }
+      });
+
+      // Click on the scene select radio button
+      $radios.click(function (event) {
+        if (event.target.tagName == 'INPUT') {
+          viewer.birkeland.loadObject(event.target.value);
+//        loadBirkeland(scene, event.target.value);
+        }
+      });
+
+      // Enable the scene select label to accept a click also.
+      $radios.siblings('label').click(function (event) {
+        var input =$(this).siblings('input')[0];
+        $(input).prop('checked', true);
+        viewer.birkeland.loadObject(event.target.value);
+//      loadBirkeland(scene, input.value);
+      });
+
     };
 
     var loadBirkeland = function loadBirkeland(filename) {
@@ -141,7 +168,6 @@
     var birkelandLoaded = function birkelandLoaded(results) {
       var conf = results[0].ymlContents;
       viewer.birkeland.createObject(conf);
-
     };
 
     // Initialize Event Handlers

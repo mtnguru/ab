@@ -53,15 +53,14 @@
           if (sceneProperties) {
             sceneProperties.innerHTML = result.data.properties;
           }
-          var $save = $('.object--save a', viewer.context);
-          if ($save.length) {
-            $save.replaceWith(result.data.link);
-            if (Drupal.attachBehaviors) {
-              Drupal.attachBehaviors('.object--save a');
-            }
+
+          if (bc) {
+            // Remove any atom's currently displayed
+            deleteObject(bc);
+            bc = null;
           }
 
-          createObject(result.data.nodeConf['yaml']);
+          bc = createObject(result.data.nodeConf);
           bc.az = {
             nid: result.data.nid,
             name: result.data.nodeName,
@@ -134,7 +133,7 @@
     var createObject = function createObject (conf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
 
-      bc = new THREE.Group();
+      var bc = new THREE.Group();
       bc.cylinders = {};
       if (conf.object.rotation) {
         bc.rotation = new THREE.Vector3();
@@ -167,35 +166,63 @@
         bc.add(cyl);
         bc.cylinders[cylinder] = cyl;
 
-     /* if (cylinder == 'Cylinder 8') {
-          var arrow = new THREE.ArrowHelper(
-            new THREE.Vector3(0, 1, 0),
-            new THREE.Vector3(0, 0, 0),
-            30,
-            0xffff00,
-            10,
-            10
-          );
-          cyl.add(arrow);
-        } */
-
-        var ptsGeometry = new THREE.Geometry();
-        var ptsMaterial = new THREE.PointsMaterial( { size: parms.chargeSize, sizeAttenuation: false, color: parms.color } );
-        var rotate = 360 / parms.numArrowPaths;
-        for (var path = 0; path < parms.numArrowPaths; path++) {
-          var radians = toRadians(path * rotate + parms.initialRotate);
-          var spacing = parms.length / (parms.numArrows + 1);
-          var x = parms.radius * Math.sin(radians);
-          var y = -parms.length / 2 + spacing * Math.random();
-          var z = parms.radius * Math.cos(radians);
-          for (var arrow = 0; arrow < parms.numArrows; arrow++) {
-            y += parms.length / parms.numArrows;
-            ptsGeometry.vertices.push(new THREE.Vector3(x, y, z));
-          }
+        switch (parms.chargeMarker) {
+          case 'arrows':
+/*          var arrow = new THREE.ArrowHelper(
+              new THREE.Vector3(0, 1, 0),
+              new THREE.Vector3(0, 0, 0),
+              30,
+              0xffff00,
+              10,
+              10
+            );
+            cyl.add(arrow); */
+            var ptsGeometry = new THREE.Geometry();
+            var ptsMaterial = new THREE.PointsMaterial({
+              size: parms.markerSize,
+              sizeAttenuation: false,
+              color: parms.color
+            });
+            var rotate = 360 / parms.numArrowPaths;
+            for (var path = 0; path < parms.numArrowPaths; path++) {
+              var radians = toRadians(path * rotate + parms.rotateInitial);
+              var spacing = parms.length / (parms.numArrows + 1);
+              var x = parms.radius * Math.sin(radians);
+              var y = -parms.length / 2 + spacing * Math.random();
+              var z = parms.radius * Math.cos(radians);
+              for (var arrow = 0; arrow < parms.numArrows; arrow++) {
+                y += parms.length / parms.numArrows;
+                ptsGeometry.vertices.push(new THREE.Vector3(x, y, z));
+              }
+            }
+            var points = new THREE.Points(ptsGeometry, ptsMaterial);
+            points.name = 'particles-' + cylinder.replace(' ', '_');
+            cyl.add(points);
+            break;
+          case 'particles':
+            var ptsGeometry = new THREE.Geometry();
+            var ptsMaterial = new THREE.PointsMaterial({
+              size: parms.markerSize,
+              sizeAttenuation: false,
+              color: parms.color
+            });
+            var rotate = 360 / parms.numArrowPaths;
+            for (var path = 0; path < parms.numArrowPaths; path++) {
+              var radians = toRadians(path * rotate + parms.rotateInitial);
+              var spacing = parms.length / (parms.numArrows + 1);
+              var x = parms.radius * Math.sin(radians);
+              var y = -parms.length / 2 + spacing * Math.random();
+              var z = parms.radius * Math.cos(radians);
+              for (var arrow = 0; arrow < parms.numArrows; arrow++) {
+                y += parms.length / parms.numArrows;
+                ptsGeometry.vertices.push(new THREE.Vector3(x, y, z));
+              }
+            }
+            var points = new THREE.Points(ptsGeometry, ptsMaterial);
+            points.name = 'particles-' + cylinder.replace(' ', '_');
+            cyl.add(points);
+            break;
         }
-        var points = new THREE.Points(ptsGeometry, ptsMaterial);
-        points.name = 'particles-' + cylinder.replace(' ', '_');
-        cyl.add(points);
       }
 
       viewer.render();
@@ -203,35 +230,37 @@
     };
 
     function animate(animateConf) {
-      for (var cylinder in animateConf.animations.particles) {
-        var conf = animateConf.animations.particles[cylinder];
+      for (var cylinder in bc.cylinders) {
+        var conf = bc.cylinders[cylinder].conf;
         var cyl = bc.cylinders[cylinder];
-        var vertices = cyl.children[0].geometry.vertices;
-        cyl.children[0].geometry.verticesNeedUpdate = true;
-        var len = vertices.length;
-        for (var v = 0; v < vertices.length; v++) {
-          var vertice = vertices[v];
-          vertice.y += conf.distance;
-          if (conf.distance > 0) {
-            if (vertice.y > cyl.conf.length / 2) {
-              vertice.y -= cyl.conf.length;
-            }
-          } else {
-            if (vertice.y < -cyl.conf.length / 2) {
-              vertice.y += cyl.conf.length;
+        if (cyl) {
+          var vertices = cyl.children[0].geometry.vertices;
+          cyl.children[0].geometry.verticesNeedUpdate = true;
+          for (var v = 0; v < vertices.length; v++) {
+            var vertice = vertices[v];
+            vertice.y += conf.animationDistance;
+            if (conf.animationDistance > 0) {
+              if (vertice.y > cyl.conf.length / 2) {
+                vertice.y -= cyl.conf.length;
+              }
+            } else {
+              if (vertice.y < -cyl.conf.length / 2) {
+                vertice.y += cyl.conf.length;
+              }
             }
           }
+          cyl.rotation.y += toRadians(conf.animationRotate);
         }
-        cyl.rotation.y += toRadians(conf.rotateAngle);
       }
       viewer.render();
     }
 
     /**
-     * Delete an atom - calls recursive function deleteNuclet
-     * @param atom
+     * Delete a birkeland current
+     * @param bc
      */
-    var deleteObject = function deleteObject (atom) {
+    var deleteObject = function deleteObject (bc) {
+      viewer.scene.remove(bc);
     };
 
     /**

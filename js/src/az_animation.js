@@ -45,6 +45,7 @@
     function advanceOrbitals() {
 
       var rotSpeed = viewer.theme.get('animation--speed') / 1000;
+//    var rotSpeed =
 
       var x = viewer.camera.position.x,
         y = viewer.camera.position.y,
@@ -219,18 +220,27 @@
 
     function animate() {
       if (state == 'running') {
-        requestAnimationFrame(animate);
-      }
-      if (animateConf.animations.rotation) {
-        if (animateConf.animations.rotation.name === 'orbitals') {
-          advanceOrbitals();
+        switch (animateConf.type) {
+          case 'atoms':
+            requestAnimationFrame(animate);
+            if (animateConf.animations.rotation) {
+              if (animateConf.animations.rotation.name === 'orbitals') {
+                advanceOrbitals();
+              }
+            }
+            break;
+          case 'birkeland':
+            var speed = viewer.theme.get('animation--speed');
+//          setTimeout(function() {
+              requestAnimationFrame(animate);
+//          }, (100 - viewer.theme.get('animation--speed')));
+            if (animateConf.animations.particles) {
+              viewer.birkeland.animate(animateConf);
+            }
+            break;
         }
+        viewer.render();
       }
-      if (animateConf.animations.particles) {
-        viewer.birkeland.animate(animateConf);
-      }
-
-      viewer.render();
     }
 
     var stopAnimation = function() {

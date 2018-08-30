@@ -356,13 +356,21 @@ class AtomizerController extends ControllerBase {
     switch ($type) {
       case 'atom':
         $field = $node->field_atomic_structure;
+        if ($field) {
+          $data['nodeConf'] = (empty($field)) ? 'Node not found' : Yaml::decode($field->value);
+        }
         break;
       case 'birkeland':
         $field = $node->field_structure;
+        $path = drupal_get_path('module', 'atomizer') . '/config/objects/birkeland/' . $data['nid'] . '.yml';
+        if (file_exists($path)) {
+          $data['nodeConf'] = Yaml::decode(file_get_contents($path));
+        } else {
+          if ($field) {
+            $data['nodeConf'] = (empty($field)) ? 'Node not found' : Yaml::decode($field->value);
+          }
+        }
         break;
-    }
-    if ($field) {
-      $data['nodeConf'] = (empty($field)) ? 'Node not found' : Yaml::decode($field->value);
     }
     $response->addCommand(new LoadNodeCommand($data));
     return $response;
