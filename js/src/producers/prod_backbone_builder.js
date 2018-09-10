@@ -126,6 +126,7 @@ Drupal.atomizer.producers.backbone_builderC = function (_viewer) {
       // Create a new ghost Proton
       viewer.view.ghostProton = viewer.nuclet.makeProton(
         0,
+        null,
         'ghost',
         viewer.theme.get('proton--opacity'),
         {x: 300, y: 50, z: 0}

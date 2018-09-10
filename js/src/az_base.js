@@ -63,7 +63,7 @@
      * @param pos
      * @returns {*}
      */
-    function makeObject(name, mat, compConf, pos, geo) {
+    function makeObject(name, mat, shapeConf, pos, geo) {
       // Set the geometry
       var receiveShadow = false;
       if (!geo) {
@@ -71,43 +71,43 @@
           case 'plane':
             receiveShadow = true;
             geo = new THREE.PlaneGeometry(
-              compConf.width || 1000,
-              compConf.depth || 1000
+              shapeConf.width || 1000,
+              shapeConf.depth || 1000
             );
             break;
           case 'proton':
           case 'sphere':
             geo = new THREE.SphereGeometry(
-              compConf.radius || viewer.theme.get('proton--radius'),
-              compConf.widthSegments || 36,
-              compConf.heightSegments || 36
+              shapeConf.radius || viewer.theme.get('proton--radius'),
+              shapeConf.widthSegments || 36,
+              shapeConf.heightSegments || 36
             );
             break;
           case 'electron':
             geo = new THREE.SphereGeometry(
-              compConf.radius || viewer.theme.get('electron--radius'),
-              compConf.widthSegments || 20,
-              compConf.heightSegments || 20
+              shapeConf.radius || viewer.theme.get('electron--radius'),
+              shapeConf.widthSegments || 20,
+              shapeConf.heightSegments || 20
             );
             break;
           case 'octahedron':
-            geo = new THREE.OctahedronGeometry(compConf.length || 3);
+            geo = new THREE.OctahedronGeometry(shapeConf.length || 3);
             break;
           case 'tetrahedron':
-            geo = new THREE.TetrahedronGeometry(compConf.length || 3);
+            geo = new THREE.TetrahedronGeometry(shapeConf.length || 3);
             break;
           case 'icosahedron':
-            geo = new THREE.IcosahedronGeometry(compConf.length || 3);
+            geo = new THREE.IcosahedronGeometry(shapeConf.length || 3);
             break;
           case 'dodecahedron':
-            geo = new THREE.DodecahedronGeometry(compConf.length || 3);
+            geo = new THREE.DodecahedronGeometry(shapeConf.length || 3);
             break;
           case 'cube':
-            var l = compConf.length || 4;
+            var l = shapeConf.length || 4;
             geo = new THREE.BoxGeometry(l, l, l);
             break;
           case 'pentagonalBipyramid':
-            geo = createBiPyramid(5, compConf.length, compConf.height, 35);
+            geo = createBiPyramid(5, shapeConf.length, shapeConf.height, 35);
             break;
         }
       }
@@ -141,8 +141,8 @@
       }
 
       // Set scale
-      if (compConf.scale) {
-        object.scale.set(compConf.scale, compConf.scale, compConf.scale);
+      if (shapeConf.scale) {
+        object.scale.set(shapeConf.scale, shapeConf.scale, shapeConf.scale);
       }
 
       // Set rotation

@@ -379,7 +379,7 @@
                 } else if (conf.pairs === 'neutron') {
                   name = 'proton-neutron';
                 } else if (conf.nuclet.state === 'initial') {
-                  name = (conf.id < 12) ? 'proton-initial' : 'proton-neutral';
+                  name = (conf.id.replace('P', '') < 12) ? 'proton-initial' : 'proton-neutral';
                 } else {
                   name = 'proton-' + state;
                 }
@@ -406,18 +406,19 @@
      *
      * @returns {*}
      */
-    function makeProton(id, conf, opacity, pos, azNuclet) {
+    function makeProton(id, shapeConf, atomConf, opacity, pos, azNuclet) {
 
       var az = {
         id: id,
-        type: conf.type || 'proton',
-        pairs: conf.pairs || 'default',
-        alpha3: conf.alpha3 || 'default',
-        rings: conf.rings || 'default',
-        visible: ('visible' in conf) ? conf.visible : true,
-        optional: conf.optional || false,
-        active: conf.active || true,
-        nuclet: azNuclet
+        type: shapeConf.type || 'proton',
+        pairs: shapeConf.pairs || 'default',
+        alpha3: shapeConf.alpha3 || 'default',
+        rings: shapeConf.rings || 'default',
+        visible: ('visible' in shapeConf) ? shapeConf.visible : true,
+        optional: shapeConf.optional || false,
+        active: shapeConf.active || true,
+        nuclet: azNuclet,
+        atomConf: atomConf
       };
 
       var opacity = viewer.theme.get('proton--opacity');
@@ -517,7 +518,15 @@
       return axis;
     }
 
-    function createProtons(geometry, compConf, azNuclet) {
+    function convertArrayToObject(array) {
+      var object = {};
+      for (var i = 0; i < array.length; ++i) {
+        object[array[i]] = null;
+      }
+      return object;
+    }
+
+    function createProtons(geometry, shapeConf, azNuclet) {
       var p;
       switch (azNuclet.state) {
 
@@ -534,13 +543,20 @@
       azNuclet.protons = [];
       azNuclet.protonGeometry = geometry;
       if (azNuclet.conf.protons) {
+//      if (Array.isArray(azNuclet.conf.protons)) {
+//        azNuclet.conf.protons = convertArrayToObject(azNuclet.conf.protons);
+//      }
         var opacity = viewer.theme.get('proton--opacity');
-        for (p in compConf.protons) {
-          if (!compConf.protons.hasOwnProperty(p)) continue;
-          if (compConf.protons[p].hasOwnProperty('optional') && compConf.protons[p].optional == 'placeholder') continue;
-          compConf.protons[p].visible = (azNuclet.conf.protons.indexOf(parseInt(p)) > -1);
-          if (geometry.vertices[p]) {
-            var proton = makeProton(p, compConf.protons[p], opacity, geometry.vertices[p], azNuclet);
+        for (p in shapeConf.protons) {
+          if (!shapeConf.protons.hasOwnProperty(p)) continue;
+          if (shapeConf.protons[p].hasOwnProperty('optional') && shapeConf.protons[p].optional == 'placeholder') continue;
+          shapeConf.protons[p].visible = (p in azNuclet.conf.protons);
+          var pnum = p.replace('P', '');
+          if (geometry.vertices[pnum]) {
+            var proton = makeProton(p, shapeConf.protons[p], azNuclet.conf.protons[p], opacity, geometry.vertices[pnum], azNuclet);
+            if (azNuclet.conf.protons[p] && azNuclet.conf.protons[p].color)  {
+              setProtonColor(proton, azNuclet.conf.protons[p].color);
+            }
             azNuclet.protons[p] = proton;
           }
         }
@@ -548,7 +564,7 @@
       return azNuclet.protons;
     }
 
-    function createNeutrons(geometry, compConf, azNuclet, nucletGroup) {
+    function createNeutrons(geometry, shapeConf, azNuclet, nucletGroup) {
 
       function calculateFourthPoint (vA, vB, vC, dir) {
 
@@ -574,18 +590,18 @@
 
       var pos;
       azNuclet.neutrons = [];
-      if (compConf.neutrons) {
+      if (shapeConf.neutrons) {
         var opacity = viewer.theme.get('proton--opacity');
-        var neutrons = compConf.neutrons;
+        var neutrons = shapeConf.neutrons;
         for (var id in neutrons) {
           if (neutrons.hasOwnProperty(id)) {
 
             pos = new THREE.Vector3();
             for (var v = 0; v < neutrons[id].length; v++) {
               pos.add(calculateFourthPoint(
-                geometry.vertices[neutrons[id][v][0]],
-                geometry.vertices[neutrons[id][v][1]],
-                geometry.vertices[neutrons[id][v][2]],
+                geometry.vertices[neutrons[id][v][0].replace('P','')],
+                geometry.vertices[neutrons[id][v][1].replace('P','')],
+                geometry.vertices[neutrons[id][v][2].replace('P','')],
                 neutrons[id][v][3] || 0
               ));
             }
@@ -594,7 +610,7 @@
             console.log(pos.x / protonRadius + ', ' + pos.y / protonRadius + ', ' + pos.z / protonRadius + ',     ');
 
             // Kludge - move the first two neutrons to where defined by geometry instead of calculated position.
-            if (id.charAt(2) == '0' && (compConf.shape == 'initial' || compConf.shape == 'final')) {
+            if (id.charAt(2) == '0' && (shapeConf.shape == 'initial' || shapeConf.shape == 'final')) {
               var num = Number(id.charAt(1));
               pos = geometry.vertices[20 + Number(id.charAt(1))];
             }
@@ -604,7 +620,7 @@
             neutrons[id].optional = true;
             neutrons[id].type = 'neutron';
 
-            var neutron = makeProton(id, neutrons[id], opacity, pos, azNuclet);
+            var neutron = makeProton(id, neutrons[id], null, opacity, pos, azNuclet);
             neutron.az.protons = neutrons[id];
             neutron.az.position = pos;
 //          neutron.az.nucletGroup = nucletGroup;
@@ -617,7 +633,7 @@
               for (var p in neutron.az.protons[t]) {
                 if (p == 3) continue;
                 if (neutron.az.protons[t].hasOwnProperty(p)) {
-                  var position = neutron.az.nuclet.protonGeometry.vertices[neutron.az.protons[t][p]];
+                  var position = neutron.az.nuclet.protonGeometry.vertices[neutron.az.protons[t][p].replace('P', '')];
                   var vector = new THREE.Vector3();
                   vector.add(position);
                   vertices.push(vector);
@@ -651,15 +667,15 @@
       return azNuclet.neutrons;
     }
 
-    function createValenceRings(compConf, azNuclet) {
+    function createValenceRings(shapeConf, azNuclet) {
       var color = viewer.theme.get('valence-active--color');
       var opacity = viewer.theme.get('valence--opacity');
       var radius = viewer.theme.get('valence--scale') * protonRadius;
       var diameter = viewer.theme.get('valence--diameter') * protonRadius;
 
       azNuclet.rings = [];
-      for (var v in compConf.valence) {
-        var ringConf = compConf.valence[v];
+      for (var v in shapeConf.valence) {
+        var ringConf = shapeConf.valence[v];
 
         var torusGeometry = new THREE.TorusGeometry(radius, diameter, 10, 40);
         var material = new THREE.MeshPhongMaterial({
@@ -683,7 +699,7 @@
             ring.rotation.z = ringConf.rotation.z / 360 * 2 * Math.PI;
           }
         }
-        azNuclet.protons[parseInt(v)].add(ring);
+        azNuclet.protons['P' + v].add(ring);
       }
     }
 
@@ -711,9 +727,9 @@
       return tetrahedron;
     };
 
-    function createTetrahedrons(compConf, geometry, azNuclet) {
+    function createTetrahedrons(shapeConf, geometry, azNuclet) {
       azNuclet.tetrahedrons = [];
-      for (var i = 0; i < compConf.tetrahedrons.length; i++) {
+      for (var i = 0; i < shapeConf.tetrahedrons.length; i++) {
         var tetrahedron = createTetrahedron('tetra');
         tetrahedron.azid = 't' + i;
 //    intersectList.push(tetrahedron.children[1]); // Attach the faces Mesh
@@ -723,14 +739,15 @@
         tetrahedron.children[1].geometry.protons = [];
         for (var v = 0; v < 4; v++) {
 
-          var p = compConf.tetrahedrons[i].vertices[v];
-          tetrahedron.children[0].geometry.vertices[v].x = geometry.vertices[p].x;
-          tetrahedron.children[0].geometry.vertices[v].y = geometry.vertices[p].y;
-          tetrahedron.children[0].geometry.vertices[v].z = geometry.vertices[p].z;
+          var p = shapeConf.tetrahedrons[i].vertices[v];
+          var pnum = p.replace('P', '').replace('U', '');
+          tetrahedron.children[0].geometry.vertices[v].x = geometry.vertices[pnum].x;
+          tetrahedron.children[0].geometry.vertices[v].y = geometry.vertices[pnum].y;
+          tetrahedron.children[0].geometry.vertices[v].z = geometry.vertices[pnum].z;
 
-          tetrahedron.children[1].geometry.vertices[v].x = geometry.vertices[p].x;
-          tetrahedron.children[1].geometry.vertices[v].y = geometry.vertices[p].y;
-          tetrahedron.children[1].geometry.vertices[v].z = geometry.vertices[p].z;
+          tetrahedron.children[1].geometry.vertices[v].x = geometry.vertices[pnum].x;
+          tetrahedron.children[1].geometry.vertices[v].y = geometry.vertices[pnum].y;
+          tetrahedron.children[1].geometry.vertices[v].z = geometry.vertices[pnum].z;
 
           // Save the proton list in tetrafaces mesh
           tetrahedron.protons[v] = azNuclet.protons[p];
@@ -744,17 +761,17 @@
      *
      * @param groupName
      * @param geometry
-     * @param compConf
+     * @param shapeConf
      * @param nucletConf
      * @returns {Array}
      */
-    function createElectrons(geometry, compConf, nucletConf) {
+    function createElectrons(geometry, shapeConf, nucletConf) {
       var opacity = viewer.theme.get('electron--opacity') || 1;
-      var scale = compConf.scale;
+      var scale = shapeConf.scale;
       var electrons = [];
       var pos = new THREE.Vector3(0,0,0);
-      for (var e in compConf.electrons) {
-        if (!compConf.electrons.hasOwnProperty(e)) continue;
+      for (var e in shapeConf.electrons) {
+        if (!shapeConf.electrons.hasOwnProperty(e)) continue;
 //      if (nucletConf.electrons && !nucletConf.electrons.contains(e)) continue;
         var vertice = geometry.vertices[e];
 //      pos.setScalar(0);
@@ -830,7 +847,7 @@
      *
      * @param groupName
      * @param geometry
-     * @param compConf
+     * @param shapeConf
      * @param nucletConf
      * @returns {Array}
      */
@@ -839,63 +856,63 @@
       for (var e in azNuclet.conf.electrons) {
         if (!azNuclet.conf.electrons.hasOwnProperty(e)) continue;
         var pos = new THREE.Vector3();
-        var vertices = azNuclet.conf.electrons[e];
-        for (var v = 0; v < vertices.length; v++) {
-          var id = vertices[v];
+        var protons = azNuclet.conf.electrons[e].protons;
+        for (var p = 0; p < protons.length; p++) {
+          var id = protons[p];
           if (typeof(id) == 'string' && id.includes('U')) {  // Neutron
             var neutron = azNuclet.neutrons[id.charAt(1)];
             pos.add(azNuclet.neutrons[id].position);
           } else {                 // Proton
-            pos.add(geometry.vertices[vertices[v]]);
+            pos.add(geometry.vertices[id.replace('P', '')]);
           }
         }
-        pos.divideScalar(vertices.length);
+        pos.divideScalar(protons.length);
         var nelectron = createNElectron('electron1', pos);
-        nelectron.az.vertices = vertices;
-        nelectron.az.id = 'E' + nelectrons.length;
-        nelectrons.push(nelectron);
+        nelectron.az.vertices = protons;
+        nelectron.az.id = e;
+        nelectrons[e] = nelectron;
       }
       return nelectrons;
     }
 
-    function createWireframe(name, geometry, compConf) {
+    function createWireframe(name, geometry, shapeConf) {
       var wireframe;
-      if (compConf.shape == 'dodecahedron' ||
-          compConf.shape == 'carbon' ||
-          compConf.shape == 'lithium' ||
-          compConf.shape == 'hexahedron' ||
-          compConf.shape == 'beryllium' ||
-          compConf.shape == 'initial' ||
-          compConf.shape == 'final' ||
-          compConf.shape == 'boron' ||
-          compConf.shape == 'boron10' ||
-          compConf.shape == 'boron11') {
+      if (shapeConf.shape == 'dodecahedron' ||
+          shapeConf.shape == 'carbon' ||
+          shapeConf.shape == 'lithium' ||
+          shapeConf.shape == 'hexahedron' ||
+          shapeConf.shape == 'beryllium' ||
+          shapeConf.shape == 'initial' ||
+          shapeConf.shape == 'final' ||
+          shapeConf.shape == 'boron' ||
+          shapeConf.shape == 'boron10' ||
+          shapeConf.shape == 'boron11') {
         wireframe = createGeometryLines(
           name,
-          compConf.scale,
+          shapeConf.scale,
           geometry,
-          compConf.rotation || null
+          shapeConf.rotation || null
         );
       } else {
         wireframe = createGeometryWireframe(
           name,
-          compConf.scale + .02,
+          shapeConf.scale + .02,
           geometry,
-          compConf.rotation || null
+          shapeConf.rotation || null
         );
       }
       return wireframe;
     }
 
-    function createNucletGroupGeometry(groupName, geoGroup, compConf, nucletGroup, azNuclet) {
+    function createNucletGroupGeometry(groupName, geoGroup, shapeConf, nucletGroup, azNuclet) {
       var geometry = createGeometry(
-        compConf.shape,
+        shapeConf.shape,
         azNuclet.state || '',
-        compConf.scale * protonRadius,
-        (compConf.scaleHeight || 1) * protonRadius
+        shapeConf.scale * protonRadius,
+        (shapeConf.scaleHeight || 1) * protonRadius
       );
-      geometry.compConf = compConf;
-      geometry.scaleInit = compConf.scale;
+      geometry.shapeConf = shapeConf;
+      geometry.scaleInit = shapeConf.scale;
 
       var radians;
       if (geoGroup.rotate) {
@@ -913,18 +930,18 @@
         }
       }
 
-      if (compConf.protons) {
-        var protons = createProtons(geometry, compConf, azNuclet);
-        for (var p = 0; p < protons.length; p++) {
-          if (protons[p]) {
+      if (shapeConf.protons) {
+        var protons = createProtons(geometry, shapeConf, azNuclet);
+        for (var p in protons) {
+          if (protons.hasOwnProperty(p)) {
             protons[p].az.nucletGroup = nucletGroup;
             nucletGroup.add(protons[p]);
           }
         }
       }
 
-      if (compConf.neutrons) {
-        var neutrons = createNeutrons(geometry, compConf, azNuclet, nucletGroup);
+      if (shapeConf.neutrons) {
+        var neutrons = createNeutrons(geometry, shapeConf, azNuclet, nucletGroup);
         for (var p in neutrons) {
           if (neutrons.hasOwnProperty(p)) {
             if (neutrons[p]) {
@@ -935,21 +952,23 @@
         }
       }
 
-      if (compConf.nelectrons && azNuclet.conf.electrons) {
+      if (shapeConf.nelectrons && azNuclet.conf.electrons) {
         var nelectrons = createNElectrons(geometry, azNuclet);
-        for (var e = 0; e < nelectrons.length; e++) {
-          nucletGroup.add(nelectrons[e]);
-          nelectrons[e].az.nuclet = azNuclet;
-          azNuclet.nelectrons[nelectrons[e].az.id] = nelectrons[e];
+        for (var e in nelectrons) {
+          if (nelectrons.hasOwnProperty(e)) {
+            nucletGroup.add(nelectrons[e]);
+            nelectrons[e].az.nuclet = azNuclet;
+            azNuclet.nelectrons[nelectrons[e].az.id] = nelectrons[e];
+          }
         }
       }
 
-      if (compConf.valence) {
-        createValenceRings(compConf, azNuclet);
+      if (shapeConf.valence) {
+        createValenceRings(shapeConf, azNuclet);
       }
 
-      if (compConf.electrons) {
-        var electrons = createElectrons(geometry, compConf, azNuclet.conf);
+      if (shapeConf.electrons) {
+        var electrons = createElectrons(geometry, shapeConf, azNuclet.conf);
         for (var e = 0; e < electrons.length; e++) {
           nucletGroup.add(electrons[e]);
           electrons[e].az.nuclet = azNuclet;
@@ -957,53 +976,53 @@
         }
       }
 
-      if (compConf.axes) {
-        nucletGroup.add(createAxis(groupName, compConf.axes, geometry));
+      if (shapeConf.axes) {
+        nucletGroup.add(createAxis(groupName, shapeConf.axes, geometry));
       }
 
-      if (compConf.tetrahedrons) {
-        var tetrahedrons = createTetrahedrons(compConf, geometry, azNuclet);
+      if (shapeConf.tetrahedrons) {
+        var tetrahedrons = createTetrahedrons(shapeConf, geometry, azNuclet);
         for (var t = 0; t < tetrahedrons.length; t++) {
           nucletGroup.add(tetrahedrons[t]);
         }
       }
 
-      if (compConf.wireframe) {
-        var wireframe = createWireframe(groupName + 'Wireframe', geometry, compConf);
+      if (shapeConf.wireframe) {
+        var wireframe = createWireframe(groupName + 'Wireframe', geometry, shapeConf);
         if (wireframe) {
           nucletGroup.add(wireframe);
         }
       }
 
-      if (compConf.faces) {
+      if (shapeConf.faces) {
         var reactiveState;
-        if (compConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
+        if (shapeConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
           var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
           geometry.reactiveState = azNuclet.reactiveState = reactiveState;
-          geometry.compConf = compConf;
+          geometry.shapeConf = shapeConf;
         }
 
         var faces = createGeometryFaces(
           groupName + 'Faces',
-          compConf.scale,
+          shapeConf.scale,
           geometry,
-          compConf.rotation || null,
+          shapeConf.rotation || null,
           azNuclet.reactiveState
         );
         nucletGroup.add(faces);
   //    viewer.objects['selectFace'] = [faces];
       }
 
-//    if (compConf.vertexids) {
+//    if (shapeConf.vertexids) {
 //      nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
 //    }
 
-//    if (compConf.faceids) {
+//    if (shapeConf.faceids) {
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
 //    }
 
-      if (compConf.particleids) {
-        nucletGroup.add(viewer.sprites.createVerticeIds(compConf.particleids, geometry));
+      if (shapeConf.particleids) {
+        nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
       }
       return geometry;
     }
@@ -1035,8 +1054,8 @@
       // Create each of the components for this group
       for (var compName in geoGroup.components) {
         if (!geoGroup.components.hasOwnProperty(compName)) continue;
-        var compConf = geoGroup.components[compName];
-        createNucletGroupGeometry(groupName, geoGroup, compConf, nucletGroup, azNuclet);
+        var shapeConf = geoGroup.components[compName];
+        createNucletGroupGeometry(groupName, geoGroup, shapeConf, nucletGroup, azNuclet);
       }
       return nucletGroup;
     }
@@ -1086,13 +1105,18 @@
 
       // Remove the attach proton if this isn't 'N0'
       if (id != 'N0') {
-        var i = nuclet.az.conf.protons.indexOf(10);
-        if (i > -1) nuclet.az.conf.protons[i] = undefined;
+//      var i = nuclet.az.conf.protons.indexOf(10);
+//      if (i > -1) nuclet.az.conf.protons[i] = undefined;
+        if (i in nuclet.az.conf.protons) {
+          nuclet.az.conf.protons[i] = undefined;
+        }
+
 
         // If this is a child nuclet and it's boron then remove one proton from the base boron.
         if (nuclet.az.conf.state === 'boron10' && nuclet.az.conf.state === 'boron') {
-          var i = nuclet.az.conf.protons.indexOf(0);
-          if (i > -1) {
+//        var i = nuclet.az.conf.protons.indexOf(0);
+//        if (i > -1) {
+          if (i in nuclet.az.conf.protons) {
             nuclet.az.conf.protons[i] = undefined;
           }
         }

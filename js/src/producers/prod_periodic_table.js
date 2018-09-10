@@ -391,14 +391,14 @@
                   oldFaces.name,
                   1,
                   oldFaces.geometry,
-                  oldFaces.geometry.compConf.rotation || null,
+                  oldFaces.geometry.shapeConf.rotation || null,
                   oldFaces.geometry.reactiveState
                 );
                 var nucletGroup = oldFaces.parent;
                 viewer.objects[oldFaces.name] = [];
                 viewer.objects[oldFaces.name].push(faces);
                 faces.geometry.reactiveState = oldFaces.geometry.reactiveState;
-                faces.geometry.compConf = oldFaces.geometry.compConf;
+                faces.geometry.shapeConf = oldFaces.geometry.shapeConf;
                 nucletGroup.remove(oldFaces);
                 nucletGroup.add(faces);
                 viewer.render();
@@ -711,7 +711,7 @@
       viewer.atom.loadObject((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
 
       // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
-      viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, 1, {x: 300, y: 50, z: 0});
+      viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, null, 1, {x: 300, y: 50, z: 0});
     };
 
     /////////// Attach event listeners

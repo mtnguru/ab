@@ -155,6 +155,10 @@
           parms[parm] = conf.cylinders[cylinder][parm];
         }
 
+        var circumference = 2 * Math.PI * parms.radius;
+        var length = circumference * parms.chargeLength / 360;
+
+
         var cyl = makeCylinder(
           parms.radius,
           parms.length,
@@ -166,62 +170,60 @@
         bc.add(cyl);
         bc.cylinders[cylinder] = cyl;
 
-        switch (parms.chargeMarker) {
-          case 'arrows':
-/*          var arrow = new THREE.ArrowHelper(
-              new THREE.Vector3(0, 1, 0),
-              new THREE.Vector3(0, 0, 0),
-              30,
-              0xffff00,
-              10,
-              10
-            );
-            cyl.add(arrow); */
-            var ptsGeometry = new THREE.Geometry();
-            var ptsMaterial = new THREE.PointsMaterial({
-              size: parms.markerSize,
-              sizeAttenuation: false,
-              color: parms.color
-            });
-            var rotate = 360 / parms.numArrowPaths;
-            for (var path = 0; path < parms.numArrowPaths; path++) {
-              var radians = toRadians(path * rotate + parms.rotateInitial);
-              var spacing = parms.length / (parms.numArrows + 1);
-              var x = parms.radius * Math.sin(radians);
-              var y = -parms.length / 2 + spacing * Math.random();
-              var z = parms.radius * Math.cos(radians);
-              for (var arrow = 0; arrow < parms.numArrows; arrow++) {
-                y += parms.length / parms.numArrows;
+        // Add the arrows can be one set of points
+        var ptsGeometry = new THREE.Geometry();
+        var ptsMaterial = new THREE.PointsMaterial({
+          size: parms.markerSize,
+          sizeAttenuation: false,
+          color: parms.color
+        });
+        var rotate = 360 / parms.numArrowPaths;
+        for (var path = 0; path < parms.numArrowPaths; path++) {
+          var radians = toRadians(path * rotate + parms.rotateInitial);
+          var spacing = parms.length / (parms.numArrows + 1);
+          var x = parms.radius * Math.sin(radians);
+          var y = -parms.length / 2 + spacing * Math.random();
+          var z = parms.radius * Math.cos(radians);
+          for (var arrow = 0; arrow < parms.numArrows; arrow++) {
+            y += parms.length / parms.numArrows;
+            // This is the only part that is different
+            switch (parms.chargeMarker) {
+              case 'arrows':
+                switch (parms.animationRotate) {
+                  case 0: // Current goes straight up or down the cylinder
+                    for (var p = 0; p < 16; p += parms.markerSize) {
+                      var point = new THREE.Vector3(x, y + p, z);
+                      point = movePoint(cyl, point, 0);
+                      ptsGeometry.vertices.push(point);
+                    }
+                    break;
+                  case 2:  // Current goes at a 45 to the cylinder?
+                  case -2:
+                    for (var p = 0; p < 16; p += parms.markerSize) {
+                      var point = new THREE.Vector3(x, y + p, z);
+                      point = movePoint(cyl, point, 0);
+                      ptsGeometry.vertices.push(point);
+                    }
+                    break;
+                  case 4:
+                  case -4: // Current is completely wrapped around the cylinder,
+                    for (var p = 0; p < 16; p += parms.markerSize) {
+                      var point = new THREE.Vector3(x, y + p, z);
+                      point = movePoint(cyl, point, 0);
+                      ptsGeometry.vertices.push(point);
+                    }
+                    break;
+                }
+                break;
+
+              case 'particles':
                 ptsGeometry.vertices.push(new THREE.Vector3(x, y, z));
-              }
+                break;
             }
-            var points = new THREE.Points(ptsGeometry, ptsMaterial);
-            points.name = 'particles-' + cylinder.replace(' ', '_');
-            cyl.add(points);
-            break;
-          case 'particles':
-            var ptsGeometry = new THREE.Geometry();
-            var ptsMaterial = new THREE.PointsMaterial({
-              size: parms.markerSize,
-              sizeAttenuation: false,
-              color: parms.color
-            });
-            var rotate = 360 / parms.numArrowPaths;
-            for (var path = 0; path < parms.numArrowPaths; path++) {
-              var radians = toRadians(path * rotate + parms.rotateInitial);
-              var spacing = parms.length / (parms.numArrows + 1);
-              var x = parms.radius * Math.sin(radians);
-              var y = -parms.length / 2 + spacing * Math.random();
-              var z = parms.radius * Math.cos(radians);
-              for (var arrow = 0; arrow < parms.numArrows; arrow++) {
-                y += parms.length / parms.numArrows;
-                ptsGeometry.vertices.push(new THREE.Vector3(x, y, z));
-              }
-            }
-            var points = new THREE.Points(ptsGeometry, ptsMaterial);
-            points.name = 'particles-' + cylinder.replace(' ', '_');
-            cyl.add(points);
-            break;
+          }
+          var points = new THREE.Points(ptsGeometry, ptsMaterial);
+          points.name = 'particles-' + cylinder.replace(' ', '_');
+          cyl.add(points);
         }
       }
 
@@ -229,7 +231,22 @@
       return bc;
     };
 
+    function movePoint (cyl, point, distance) {
+      point.y += distance;
+      if (distance >= 0) {
+        if (point.y > cyl.conf.length / 2) {
+          point.y -= cyl.conf.length;
+        }
+      } else {
+        if (point.y < -cyl.conf.length / 2) {
+          point.y += cyl.conf.length;
+        }
+      }
+      return point;
+    }
+
     function animate(animateConf) {
+      var speed = viewer.theme.get('animation--speed') / 100;
       for (var cylinder in bc.cylinders) {
         var conf = bc.cylinders[cylinder].conf;
         var cyl = bc.cylinders[cylinder];
@@ -237,19 +254,9 @@
           var vertices = cyl.children[0].geometry.vertices;
           cyl.children[0].geometry.verticesNeedUpdate = true;
           for (var v = 0; v < vertices.length; v++) {
-            var vertice = vertices[v];
-            vertice.y += conf.animationDistance;
-            if (conf.animationDistance > 0) {
-              if (vertice.y > cyl.conf.length / 2) {
-                vertice.y -= cyl.conf.length;
-              }
-            } else {
-              if (vertice.y < -cyl.conf.length / 2) {
-                vertice.y += cyl.conf.length;
-              }
-            }
+            vertices[v] = movePoint(cyl, vertices[v], conf.animationDistance * speed);
           }
-          cyl.rotation.y += toRadians(conf.animationRotate);
+          cyl.rotation.y += toRadians(conf.animationRotate * speed);
         }
       }
       viewer.render();

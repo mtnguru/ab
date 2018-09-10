@@ -124,7 +124,7 @@
 
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
-      objectNid = ((!objectNid || objectNid == 'undefined') ? 609 : objectNid);  // Loads a birkeland content type
+      objectNid = ((!objectNid || objectNid == 'undefined') ? 627 : objectNid);  // Loads a birkeland content type
       viewer.birkeland.loadObject(objectNid);
 
       // Set the ID of the scene select radio buttons - scene--select--610

@@ -100,7 +100,7 @@
       // Activate/Deactivate the neutral ending protons.
 
       // Neutral ending protons
-      var np = (side == '0') ? [12,13,14,15] : [16,17,18,19];
+      var np = (side == '0') ? ['P12','P13','P14','P15'] : ['P16','P17','P18','P19'];
       for (var p = 0; p < np.length; p++) {
         nuclet.az.protons[np[p]].material.visible = show;
         nuclet.az.protons[np[p]].az.visible = show;
@@ -221,24 +221,24 @@
         var growId;
         var attachId;
         if (side == 0) {  // left side
-          growId = 0;
+          growId = 'P0';
 
           // attach on 10
-          attachId = 10;
+          attachId = 'P10';
           nucletInnerShell.initial_rotation_y = -18;
 
           // attach on 11
-//      attachId = 11;
+//      attachId = 'P11';
 //      nucletInnerShell.initial_rotation_y = -18;
         } else {              // right side
-          growId = 2;
+          growId = 'P2';
 
           // attach on 10
-          attachId = 10;
+          attachId = 'P10';
           nucletInnerShell.initial_rotation_y = -198;
 
           // attach on 11
-//      attachId = 11;
+//      attachId = 'P11';
 //      nucletInnerShell.initial_rotation_y = -162;
         }
 
@@ -257,7 +257,7 @@
         growPt.y = growPt.y + 11;
         var attachScale = 2.37;
 
-        var attachVertice = nuclet.az.protonGeometry.vertices[attachId];
+        var attachVertice = nuclet.az.protonGeometry.vertices[attachId.replace('P', '')];
         var initialAxis = attachVertice.clone().normalize();
         var alignAxis = new THREE.Vector3(0, 1, 0);
         var attachAxis = angleOrigin.clone().sub(growPt);
@@ -287,8 +287,8 @@
         // Set the initial y rotation
         nucletInnerShell.rotation.y = (nucletInnerShell.initial_rotation_y + (((nucletConf.attachAngle || 1) - 1) * 72.2)) / 180 *Math.PI;
 
-        nuclet.az.attachPt = attachPt;
         // Add attach Axis Lines
+        nuclet.az.attachPt = attachPt;
         var opacity = viewer.theme.get('attachLines--opacity');
         var lineGeometry = new THREE.Geometry();
         var constants = viewer.nuclet.getConstants();
@@ -338,6 +338,12 @@
      */
     var doCreateAtom = function doCreateAtom (results) {
       var az;
+      // Write a PHP program to read in all atoms one by one and convert the proton and electron arrays to associative arrays?
+      // Don't use javascript for it.
+      // Query all atoms using the atom query thing
+      //   Read in the atom
+      //   Convert the arrays
+      //   Save the atom
       for (var i = 0; i < results.length; i++) {
         var result = results[i];
         if (result.command == 'loadAtomCommand') {
@@ -609,7 +615,7 @@
     });
 
     /**
-     * Extract the text description of the atom currently displayed.
+     * Extract the text description of the current atom currently displayed.
      *
      * @returns {*}
      */
@@ -632,18 +638,22 @@
         }
 
         // Add the protons.
-        if (nuclet.az.protons && nuclet.az.protons.length) {
+        if (nuclet.az.protons) {
           var nl = 0;
-          for (var i = 0; i < nuclet.az.protons.length; i++) {
-            if (nuclet.az.protons[i]) {
-              var proton = nuclet.az.protons[i];
+          for (var p in nuclet.az.protons) {
+            if (nuclet.az.protons.hasOwnProperty(p)) {
+              var proton = nuclet.az.protons[p];
               if (proton.az.active && proton.az.visible) {
-                out += (nl++ == 0) ? spacing + 'protons: [' : ', ';
-                out += i;
+                out += (nl++ == 0) ? spacing + 'protons: {' : ', ';
+                out += p + ':';
+                if (proton.az.tmpColor) {
+                  args = proton.az.tmpColor.name.split('-');
+                  out += ' {color: ' + args[1] + '}';
+                }
               }
             }
           }
-          if (nl) out += ']\n';
+          if (nl) out += '}\n';
         }
 
         // Add the neutrons.
@@ -662,16 +672,19 @@
           for (var e in nuclet.az.nelectrons) {
             if (nuclet.az.nelectrons.hasOwnProperty(e)) {
               var electron = nuclet.az.nelectrons[e];
-              out += (nl++ == 0) ? spacing + 'electrons: [' : ', ';
+              if (nl++ == 0) {
+                out += spacing + 'electrons:\n';
+              }
+              var num = (nl < 10) ? '0' + nl : nl;
+              out += spacing + '  E' + num + ': {protons: [';
               var np = 0;
               for (var v = 0; v < electron.az.vertices.length; v++) {
-                out += (np++ == 0) ? '[' : ', ';
+                if (np++ != 0) out += ', ';
                 out += electron.az.vertices[v];
               }
-              if (np) out += ']';
+              if (np) out += ']}\n';
             }
           }
-          if (nl) out += ']';
         }
 
         // Recursively add the children nuclets.
@@ -739,7 +752,9 @@
         if (nodeForm) {
           var atomicStructure = nodeForm.getElementsByClassName('field--name-field-atomic-structure')[0];
           var textarea = atomicStructure.getElementsByTagName('textarea')[0];
-          textarea.value = extractStructure();
+          var value = extractStructure();
+          textarea.value = value;
+          var fart = 5;
         }
       }
     };
