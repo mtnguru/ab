@@ -644,16 +644,18 @@
             if (nuclet.az.protons.hasOwnProperty(p)) {
               var proton = nuclet.az.protons[p];
               if (proton.az.active && proton.az.visible) {
-                out += (nl++ == 0) ? spacing + 'protons: {' : ', ';
-                out += p + ':';
+                if (nl++ == 0) {
+                  out += spacing + 'protons:\n';
+                }
+                out += spacing + '  ' + p + ':';
                 if (proton.az.tmpColor) {
                   args = proton.az.tmpColor.name.split('-');
                   out += ' {color: ' + args[1] + '}';
                 }
+                out += '\n';
               }
             }
           }
-          if (nl) out += '}\n';
         }
 
         // Add the neutrons.
