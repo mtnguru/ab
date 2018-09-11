@@ -133,6 +133,8 @@
     var createObject = function createObject (conf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
 
+//    var firstCylinderradius conf.cylinders
+
       var bc = new THREE.Group();
       bc.cylinders = {};
       if (conf.object.rotation) {
@@ -157,7 +159,6 @@
 
         var circumference = 2 * Math.PI * parms.radius;
         var length = circumference * parms.chargeLength / 360;
-
 
         var cyl = makeCylinder(
           parms.radius,
@@ -187,7 +188,7 @@
           for (var arrow = 0; arrow < parms.numArrows; arrow++) {
             y += parms.length / parms.numArrows;
             // This is the only part that is different
-            switch (parms.chargeMarker) {
+            switch (parms.markerType) {
               case 'arrows':
                 switch (parms.animationRotate) {
                   case 0: // Current goes straight up or down the cylinder
