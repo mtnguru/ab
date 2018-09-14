@@ -14,6 +14,7 @@
     var sceneInformation = $('.scene--information', viewer.context)[0];
     var sceneProperties = $('.scene--properties', viewer.context)[0];
     var cylinders = {};
+    var points;
 
     var loadCallback;
 
@@ -132,8 +133,73 @@
      */
     var createObject = function createObject (conf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
+      var parms;
+      var ptsGeometry;
+      var ptsMaterial;
+      var cyl;
+      var ptConf;
 
-//    var firstCylinderradius conf.cylinders
+      function plotParticle(a) {
+        switch (parms.markerType) {
+
+          case 'arrows':
+            ptConf.y += parms.length / parms.numArrows;
+
+            switch (parms.animationRotate) {
+              case 0: // Current goes straight up or down the cylinder
+                var x = parms.radius * Math.sin(radians);
+                var y = -parms.length / 2 + spacing * Math.random();
+                var z = parms.radius * Math.cos(radians);
+
+                for (var arrow = 0; arrow < parms.numArrows; arrow++) {
+                  y += parms.length / parms.numArrows;
+                }
+
+                for (var p = 0; p < parms.markerLength; p += parms.markerSize) {
+                  var point = new THREE.Vector3(x, y + p, z);
+                  point = movePoint(cyl, point, 0);
+                  ptsGeometry.vertices.push(point);
+                }
+                break;
+
+              case 2:  // Current goes at a 45 to the cylinder?
+              case -2:
+
+                for (var arrow = 0; arrow < parms.numArrows; arrow++) {
+                  y += parms.length / parms.numArrows;
+                }
+
+                for (var p = 0; p < parms.markerLength; p += parms.markerSize) {
+                  var point = new THREE.Vector3(x, y + p, z);
+                  point = movePoint(cyl, point, 0);
+                  ptsGeometry.vertices.push(point);
+                }
+                break;
+
+              case 4:
+              case -4: // Current is completely wrapped around the cylinder,
+                for (var arrow = 0; arrow < parms.numArrows; arrow++) {
+                  y += parms.length / parms.numArrows;
+                }
+
+                for (var p = 0; p < parms.markerLength; p += parms.markerSize) {
+                  var point = new THREE.Vector3(x, y + p, z);
+                  point = movePoint(cyl, point, 0);
+                  ptsGeometry.vertices.push(point);
+                }
+                break;
+
+            }
+            break;
+
+          case 'particles':
+            ptConf.y += parms.length / parms.numArrows;
+            var point = new THREE.Vector3(ptConf.x, ptConf.y, ptConf.z);
+            point = movePoint(cyl, point, 0);
+            ptsGeometry.vertices.push(point);
+            break;
+        }
+      }
 
       var bc = new THREE.Group();
       bc.cylinders = {};
@@ -149,7 +215,7 @@
 
       for (var cylinder in conf.cylinders) {
         if (cylinder == 'defaults') continue;
-        var parms = [];
+        parms = [];
         for (var parm in conf.cylinders.defaults) {
           parms[parm] = conf.cylinders.defaults[parm];
         }
@@ -157,75 +223,60 @@
           parms[parm] = conf.cylinders[cylinder][parm];
         }
 
-        var circumference = 2 * Math.PI * parms.radius;
-        var length = circumference * parms.chargeLength / 360;
+        ptsGeometry = new THREE.Geometry();
+        ptsMaterial = new THREE.PointsMaterial({
+          size: parms.markerSize,
+          sizeAttenuation: false,
+          color: parms.color
+        });
 
-        var cyl = makeCylinder(
+        cyl = makeCylinder(
           parms.radius,
           parms.length,
           parms.color,
           viewer.theme.get('cylinders-' + cylinder + '--opacity')
         );
+
         cyl.name = 'cylinders-' + cylinder.replace(' ', '_');
         cyl.conf = parms;
         bc.add(cyl);
         bc.cylinders[cylinder] = cyl;
 
-        // Add the arrows can be one set of points
-        var ptsGeometry = new THREE.Geometry();
-        var ptsMaterial = new THREE.PointsMaterial({
-          size: parms.markerSize,
-          sizeAttenuation: false,
-          color: parms.color
-        });
+        ptConf = {};
+
+        switch (parms.markerType) {
+          case 'arrows':
+            ptConf.circumference = 2 * Math.PI * parms.radius;
+            ptConf.arc = ptConf.circumference * parms.markerLength / 360;
+            ptConf.step = arc / parms.markerLength;
+            break;
+          case 'particles':
+            break;
+        }
+
         var rotate = 360 / parms.numArrowPaths;
         for (var path = 0; path < parms.numArrowPaths; path++) {
-          var radians = toRadians(path * rotate + parms.rotateInitial);
-          var spacing = parms.length / (parms.numArrows + 1);
-          var x = parms.radius * Math.sin(radians);
-          var y = -parms.length / 2 + spacing * Math.random();
-          var z = parms.radius * Math.cos(radians);
-          for (var arrow = 0; arrow < parms.numArrows; arrow++) {
-            y += parms.length / parms.numArrows;
-            // This is the only part that is different
-            switch (parms.markerType) {
-              case 'arrows':
-                switch (parms.animationRotate) {
-                  case 0: // Current goes straight up or down the cylinder
-                    for (var p = 0; p < 16; p += parms.markerSize) {
-                      var point = new THREE.Vector3(x, y + p, z);
-                      point = movePoint(cyl, point, 0);
-                      ptsGeometry.vertices.push(point);
-                    }
-                    break;
-                  case 2:  // Current goes at a 45 to the cylinder?
-                  case -2:
-                    for (var p = 0; p < 16; p += parms.markerSize) {
-                      var point = new THREE.Vector3(x, y + p, z);
-                      point = movePoint(cyl, point, 0);
-                      ptsGeometry.vertices.push(point);
-                    }
-                    break;
-                  case 4:
-                  case -4: // Current is completely wrapped around the cylinder,
-                    for (var p = 0; p < 16; p += parms.markerSize) {
-                      var point = new THREE.Vector3(x, y + p, z);
-                      point = movePoint(cyl, point, 0);
-                      ptsGeometry.vertices.push(point);
-                    }
-                    break;
-                }
-                break;
+          ptConf.radians = toRadians(path * rotate + parms.rotateInitial);
+          ptConf.spacing = parms.length / (parms.numArrows + 1);
 
-              case 'particles':
-                ptsGeometry.vertices.push(new THREE.Vector3(x, y, z));
-                break;
-            }
+          switch (parms.markerType) {
+            case 'arrows':
+              break;
+            case 'particles':
+              ptConf.x = parms.radius * Math.sin(ptConf.radians);
+              ptConf.y = -parms.length / 2 + ptConf.spacing * Math.random();
+              ptConf.z = parms.radius * Math.cos(ptConf.radians);
+              break;
           }
-          var points = new THREE.Points(ptsGeometry, ptsMaterial);
-          points.name = 'particles-' + cylinder.replace(' ', '_');
-          cyl.add(points);
+
+          for (var a = 0; a < parms.numArrows; a++) {
+            plotParticle(a);
+          }
         }
+
+        points = new THREE.Points(ptsGeometry, ptsMaterial);
+        points.name = 'particles-' + cylinder.replace(' ', '_');
+        cyl.add(points);
       }
 
       viewer.render();

@@ -108,7 +108,7 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), true);
 
     $response = new AjaxResponse();
-    $data['succsss'] = file_put_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath'], Yaml::encode($data['ymlContents']));
+    $data['success'] = file_put_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath'], Yaml::encode($data['ymlContents']));
     $response->addCommand(new SaveYmlCommand($data));
 
     return $response;

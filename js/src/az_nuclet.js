@@ -812,7 +812,7 @@
       core.name = name + '-core';
       electronGroup.add(core);
 
-      // Make the electron pair
+      // Make the electron field
       var fieldOpacity = viewer.theme.get(name + '-field--opacity') || 1;
       var field = Drupal.atomizer.base.makeObject(
         'proton',
@@ -835,8 +835,33 @@
         protonGeometry = electronGroup.geometry;
       }
       field.name = name + '-field';
-
       electronGroup.add(field);
+
+      // Make the electron orbital
+      var orbitalOpacity = viewer.theme.get(name + '-orbital--opacity') || 1;
+      var orbital = Drupal.atomizer.base.makeObject(
+        'proton',
+        {
+          phong: {
+            color: viewer.theme.get(name + '-orbital--color'),
+            opacity: orbitalOpacity,
+            transparent: (orbitalOpacity < constants.transparentThresh),
+            visible: (orbitalOpacity > constants.visibleThresh)
+          }
+        },
+        {
+          scale: viewer.theme.get(name + '-orbital--scale'),
+          radius: protonRadius
+        },
+        pos,
+        protonGeometry
+      );
+      if (!protonGeometry) {
+        protonGeometry = electronGroup.geometry;
+      }
+      orbital.name = name + '-orbital';
+      electronGroup.add(orbital);
+
       return electronGroup;
     }
 
@@ -963,18 +988,20 @@
         }
       }
 
-      if (shapeConf.valence) {
-        createValenceRings(shapeConf, azNuclet);
-      }
+      // OBSOLETE - valence rings never existed
+//    if (shapeConf.valence) {
+//      createValenceRings(shapeConf, azNuclet);
+//    }
 
-      if (shapeConf.electrons) {
-        var electrons = createElectrons(geometry, shapeConf, azNuclet.conf);
-        for (var e = 0; e < electrons.length; e++) {
-          nucletGroup.add(electrons[e]);
-          electrons[e].az.nuclet = azNuclet;
-          azNuclet.electrons[electrons[e].az.id] = electrons[e];
-        }
-      }
+      // OBSOLETE - electrons are positioned based on the octahedron
+//    if (shapeConf.electrons) {
+//      var electrons = createElectrons(geometry, shapeConf, azNuclet.conf);
+//      for (var e = 0; e < electrons.length; e++) {
+//        nucletGroup.add(electrons[e]);
+//        electrons[e].az.nuclet = azNuclet;
+//        azNuclet.electrons[electrons[e].az.id] = electrons[e];
+//      }
+//    }
 
       if (shapeConf.axes) {
         nucletGroup.add(createAxis(groupName, shapeConf.axes, geometry));
@@ -1361,6 +1388,7 @@
       if (electron.az.selected || doHighlight) {
         electron.children[0].material.color = viewer.theme.getColor(electron.name + '-core--color-highlight');
         electron.children[1].material.color = viewer.theme.getColor(electron.name + '-field--color-highlight');
+        electron.children[2].material.color = viewer.theme.getColor(electron.name + '-orbital--color-highlight');
         if (doProtons) {
           for (var v in electron.az.vertices) {
             if (!electron.az.vertices.hasOwnProperty(v)) continue;
@@ -1377,6 +1405,7 @@
       } else {
         electron.children[0].material.color = viewer.theme.getColor(electron.name + '-core--color');
         electron.children[1].material.color = viewer.theme.getColor(electron.name + '-field--color');
+        electron.children[2].material.color = viewer.theme.getColor(electron.name + '-orbital--color');
         if (doProtons) {
           for (var v in electron.az.vertices) {
             if (!electron.az.vertices.hasOwnProperty(v)) continue;
