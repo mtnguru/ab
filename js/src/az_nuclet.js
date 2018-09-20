@@ -965,8 +965,7 @@
         }
       }
 
-      var fart = 0;
-      if (fart && shapeConf.neutrons && azNuclet.id == 'N0') {
+      if (shapeConf.neutrons && azNuclet.id == 'N0') {
         var neutrons = createNeutrons(geometry, shapeConf, azNuclet, nucletGroup);
         for (var p in neutrons) {
           if (neutrons.hasOwnProperty(p)) {
@@ -1004,25 +1003,25 @@
 //      }
 //    }
 
-      if (fart && shapeConf.axes) {
+      if (shapeConf.axes) {
         nucletGroup.add(createAxis(groupName, shapeConf.axes, geometry));
       }
 
-      if (fart && shapeConf.tetrahedrons) {
+      if (shapeConf.tetrahedrons) {
         var tetrahedrons = createTetrahedrons(shapeConf, geometry, azNuclet);
         for (var t = 0; t < tetrahedrons.length; t++) {
           nucletGroup.add(tetrahedrons[t]);
         }
       }
 
-      if (fart && shapeConf.wireframe) {
+      if (shapeConf.wireframe) {
         var wireframe = createWireframe(groupName + 'Wireframe', geometry, shapeConf);
         if (wireframe) {
           nucletGroup.add(wireframe);
         }
       }
 
-      if (fart && shapeConf.faces) {
+      if (shapeConf.faces) {
         var reactiveState;
         if (shapeConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
           var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
