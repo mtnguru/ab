@@ -9,10 +9,10 @@
   Drupal.atomizer.birkelandC = function (_viewer) {
 
 
-    labels = [
-        [X, "Chart Label",jz,jθ,Delta x,"Vector Angle",Magnitude,"Assymp ch"],
-        [x, "fig. 1", J0,J1,0.2,"°cw from +z", "of j vector,k/sqrt(x)"]
-    ];
+//  labels = [
+//      [X, "Chart Label",jz,jθ,Delta x,"Vector Angle",Magnitude,"Assymp ch"],
+//      [x, "fig. 1", J0,J1,0.2,"°cw from +z", "of j vector,k/sqrt(x)"]
+//  ];
 
     // Bessel numbers - X, chrt pt, j0, J1
     var bessel = {

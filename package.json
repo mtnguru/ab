@@ -6,6 +6,7 @@
   "dependencies": {
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-dependency-install": "0.0.8",
     "gulp-imagemin": "^3.0.2",
     "gulp-livereload": "^3.8.1",
     "gulp-pngquant": "^1.0.10",
