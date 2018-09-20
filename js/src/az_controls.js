@@ -86,6 +86,9 @@
         $('#' + id + '--az-value', viewer.context)[0].value = event.target.value;
       }
       viewer.theme.applyControl(id, event.target.value);
+      if (viewer.producer.applyControl) {
+        viewer.producer.applyControl(id, event.target.value);
+      }
     }
 
     /**

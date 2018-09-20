@@ -965,7 +965,8 @@
         }
       }
 
-      if (shapeConf.neutrons) {
+      var fart = 0;
+      if (fart && shapeConf.neutrons && azNuclet.id == 'N0') {
         var neutrons = createNeutrons(geometry, shapeConf, azNuclet, nucletGroup);
         for (var p in neutrons) {
           if (neutrons.hasOwnProperty(p)) {
@@ -1003,25 +1004,25 @@
 //      }
 //    }
 
-      if (shapeConf.axes) {
+      if (fart && shapeConf.axes) {
         nucletGroup.add(createAxis(groupName, shapeConf.axes, geometry));
       }
 
-      if (shapeConf.tetrahedrons) {
+      if (fart && shapeConf.tetrahedrons) {
         var tetrahedrons = createTetrahedrons(shapeConf, geometry, azNuclet);
         for (var t = 0; t < tetrahedrons.length; t++) {
           nucletGroup.add(tetrahedrons[t]);
         }
       }
 
-      if (shapeConf.wireframe) {
+      if (fart && shapeConf.wireframe) {
         var wireframe = createWireframe(groupName + 'Wireframe', geometry, shapeConf);
         if (wireframe) {
           nucletGroup.add(wireframe);
         }
       }
 
-      if (shapeConf.faces) {
+      if (fart && shapeConf.faces) {
         var reactiveState;
         if (shapeConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
           var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
@@ -1048,7 +1049,7 @@
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
 //    }
 
-      if (shapeConf.particleids) {
+      if (shapeConf.particleids && azNuclet.id == 'N0') {
         nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
       }
       return geometry;
@@ -1114,16 +1115,16 @@
 
       var protons;
       switch (nuclet.az.state) {
-        case 'dodecahedron': protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]; break;
-        case 'neutral':      protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]; break;
-        case 'lithium':      protons = [0, 1, 3, 4, 5, 9, 11]; break;
-        case 'beryllium':    protons = [1, 3, 4, 5, 6, 7, 9, 10, 11]; break;
+        case 'dodecahedron': protons = {P0: null, P1: null, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null, P11: null, P12: null, P13: null, P14: null, P15: null, P16: null, P17: null, P18: null, P19: null}; break;
+        case 'neutral':      protons = {P0: null, P1: null, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null, P11: null, P12: null, P13: null, P14: null, P15: null, P16: null, P17: null, P18: null, P19: null, P20: null, P21: null}; break;
+        case 'lithium':      protons = {P0: null, P1: null, P3: null, P4: null, P5: null, P9: null, P11: null}; break;
+        case 'beryllium':    protons = {P1: null, P3: null, P4: null, P5: null, P6: null, P7: null, P9: null, P10: null, P11: null}; break;
         case 'boron':
-        case 'boron10':      protons = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11]; break;
-        case 'boron11':      protons = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11]; break;
-        case 'carbon':       protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];  break;
-        case 'initial':      protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]; break;
-        case 'final':        protons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]; break;
+        case 'boron10':      protons = {P1: null, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P9: null, P10: null, P11: null}; break;
+        case 'boron11':      protons = {P0: null, P1: null, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P9: null, P10: null, P11: null}; break;
+        case 'carbon':       protons = {P0: null, P1: null, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null, P11: null};  break;
+        case 'initial':      protons = {P0: null, P1: null, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null, P11: null, P12: null, P13: null, P14: null, P15: null, P16: null, P17: null, P18: null, P19: null}; break;
+        case 'final':        protons = {P0: null, P1: null, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null, P11: null, P12: null, P13: null, P14: null, P15: null, P16: null, P17: null, P18: null, P19: null}; break;
       }
 
       // If the configuration for protons and electrons is not set then use the default values set above.

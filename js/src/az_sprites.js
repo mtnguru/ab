@@ -73,7 +73,7 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 		context.putImageData(imgData, 0, 0);
 
 		// canvas contents will be used for a texture
-		var texture = new THREE.Texture(canvas)
+		var texture = new THREE.Texture(canvas);
 		texture.needsUpdate = true;
 
 		var spriteMaterial = new THREE.SpriteMaterial({map: texture});

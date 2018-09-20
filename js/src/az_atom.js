@@ -108,21 +108,30 @@
       }
 
       // Neutrons
-      for (p in nuclet.az.neutrons) {
-        if (nuclet.az.neutrons.hasOwnProperty(p)) {
-          if (p.charAt(1) == side) {
-            nuclet.az.neutrons[p].material.visible = false;
-            nuclet.az.neutrons[p].az.visible = false;
-            nuclet.az.neutrons[p].az.active = activate;
+      for (var n in nuclet.az.neutrons) {
+        if (nuclet.az.neutrons.hasOwnProperty(n)) {
+          if (n.charAt(1) == side) {
+            nuclet.az.neutrons[n].material.visible = false;
+            nuclet.az.neutrons[n].az.visible = false;
+            nuclet.az.neutrons[n].az.active = activate;
           }
         }
       }
 
       // Electrons
       if (!activate && nuclet.az.nelectrons) {
-        for (p in nuclet.az.nelectrons) {
-          if (nuclet.az.nelectrons.hasOwnProperty(p)) {
-            deleteNElectron(nuclet.az.nelectrons[p]);
+        for (var e in nuclet.az.nelectrons) {
+          if (nuclet.az.nelectrons.hasOwnProperty(e)) {
+            var deleteIt = false;
+            // Check to see if any of the protons for this electron are neutral ending protons, if so delete it.
+            for (var p = 0; p < np.length; p++) {
+              if (np[p] in nuclet.az.nelectrons[e].az.vertices) {
+                deleteIt = true;
+              }
+            }
+            if (deleteIt) {
+              deleteNElectron(nuclet.az.nelectrons[e]);
+            }
           }
         }
       }
@@ -155,7 +164,7 @@
       conf = {
         state: 'lithium',
         attachAngle: 3,
-        protons: [10, 1, 4, 5, 3, 11, 9],
+        protons: {P10: null, P1: null, P4: null, P5: null, P3: null, P11: null, P9: null},
       };
 
       // Find the parent nuclet
@@ -228,8 +237,8 @@
           nucletInnerShell.initial_rotation_y = -18;
 
           // attach on 11
-//      attachId = 'P11';
-//      nucletInnerShell.initial_rotation_y = -18;
+//        attachId = 'P11';
+//        nucletInnerShell.initial_rotation_y = -18;
         } else {              // right side
           growId = 'P2';
 
@@ -238,8 +247,8 @@
           nucletInnerShell.initial_rotation_y = -198;
 
           // attach on 11
-//      attachId = 'P11';
-//      nucletInnerShell.initial_rotation_y = -162;
+//        attachId = 'P11';
+//        nucletInnerShell.initial_rotation_y = -162;
         }
 
         var growProton = growNuclet.az.protons[growId];
@@ -364,7 +373,7 @@
           if ($save.length) {
             $save.replaceWith(result.data.link);
             if (Drupal.attachBehaviors) {
-              Drupal.attachBehaviors('.atom--save a');
+              Drupal.attachBehaviors('#atom--save');
             }
           }
 
