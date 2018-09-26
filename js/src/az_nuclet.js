@@ -965,7 +965,7 @@
         }
       }
 
-      if (shapeConf.neutrons && azNuclet.id == 'N0') {
+      if (shapeConf.neutrons) {
         var neutrons = createNeutrons(geometry, shapeConf, azNuclet, nucletGroup);
         for (var p in neutrons) {
           if (neutrons.hasOwnProperty(p)) {
@@ -1048,7 +1048,7 @@
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
 //    }
 
-      if (shapeConf.particleids && azNuclet.id == 'N0') {
+      if (shapeConf.particleids) {
         nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
       }
       return geometry;
