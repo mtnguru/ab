@@ -506,11 +506,11 @@
      * @param length
      * @param linewidth
      *
-     * @returns {THREE.AxisHelper}
+     * @returns {THREE.AxesHelper}
      */
     function createHelperAxis(name, length, linewidth) {
       var opacity = viewer.theme.get(name + '--opacity');
-      var axis = new THREE.AxisHelper(length);
+      var axis = new THREE.AxesHelper(length);
       axis.name = name;
       axis.material.linewidth = linewidth;
       axis.material.opacity = opacity;
@@ -608,7 +608,7 @@
             }
             pos.divideScalar(neutrons[id].length);
 
-            console.log(pos.x / protonRadius + ', ' + pos.y / protonRadius + ', ' + pos.z / protonRadius + ',     ');
+//          console.log(pos.x / protonRadius + ', ' + pos.y / protonRadius + ', ' + pos.z / protonRadius + ',     ');
 
             // Kludge - move the first two neutrons to where defined by geometry instead of calculated position.
             if (id.charAt(2) == '0' && (shapeConf.shape == 'initial' || shapeConf.shape == 'final')) {
@@ -1049,9 +1049,9 @@
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
 //    }
 
-      if (shapeConf.particleids) {
-        nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
-      }
+//    if (shapeConf.particleids) {
+//      nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
+//    }
       return geometry;
     }
 
@@ -1133,17 +1133,12 @@
 
       // Remove the attach proton if this isn't 'N0'
       if (id != 'N0') {
-//      var i = nuclet.az.conf.protons.indexOf(10);
-//      if (i > -1) nuclet.az.conf.protons[i] = undefined;
-        if (i in nuclet.az.conf.protons) {
-          nuclet.az.conf.protons[i] = undefined;
+        if ('P10' in nuclet.az.conf.protons) {
+          delete (nuclet.az.conf.protons['P10']);
         }
-
 
         // If this is a child nuclet and it's boron then remove one proton from the base boron.
         if (nuclet.az.conf.state === 'boron10' && nuclet.az.conf.state === 'boron') {
-//        var i = nuclet.az.conf.protons.indexOf(0);
-//        if (i > -1) {
           if (i in nuclet.az.conf.protons) {
             nuclet.az.conf.protons[i] = undefined;
           }

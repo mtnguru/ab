@@ -264,7 +264,12 @@
         var angleOrigin = new THREE.Vector3(0, 28, 0);
         var origin = new THREE.Vector3(0, 6, 0);
         growPt.y = growPt.y + 11;
-        var attachScale = 2.37;
+        var attachScale;
+        if (growNuclet.az.conf.state == 'initial') {
+          attachScale = 2.08;
+        } else {
+          attachScale = 2.37;
+        }
 
         var attachVertice = nuclet.az.protonGeometry.vertices[attachId.replace('P', '')];
         var initialAxis = attachVertice.clone().normalize();
@@ -373,7 +378,8 @@
           if ($save.length) {
             $save.replaceWith(result.data.link);
             if (Drupal.attachBehaviors) {
-              Drupal.attachBehaviors('#atom--save');
+              Drupal.attachBehaviors($save[0]);
+//            Drupal.attachBehaviors('.atom--save');
             }
           }
 

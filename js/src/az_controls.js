@@ -566,9 +566,8 @@
     function onMouseDown(event) {
       mouseDown.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
       mouseDown.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
-      console.log('onMouseDown ' + mouse.x + ' ' + mouse.y);
+//    console.log('onMouseDown ' + mouse.x + ' ' + mouse.y);
       if (viewer.producer.mouseDown) {
-//      event.preventDefault();
         return viewer.producer.mouseDown(event);
       }
     }
@@ -581,10 +580,9 @@
       mouse.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
       mouse.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
       var distance = mouse.distanceTo(mouseDown);
-      console.log('onMouseUp ' + mouse.x + ' ' + mouse.y + '  ' + distance);
+//    console.log('onMouseUp ' + mouse.x + ' ' + mouse.y + '  ' + distance);
 
       if (viewer.producer.mouseUp) {
-//      event.preventDefault();
         return viewer.producer.mouseUp(event, distance);
       }
     }
@@ -615,7 +613,9 @@
           return $element.val();
         }
       } else {
-        console.log('atomizer_controls.js - control not found - ' + id);
+        if (Drupal.atomizer.logit) {
+          console.log('atomizer_controls.js - control not found - ' + id);
+        }
         return null;
       }
     };

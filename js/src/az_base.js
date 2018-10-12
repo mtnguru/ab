@@ -15,6 +15,8 @@
 
   Drupal.atomizer = {};
 
+  Drupal.atomizer.logit = false;
+
   Drupal.atomizer.baseC = function () {
 
     Drupal.AjaxCommands.prototype.loadYmlCommand = function(ajax, response, status) {
