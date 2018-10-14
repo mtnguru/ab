@@ -198,10 +198,25 @@ class AtomizerController extends ControllerBase {
     $data['atomName'] = $node->label();
     $data['atomTitle'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';
 
+    // Build the properties block using the atom_viewer view'.
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
+
+    // Add the create link to Wikipedia Isotopes page for this element
+    $element = strtolower($node->field_element->entity->label());
+    $isotopeUrl = 'https://en.wikipedia.org/wiki/Isotopes_of_' . $element;
+    $build['links'] = [
+      '#type' => 'link',
+      '#title' => 'Isotopes',
+      '#attributes' => [
+         'title' => t('Wikipedias Isotope page for this element'),
+         'target' => '_blank',
+      ],
+      '#url' => Url::fromUri($isotopeUrl),
+    ];
+    // Render the properties block.
     $data['properties'] = render($build);
 
-    // Render the node/atom using teaser view mode.
+    // Render the atom information using teaser view.
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
     $data['information'] = render($build);
 
