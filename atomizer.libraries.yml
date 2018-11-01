@@ -80,13 +80,18 @@ atomizer-birkeland-obfuscator:
 
 # Periodic Table
 
-atomizer-periodic-table:
+atomizer-ptable:
   js:
-    js/src/producers/prod_periodic-table.js: {}
+    js/threejs/renderers/CSS3DRenderer.js: {}
+    js/threejs/libs/tween.min.js: {}
+    js/src/az_ptable.js: {}
+    js/src/producers/prod_ptable.js: {}
 
-atomizer-periodic-table-obfuscator:
+atomizer-ptable-obfuscator:
   js:
-    js/min/producers/prod_periodic-table.js: {}
+    js/threejs/renderers/CSS3DRenderer.js: {}
+    js/min/az_ptable.js: {}
+    js/min/producers/prod_ptable.js: {}
 
 # Platonic Solids
 

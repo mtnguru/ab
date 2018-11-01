@@ -127,11 +127,11 @@
 
           if (bc) {
             // Remove any atom's currently displayed
-            deleteObject(bc);
+            deleteScene(bc);
             bc = null;
           }
 
-          bc = createObject(result.data.nodeConf);
+          bc = createScene(result.data.nodeConf);
           bc.az = {
             nid: result.data.nid,
             name: result.data.nodeName,
@@ -201,7 +201,7 @@
      * @param atomConf
      * @returns {THREE.Group|*}
      */
-    var createObject = function createObject (conf) {
+    var createScene = function createScene (conf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
       var parms;
       var ptsGeometry;
@@ -411,7 +411,7 @@
      * Delete a birkeland current
      * @param bc
      */
-    var deleteObject = function deleteObject (bc) {
+    var deleteScene = function deleteScene (bc) {
       viewer.scene.remove(bc);
     };
 
@@ -437,8 +437,8 @@
     return {
       az: function () { return atom.az; },
       buttonClicked: buttonClicked,
-      createObject: createObject,
-      deleteObject: deleteObject,
+      createScene: createScene,
+      deleteScene: deleteScene,
       loadObject: loadObject,
       animate: animate
     };

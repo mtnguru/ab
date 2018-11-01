@@ -2,6 +2,7 @@
 
 namespace Drupal\atomizer;
 
+use Drupal\az_content\AzContentQuery;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Xss;
 
@@ -12,6 +13,27 @@ use Drupal\Component\Utility\Xss;
  */
 class AtomizerInit {
   public static $idNum = 0;
+
+  static function queryElements() {
+    $objects = [];
+    $result = AzContentQuery::nodeQuery([
+      'types' => 'element',
+    ]);
+    $nids = array_keys($result['results']);
+    $elements = entity_load_multiple('node', $nids);
+    foreach ($elements as $nid => $element) {
+      if (!$element->get('field_pt')->isEmpty() && !$element->get('field_period')->isEmpty()) {
+        $group = $element->field_pt->entity;
+        $column = explode(' ' ,$group->getName())[0];
+        $objects[$nid] = [
+          'name' => $element->getTitle(),
+          'period' => $element->get('field_period')->value,
+          'group' => $column,
+        ];
+      }
+    }
+    return $objects;
+  }
 
   static function build($config) {
 //  $atomizerId = $config['atomizerId'] = str_replace(['_', ' '], '-', strtolower($config['atomizerId'])) . '--' . self::$idNum;
@@ -35,15 +57,22 @@ class AtomizerInit {
 
 //  Read in the objects - nuclets for Atom Builder/Viewer - solids for Platonic Solids Viewer
     $objects = [];
-    if (!empty($atomizer_config['objects'])) {
-      foreach ($atomizer_config['objects'] as $object) {
-        $files = file_scan_directory(drupal_get_path('module','atomizer') . '/config/objects/' . $object, '/\.yml/');
-        foreach ($files as $file) {
-          $objects[str_replace('nuclet_', '', $file->name)] = Yaml::decode(
-            file_get_contents(drupal_get_path('module', 'atomizer') . '/config/objects/' . $object . '/' . $file->filename)
-          );
+    if (!empty($atomizer_config)) {
+      if (!empty($atomizer_config['objects'])) {
+        foreach ($atomizer_config['objects'] as $object) {
+          $files = file_scan_directory(drupal_get_path('module', 'atomizer') . '/config/objects/' . $object, '/\.yml/');
+          foreach ($files as $file) {
+            $objects[str_replace('nuclet_', '', $file->name)] = Yaml::decode(
+              file_get_contents(drupal_get_path('module', 'atomizer') . '/config/objects/' . $object . '/' . $file->filename)
+            );
+          }
         }
       }
+    }
+
+    // The objects for the periodic table is an array of elements
+    if ($atomizer_config['atomizerClass'] == 'ptable') {
+      $objects = self::queryElements();
     }
 
     $build = [

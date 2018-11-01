@@ -1022,6 +1022,31 @@
         }
       }
 
+      // Create volume sphere.
+      if (shapeConf.volume) {
+        var volumeOpacity = viewer.theme.get('nuclet-volume--opacity') || 0;
+        var volume = Drupal.atomizer.base.makeObject(
+            'proton',
+            {
+              phong: {
+                color: viewer.theme.get('nuclet-volume--color'),
+                opacity: volumeOpacity,
+                transparent: (volumeOpacity < constants.transparentThresh),
+                visible: (volumeOpacity > constants.visibleThresh)
+              }
+            },
+            {
+              scale: viewer.theme.get('nuclet-volume--scale'),
+              radius: protonRadius
+            },
+            new THREE.Vector3(),
+            protonGeometry
+        );
+        volume.name = 'nuclet-volume';
+        nucletGroup.add(volume);
+      }
+
+      // Create faces for the structure
       if (shapeConf.faces) {
         var reactiveState;
         if (shapeConf.assignFaceOpacity && azNuclet.conf.reactiveState) {

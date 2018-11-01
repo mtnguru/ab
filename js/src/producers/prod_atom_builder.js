@@ -799,6 +799,11 @@
         var normalizedVolume = Math.round(volume / 4.1887902047863905 * 1000) / 1000;
         $('#electron1-orbital--volume').html('<span class="az-name">Volume: &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="az-value">' + normalizedVolume + '</span>');
       }
+      if (id == 'nuclet-volume--scale') {
+        var volume = 4.0 / 3.0 *  Math.PI * Math.pow(value, 3);
+        var normalizedVolume = Math.round(volume / 4.1887902047863905 * 1000) / 1000;
+        $('#nuclet-volume--volume').html('<span class="az-name">Volume: &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="az-value">' + normalizedVolume + '</span>');
+      }
       var fart = 5;
     }
 

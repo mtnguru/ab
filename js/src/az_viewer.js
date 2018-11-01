@@ -86,11 +86,13 @@
           displayMode = 'mobile';
           viewer.context.addClass('display-mode-' + displayMode);
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
-//        var maxHeight = viewer.canvas.width * 1.333;
+          viewer.canvasContainer.style.width = viewer.canvas.width + 'px';
           var maxHeight = viewer.canvas.width;
           var fullHeight = window.innerHeight - 150;
           viewer.canvas.height = (maxHeight < fullHeight) ? maxHeight : fullHeight;
-        } else {
+          viewer.canvasContainer.style.height = viewer.canvas.height + 'px';
+        }
+        else {
           if (displayMode != 'desktop') {
             $atomList.removeClass('az-hidden');
           }
@@ -102,16 +104,21 @@
           } else {
             viewer.canvas.height = viewer.canvas.width * viewer.atomizer.canvasRatio;
           }
+          viewer.canvasContainer.style.height = viewer.canvas.height + 'px';
           // Now that we set the height, set the width again,
           // the page scrollbar changes the container width.
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
+//        viewer.canvas.width = 1;
+//        viewer.canvas.height = 1;
         }
       }
 
       if (viewer.renderer) {
         // Tell the renderer and camera about the new canvas size.
         viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
-        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+        if (viewer.renderer.setViewPort) {
+          viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+        }
         viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
         viewer.camera.updateProjectionMatrix();
         viewer.render();
@@ -140,27 +147,49 @@
       viewer.controls = Drupal.atomizer.controlsC(viewer);
 
       // Create the renderer
-      viewer.renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        canvas: viewer.canvas,
-        preserveDrawingBuffer: true,
-        shadowEnabled: true
-      });
-      viewer.renderer.setClearColor(viewer.theme.get('renderer--color'), 1.0);
-      viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
+      switch (viewer.atomizer.renderer) {
+
+        case 'webgl':
+          viewer.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            canvas: viewer.canvas,
+            preserveDrawingBuffer: true,
+            shadowEnabled: true
+          });
+          viewer.renderer.setClearColor(viewer.theme.get('renderer--color'), 1.0);
+          viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
+          // Create camera, and point it at the scene
+          viewer.camera = new THREE.PerspectiveCamera(
+              viewer.theme.get('camera--perspective'),
+              viewer.canvas.width / viewer.canvas.height,
+              .1, 10000
+          );
+          break;
+
+        case 'css3d':
+          viewer.renderer = new THREE.CSS3DRenderer({
+            antialias: true,
+//          canvas: viewer.canvas,
+            preserveDrawingBuffer: true,
+//          shadowEnabled: true
+          });
+          viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
+          viewer.canvasContainer.appendChild(viewer.renderer.domElement);
+
+          // Create camera, and point it at the scene
+          viewer.camera = new THREE.PerspectiveCamera(
+              viewer.theme.get('camera--perspective'),
+              viewer.canvas.width / viewer.canvas.height,
+              .1, 10000
+          );
+          break;
+      }
 //    viewer.renderer.shadowEnabled = true;
 
       // add the output of the renderer to the html element
-      viewer.canvasContainer.appendChild(viewer.renderer.domElement);
 
       window.addEventListener('resize', setSize);
 
-      // Create camera, and point it at the scene
-      viewer.camera = new THREE.PerspectiveCamera(
-        viewer.theme.get('camera--perspective'),
-        viewer.canvas.width / viewer.canvas.height,
-        .1, 10000
-      );
       zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
       viewer.camera.position.set(
         zoom * viewer.theme.get('camera--position', 'x'),
@@ -290,8 +319,6 @@
     viewer.atomizer = atomizer;
     viewer.view = atomizer.views[atomizer.defaultView];
 
-    var containerId = viewer.atomizer.atomizerId.replace(/[ _]/g, '-').toLowerCase() + '-canvas-wrapper';
-//  viewer.canvasContainer = $('.' + containerId, viewer.context)[0];
     viewer.canvasContainer = $('.az-canvas-wrapper', viewer.context)[0];
     viewer.dataAttr = getDataAttr(viewer.canvasContainer);
 

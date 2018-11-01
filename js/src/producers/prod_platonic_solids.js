@@ -16,19 +16,19 @@ Drupal.atomizer.producers.platonic_solidsC = function (_viewer) {
 
     var atom;
 
-    atom = viewer.atom.createObject({ protons: [0,1,2,3], state: 'tetrahedron' });
+    atom = viewer.atom.createAtom({ protons: [0,1,2,3], state: 'tetrahedron' });
     atom.position.set( 400, 0,  -200);
 
-    atom = viewer.atom.createObject({ protons: [0,1,2,3,4,5,6,7,8,9,10,11], state: 'hexahedron' });
+    atom = viewer.atom.createAtom({ protons: [0,1,2,3,4,5,6,7,8,9,10,11], state: 'hexahedron' });
     atom.position.set(   0, 0,  -200);
 
-    atom = viewer.atom.createObject({ protons: [0,1,2,3,4,5,6,7,8,9,10,11], state: 'octahedron' });
+    atom = viewer.atom.createAtom({ protons: [0,1,2,3,4,5,6,7,8,9,10,11], state: 'octahedron' });
     atom.position.set(-400, 0,  -200);
 
-    atom = viewer.atom.createObject({ protons: [0,1,2,3,4,5,6,7,8,9,10,11], state: 'icosahedron' });
+    atom = viewer.atom.createAtom({ protons: [0,1,2,3,4,5,6,7,8,9,10,11], state: 'icosahedron' });
     atom.position.set( 275, 0,   200);
 
-    atom = viewer.atom.createObject({ protons: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], state: 'dodecahedron' });
+    atom = viewer.atom.createAtom({ protons: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], state: 'dodecahedron' });
     atom.position.set(-275, 0,   200);
 
     return;

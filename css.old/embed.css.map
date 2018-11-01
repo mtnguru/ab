@@ -1,1 +1,0 @@
-{"version":3,"sources":["embed.scss"],"names":[],"mappings":"AAAA,iCAEI,YACA,YAAc,CACf,iCAKC,YACA,YAAc,CACf","file":"embed.css","sourcesContent":[".az-atomizer-viewer-small {\n  canvas {\n    width: 480px;\n    height: 360px;\n  }\n}\n\n.az-atomizer-viewer-large {\n  canvas {\n    width: 800px;\n    height: 600px;\n  }\n}\n\n\n"],"sourceRoot":"/source/"}

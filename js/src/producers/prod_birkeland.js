@@ -167,7 +167,7 @@
 
     var birkelandLoaded = function birkelandLoaded(results) {
       var conf = results[0].ymlContents;
-      viewer.birkeland.createObject(conf);
+      viewer.birkeland.createScene(conf);
     };
 
     // Initialize Event Handlers

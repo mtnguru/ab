@@ -385,7 +385,7 @@
 
           if (atom) {
             // Remove any atom's currently displayed
-            deleteObject(atom);
+            deleteAtom(atom);
             atom = null;
             az = null;
             viewer.atom.atom = null;
@@ -393,7 +393,7 @@
             az = {nuclets: {}}
           }
 
-          createObject(result.data.atomConf['N0']);
+          createAtom(result.data.atomConf['N0']);
           atom.az.nid = result.data.nid;
           atom.az.name = result.data.atomName;
           atom.az.title = result.data.atomTitle;
@@ -445,7 +445,7 @@
      * @param atomConf
      * @returns {THREE.Group|*}
      */
-    var createObject = function createObject (atomConf) {
+    var createAtom = function createAtom (atomConf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
       atom = new THREE.Group();
       atom.name = 'atom';
@@ -465,7 +465,7 @@
      * Delete an atom - calls recursive function deleteNuclet
      * @param atom
      */
-    var deleteObject = function deleteObject (atom) {
+    var deleteAtom = function deleteAtom (atom) {
       for (var n in atom.az.nuclets) {
         viewer.nuclet.deleteNuclet(atom.az.nuclets[n]);
       }
@@ -789,8 +789,8 @@
       buttonClicked: buttonClicked,
       changeNucletState: changeNucletState,
       changeNucletAngle: changeNucletAngle,
-      createObject: createObject,
-      deleteObject: deleteObject,
+      createAtom: createAtom,
+      deleteAtom: deleteAtom,
       deleteNuclet: deleteNuclet,
       explodeAtom: explodeAtom,
       getNuclet: getNuclet,

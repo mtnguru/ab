@@ -378,7 +378,6 @@
       });
 
       $('#controls--snapshot', viewer.context).click(function () {
-
         // Play the click sound
         var audio = $(this).find('audio')[0];
         audio.volume = .1;
@@ -396,7 +395,6 @@
         viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
         viewer.camera.updateProjectionMatrix();
         viewer.render();
-//      img = viewer.scene.components.screenshot.getCanvas('perspective').toDataURL('image/jpeg')
 
         // Create image from canvas
         img = viewer.canvas.toDataURL('image/jpeg');
