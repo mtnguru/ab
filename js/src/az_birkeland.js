@@ -14,10 +14,16 @@
 //      [x, "fig. 1", J0,J1,0.2,"°cw from +z", "of j vector,k/sqrt(x)"]
 //  ];
 
+    var shit = 1;
     // Bessel numbers - X, chrt pt, j0, J1
-/*  var bessel = {
-      X     Pt      J0      J1
-      0:   [1,     1.000,  0.000,   0, 1.00, undef],
+    // Pt
+    // J0
+    // J1
+    // Vector Angle - cw from +z
+    // Magnitude of J vector
+    // Assymp Chk - k/sqrt(x)
+    var bessel = {
+      0.05:[1,     1.000,  0.000,   0, 1.00, null],
       0.2: [null,  0.990,  0.100,   6, 1.00, 1.82],
       0.4: [null,  0.960,  0.196,  12, 0.98, 1.29],
       0.6: [null,  0.912,  0.287,  17, 0.96, 1.05],
@@ -72,10 +78,10 @@
      10.4: [null, -0.243, -0.055, 193, 0.25, 0.25],
      10.6: [null, -0.228, -0.101, 204, 0.25, 0.25],
      10.8: [null, -0.203, -0.142, 215, 0.25, 0.25]
-    }; */
+    };
 
-    var viewer = _viewer;
     var bc;
+    var viewer = _viewer;
     var $sceneName = $('.scene--name', viewer.context);
     var sceneInformation = $('.scene--information', viewer.context)[0];
     var sceneProperties = $('.scene--properties', viewer.context)[0];
@@ -91,8 +97,9 @@
     function toDegrees(radians) {
       return radians * (180 / Math.PI);
     }
+
     /**
-     * Execute AJAX command to load a new atom.
+     * Execute AJAX command to load a new birkeland current.
      *
      * @param nid
      */
@@ -106,7 +113,7 @@
     };
 
     /**
-     * Callback from ajax call to load and display an atom.
+     * Callback from ajax call to load and display an birkeland current.
      *
      * @param results
      */
@@ -126,7 +133,7 @@
           }
 
           if (bc) {
-            // Remove any atom's currently displayed
+            // Remove any birkeland current's currently displayed
             deleteScene(bc);
             bc = null;
           }
@@ -198,11 +205,10 @@
     /**
      * Create a birkeland current
      *
-     * @param atomConf
+     * @param conf
      * @returns {THREE.Group|*}
      */
     var createScene = function createScene (conf) {
-      // Create the atom group - create first nuclet, remaining nuclets are created recursively.
       var parms;
       var ptsGeometry;
       var ptsMaterial;
@@ -210,61 +216,24 @@
       var ptConf;
 
       function plotParticle(a) {
+        var radius = parms.radius * parms.radiusZoom;
         switch (parms.markerType) {
           case 'arrows':
             ptConf.y += parms.length / parms.numArrows;
-            switch (parms.animationRotate) {
-              case 0: // Current goes straight up or down the cylinder
-                for (var p = 0; p < parms.markerLength; p += parms.markerSize) {
-                  var point = new THREE.Vector3(ptConf.x, ptConf.y + p, ptConf.z);
-                  point = movePoint(cyl, point, 0);
-                  ptsGeometry.vertices.push(point);
-                }
-                break;
+            // Calculate the rotate distance in degrees and the z distance
 
-              case 2:  // This isn't flexible - need to calculate
-              case -2:
-                var x = ptConf.x;
-                var y = ptConf.y;
-                var z = ptConf.z;
-                var sangle = ptConf.radians;
-                if (parms.animationDistance < 0) {
-                  for (var p = 0; p < parms.markerLength; p += parms.markerSize) {
-                    var point = new THREE.Vector3(x, y + p *.7, z);
-                    point = movePoint(cyl, point, 0);
-                    ptsGeometry.vertices.push(point);
-                    sangle += ptConf.step;
-                    x = parms.radius * Math.sin(sangle);
-                    z = parms.radius * Math.cos(sangle);
-                  }
-                } else {
-                  for (var p = 0; p < parms.markerLength; p += parms.markerSize) {
-                    var point = new THREE.Vector3(x, y - p *.7, z);
-                    point = movePoint(cyl, point, 0);
-                    ptsGeometry.vertices.push(point);
-                    sangle += ptConf.step;
-                    x = parms.radius * Math.sin(sangle);
-                    z = parms.radius * Math.cos(sangle);
-                  }
-                }
-                break;
-
-              case 4:
-              case -4: // Current is completely wrapped around the cylinder,
-                var x = ptConf.x;
-                var y = ptConf.y;
-                var z = ptConf.z;
-                var sangle = ptConf.radians;
-                for (var p = 0; p < parms.markerLength; p += parms.markerSize) {
-                  var point = new THREE.Vector3(x, y, z);
-                  point = movePoint(cyl, point, 0);
-                  ptsGeometry.vertices.push(point);
-                  sangle += ptConf.step;
-                  x = parms.radius * Math.sin(sangle);
-                  z = parms.radius * Math.cos(sangle);
-                }
-                break;
-
+            var x = ptConf.x;
+            var y = ptConf.y;
+            var z = ptConf.z;
+            theta = parms.radians;
+            for (var p = 0; p < parms.markerPts; p += parms.markerSize) {
+              var point = new THREE.Vector3(x, y, z);
+              point = movePoint(cyl, point, 0);
+              ptsGeometry.vertices.push(point);
+              theta += parms.thetaStep;
+              y += parms.zStep;
+              x = radius * Math.sin(theta);
+              z = radius * Math.cos(theta);
             }
             break;
 
@@ -304,17 +273,22 @@
           parms[parm] = conf.cylinders[cylinder][parm];
         }
 
+        var radius = parms.radius * parms.radiusZoom;
+
         // Create the geometry and material for this cylinder
         ptsGeometry = new THREE.Geometry();
         ptsMaterial = new THREE.PointsMaterial({
           size: parms.markerSize,
           sizeAttenuation: false,
+          opacity: viewer.theme.get('particles-' + cylinder + '--opacity'),
+          transparent: true,
+          visible: true,
           color: parms.color
         });
 
         // Create the cylinder
         cyl = makeCylinder(
-          parms.radius,
+          radius,
           parms.length,
           parms.color,
           viewer.theme.get('cylinders-' + cylinder + '--opacity')
@@ -329,8 +303,16 @@
         ptConf = {};
         switch (parms.markerType) {
           case 'arrows':
-            ptConf.circumference = 2 * Math.PI * parms.radius;
-            ptConf.step = 6.28 / ptConf.circumference;
+            cyl.conf.circumference = 2 * Math.PI * radius;
+            cyl.conf.J0 = bessel[parms.radius][1];  // vector down the Z axis
+            cyl.conf.J1 = bessel[parms.radius][2];  // total rotation distance in 'units
+//          cyl.conf.theta = cyl.conf.J1 * parms.radiusZoom * parms.markerLength / cyl.conf.circumference * 6.28;  // total rotation in theta
+            cyl.conf.theta = cyl.conf.J1 * parms.markerLength / cyl.conf.circumference * 6.28;  // total rotation in theta
+//          cyl.conf.theta = parms.markerLength / cyl.conf.circumference * 6.28;  // total rotation in theta
+            cyl.conf.thetaStep = cyl.conf.theta / parms.markerPts; // Calculate step in theta
+//          cyl.conf.zStep = cyl.conf.J0 * parms.markerLength / parms.markerPts;        // Calculate step in 'z'
+//          cyl.conf.zStep = cyl.conf.J0 * parms.markerLength / parms.markerPts;        // Calculate step in 'z'
+            cyl.conf.zStep = cyl.conf.J0 * parms.markerLength / parms.markerPts;        // Calculate step in 'z'
             break;
           case 'particles':
             break;
@@ -339,19 +321,19 @@
         // Calculate the degrees rotation and plot each arrow path.
         var rotate = 360 / parms.numArrowPaths;
         for (var path = 0; path < parms.numArrowPaths; path++) {
-          ptConf.radians = toRadians(path * rotate + parms.rotateInitial);
-          ptConf.spacing = parms.length / (parms.numArrows + 1);
+          cyl.conf.radians = toRadians(path * rotate + parms.rotateInitial);
+          cyl.conf.spacing = parms.length / (parms.numArrows + 1);
 
           switch (parms.markerType) {
             case 'arrows':
-              ptConf.x = parms.radius * Math.sin(ptConf.radians);
-              ptConf.y = -parms.length / 2 + ptConf.spacing * Math.random();
-              ptConf.z = parms.radius * Math.cos(ptConf.radians);
+              ptConf.x = radius * Math.sin(cyl.conf.radians);
+              ptConf.y = -parms.length / 2 + cyl.conf.spacing * Math.random();
+              ptConf.z = radius * Math.cos(cyl.conf.radians);
               break;
             case 'particles':
-              ptConf.x = parms.radius * Math.sin(ptConf.radians);
-              ptConf.y = -parms.length / 2 + ptConf.spacing * Math.random();
-              ptConf.z = parms.radius * Math.cos(ptConf.radians);
+              ptConf.x = radius * Math.sin(cyl.conf.radians);
+              ptConf.y = -parms.length / 2 + cyl.conf.spacing * Math.random();
+              ptConf.z = radius * Math.cos(cyl.conf.radians);
               break;
           }
 
@@ -391,7 +373,7 @@
     }
 
     function animate(animateConf) {
-      var speed = viewer.theme.get('animation--speed') / 100;
+      var speed = viewer.theme.get('animation--speed') / 12;
       for (var cylinder in bc.cylinders) {
         var conf = bc.cylinders[cylinder].conf;
         var cyl = bc.cylinders[cylinder];
@@ -399,9 +381,9 @@
           var vertices = cyl.children[0].geometry.vertices;
           cyl.children[0].geometry.verticesNeedUpdate = true;
           for (var v = 0; v < vertices.length; v++) {
-            vertices[v] = movePoint(cyl, vertices[v], conf.animationDistance * speed);
+            vertices[v] = movePoint(cyl, vertices[v], conf.zStep * speed);
           }
-          cyl.rotation.y += toRadians(conf.animationRotate * speed);
+          cyl.rotation.y += conf.thetaStep * speed;
         }
       }
       viewer.render();
