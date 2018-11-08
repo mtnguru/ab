@@ -162,10 +162,6 @@
             bc.position.z = viewer.dataAttr['bc--position--z'];
           }
 
-//        if (!bc.rotation) bc.rotation = new THREE.Vector3();
-//        bc.rotation.x =  30 / 360 * 2 * Math.PI;
-//        bc.rotation.z = -45 / 360 * 2 * Math.PI;
-
           // Rotate bc
           if (viewer.dataAttr['bc--rotation--x']) {
             if (!bc.rotation) bc.rotation = new THREE.Vector3();
@@ -210,7 +206,7 @@
      */
     var createScene = function createScene (conf) {
       var parms;
-      var ptsGeometry;
+      var ptsGeometry;  // Geometry with all points for all arrows
       var ptsMaterial;
       var cyl;
       var ptConf;
@@ -222,24 +218,45 @@
             ptConf.y += parms.length / parms.numArrows;
             // Calculate the rotate distance in degrees and the z distance
 
-            var x = ptConf.x;
+            var point;
             var y = ptConf.y;
-            var z = ptConf.z;
-            theta = parms.radians;
+            var theta = ptConf.radians;
             for (var p = 0; p < parms.markerPts; p += parms.markerSize) {
-              var point = new THREE.Vector3(x, y, z);
+              // Create a point
+              var x = radius * Math.sin(theta);
+              var z = radius * Math.cos(theta);
+
+              point = new THREE.Vector3(x, y, z);
               point = movePoint(cyl, point, 0);
               ptsGeometry.vertices.push(point);
+
               theta += parms.thetaStep;
-              y += parms.zStep;
-              x = radius * Math.sin(theta);
-              z = radius * Math.cos(theta);
+              y += parms.yStep;
             }
+
+            // Draw the arrow head
+//          if (p > 0 && p < parms.arrowLength) {
+//            var coneGeometry = new CylinderBufferGeometry( 0, parms.arrowSize, parms.arrowSize, 5, 1 );
+//            coneGeometry.translate( 0, - 0.5, 0 );
+//            var cone = new Mesh( coneGeometry, new MeshBasicMaterial( { color: '#ffffff' } ) );
+//            cone.matrixAutoUpdate = false;
+//            cyl.add(cone);
+
+//            for (q = p; q < parms.arrowLength; q++) {
+//              var atheta = theta - 6.28 / 4;
+//              var ay = y + parms.zStep;
+//              var ax = radius * Math.sin(atheta);
+//              var az = radius * Math.cos(atheta);
+//              point = new THREE.Vector3(ax, y, az);
+//              point = movePoint(cyl, point, 0);
+//              lineGeometry.vertices.push(point);
+//            }
+//          }
             break;
 
           case 'particles':
             ptConf.y += parms.length / parms.numArrows;
-            var point = new THREE.Vector3(ptConf.x, ptConf.y, ptConf.z);
+            point = new THREE.Vector3(ptConf.x, ptConf.y, ptConf.z);
             point = movePoint(cyl, point, 0);
             ptsGeometry.vertices.push(point);
             break;
@@ -301,51 +318,31 @@
 
         // Initialize the ptConf array for this cylinder.
         ptConf = {};
-        switch (parms.markerType) {
-          case 'arrows':
-            cyl.conf.circumference = 2 * Math.PI * radius;
-            cyl.conf.J0 = bessel[parms.radius][1];  // vector down the Z axis
-            cyl.conf.J1 = bessel[parms.radius][2];  // total rotation distance in 'units
-//          cyl.conf.theta = cyl.conf.J1 * parms.radiusZoom * parms.markerLength / cyl.conf.circumference * 6.28;  // total rotation in theta
-            cyl.conf.theta = cyl.conf.J1 * parms.markerLength / cyl.conf.circumference * 6.28;  // total rotation in theta
-//          cyl.conf.theta = parms.markerLength / cyl.conf.circumference * 6.28;  // total rotation in theta
-            cyl.conf.thetaStep = cyl.conf.theta / parms.markerPts; // Calculate step in theta
-//          cyl.conf.zStep = cyl.conf.J0 * parms.markerLength / parms.markerPts;        // Calculate step in 'z'
-//          cyl.conf.zStep = cyl.conf.J0 * parms.markerLength / parms.markerPts;        // Calculate step in 'z'
-            cyl.conf.zStep = cyl.conf.J0 * parms.markerLength / parms.markerPts;        // Calculate step in 'z'
-            break;
-          case 'particles':
-            break;
-        }
+        cyl.conf.circumference = 2 * Math.PI * radius;
+        cyl.conf.J0 = bessel[parms.radius][1];  // vector down the Z axis
+        cyl.conf.J1 = bessel[parms.radius][2];  // total rotation distance in 'units
+        cyl.conf.theta = cyl.conf.J1 * parms.markerLength / cyl.conf.circumference * 6.28;  // total rotation in theta
+        cyl.conf.thetaStep = cyl.conf.theta / parms.markerPts; // Calculate step in theta
+        cyl.conf.yStep = cyl.conf.J0 * parms.markerLength / parms.markerPts;        // Calculate step in 'y'
+        cyl.conf.spacing = parms.length / (parms.numArrows);
 
         // Calculate the degrees rotation and plot each arrow path.
-        var rotate = 360 / parms.numArrowPaths;
+        var rotate = 6.28 / parms.numArrowPaths;
+        var random = true;
         for (var path = 0; path < parms.numArrowPaths; path++) {
-          cyl.conf.radians = toRadians(path * rotate + parms.rotateInitial);
-          cyl.conf.spacing = parms.length / (parms.numArrows + 1);
-
-          switch (parms.markerType) {
-            case 'arrows':
-              ptConf.x = radius * Math.sin(cyl.conf.radians);
-              ptConf.y = -parms.length / 2 + cyl.conf.spacing * Math.random();
-              ptConf.z = radius * Math.cos(cyl.conf.radians);
-              break;
-            case 'particles':
-              ptConf.x = radius * Math.sin(cyl.conf.radians);
-              ptConf.y = -parms.length / 2 + cyl.conf.spacing * Math.random();
-              ptConf.z = radius * Math.cos(cyl.conf.radians);
-              break;
-          }
+          var radians = path * rotate;
+          y = -parms.length / 2;
 
           for (var a = 0; a < parms.numArrows; a++) {
-            switch (parms.markerType) {
-              case 'arrows':
-                break;
-              case 'particles':
-                break;
+            if (random) {
+              ptConf.radians = radians + .75 * cyl.conf.theta * Math.random();
+              ptConf.y = y + .75 * cyl.conf.spacing * Math.random();
+            } else {
+              ptConf.radians = radians;
+              ptConf.y = y + cyl.conf.spacing;
             }
-
             plotParticle(a);
+            y += cyl.conf.spacing
           }
         }
 
@@ -381,7 +378,7 @@
           var vertices = cyl.children[0].geometry.vertices;
           cyl.children[0].geometry.verticesNeedUpdate = true;
           for (var v = 0; v < vertices.length; v++) {
-            vertices[v] = movePoint(cyl, vertices[v], conf.zStep * speed);
+            vertices[v] = movePoint(cyl, vertices[v], conf.yStep * speed);
           }
           cyl.rotation.y += conf.thetaStep * speed;
         }

@@ -73,6 +73,33 @@
       }
     }
 
+    function changeOpacity(button, event) {
+      var current;
+      var next;
+      if ($(button).hasClass('opaque')) {
+        current = 'opaque';
+        next = 'notvisible';
+      }
+      else if ($(button).hasClass('transparent')) {
+        current = 'transparent';
+        next = 'opaque';
+      }
+      else if ($(button).hasClass('notvisible')) {
+        current = 'notvisible';
+        next = 'transparent';
+      }
+      $(button).removeClass(current).addClass(next);
+
+      if ($(button).attr('id').indexOf('master') > -1) {
+        var $grandParent = $(button).parent().parent();
+        var $opacities = $grandParent.find('.az-control-opacity');
+        $opacities.find('.az-button').removeClass(current).addClass(next);
+//      $opacities.each(function (index, value) {
+//        $(this).removeClass(current).addClass(next);
+//      });
+      }
+    }
+
     /**
      * One of the styling controls has changed, get the value of the control and apply control through the theme module.
      * @param event
@@ -84,6 +111,8 @@
         $('#' + id + '--az-value', viewer.context)[0].value = event.target.value;
       } else if (this.className.indexOf('az-control-range') > -1) {
         $('#' + id + '--az-value', viewer.context)[0].value = event.target.value;
+      } else if (this.className.indexOf('az-button') > -1) {
+        changeOpacity(this, event);
       }
       viewer.theme.applyControl(id, event.target.value);
       if (viewer.producer.applyControl) {
@@ -238,10 +267,14 @@
           switch (control.type) {
             case 'color':
             case 'range':
-            case 'opacity':
             case 'scale':
             case 'rotation':
             case 'position':
+              viewer.theme.setInit(control.defaultValue, id, control.type);
+              break;
+            case 'opacity':
+            case 'opacityMaster':
+              // Set range slider and opacity button
               viewer.theme.setInit(control.defaultValue, id, control.type);
               break;
           }
@@ -292,6 +325,7 @@
         });
       }
 
+      var sid;
       // Set up event listeners
       for (var controlId in viewer.atomizer.theme.settings) {
         var control = viewer.atomizer.theme.settings[controlId];
@@ -299,33 +333,54 @@
         var element = $('.' + id, viewer.context)[0];
         if (element || control.type == 'rotation' || control.type == 'position') {
           switch (control.type) {
+
             case 'color':
               element.addEventListener("input", onControlChanged);
               break;
+
             case 'range':
             case 'rotation':
             case 'position':
-              var sid = id + '--az-slider';
+              sid = id + '--az-slider';
               $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
               viewer.theme.setInit(control.defaultValue, id, control.type);
               break;
+
+            case 'opacity':
+            case 'opacityMaster':
+              sid = id + '--az-slider';
+              $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
+              viewer.theme.setInit(control.defaultValue.slider || .7, id, control.type);
+
+              sid = id + '--az-button';
+              var value = control.buttonValue || 'transparent';
+              var $button = $('.' + sid, viewer.context);
+              $button.addClass(value);
+              $button[0].addEventListener("click", onControlChanged);
+              viewer.theme.setInit(control.defaultValue.button, id, control.type);
+              break;
+
             case 'saveyml':
               var elem = $('.' + id + '--button', viewer.context)[0];
               $('.' + id + '--button', viewer.context)[0].addEventListener("click", onButtonClicked);
               break;
+
             case 'selectyml':
               element.addEventListener("change", selectYmlChanged);
               break;
+
             case 'link':
             case 'button':
             case 'toggle':
               element.addEventListener("click", onButtonClicked);
               break;
+
             case 'radios':
               var $radios = $(element).find('input');
               $radios.click(onRadioClicked);
               $radios.siblings('label').click(onRadioLabelClicked);
               break;
+
             case 'popup-node':
               element.addEventListener("click", onPopupNode);
               break;
@@ -602,9 +657,13 @@
             $element.hasClass('az-control-position')) {
           if (index) {
             return $('#' + id + '--' + index + '--az-slider', viewer.context)[0].value;
-          } else {
+          }
+          else {
             return $('#' + id + '--az-slider', viewer.context)[0].value;
           }
+        } else if ($element.hasClass('az-control-opacity') ||
+                   $element.hasClass('az-control-opacityMaster')) {
+          return $('#' + id + '--az-slider', viewer.context)[0].value;
         } else if ($element.hasClass('az-control-radios')) {
           return $('input[name=' + $element.attr('id') + ']:checked', viewer.context).val();
         } else {

@@ -14,6 +14,53 @@ use Drupal\Component\Serialization\Json;
  */
 class AtomizerControlBlock {
 
+  static private function makeOpacityControl($id, $name, $defaultValue, $min, $max, $step) {
+    $opacityClass = 'az-opacity';
+    $opacityId = $id . '--' . $opacityClass;
+    $buttonClass = 'az-button';
+    $buttonId = $id . '--' . $buttonClass;
+    $sliderClass = 'az-slider';
+    $sliderId = $id . '--'  . $sliderClass;
+    $valueClass = 'az-value';
+    $valueId = $id . '--' . $valueClass;
+    return [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => $opacityId,
+        'class' => [$opacityClass, $opacityId, 'az-opacity'],
+      ],
+      'title' => [
+        '#markup' => '<div class="az-name">' . $name . '</div>'
+      ],
+      'button' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => $buttonId,
+          'class' => [$buttonClass, $buttonId],
+        ],
+      ],
+      'value' => [
+        '#type' => 'textfield',
+        '#default_value' => $defaultValue,
+        '#attributes' => [
+          'id' => $valueId,
+          'class' => [$valueClass, $valueId],
+        ],
+      ],
+      'range' => [
+        '#type' => 'range',
+        '#default_value' => $defaultValue,
+        '#min' => $min,
+        '#max' => $max,
+        '#step' => $step,
+        '#attributes' => [
+          'id' => $sliderId,
+          'class' => [$sliderClass, $sliderId],
+        ],
+      ],
+    ];
+  }
+
   static private function makeRangeControl($id, $name, $defaultValue, $min, $max, $step) {
     $sliderClass = 'az-slider';
     $sliderId = $id . '--'  . $sliderClass;
@@ -247,6 +294,19 @@ class AtomizerControlBlock {
 
       case 'range':
         $control = AtomizerControlBlock::makeRangeControl(
+          $id,
+          $controlConf[0],
+          $defaultValue,
+          $controlConf[3][0],
+          $controlConf[3][1],
+          $controlConf[3][2]
+        );
+        $addValue = true;
+        break;
+
+      case 'opacity':
+      case 'opacityMaster':
+        $control = AtomizerControlBlock::makeOpacityControl(
           $id,
           $controlConf[0],
           $defaultValue,
