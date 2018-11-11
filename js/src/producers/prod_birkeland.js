@@ -11,6 +11,7 @@
   Drupal.atomizer.producers.birkelandC = function (_viewer) {
     var viewer = _viewer;
     var mouseMode;
+    var bc;
 
     /**
      * Return the objects which are active for hovering
@@ -108,9 +109,10 @@
       localStorage.setItem('atomizer_birkeland_nid', bc.az.nid);
       createIntersectLists();
       viewer.scene.az = {
-        title: bc.az.title, // Use object title as scene title
-        name: bc.az.name,  // Use object name as the scene name
-        objectNid: bc.az.nid
+        title: bc.az.title,    // Use object title as scene title
+        name: bc.az.name,      // Use object name as the scene name
+        objectNid: bc.az.nid,  // Nid of current birkeland current
+        bc: bc                 // Birkeland current object
       };
     };
 
@@ -167,7 +169,7 @@
 
     var birkelandLoaded = function birkelandLoaded(results) {
       var conf = results[0].ymlContents;
-      viewer.birkeland.createScene(conf);
+      var bc = viewer.birkeland.createScene(conf);
     };
 
     // Initialize Event Handlers
@@ -183,13 +185,38 @@
       });
     }
 
+    function applyControl (id, value) {
+      if (id == 'cylinders--extrude') {           // Expand the Y axis
+        var bc = viewer.scene.az.bc;
+        var cn = 0;
+        for (var c in bc.cylinders) {
+          if (bc.cylinders.hasOwnProperty(c)) {
+            bc.cylinders[c].position.y = value * cn;
+            cn++;
+          }
+        }
+        viewer.render();
+      } else if (id == 'cylinders--radius') {     // Change radius of all cylinders
+        var bc = viewer.scene.az.bc;
+        for (var c in bc.cylinders) {
+          if (bc.cylinders.hasOwnProperty(c)) {
+            var cyl = bc.cylinders[c];
+            cyl.position.y = value * cn;
+            cn++;
+          }
+        }
+        viewer.render();
+      }
+    }
+
     return {
       createView: createView,
       setDefaults: setDefaults,
       mouseUp: mouseUp,
       hoverObjects: hoverObjects,
       hovered: hovered,
-      objectLoaded: objectLoaded
+      objectLoaded: objectLoaded,
+      applyControl: applyControl
     };
   };
 

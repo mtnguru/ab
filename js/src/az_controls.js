@@ -93,6 +93,11 @@
       if ($(button).attr('id').indexOf('master') > -1) {
         var $grandParent = $(button).parent().parent();
         var $opacities = $grandParent.find('.az-control-opacity');
+        $opacities.find('.az-button')
+            .removeClass('opaque')
+            .removeClass('transparent')
+            .removeClass('invisible')
+            .addClass(next);
         $opacities.find('.az-button').removeClass(current).addClass(next);
 //      $opacities.each(function (index, value) {
 //        $(this).removeClass(current).addClass(next);
@@ -101,7 +106,9 @@
     }
 
     /**
-     * One of the styling controls has changed, get the value of the control and apply control through the theme module.
+     * One of the styling controls has changed, get the value of the control
+     * and apply control through both the theme and producer modules.
+     *
      * @param event
      */
     function onControlChanged(event) {

@@ -8,13 +8,11 @@
 
   Drupal.atomizer.birkelandC = function (_viewer) {
 
-
 //  labels = [
 //      [X, "Chart Label",jz,jθ,Delta x,"Vector Angle",Magnitude,"Assymp ch"],
 //      [x, "fig. 1", J0,J1,0.2,"°cw from +z", "of j vector,k/sqrt(x)"]
 //  ];
 
-    var shit = 1;
     // Bessel numbers - X, chrt pt, j0, J1
     // Pt
     // J0
@@ -23,64 +21,63 @@
     // Magnitude of J vector
     // Assymp Chk - k/sqrt(x)
     var bessel = {
-      0.05:[1,     1.000,  0.000,   0, 1.00, null],
-      0.2: [null,  0.990,  0.100,   6, 1.00, 1.82],
-      0.4: [null,  0.960,  0.196,  12, 0.98, 1.29],
-      0.6: [null,  0.912,  0.287,  17, 0.96, 1.05],
-      0.8: [null,  0.846,  0.369,  24, 0.92, 0.91],
-      1:   [null,  0.765,  0.440,  30, 0.88, 0.82],
-      1.2: [null,  0.671,  0.498,  37, 0.84, 0.74],
-      1.4: [null,  0.567,  0.542,  44, 0.78, 0.69],
-      1.6: [null,  0.455,  0.570,  51, 0.73, 0.64],
-      1.8: [null,  0.340,  0.582,  60, 0.67, 0.61],
-      2:   [null,  0.224,  0.577,  69, 0.62, 0.58],
-      2.2: [null,  0.110,  0.556,  79, 0.57, 0.55],
-      2.4: [2,     0.003,  0.520,  90, 0.52, 0.53],
-      2.6: [null, -0.097,  0.471, 102, 0.48, 0.51],
-      2.8: [null, -0.185,  0.410, 114, 0.45, 0.49],
-      3:   [null, -0.260,  0.339, 127, 0.43, 0.47],
-      3.2: [null, -0.320,  0.261, 141, 0.41, 0.46],
-      3.4: [null, -0.364,  0.179, 154, 0.41, 0.44],
-      3.6: [null, -0.392,  0.095, 166, 0.40, 0.43],
-      3.8: [3,    -0.403,  0.013, 178, 0.40, 0.42],
-      4:   [null, -0.397, -0.066, 189, 0.40, 0.41],
-      4.2: [null, -0.377, -0.139, 200, 0.40, 0.40],
-      4.4: [null, -0.342, -0.203, 211, 0.40, 0.39],
-      4.6: [null, -0.296, -0.257, 221, 0.39, 0.38],
-      4.8: [null, -0.240, -0.298, 231, 0.38, 0.37],
-      5:   [null, -0.178, -0.328, 242, 0.37, 0.36],
-      5.2: [null, -0.110, -0.343, 252, 0.36, 0.36],
-      5.4: [null, -0.041, -0.345, 263, 0.35, 0.35],
-      5.6: [4,     0.027, -0.334, 275, 0.34, 0.34],
-      5.8: [null,  0.092, -0.311, 286, 0.32, 0.34],
-      6:   [null,  0.151, -0.277, 299, 0.32, 0.33],
-      6.2: [null,  0.202, -0.233, 311, 0.31, 0.33],
-      6.4: [null,  0.243, -0.182, 323, 0.30, 0.32],
-      6.6: [null,  0.274, -0.125, 335, 0.30, 0.32],
-      6.8: [null,  0.293, -0.065, 347, 0.30, 0.31],
-      7:   [5,     0.300, -0.005,  -1, 0.30, 0.31],
-      7.2: [null,  0.295,  0.054,  10, 0.30, 0.30],
-      7.4: [null,  0.279,  0.110,  21, 0.30, 0.30],
-      7.6: [null,  0.252,  0.159,  32, 0.30, 0.30],
-      7.8: [null,  0.215,  0.201,  43, 0.29, 0.29],
-      8:   [null,  0.172,  0.235,  54, 0.29, 0.29],
-      8.2: [null,  0.122,  0.258,  65, 0.29, 0.28],
-      8.4: [null,  0.069,  0.271,  76, 0.28, 0.28],
-      8.6: [6,     0.015,  0.273,  87, 0.27, 0.28],
-      8.8: [null, -0.039,  0.264,  98, 0.27, 0.27],
-      9:   [null, -0.090,  0.245, 110, 0.26, 0.27],
-      9.2: [null, -0.137,  0.217, 122, 0.26, 0.27],
-      9.4: [null, -0.177,  0.182, 134, 0.25, 0.27],
-      9.6: [null, -0.209,  0.140, 146, 0.25, 0.26],
-      9.8: [null, -0.232,  0.093, 158, 0.25, 0.26],
-     10:   [null, -0.246,  0.043, 170, 0.25, 0.26],
-     10.2: [7,    -0.250, -0.007, 182, 0.25, 0.26],
-     10.4: [null, -0.243, -0.055, 193, 0.25, 0.25],
-     10.6: [null, -0.228, -0.101, 204, 0.25, 0.25],
-     10.8: [null, -0.203, -0.142, 215, 0.25, 0.25]
+      0.05: [1,     1.000,  0.000,   0, 1.00, null],
+      0.2:  [null,  0.990,  0.100,   6, 1.00, 1.82],
+      0.4:  [null,  0.960,  0.196,  12, 0.98, 1.29],
+      0.6:  [null,  0.912,  0.287,  17, 0.96, 1.05],
+      0.8:  [null,  0.846,  0.369,  24, 0.92, 0.91],
+      1:    [null,  0.765,  0.440,  30, 0.88, 0.82],
+      1.2:  [null,  0.671,  0.498,  37, 0.84, 0.74],
+      1.4:  [null,  0.567,  0.542,  44, 0.78, 0.69],
+      1.6:  [null,  0.455,  0.570,  51, 0.73, 0.64],
+      1.8:  [null,  0.340,  0.582,  60, 0.67, 0.61],
+      2:    [null,  0.224,  0.577,  69, 0.62, 0.58],
+      2.2:  [null,  0.110,  0.556,  79, 0.57, 0.55],
+      2.4:  [2,     0.003,  0.520,  90, 0.52, 0.53],
+      2.6:  [null, -0.097,  0.471, 102, 0.48, 0.51],
+      2.8:  [null, -0.185,  0.410, 114, 0.45, 0.49],
+      3:    [null, -0.260,  0.339, 127, 0.43, 0.47],
+      3.2:  [null, -0.320,  0.261, 141, 0.41, 0.46],
+      3.4:  [null, -0.364,  0.179, 154, 0.41, 0.44],
+      3.6:  [null, -0.392,  0.095, 166, 0.40, 0.43],
+      3.8:  [3,    -0.403,  0.013, 178, 0.40, 0.42],
+      4:    [null, -0.397, -0.066, 189, 0.40, 0.41],
+      4.2:  [null, -0.377, -0.139, 200, 0.40, 0.40],
+      4.4:  [null, -0.342, -0.203, 211, 0.40, 0.39],
+      4.6:  [null, -0.296, -0.257, 221, 0.39, 0.38],
+      4.8:  [null, -0.240, -0.298, 231, 0.38, 0.37],
+      5:    [null, -0.178, -0.328, 242, 0.37, 0.36],
+      5.2:  [null, -0.110, -0.343, 252, 0.36, 0.36],
+      5.4:  [null, -0.041, -0.345, 263, 0.35, 0.35],
+      5.6:  [4,     0.027, -0.334, 275, 0.34, 0.34],
+      5.8:  [null,  0.092, -0.311, 286, 0.32, 0.34],
+      6:    [null,  0.151, -0.277, 299, 0.32, 0.33],
+      6.2:  [null,  0.202, -0.233, 311, 0.31, 0.33],
+      6.4:  [null,  0.243, -0.182, 323, 0.30, 0.32],
+      6.6:  [null,  0.274, -0.125, 335, 0.30, 0.32],
+      6.8:  [null,  0.293, -0.065, 347, 0.30, 0.31],
+      7:    [5,     0.300, -0.005,  -1, 0.30, 0.31],
+      7.2:  [null,  0.295,  0.054,  10, 0.30, 0.30],
+      7.4:  [null,  0.279,  0.110,  21, 0.30, 0.30],
+      7.6:  [null,  0.252,  0.159,  32, 0.30, 0.30],
+      7.8:  [null,  0.215,  0.201,  43, 0.29, 0.29],
+      8:    [null,  0.172,  0.235,  54, 0.29, 0.29],
+      8.2:  [null,  0.122,  0.258,  65, 0.29, 0.28],
+      8.4:  [null,  0.069,  0.271,  76, 0.28, 0.28],
+      8.6:  [6,     0.015,  0.273,  87, 0.27, 0.28],
+      8.8:  [null, -0.039,  0.264,  98, 0.27, 0.27],
+      9:    [null, -0.090,  0.245, 110, 0.26, 0.27],
+      9.2:  [null, -0.137,  0.217, 122, 0.26, 0.27],
+      9.4:  [null, -0.177,  0.182, 134, 0.25, 0.27],
+      9.6:  [null, -0.209,  0.140, 146, 0.25, 0.26],
+      9.8:  [null, -0.232,  0.093, 158, 0.25, 0.26],
+     10:    [null, -0.246,  0.043, 170, 0.25, 0.26],
+     10.2:  [7,    -0.250, -0.007, 182, 0.25, 0.26],
+     10.4:  [null, -0.243, -0.055, 193, 0.25, 0.25],
+     10.6:  [null, -0.228, -0.101, 204, 0.25, 0.25],
+     10.8:  [null, -0.203, -0.142, 215, 0.25, 0.25]
     };
 
-    var bc;
     var viewer = _viewer;
     var $sceneName = $('.scene--name', viewer.context);
     var sceneInformation = $('.scene--information', viewer.context)[0];
@@ -118,7 +115,6 @@
      * @param results
      */
     var doCreateBirkeland = function doCreateBirkeland (results) {
-      var az;
       for (var i = 0; i < results.length; i++) {
         var result = results[i];
         if (result.command == 'loadNodeCommand') {
@@ -132,21 +128,19 @@
             sceneProperties.innerHTML = result.data.properties;
           }
 
-          if (bc) {
+          if (viewer.scene.az && viewer.scene.az.bc) {
             // Remove any birkeland current's currently displayed
             deleteScene(bc);
-            bc = null;
+            viewer.scene.az.bc = null;
           }
 
-          bc = createScene(result.data.nodeConf);
-          bc.az = {
+          var bc = createBirkeland(result.data.nodeConf);
+          viewer.scene.az = {
             nid: result.data.nid,
             name: result.data.nodeName,
             title: result.data.nodeTitle,
+            bc: bc
           };
-//        bc.az.nid = result.data.nid;
-//        bc.az.name = result.data.nodeName;
-//        bc.az.title = result.data.nodeTitle;
 
           // Move bc position
           if (viewer.dataAttr['object--position--x']) {
@@ -204,7 +198,7 @@
      * @param conf
      * @returns {THREE.Group|*}
      */
-    var createScene = function createScene (conf) {
+    var createBirkeland = function createBirkeland (conf) {
       var parms;
       var ptsGeometry;  // Geometry with all points for all arrows
       var ptsMaterial;
@@ -316,8 +310,7 @@
         bc.add(cyl);
         bc.cylinders[cylinder] = cyl;
 
-        // Initialize the ptConf array for this cylinder.
-        ptConf = {};
+        // Initialize variables for this cylinder.
         cyl.conf.circumference = 2 * Math.PI * radius;
         cyl.conf.J0 = bessel[parms.radius][1];  // vector down the Z axis
         cyl.conf.J1 = bessel[parms.radius][2];  // total rotation distance in 'units
@@ -329,10 +322,14 @@
         // Calculate the degrees rotation and plot each arrow path.
         var rotate = 6.28 / parms.numArrowPaths;
         var random = true;
+        ptConf = {};
+
+        // Create arrows for each arrowPath
         for (var path = 0; path < parms.numArrowPaths; path++) {
           var radians = path * rotate;
           y = -parms.length / 2;
 
+          // Create each of the arrows
           for (var a = 0; a < parms.numArrows; a++) {
             if (random) {
               ptConf.radians = radians + .75 * cyl.conf.theta * Math.random();
@@ -371,10 +368,10 @@
 
     function animate(animateConf) {
       var speed = viewer.theme.get('animation--speed') / 12;
-      for (var cylinder in bc.cylinders) {
-        var conf = bc.cylinders[cylinder].conf;
-        var cyl = bc.cylinders[cylinder];
+      for (var cylinder in viewer.scene.az.bc.cylinders) {
+        var cyl = viewer.scene.az.bc.cylinders[cylinder];
         if (cyl) {
+          var conf = cyl.conf;
           var vertices = cyl.children[0].geometry.vertices;
           cyl.children[0].geometry.verticesNeedUpdate = true;
           for (var v = 0; v < vertices.length; v++) {
@@ -416,7 +413,7 @@
     return {
       az: function () { return atom.az; },
       buttonClicked: buttonClicked,
-      createScene: createScene,
+      createBirkeland: createBirkeland,
       deleteScene: deleteScene,
       loadObject: loadObject,
       animate: animate
