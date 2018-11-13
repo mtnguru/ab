@@ -135,11 +135,10 @@
           }
 
           var bc = createBirkeland(result.data.nodeConf);
-          viewer.scene.az = {
+          bc.az = {
             nid: result.data.nid,
             name: result.data.nodeName,
             title: result.data.nodeTitle,
-            bc: bc
           };
 
           // Move bc position
@@ -206,7 +205,7 @@
       var ptConf;
 
       function plotParticle(a) {
-        var radius = parms.radius * parms.radiusZoom;
+        var radius = parms.radius * parms.radiusZoom + 5;
         switch (parms.markerType) {
           case 'arrows':
             ptConf.y += parms.length / parms.numArrows;
@@ -300,7 +299,7 @@
         // Create the cylinder
         cyl = makeCylinder(
           radius,
-          parms.length,
+          parms.length + 20,
           parms.color,
           viewer.theme.get('cylinders-' + cylinder + '--opacity')
         );
@@ -321,22 +320,26 @@
 
         // Calculate the degrees rotation and plot each arrow path.
         var rotate = 6.28 / parms.numArrowPaths;
-        var random = true;
+        var random = viewer.theme.get('particles--random');
         ptConf = {};
 
         // Create arrows for each arrowPath
         for (var path = 0; path < parms.numArrowPaths; path++) {
           var radians = path * rotate;
-          y = -parms.length / 2;
+          var y = -parms.length / 2;
 
           // Create each of the arrows
+          var stagger = 0;
           for (var a = 0; a < parms.numArrows; a++) {
             if (random) {
               ptConf.radians = radians + .75 * cyl.conf.theta * Math.random();
               ptConf.y = y + .75 * cyl.conf.spacing * Math.random();
             } else {
               ptConf.radians = radians;
-              ptConf.y = y + cyl.conf.spacing;
+              ptConf.y = y + .65 * cyl.conf.spacing * Math.random();
+              if (++stagger == 3) {
+                stagger = -2;
+              }
             }
             plotParticle(a);
             y += cyl.conf.spacing
@@ -348,9 +351,20 @@
         cyl.add(points);
       }
 
+      extrudeCylinders(bc, viewer.theme.get('cylinders--extrude'));
+
       viewer.render();
       return bc;
     };
+
+//  var bc = viewer.scene.az.bc;
+//  var cn = 0;
+//  for (var c in bc.cylinders) {
+//    if (bc.cylinders.hasOwnProperty(c)) {
+//      bc.cylinders[c].position.y = value * cn;
+//      cn++;
+//    }
+//  }
 
     function movePoint (cyl, point, distance) {
       point.y += distance;
@@ -364,6 +378,20 @@
         }
       }
       return point;
+    }
+
+    /**
+     * Extrude the cylinders
+     * @param val
+     */
+    function extrudeCylinders (bc, val) {
+      var cn = 0;
+      for (var c in bc.cylinders) {
+        if (bc.cylinders.hasOwnProperty(c)) {
+          bc.cylinders[c].position.y = val * cn;
+          cn++;
+        }
+      }
     }
 
     function animate(animateConf) {
@@ -415,6 +443,7 @@
       buttonClicked: buttonClicked,
       createBirkeland: createBirkeland,
       deleteScene: deleteScene,
+      extrudeCylinders: extrudeCylinders,
       loadObject: loadObject,
       animate: animate
     };

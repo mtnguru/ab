@@ -467,7 +467,7 @@
       }
     };
 
-    var setBaseSetting = function set(value, id) {
+    function set(value, id) {
       currentSet.settings[id]['baseSetting'] = value;
     };
 

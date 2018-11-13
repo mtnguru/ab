@@ -150,15 +150,16 @@
      * @returns {boolean}
      */
     function onButtonClicked(event) {
-      event.preventDefault();
 
       var args = this.id.split("--");
       switch (args[1]) {
         case 'selectyml':
+          event.preventDefault();
           viewer[args[0]].overwriteYml();
           break;
 
         case 'saveyml':
+          event.preventDefault();
           var wrapper  = $('3' + args[0] + '--saveyml', viewer.context)[0];
           var name = wrapper.querySelector('input[name=name]').value;
           var filename = wrapper.querySelector('input[name=filename]').value;
@@ -170,7 +171,7 @@
             if (filename.indexOf('.yml') == -1) {
               filename += '.yml';
             }
-            // Save the yml file154G
+            // Save the yml file
             viewer[args[0]].saveYml({
               name: name,
               filepath: viewer[args[0]].getYmlDirectory() + '/' + filename.replace(/[|&;$%@"<>()+,]/g, "").replace(/[ -]/g, '_')
@@ -179,6 +180,10 @@
           break;
 
         case 'snapshot':
+          event.preventDefault();
+          break;
+
+        case 'random':
           break;
 
         default:
@@ -284,6 +289,9 @@
               // Set range slider and opacity button
               viewer.theme.setInit(control.defaultValue, id, control.type);
               break;
+            case 'checkbox':
+              viewer.theme.setInit(control.defaultValue, id, control.type);
+              break;
           }
         }
       }
@@ -378,7 +386,12 @@
 
             case 'link':
             case 'button':
+              element.addEventListener("click", onButtonClicked);
+              break;
+
             case 'toggle':
+            case 'checkbox':
+              viewer.theme.setInit(control.defaultValue, id, control.type);
               element.addEventListener("click", onButtonClicked);
               break;
 
@@ -673,6 +686,8 @@
           return $('#' + id + '--az-slider', viewer.context)[0].value;
         } else if ($element.hasClass('az-control-radios')) {
           return $('input[name=' + $element.attr('id') + ']:checked', viewer.context).val();
+        } else if ($element.hasClass('az-control-checkbox')) {
+          return $('#' + id).is(':checked');
         } else {
           return $element.val();
         }

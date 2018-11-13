@@ -288,6 +288,7 @@ class AtomizerControlBlock {
           '#type' => 'checkbox',
 //          '#attributes' => array('onclick' => 'return (false);'),
           '#title' => $controlConf[0],
+          '#default_value' => $defaultValue,
         ];
         $addValue = true;
         break;

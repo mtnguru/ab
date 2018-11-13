@@ -186,18 +186,11 @@
     }
 
     function applyControl (id, value) {
+      var bc = viewer.scene.az.bc;
       if (id == 'cylinders--extrude') {           // Expand the Y axis
-        var bc = viewer.scene.az.bc;
-        var cn = 0;
-        for (var c in bc.cylinders) {
-          if (bc.cylinders.hasOwnProperty(c)) {
-            bc.cylinders[c].position.y = value * cn;
-            cn++;
-          }
-        }
+        viewer.birkeland.extrudeCylinders(bc, value);
         viewer.render();
       } else if (id == 'cylinders--radius') {     // Change radius of all cylinders
-        var bc = viewer.scene.az.bc;
         for (var c in bc.cylinders) {
           if (bc.cylinders.hasOwnProperty(c)) {
             var cyl = bc.cylinders[c];
