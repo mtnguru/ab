@@ -53,7 +53,7 @@
     var addDataAttr = function () {
       for (var name in viewer.dataAttr) {
         if (currentSet.settings[name]) {
-          currentSet.settings[name].defaultValue = viewer.dataAttr[name];
+          currentSet.settings[name].setting = viewer.dataAttr[name];
         }
       }
     };
@@ -156,12 +156,12 @@
 //      console.log(id);
         if (!currentSet.settings[id]) continue;
 
-        // if defaultValue defines an array then set all elements.
-        if (Object.prototype.toString.call(currentSet.settings[id].defaultValue) === '[object Array]') {  // If it's an array
+        // if setting defines an array then set all elements.
+        if (Object.prototype.toString.call(currentSet.settings[id].setting) === '[object Array]') {  // If it's an array
           var comp = id.split('--');
           var ind = 'xyz'.indexOf(comp[2]);
-          def = defaultSet.settings[id].defaultValue[ind];
-          if (updateAll || currentSet.settings[id].defaultValue[ind] != def) {
+          def = defaultSet.settings[id].setting[ind];
+          if (updateAll || currentSet.settings[id].setting[ind] != def) {
             if (!controlsOnly) {
               applyControl(id, def);
             }
@@ -173,19 +173,19 @@
             element = $('#' + id + '--az-value')[0];
             if (element) element.value = def;
           }
-          // else defaultValue is not an array, set the one value
+          // else setting is not an array, set the one value
         } else {
           if (viewer.dataAttr && viewer.dataAttr[id]) {
             def = viewer.dataAttr[id];
           } else if (defaultSet.settings[id]) {
-              def = defaultSet.settings[id].defaultValue;
+              def = defaultSet.settings[id].setting;
           } else {
-//          alert('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
-            console.log('Error: No defaultValue found for ' + id + ' in ' + defaultSet.filepath);
+//          alert('Error: No setting found for ' + id + ' in ' + defaultSet.filepath);
+            console.log('Error: No setting found for ' + id + ' in ' + defaultSet.filepath);
           }
-          if (updateAll || currentSet.settings[id].defaultValue != def) {
+          if (updateAll || currentSet.settings[id].setting != def) {
             if (!controlsOnly && defaultSet.settings[id]) {
-              applyControl(id, defaultSet.settings[id].defaultValue);
+              applyControl(id, defaultSet.settings[id].setting);
             }
             var element = $('#' + id)[0];
             if (element) {
@@ -212,11 +212,11 @@
       var argNames = args[0].split("-");
       // Set the currentSet
       if (args.length === 4) {
-        currentSet.settings[args[0] + '--' + args[1] + '--' + args[2] + '--' + args[3]].defaultValue = value;
+        currentSet.settings[args[0] + '--' + args[1] + '--' + args[2] + '--' + args[3]].setting = value;
       } else if (args.length === 3) {
-        currentSet.settings[args[0] + '--' + args[1] + '--' + args[2]].defaultValue = value;
+        currentSet.settings[args[0] + '--' + args[1] + '--' + args[2]].setting = value;
       } else {
-        currentSet.settings[args[0] + '--' + args[1]].defaultValue = value;
+        currentSet.settings[args[0] + '--' + args[1]].setting = value;
       }
 
       switch (argNames[0]) {
@@ -310,8 +310,8 @@
                 case 'depth':
                   if (argNames[0] == 'plane') {
                     node.geometry = THREE.PlaneBufferGeometry(
-                      currentSet['settings']['plane--width'],
-                      currentSet['settings']['plane--depth']
+                      currentSet.settings['plane--width'],
+                      currentSet.settings['plane--depth']
                     );
                   }
                   break;
@@ -453,22 +453,22 @@
      * @param type
      */
     var set = function set(value, id) {
-      currentSet.settings[id]['defaultValue'] = value;
+      currentSet.settings[id].setting = value;
     };
 
     var setInit = function setInit(value, id, type) {
       if (!currentSet.settings[id]) {
         currentSet.settings[id] = {
-          'defaultValue': value,
+          'setting': value,
           'type': type
         }
       } else {
-//      currentSet.settings[id]['defaultValue'] = value;
+//      currentSet.settings[id].setting = value;
       }
     };
 
     function set(value, id) {
-      currentSet.settings[id]['baseSetting'] = value;
+      currentSet.settings[id].baseSetting = value;
     };
 
     /**
@@ -485,7 +485,7 @@
         sid += '--' + index;
       }
       if (currentSet.settings[sid]) {
-        return currentSet.settings[sid]['defaultValue'];
+        return currentSet.settings[sid].setting;
       } else
       {
         return viewer.controls.getDefault(sid, index);

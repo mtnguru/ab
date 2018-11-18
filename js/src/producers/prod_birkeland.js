@@ -63,24 +63,20 @@
         case 1:   // Select/Unselect protons to add an electron to.
           switch (mouseMode) {
             case 'electronsAdd_breakit':
-              var objects = viewer.controls.findIntersects(visibleParticles);
-              if (objects.length) {          // Object found
-              }
-              viewer.render();
               break;
           }
           break;
 
         case 2:
           // Middle button always sets the edit nuclet
-          var intersects = viewer.controls.findIntersects(visibleProtons);
+/*        var intersects = viewer.controls.findIntersects(visibleProtons);
           if (intersects.length == 0) {
             viewer.render();
             return false;
           } else {
             viewer.render();
             return false;
-          }
+          } */
           break;
       } // switch which mouse button
     }
@@ -114,6 +110,21 @@
         objectNid: bc.az.nid,  // Nid of current birkeland current
         bc: bc                 // Birkeland current object
       };
+
+      for (var c in bc.cylinders) {
+        if (bc.cylinders.hasOwnProperty(c)) {
+          var conf = bc.cylinders[c].conf;
+          if (conf.name) {
+            var fullname = '#particles-' + c + '--opacity .az-color';
+            $('#particles-' + c + '--opacity .az-name', viewer.context).html(conf.name);
+            $('#cylinders-' + c + '--opacity .az-name', viewer.context).html(conf.name);
+            $('#particles-' + c + '--opacity .az-color', viewer.context).css('background', '#' + conf.color.toString(16));
+            $('#cylinders-' + c + '--opacity .az-color', viewer.context).css('background', '#' + conf.color.toString(16));
+          }
+        }
+      }
+
+      viewer.render();
     };
 
     /**

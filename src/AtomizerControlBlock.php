@@ -17,8 +17,8 @@ class AtomizerControlBlock {
   static private function makeOpacityControl($id, $name, $defaultValue, $min, $max, $step) {
     $opacityClass = 'az-opacity';
     $opacityId = $id . '--' . $opacityClass;
-    $buttonClass = 'az-button';
-    $buttonId = $id . '--' . $buttonClass;
+    $colorClass = 'az-color';
+    $colorId = $id . '--' . $colorClass;
     $sliderClass = 'az-slider';
     $sliderId = $id . '--'  . $sliderClass;
     $valueClass = 'az-value';
@@ -32,11 +32,11 @@ class AtomizerControlBlock {
       'title' => [
         '#markup' => '<div class="az-name">' . $name . '</div>'
       ],
-      'button' => [
+      'color' => [
         '#type' => 'container',
         '#attributes' => [
-          'id' => $buttonId,
-          'class' => [$buttonClass, $buttonId],
+          'id' => $colorId,
+          'class' => [$colorClass, $colorId],
         ],
       ],
       'value' => [
@@ -378,7 +378,7 @@ class AtomizerControlBlock {
           $control[$id . '--' . $axis]['#attributes']['class'][] = 'az-indent';
           $theme[$id . '--' . $axis] = [
             'type' => $controlConf[1],
-            'defaultValue' => $defaultValue[$ind],
+            'setting' => $defaultValue[$ind],
           ];
         }
         break;
@@ -473,7 +473,7 @@ class AtomizerControlBlock {
     if ($addValue) {
       $theme[$id] = [
         'type' => $controlConf[1],
-        'defaultValue' => $defaultValue,
+        'setting' => $defaultValue,
       ];
     }
     $containerClasses[] = $id;

@@ -282,15 +282,15 @@
             case 'scale':
             case 'rotation':
             case 'position':
-              viewer.theme.setInit(control.defaultValue, id, control.type);
+              viewer.theme.setInit(control.setting, id, control.type);
               break;
             case 'opacity':
             case 'opacityMaster':
               // Set range slider and opacity button
-              viewer.theme.setInit(control.defaultValue, id, control.type);
+              viewer.theme.setInit(control.setting, id, control.type);
               break;
             case 'checkbox':
-              viewer.theme.setInit(control.defaultValue, id, control.type);
+              viewer.theme.setInit(control.setting, id, control.type);
               break;
           }
         }
@@ -358,21 +358,21 @@
             case 'position':
               sid = id + '--az-slider';
               $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
-              viewer.theme.setInit(control.defaultValue, id, control.type);
+              viewer.theme.setInit(control.setting, id, control.type);
               break;
 
             case 'opacity':
             case 'opacityMaster':
               sid = id + '--az-slider';
               $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
-              viewer.theme.setInit(control.defaultValue.slider || .7, id, control.type);
+              viewer.theme.setInit(control.setting || .7, id, control.type);
 
-              sid = id + '--az-button';
-              var value = control.buttonValue || 'transparent';
-              var $button = $('.' + sid, viewer.context);
-              $button.addClass(value);
-              $button[0].addEventListener("click", onControlChanged);
-              viewer.theme.setInit(control.defaultValue.button, id, control.type);
+//            sid = id + '--az-button';
+//            var value = control.buttonValue || 'transparent';
+//            var $button = $('.' + sid, viewer.context);
+//            $button.addClass(value);
+//            $button[0].addEventListener("click", onControlChanged);
+//            viewer.theme.setInit(control.setting.button, id, control.type);
               break;
 
             case 'saveyml':
@@ -391,7 +391,7 @@
 
             case 'toggle':
             case 'checkbox':
-              viewer.theme.setInit(control.defaultValue, id, control.type);
+              viewer.theme.setInit(control.setting, id, control.type);
               element.addEventListener("click", onButtonClicked);
               break;
 

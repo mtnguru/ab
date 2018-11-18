@@ -110,7 +110,7 @@
     };
 
     /**
-     * Callback from ajax call to load and display an birkeland current.
+     * Callback from ajax call to load and display a birkeland current.
      *
      * @param results
      */
@@ -169,7 +169,6 @@
             bc.rotation.z = toRadians(viewer.dataAttr['bc--rotation--z']);
           }
           viewer.producer.objectLoaded(bc);
-          viewer.render();
 
           if (loadCallback) {
             loadCallback();
@@ -206,6 +205,7 @@
 
       function plotParticle(a) {
         var radius = parms.radius * parms.radiusZoom + 5;
+        // Calculate the rotate distance in degrees and the z distance
         switch (parms.markerType) {
           case 'arrows':
             ptConf.y += parms.length / parms.numArrows;
@@ -226,25 +226,6 @@
               theta += parms.thetaStep;
               y += parms.yStep;
             }
-
-            // Draw the arrow head
-//          if (p > 0 && p < parms.arrowLength) {
-//            var coneGeometry = new CylinderBufferGeometry( 0, parms.arrowSize, parms.arrowSize, 5, 1 );
-//            coneGeometry.translate( 0, - 0.5, 0 );
-//            var cone = new Mesh( coneGeometry, new MeshBasicMaterial( { color: '#ffffff' } ) );
-//            cone.matrixAutoUpdate = false;
-//            cyl.add(cone);
-
-//            for (q = p; q < parms.arrowLength; q++) {
-//              var atheta = theta - 6.28 / 4;
-//              var ay = y + parms.zStep;
-//              var ax = radius * Math.sin(atheta);
-//              var az = radius * Math.cos(atheta);
-//              point = new THREE.Vector3(ax, y, az);
-//              point = movePoint(cyl, point, 0);
-//              lineGeometry.vertices.push(point);
-//            }
-//          }
             break;
 
           case 'particles':
@@ -253,12 +234,32 @@
             point = movePoint(cyl, point, 0);
             ptsGeometry.vertices.push(point);
             break;
+
+          case 'lines':
+            var point;
+            var y = ptConf.y += parms.length / parms.numArrows;
+            var theta = ptConf.radians;
+            var geometry = new THREE.Geometry();
+            for (var p = 0; p < parms.markerPts; p += parms.markerSize) {
+              // Create a point
+              var x = radius * Math.sin(theta);
+              var z = radius * Math.cos(theta);
+
+              point = new THREE.Vector3(x, y, z);
+//            point = moveSegment(cyl, point, 0);
+              geometry.vertices.push(point);
+
+              theta += parms.thetaStep;
+              y += parms.yStep;
+            }
+
+            var line = new THREE.Line( geometry, ptsMaterial );
+            return line;
         }
-      }
+      } // function plotParticle
 
       // Create the birkeland current group/wrapper
       var bc = new THREE.Group();
-      bc.cylinders = {};
       if (conf.object.rotation) {
         bc.rotation = new THREE.Vector3();
         bc.rotation.set(
@@ -271,6 +272,7 @@
       viewer.scene.add(bc);
 
       // Create each cylinder
+      bc.cylinders = {};
       for (var cylinder in conf.cylinders) {
         if (cylinder == 'defaults') continue;
 
@@ -295,6 +297,8 @@
           visible: true,
           color: parms.color
         });
+
+        conf.color = parms.color;
 
         // Create the cylinder
         cyl = makeCylinder(
@@ -341,14 +345,19 @@
                 stagger = -2;
               }
             }
-            plotParticle(a);
+            var particle = plotParticle(a);
+            if (parms.markerType == 'lines') {
+              cyl.add(particle);
+            }
             y += cyl.conf.spacing
           }
         }
 
-        points = new THREE.Points(ptsGeometry, ptsMaterial);
-        points.name = 'particles-' + cylinder.replace(' ', '_');
-        cyl.add(points);
+        if (parms.markerType == 'arrows') {
+          points = new THREE.Points(ptsGeometry, ptsMaterial);
+          points.name = 'particles-' + cylinder.replace(' ', '_');
+          cyl.add(points);
+        }
       }
 
       extrudeCylinders(bc, viewer.theme.get('cylinders--extrude'));
@@ -356,29 +365,6 @@
       viewer.render();
       return bc;
     };
-
-//  var bc = viewer.scene.az.bc;
-//  var cn = 0;
-//  for (var c in bc.cylinders) {
-//    if (bc.cylinders.hasOwnProperty(c)) {
-//      bc.cylinders[c].position.y = value * cn;
-//      cn++;
-//    }
-//  }
-
-    function movePoint (cyl, point, distance) {
-      point.y += distance;
-      if (distance >= 0) {
-        if (point.y > cyl.conf.length / 2) {
-          point.y -= cyl.conf.length;
-        }
-      } else {
-        if (point.y < -cyl.conf.length / 2) {
-          point.y += cyl.conf.length;
-        }
-      }
-      return point;
-    }
 
     /**
      * Extrude the cylinders
@@ -394,16 +380,71 @@
       }
     }
 
+    function movePoint (cyl, point, distance) {
+      point.y += distance;
+      if (distance >= 0) {
+        if (point.y > cyl.conf.length / 2) {
+          point.y -= cyl.conf.length;
+        }
+      } else {
+        if (point.y < -cyl.conf.length / 2) {
+          point.y += cyl.conf.length;
+        }
+      }
+      return point;
+    }
+
+    function moveSegment (cyl, point, distance) {
+      point.y += distance;
+
+      if (distance >= 0) {
+        if (point.hidden) {
+          point.hidden = false;
+          point.x = point.cx;
+          point.z = point.cz;
+        } else {
+          if (point.y > cyl.conf.length / 2) {
+            point.cx = point.x;
+            point.cz = point.z;
+            point.y -= cyl.conf.length;
+            point.hidden = true;
+            point.x = null;
+            point.z = null;
+          }
+        }
+      } else {
+        if (point.y < -cyl.conf.length / 2) {
+          point.y += cyl.conf.length;
+        }
+      }
+      return point;
+    }
+
     function animate(animateConf) {
       var speed = viewer.theme.get('animation--speed') / 12;
       for (var cylinder in viewer.scene.az.bc.cylinders) {
         var cyl = viewer.scene.az.bc.cylinders[cylinder];
         if (cyl) {
           var conf = cyl.conf;
-          var vertices = cyl.children[0].geometry.vertices;
-          cyl.children[0].geometry.verticesNeedUpdate = true;
-          for (var v = 0; v < vertices.length; v++) {
-            vertices[v] = movePoint(cyl, vertices[v], conf.yStep * speed);
+          switch (cyl.conf.markerType) {
+            case 'arrows':
+              var vertices = cyl.children[0].geometry.vertices;
+              cyl.children[0].geometry.verticesNeedUpdate = true;
+              for (var v = 0; v < vertices.length; v++) {
+                vertices[v] = movePoint(cyl, vertices[v], conf.yStep * speed);
+              }
+              break;
+
+            case 'lines':
+              for (var p = 0; p < cyl.children.length; p++) {
+                var particle = cyl.children[p];
+                particle.geometry.verticesNeedUpdate = true;
+                var vertices = particle.geometry.vertices;
+                for (var v = 0; v < vertices.length; v++) {
+                  vertices[v] = moveSegment(cyl, vertices[v], conf.yStep * speed);
+                }
+              }
+              break;
           }
           cyl.rotation.y += conf.thetaStep * speed;
         }
