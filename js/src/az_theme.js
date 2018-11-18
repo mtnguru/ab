@@ -318,8 +318,8 @@
 
                 case 'opacity':
                   var opacity =     value;
-                  var visible =     (value > .02);
-                  var transparent = (value < .97);
+                  var visible =     (value > .01);
+                  var transparent = (value < .99);
                   if (argNames[0] == 'proton') {
                     if (node.az.active) {
                       node.material.opacity = opacity;

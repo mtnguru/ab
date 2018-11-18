@@ -36,7 +36,7 @@ class AtomizerControlBlock {
         '#type' => 'container',
         '#attributes' => [
           'id' => $colorId,
-          'class' => [$colorClass, $colorId],
+          'class' => [$colorClass, 'opacity--color'],
         ],
       ],
       'value' => [
@@ -44,7 +44,7 @@ class AtomizerControlBlock {
         '#default_value' => $defaultValue,
         '#attributes' => [
           'id' => $valueId,
-          'class' => [$valueClass, $valueId],
+          'class' => [$valueClass, 'opacity--value'],
         ],
       ],
       'range' => [
@@ -55,7 +55,7 @@ class AtomizerControlBlock {
         '#step' => $step,
         '#attributes' => [
           'id' => $sliderId,
-          'class' => [$sliderClass, $sliderId],
+          'class' => [$sliderClass, 'opacity--slider'],
         ],
       ],
     ];

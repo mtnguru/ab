@@ -11,7 +11,6 @@
   Drupal.atomizer.producers.birkelandC = function (_viewer) {
     var viewer = _viewer;
     var mouseMode;
-    var bc;
 
     /**
      * Return the objects which are active for hovering
@@ -111,11 +110,11 @@
         bc: bc                 // Birkeland current object
       };
 
+      $('opacity--')
       for (var c in bc.cylinders) {
         if (bc.cylinders.hasOwnProperty(c)) {
           var conf = bc.cylinders[c].conf;
           if (conf.name) {
-            var fullname = '#particles-' + c + '--opacity .az-color';
             $('#particles-' + c + '--opacity .az-name', viewer.context).html(conf.name);
             $('#cylinders-' + c + '--opacity .az-name', viewer.context).html(conf.name);
             $('#particles-' + c + '--opacity .az-color', viewer.context).css('background', '#' + conf.color.toString(16));
@@ -153,8 +152,8 @@
       // Click on the scene select radio button
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {
+          viewer.scene.remove(viewer.scene.az.bc);
           viewer.birkeland.loadObject(event.target.value);
-//        loadBirkeland(scene, event.target.value);
         }
       });
 
@@ -163,7 +162,6 @@
         var input =$(this).siblings('input')[0];
         $(input).prop('checked', true);
         viewer.birkeland.loadObject(event.target.value);
-//      loadBirkeland(scene, input.value);
       });
 
     };

@@ -364,7 +364,7 @@
             case 'opacity':
             case 'opacityMaster':
               sid = id + '--az-slider';
-              $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
+              $('#' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
               viewer.theme.setInit(control.setting || .7, id, control.type);
 
 //            sid = id + '--az-button';

@@ -98,8 +98,8 @@ Drupal.atomizer.spritesC = function (_viewer, controlSet) {
 			color: '#000000',
 			backgroundColor: viewer.theme.get(id),
 			opacity: opacity,
-			transparent: (opacity <.97) ? true : false,
-	    visible: (opacity >.03) ? true : false
+			transparent: (opacity <.99) ? true : false,
+                        visible: (opacity >.01) ? true : false
 		};
 
 		var protonRadius = viewer.theme.get('proton--radius');

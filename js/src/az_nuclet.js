@@ -514,8 +514,8 @@
       axis.name = name;
       axis.material.linewidth = linewidth;
       axis.material.opacity = opacity;
-      axis.material.visible = (opacity > .02);
-      axis.material.transparent = (opacity < .97);
+      axis.material.visible = (opacity > .01);
+      axis.material.transparent = (opacity < .99);
       return axis;
     }
 

@@ -288,8 +288,8 @@
       initDraggable: initDraggable,
       makeObject: makeObject,
       constants: {
-        visibleThresh: .03,
-        transparentThresh: .97
+        visibleThresh: .01,
+        transparentThresh: .99
       }
     };
 
