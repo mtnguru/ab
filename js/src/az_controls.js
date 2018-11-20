@@ -150,16 +150,15 @@
      * @returns {boolean}
      */
     function onButtonClicked(event) {
+      event.preventDefault();
 
       var args = this.id.split("--");
       switch (args[1]) {
         case 'selectyml':
-          event.preventDefault();
           viewer[args[0]].overwriteYml();
           break;
 
         case 'saveyml':
-          event.preventDefault();
           var wrapper  = $('3' + args[0] + '--saveyml', viewer.context)[0];
           var name = wrapper.querySelector('input[name=name]').value;
           var filename = wrapper.querySelector('input[name=filename]').value;
@@ -180,7 +179,6 @@
           break;
 
         case 'snapshot':
-          event.preventDefault();
           break;
 
         case 'random':
@@ -192,7 +190,6 @@
           }
           else {
             if (viewer[args[0]] && viewer[args[0]].buttonClicked) {
-              event.preventDefault();
               viewer[args[0]].buttonClicked(event.target);
             }
           }
@@ -532,7 +529,7 @@
       var x1 = viewer.canvas.width * .9;
       if (viewer.canvas.width * .9 < first.clientX) {
         button = 1;
-      };
+      }
 
       // initMouseEvent(type, canBubble, cancelable, view, clickCount,
       //                screenX, screenY, clientX, clientY, ctrlKey,

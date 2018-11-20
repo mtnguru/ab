@@ -168,10 +168,17 @@
 
         case 'css3d':
           viewer.renderer = new THREE.CSS3DRenderer({
+//          antialias: true,
+//          canvas: viewer.canvas,
+//          preserveDrawingBuffer: true,
+//          shadowEnabled: true
+          });
+          viewer.CSS2DRenderer({
             antialias: true,
 //          canvas: viewer.canvas,
             preserveDrawingBuffer: true,
 //          shadowEnabled: true
+
           });
           viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
           viewer.canvasContainer.appendChild(viewer.renderer.domElement);

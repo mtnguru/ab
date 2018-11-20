@@ -336,11 +336,11 @@
           var stagger = 0;
           for (var a = 0; a < parms.numArrows; a++) {
             if (random) {
-              ptConf.radians = radians + .75 * cyl.conf.theta * Math.random();
-              ptConf.y = y + .75 * cyl.conf.spacing * Math.random();
+              ptConf.radians = radians + .75 * cyl.conf.theta * Math.random() * Math.random();
+              ptConf.y = y + .85 * cyl.conf.spacing * Math.random() * Math.random();
             } else {
               ptConf.radians = radians;
-              ptConf.y = y + .65 * cyl.conf.spacing * Math.random();
+              ptConf.y = y + .85 * cyl.conf.spacing * Math.random();
               if (++stagger == 3) {
                 stagger = -2;
               }

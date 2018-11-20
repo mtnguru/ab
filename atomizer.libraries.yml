@@ -83,6 +83,7 @@ atomizer-birkeland-obfuscator:
 atomizer-ptable:
   js:
     js/threejs/renderers/CSS3DRenderer.js: {}
+    js/threejs/renderers/CSS2DRenderer.js: {}
     js/threejs/libs/tween.min.js: {}
     js/src/az_ptable.js: {}
     js/src/producers/prod_ptable.js: {}

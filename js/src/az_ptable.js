@@ -296,50 +296,15 @@
 
           // Periodic Table
 
-          var object = new THREE.Object3D();
-          object.position.x = (table[ i + 3 ] * 140) - 1330;
-          object.position.y = - (table[ i + 4 ] * 180) + 990;
-          object.position.z = 0;
-          targets.table.push( object );
+//        var object = new THREE.Object3D();
+//        object.position.x = (table[ i + 3 ] * 140) - 1330;
+//        object.position.y = - (table[ i + 4 ] * 180) + 990;
+//        object.position.z = 0;
+//        targets.table.push( object );
         }
-
-        // sphere
-
-        /*
-        var vector = new THREE.Vector3();
-        for ( var i = 0, l = elements.length; i < l; i ++ ) {
-          var phi = Math.acos( -1 + ( 2 * i ) / l );
-          var theta = Math.sqrt( l * Math.PI ) * phi;
-
-          var object = new THREE.Object3D();
-          object.position.setFromSphericalCoords( 800, phi, theta );
-          vector.copy( object.position ).multiplyScalar( 2 );
-          object.lookAt( vector );
-          targets.sphere.push( object );
-        } */
-
-        // helix
-
-        /*
-        var vector = new THREE.Vector3();
-        for ( var i = 0, l = elements.length; i < l; i ++ ) {
-          var theta = i * 0.175 + Math.PI;
-          var y = - ( i * 8 ) + 450;
-
-          var object = new THREE.Object3D();
-          object.position.setFromCylindricalCoords( 900, theta, y );
-          vector.x = object.position.x * 2;
-          vector.y = object.position.y;
-          vector.z = object.position.z * 2;
-
-          object.lookAt( vector );
-          targets.helix.push( object );
-        }
-
-        */
 
         // grid
-
+        /*
         for ( var i = 0; i < elements.length; i ++ ) {
           var object = new THREE.Object3D();
           object.position.x = ((i % 5) * 200) - 400;
@@ -347,6 +312,29 @@
           object.position.z = (Math.floor(i / 25)) * 500 - 1000;
           targets.grid.push(object);
         }
+        */
+
+        var geometry = new THREE.Geometry();
+        for (var p = 0; p < 5; p += 1) {
+          // Create a point
+          var x = 100 + p * 5;
+          var y = 100 + p * 5;
+          var z = 0;
+
+          point = new THREE.Vector3(x, y, z);
+//            point = moveSegment(cyl, point, 0);
+          geometry.vertices.push(point);
+        }
+
+        var material = new THREE.LineBasicMaterial({
+          color: '#ffffff',
+          opacity: .8,
+          transparent: true,
+          visible: true,
+          linewidth: 5
+        });
+        var line = new THREE.Line( geometry, material );
+        viewer.scene.add(line);
 
 //      viewer.canvasContainer.appendChild(viewer.renderer.domElement);
       }
@@ -377,8 +365,9 @@
       }
 
       init();
-      transform(targets.table)
+//    transform(targets.table)
       animate();
+      viewer.render();
       return elements;
     }
 

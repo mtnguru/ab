@@ -67,6 +67,7 @@
      */
     function onNucletDelete(event) {
       // Delete the protons from the
+//    event.preventDefault();
       viewer.atom.deleteNuclet(editNuclet.az.id);
       delete viewer.atom.az().nuclets[editNuclet.az.id];
       createNucletList(viewer.atom.atom);
@@ -74,6 +75,7 @@
       viewer.render();
 
       $nucletFormBlock.addClass('az-hidden');
+//    return false;
     }
 
     /**
