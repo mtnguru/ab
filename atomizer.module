@@ -29,6 +29,28 @@ function atomizer_help($route_name, RouteMatchInterface $route_match) {
   }
 }
 
+/**
+ * Implements hook_theme().
+ */
+function atomizer_theme() {
+  return [
+    // Display atom select list items and their sublists.
+    'atomizer_select_atom' => [
+      'variables' => [
+        'title' => '',
+        'element_nid' => 0,
+        'stability' => '',
+        'default_atom_nid' => 0,
+        'atomic_number' => 0,
+        'num_isotopes' => 0,
+        'num_isomers' => 0,
+        'isotopes' => [],
+        'isomers' => [],
+      ],
+    ],
+  ];
+}
+
 ////////////////////// Atom Form Alters //////////////////////////
 
 /**

@@ -18,21 +18,121 @@ class AtomizerInit {
     $objects = [];
     $result = AzContentQuery::nodeQuery([
       'types' => 'element',
+      'sort' => 'elements',
     ]);
     $nids = array_keys($result['results']);
     $elements = entity_load_multiple('node', $nids);
     foreach ($elements as $nid => $element) {
-      if (!$element->get('field_pt')->isEmpty() && !$element->get('field_period')->isEmpty()) {
-        $group = $element->field_pt->entity;
-        $column = explode(' ' ,$group->getName())[0];
+//    if (!$element->get('field_pt')->isEmpty() && !$element->get('field_period')->isEmpty()) {
         $objects[$nid] = [
           'name' => $element->getTitle(),
-          'period' => $element->get('field_period')->value,
-          'group' => $column,
+          'nid' => $nid,
+          'period' =>      ($element->field_period->isEmpty())        ? null : $element->field_period->value,
+          'defaultAtom' => ($element->field_default_atom->isEmpty())  ? null : $element->field_default_atom->entity->id(),
+          'group' =>       ($element->field_pt->isEmpty())            ? null : $element->field_pt->value,
+          'atomicNumber' =>($element->field_atomic_number->isEmpty()) ? 999  : $element->field_atomic_number->value,
+          'numIsotopes' => 0,
+          'numIsomers' => 0,
         ];
-      }
+//    }
     }
     return $objects;
+  }
+
+  static function queryAtoms() {
+    $perm = ['public'];
+    if (\Drupal::currentUser()->hasPermission('atomizer atoms development')) { $perm[] = 'development'; }
+    if (\Drupal::currentUser()->hasPermission('atomizer atoms members'))     { $perm[] = 'members'; }
+    if (\Drupal::currentUser()->hasPermission('atomizer atoms trusted'))     { $perm[] = 'trusted'; }
+
+    $result = AzContentQuery::nodeQuery([
+      'type' => 'entity-table',
+      'sort' => 'select-atom',
+      'fields' => [
+        'nfd' => ['nid', 'title'],
+        'nfan' => ['field_atomic_number_value'],
+        'nfp' => ['field__protons_value'],
+        'nfe' => ['field_element_target_id'],
+        'ttfd' => ['name'],
+      ],
+      'more' => 'none',
+      'types' => 'atom',
+      'approval' => $perm,
+    ]);
+
+    return $result;
+  }
+
+  static function build_select_atom_list() {
+    $elements = self::queryElements();
+    $atoms = self::queryAtoms()['results'];
+
+    // Go through each element and count number of atoms per element
+    foreach ($atoms as $atom) {
+      $eid = $atom->field_element_target_id;
+      if (!empty($elements[$eid])) {
+        $elements[$eid]['isotopes'][] = $atom;
+        if (empty($elements[$eid]['numIsotopes'])) {
+          $elements[$eid]['numIsotopes'] = 1;
+        } else {
+          $elements[$eid]['numIsotopes']++;
+        }
+      }
+    }
+
+    // Go through elements again and create list items with sublists
+    $list = [];
+    $defaultAtom = null;
+    foreach ($elements as $element) {
+      if ($element['numIsotopes'] == 0) continue;
+      $defaultAtomNid = (!empty($element['defaultAtom'])) ? $element['defaultAtom'] : $element['isotopes'][0]->nid;
+      $defaultAtom = $atoms[$defaultAtomNid];
+
+      $list[$element['name']] = [
+        '#type' => 'theme',
+        '#theme' => 'atomizer_select_atom',
+        '#title' => $defaultAtom->title,
+        '#element_nid' => $element['nid'],
+        '#default_atom_nid' => $defaultAtomNid,
+        '#stability' => (!empty($defaultAtom->name)) ? $defaultAtom->name : 'Not Set',
+        '#atomic_number' => $element['atomicNumber'],
+        '#num_isotopes' => $element['numIsotopes'],
+        '#num_isomers' => $element['numIsomers'],
+        '#isotopes' => ($element['numIsotopes']) ? $element['isotopes'] : null,
+        '#isomers' => ($element['numIsomers']) ? $element['isomers'] : null,
+      ];
+    }
+
+    return [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['az-elements-wrapper'],
+        'id' => 'az-select-atom',
+      ],
+      'title' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['az-select-atom-title'],
+        ],
+        'title' => ['#markup' => '<h2>Select Atom</h2>'],
+        'close' => [
+          '#type' => 'container',
+          '#attributes' => [
+            'class' => ['az-fa-times az-close'],
+          ],
+        ],
+      ],
+      'element_list' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['element-list'],
+        ],
+        'elements' => $list,
+      ],
+    ];
+  }
+  static function buildSelectAtom() {
+
   }
 
   static function build($config) {
@@ -111,29 +211,7 @@ class AtomizerInit {
 
     // Build the select-atom dialog.
     if (!empty($atomizer_config['select']) && $atomizer_config['select'] == 'select_atom') {
-      $perm = ['public'];
-      if (\Drupal::currentUser()->hasPermission('atomizer atoms development')) { $perm[] = 'development'; }
-      if (\Drupal::currentUser()->hasPermission('atomizer atoms members'))     { $perm[] = 'members'; }
-      if (\Drupal::currentUser()->hasPermission('atomizer atoms trusted'))     { $perm[] = 'trusted'; }
-
-      $build['content']['select_atom'] = _az_content_build_block('select-atom', [
-        'type' => 'entity-table',
-        'id' => 'select-atom',
-        'sort' => 'select-atom',
-        'title' => 'Select Atom',
-        'fields' => [
-          'nfd' => ['nid', 'title'],
-          'nfan' => ['field_atomic_number_value'],
-        ],
-        'more' => 'none',
-//      'status' => NODE_PUBLISHED, // Make this dependent on user?
-        'types' => 'atom',
-        'approval' => $perm,
-        'viewMode' => 'teaser_short',
-        'class' => 'block-border',
-        'load' => 'immediate',
-        'empty' => 'NO DISPLAY'
-      ]);
+      $build['content']['select_atom'] = self::build_select_atom_list();
     }
 
     // Build atomizer container with canvas - attach drupalSettings

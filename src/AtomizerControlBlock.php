@@ -165,7 +165,7 @@ class AtomizerControlBlock {
             '#type' => 'item',
             '#prefix' => '<div class="' . $id . ' button-wrapper">',
             '#suffix' => '</div>',
-            '#markup' => t('Save'),
+            '#markup' => t('Save Atom'),
           ],
           'overwrite_message' => [
             '#type' => 'item',

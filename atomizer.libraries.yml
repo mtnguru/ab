@@ -50,10 +50,12 @@ atomizer-obfuscator:
 
 atomizer-atom-builder:
   js:
+    js/threejs/renderers/CSS2DRenderer.js: {}
     js/src/producers/prod_atom_builder.js: {}
 
 atomizer-atom-builder-obfuscator:
   js:
+    js/threejs/renderers/CSS2DRenderer.js: {}
     js/min/producers/prod_atom_builder.js: {}
 
 # Atom Viewer

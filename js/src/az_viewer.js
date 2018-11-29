@@ -72,7 +72,7 @@
       viewer.context.removeClass('display-mode-table');
       viewer.context.removeClass('display-mode-desktop');
 
-      var $atomList = $('#az-page-select-atom', viewer.content);
+      var $atomList = $('#az-select-atom', viewer.content);
 
       // Get container width and calculate new height
       if (fullScreen) {
@@ -85,6 +85,7 @@
           }
           displayMode = 'mobile';
           viewer.context.addClass('display-mode-' + displayMode);
+          viewer.canvasContainer.style.width = null;
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
           viewer.canvasContainer.style.width = viewer.canvas.width + 'px';
           var maxHeight = viewer.canvas.width;
@@ -98,6 +99,7 @@
           }
           displayMode = 'desktop';
           viewer.context.addClass('display-mode-' + displayMode);
+          viewer.canvasContainer.style.width = null;
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
           if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
             viewer.canvas.height = window.innerHeight - 170;
@@ -147,6 +149,7 @@
       viewer.controls = Drupal.atomizer.controlsC(viewer);
 
       // Create the renderer
+//    viewer.producer.createRenderer();
       switch (viewer.atomizer.renderer) {
 
         case 'webgl':
@@ -166,6 +169,8 @@
           );
           break;
 
+        case 'css2d':
+          break;
         case 'css3d':
           viewer.renderer = new THREE.CSS3DRenderer({
 //          antialias: true,

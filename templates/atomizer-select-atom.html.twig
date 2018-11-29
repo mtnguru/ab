@@ -1,0 +1,38 @@
+<div class="element" data-nid="{{ nid }}">
+
+  <div class="default-isotope" data-nid="{{ default_atom_nid }}">
+    {% set expand_isotopes = (num_isotopes > 0) ? 'expand' : '' %}
+    {% set expand_isomers = (num_isomers > 0) ? 'expand' : '' %}
+    <span class="atomic-number">{{ atomic_number }}</span>
+    <span class="atom-title {{ stability | lower }}">
+      <a data-nid="{{ default_atom_nid }}" href="#" class="atom-name">
+          {{ title }}
+      </a>
+    </span>
+    {# <span class="num-isomers {{ expand_isomers }}">{{ num_isomers }}</span> #}
+    <span class="num-isotopes az-closed {{ expand_isotopes }}">{{ num_isotopes }}</span>
+  </div>
+
+  <div class="isomers" title="Isomers">
+  </div>
+
+  <div class="isotopes az-closed" title="Isotopes">
+    {% if num_isotopes > 0  %}
+      <ul class="isotope-list">
+        {% for isotope in isotopes %}
+          {% set default = (isotope.nid == nid) ? 'default' : 'not-default'  %}
+          <li class="isotope {{ default }} {{ isotope.name | lower }}" data-nid="{{ isotope.nid }}">
+            <a data-nid="{{ isotope.nid }}" href="#" class="atom-name">
+              {{ isotope.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+</div>
+
+{% if default_atom_nid == '260' %}
+  {# kint() #}
+{% endif %}

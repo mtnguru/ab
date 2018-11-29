@@ -170,7 +170,7 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), true);
     $link = [
       '#type' => 'link',
-      '#title' => 'Save',
+      '#title' => 'Save Atom',
       '#url' => Url::fromRoute('entity.node.edit_form',['node' => $data['nid']]),
       '#attached' => ['library' => ['core/drupal.dialog.ajax']],
       '#attributes' => [
@@ -214,7 +214,7 @@ class AtomizerController extends ControllerBase {
       '#url' => Url::fromUri($isotopeUrl),
     ];
     // Render the properties block.
-    $data['properties'] = render($build);
+    $data['nuclet'] = render($build);
 
     // Render the atom information using teaser view.
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');

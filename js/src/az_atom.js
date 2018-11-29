@@ -14,7 +14,7 @@
     var atomInformation = $('.atom--information', viewer.context)[0];
     var atomProperties = $('.atom--properties', viewer.context)[0];
 
-    var $atomList = $('#az-page-select-atom', viewer.content);
+    var $atomList = $('#az-select-atom', viewer.content);
     var $atomSelectEnable = $('#atom-select-enable', viewer.context);
     var $atomSelectClose = $atomList.find('.az-close');
     var $atoms = $('.atom-name, .atomic-number', viewer.context);
@@ -719,7 +719,23 @@
     }
 
     /**
-     * Ad event listeners for when a user selects an atom.
+     *
+     */
+    function addIsotopeEnableEventListeners () {
+      $('.num-isotopes').click(function () {
+        var $isotopes = $(this).parent().siblings('.isotopes');
+        if ($isotopes.hasClass('az-closed')) {
+          $(this).removeClass('az-closed');
+          $isotopes.removeClass('az-closed');
+        } else {
+          $(this).addClass('az-closed');
+          $isotopes.addClass('az-closed');
+        }
+      });
+    }
+
+    /**
+     * Add event listeners for when a user selects an atom.
      */
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
@@ -759,7 +775,8 @@
     Drupal.behaviors.atomizer_atom = {
       attach: function (context, settings) {
         var value = '';
-        $(context).find('#az-page-select-atom').once('selectAtomAttached').each(function () {
+        $(context).find('#az-select-atom').once('selectAtomAttached').each(function () {
+          addIsotopeEnableEventListeners();
           addSelectAtomEventListeners();
         });
 
@@ -776,6 +793,7 @@
       }
     };
 
+    addIsotopeEnableEventListeners();
     addSelectAtomEventListeners();
 
     /**
