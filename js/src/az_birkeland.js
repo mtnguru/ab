@@ -421,7 +421,7 @@
     }
 
     function animate(animateConf) {
-      var speed = viewer.theme.get('animation--speed') / 12;
+      var speed = viewer.theme.get('animation--speed') / 5;
       for (var cylinder in viewer.scene.az.bc.cylinders) {
         var cyl = viewer.scene.az.bc.cylinders[cylinder];
         if (cyl) {

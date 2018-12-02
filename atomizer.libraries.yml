@@ -39,9 +39,9 @@ atomizer-obfuscator:
     js/min/az_nuclet.js: {}
     js/min/az_atom.js: {}
     js/min/az_animation.js: {}
-  css:
-    component:
-      css/atomizer.css: {}
+# css:
+#   component:
+#     css/atomizer.css: {}
   dependencies:
     - core/drupal.dialog.ajax
     - core/drupal.ajax

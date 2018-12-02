@@ -80,6 +80,9 @@ class AtomizerFormatter extends FormatterBase {
     $atomizerFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/');
     $atomizer = $this->getSetting('atomizer');
     $atomizer = ($atomizer) ? $atomizer : $this->defaultSettings()['atomizer'];
+    if ($atomizer == 'atom_viewer.yml') {
+      $atomizer = 'atomizer_atom_viewer.yml';
+    }
     $summary[] = t('Atomizer: @atomizer', array('@atomizer' => $atomizerFiles[$atomizer]));
 
     $controlFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/controls', '/\.yml/');

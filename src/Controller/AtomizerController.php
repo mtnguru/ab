@@ -214,7 +214,7 @@ class AtomizerController extends ControllerBase {
       '#url' => Url::fromUri($isotopeUrl),
     ];
     // Render the properties block.
-    $data['nuclet'] = render($build);
+    $data['properties'] = render($build);
 
     // Render the atom information using teaser view.
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
