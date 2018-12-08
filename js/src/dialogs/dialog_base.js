@@ -66,6 +66,7 @@
    *
    * @return {baseC} dialog
    */
+  /*
   Drupal.atomizer.dialogs.initDialog = function initDialog(name, buttonId, processFunc) {
     var Dialogs = Drupal.atomizer.dialogs;
     var dialog;
@@ -89,6 +90,7 @@
     Dialogs[name] = dialog;
     return dialog;
   };
+  */
 
   Drupal.atomizer.dialogs.baseC = function baseC(spec) {
     var dialog = {
@@ -98,15 +100,15 @@
 
     // Return if dialog is loaded.
     dialog.dialogHave = function dialogHave() {
-      return (dialog.$elem) ? true : false;
+      return (dialog.$dialog) ? true : false;
     };
 
     // Load the dialog using AJAX.
     dialog.dialogLoad = function dialogLoad() {
-      Drupal.atomizer.core.ajaxProcess(dialog,
-        Drupal.atomizer.settings.actions.renderDialog.url,
+      Drupal.atomizer.base.doAjax(
+        '/ajax-ab/load-dialog',
         {
-          action: 'render-dialog',
+          action: 'load-dialog',
           dialogName: dialog.spec.name
         },
         dialog.dialogCreate);
@@ -114,31 +116,32 @@
 
     // Create dialog from AJAX response.
     dialog.dialogCreate = function dialogCreate(response, $callingElement) {
-      // Create the dialog wrapper.
+
+      // Create the wrapper for this dialog.
       dialog.$wrapper = $(document.createElement('DIV'))
         .attr('id', dialog.spec.cssId)
         .addClass('atomizer-dialog');
-      Drupal.atomizer.$wrapper.append(dialog.$wrapper);
+      $(dialog.spec.container).append(dialog.$wrapper);
 
       // Create the dialog title
       if (dialog.spec.title) {
-        dialog.$title = $(document.createElement('DIV'))
-                         .addClass('atomizer-title')
+        dialog.$title = $(document.createElement('H2'))
+                         .addClass('title')
                          .html(dialog.spec.title);
         dialog.$wrapper.append(dialog.$title);
       }
 
       // Create the dialog content
       dialog.$content = $(document.createElement('DIV'))
-        .addClass('atomizer-content')
-        .html(response.content);
+        .addClass('content')
+        .html(response[0].data.content);
       dialog.$wrapper.append(dialog.$content);
 
 
       if (response.buttonpane) {
         // Create the dialog buttonpane
         dialog.$buttonpane = $(document.createElement('DIV'))
-          .addClass('atomizer-buttonpane')
+          .addClass('buttonpane')
           .html(response.buttonpane);
         dialog.$wrapper.append(dialog.$buttonpane);
         dialog.$buttonpane.find('input').click(function (event) {
@@ -146,11 +149,11 @@
         });
       }
 
-      dialog.$elem = $('#' + dialog.spec.cssId);
+      dialog.$dialog = $('#' + dialog.spec.cssId);
 
       // Make the dialog resizable.
       if (dialog.spec.resizable) {
-        dialog.$elem.resizable({
+        dialog.$dialog.resizable({
           resize: function (event, ui) {
             if (dialog.dialogOnResize) {
               dialog.dialogOnResize(event, ui);
@@ -169,9 +172,9 @@
         dialog.$wrapper.css('zindex', dialog.spec.zIndex);
       }
 
-      // Position the dialog.
-      if (dialog.spec.position) {
-        dialog.$wrapper.css(dialog.spec.position);
+      // Set CSS styles on the dialog
+      if (dialog.spec.styles) {
+        dialog.$wrapper.css(dialog.spec.styles);
       }
       else {
         dialog.$wrapper.css({left: '75px', bottom: '100px'});
@@ -188,20 +191,20 @@
      *   True if open, False if closed.
      */
     dialog.dialogIsOpen = function dialogIsOpen() {
-      return (dialog.$elem && dialog.isOpen) ? true : false;
+      return (dialog.$dialog && dialog.isOpen) ? true : false;
     };
 
     /**
      * If the dialog is open then close it.
      */
     dialog.dialogClose = function dialogClose() {
-      if (dialog.$elem) {
+      if (dialog.$dialog) {
         if (dialog.spec.$selectButton) {
           dialog.spec.$selectButton.removeClass('checked');
         }
         if (dialog.isOpen) {
           dialog.isOpen = false;
-          dialog.$elem.hide();
+          dialog.$dialog.hide();
         }
         dialog.dialogOnClose();
         dialog.settings = {};
@@ -210,13 +213,13 @@
     // Open the dialog if it exists, otherwise create it.
     dialog.dialogOpen = function dialogOpen(settings) {
       $.extend(dialog.settings, settings);
-      if (dialog.$elem) {
+      if (dialog.$dialog) {
         if (dialog.spec.$selectButton) {
           dialog.spec.$selectButton.addClass('checked');
         }
         if (!dialog.isOpen) {
           dialog.isOpen = true;
-          dialog.$elem.show();
+          dialog.$dialog.show();
           dialog.dialogOnOpen();
         }
       }
@@ -240,14 +243,14 @@
       }
     };
 
-    dialog.setSelectButton = function setSelectButton($elem) {
-      dialog.spec.$selectButton = $elem;
+    dialog.setSelectButton = function setSelectButton($dialog) {
+      dialog.spec.$selectButton = $dialog;
       if (dialog.dialogHave()) {
-//      dialog.$elem.dialog({
+//      dialog.$dialog.dialog({
 //        position: {
 //          my: 'left',
 //          at: 'right',
-//          of: $elem
+//          of: $dialog
 //        }
 //      });
       }

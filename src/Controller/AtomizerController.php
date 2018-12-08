@@ -2,6 +2,7 @@
 
 namespace Drupal\atomizer\Controller;
 
+use Drupal\atomizer\Dialogs\AtomizerDialogs;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
@@ -22,6 +23,7 @@ use Drupal\atomizer\Ajax\LoadYmlCommand;
 use Drupal\atomizer\Ajax\SaveYmlCommand;
 use Drupal\atomizer\Ajax\LoadAtomCommand;
 use Drupal\atomizer\Ajax\LoadNodeCommand;
+use Drupal\atomizer\Ajax\LoadDialogCommand;
 use Drupal\atomizer\Ajax\ListDirectoryCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -257,6 +259,29 @@ class AtomizerController extends ControllerBase {
     }
 //  $cmd = "rm $spath";
     system($cmd);
+  }
+
+  static private $dialogs = NULL;
+  /**
+   * Render a dialog - why do I need this?  Look at imager code.
+   */
+  public function loadDialog() {
+    $data = json_decode(file_get_contents("php://input"), TRUE);
+
+    if (empty(self::$dialogs)) {
+      self::$dialogs = new AtomizerDialogs();
+    }
+
+    $dialog = self::$dialogs->buildDialog($data);
+    $data['content'] = render($dialog['content']);
+    if (!empty($dialog['buttonpane'])) {
+      $data['buttonpane'] = render($dialog['buttonpane']);
+    }
+    $data['id'] = $dialog['id'];
+
+    $response = new AjaxResponse();
+    return $response->addCommand(new LoadDialogCommand($data));
+
   }
 
   /**

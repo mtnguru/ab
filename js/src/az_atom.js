@@ -313,7 +313,7 @@
           visible: (opacity > viewer.nuclet.getConstants().visibleThresh),
           linewidth: viewer.theme.get('attachLines--linewidth')
         });
-        lineGeometry.vertices[0] = attachPt.multiplyScalar(viewer.theme.get('attachLines--scale'));
+        lineGeometry.vertices[0] = attachPt;
         lineGeometry.vertices[1] = new THREE.Vector3(0,0,0);
         var lines = new THREE.LineSegments(lineGeometry, lineMaterial);
         lines.name = 'attachLines';
@@ -455,6 +455,11 @@
       updateValenceRings();
       updateParticleCount();
 
+      var explode = viewer.theme.get('attachLines--scale');
+      if (explode != 1) {
+        explodeAtom(explode);
+      }
+
       viewer.scene.add(atom);
       viewer.render();
 
@@ -483,8 +488,7 @@
           );
         }
       }
-      viewer.render();
-    }
+    };
 
     /**
      * Check all valence rings and color active/inactive rings - count total Active and update atom information.

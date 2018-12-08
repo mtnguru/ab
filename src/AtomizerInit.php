@@ -5,6 +5,7 @@ namespace Drupal\atomizer;
 use Drupal\az_content\AzContentQuery;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Xss;
+use Drupal\node\Entity\Node;
 
 /**
  * Class AtomizerFiles.
@@ -67,7 +68,7 @@ class AtomizerInit {
     $elements = self::queryElements();
     $atoms = self::queryAtoms()['results'];
 
-    // Go through each element and count number of atoms per element
+    // Go through each atom and count number of atoms per element
     foreach ($atoms as $atom) {
       $eid = $atom->field_element_target_id;
       if (!empty($elements[$eid])) {
@@ -80,7 +81,7 @@ class AtomizerInit {
       }
     }
 
-    // Go through elements again and create list items with sublists
+    // Create render array of elements and their isotopes.
     $list = [];
     $defaultAtom = null;
     foreach ($elements as $element) {
@@ -103,6 +104,7 @@ class AtomizerInit {
       ];
     }
 
+    // Wrap in a container with a title, the select atom button, and list of elements.
     return [
       '#type' => 'container',
       '#attributes' => [
@@ -240,6 +242,19 @@ class AtomizerInit {
         ],
       ],
     ];
+
+    // Load Binding Energies for the nuclets
+    if (isset($atomizer_config['bindingEnergies'])) {
+      $node = Node::load($atomizer_config['bindingEnergies']);
+      $fields = $node->getFields();
+      $bindingEnergies = [];
+      foreach ($fields as $name => $field) {
+        if (strstr($name, 'field_')) {
+          $bindingEnergies[str_replace('field_', '', $name)] = $node->{$name}->value;
+        }
+      }
+      $build['content']['atomizer']['#attached']['drupalSettings']['atomizer_bindingEnergies'] = $bindingEnergies;
+    }
 
     // Build the controls
     if (isset($config['controlFile'])) {

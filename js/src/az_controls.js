@@ -15,6 +15,7 @@
     var cameraMode = 'none';
     var selectBlock = $('.theme--selectBlock', viewer.context)[0];
     var img = document.createElement('IMG'); // Storage for current image.
+    var dialogs = {};
 
     // Variables for detecting items mouse is hovering over.
     var raycaster;
@@ -182,6 +183,17 @@
           break;
 
         case 'random':
+          break;
+
+        case 'dialog':
+          var module = args[0];
+          var dialog;
+          if (dialogs[module]) {
+            dialog = Dialogs[module];
+          } else {
+            dialog = Drupal.atomizer.dialogs[module + 'C'](viewer, event.target.dataset);
+          }
+          dialog.dialogToggle();
           break;
 
         default:
@@ -387,6 +399,7 @@
               break;
 
             case 'toggle':
+            case 'toggleDialog':
             case 'checkbox':
               viewer.theme.setInit(control.setting, id, control.type);
               element.addEventListener("click", onButtonClicked);

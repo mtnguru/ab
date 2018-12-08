@@ -133,6 +133,7 @@
       // Start birkelandC and animationC
       viewer.birkeland = Drupal.atomizer.birkelandC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
+//    viewer.animation = Drupal.atomizer.dialogC(viewer);
 
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
@@ -211,6 +212,28 @@
       }
     }
 
+    /**
+     * User pressed button to view Bessel graph.
+     *
+     * if first time
+     *   Create a bessel dialog and display it.
+     *   find container - add canvas
+     *
+     * OnCreate - determine size
+     *   set canvas size
+     *   start loading of image - set event handler
+     *
+     *   handle loaded
+     *     draw image onto canvas
+     *
+     *
+     *   determine size, set canvas
+     *
+     * @param event
+     */
+    function buttonClicked(event) {
+    }
+
     return {
       createView: createView,
       setDefaults: setDefaults,
@@ -218,7 +241,8 @@
       hoverObjects: hoverObjects,
       hovered: hovered,
       objectLoaded: objectLoaded,
-      applyControl: applyControl
+      applyControl: applyControl,
+      buttonClicked: buttonClicked
     };
   };
 

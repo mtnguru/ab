@@ -73,11 +73,15 @@ atomizer-atom-viewer-obfuscator:
 atomizer-birkeland:
   js:
     js/src/az_birkeland.js: {}
+    js/src/dialogs/dialog_base.js: {}
+    js/src/dialogs/dialog_bessel.js: {}
     js/src/producers/prod_birkeland.js: {}
 
 atomizer-birkeland-obfuscator:
   js:
     js/min/az_birkeland.js: {}
+    js/min/dialogs/dialog_base.js: {}
+    js/min/dialogs/dialog_bessel.js: {}
     js/min/producers/prod_birkeland.js: {}
 
 # Periodic Table

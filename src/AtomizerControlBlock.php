@@ -220,52 +220,11 @@ class AtomizerControlBlock {
             '#attributes' => ['class' => ['az-popup']],
           ];
         }
-        if (!empty($controlConf[2])) {
-          foreach ($controlConf[2] as $key => $value) {
-            if (preg_match('/^data\-/', $key)) {
-              $control['#attributes'][$key] = $value;
-              if ($key == 'data-blockid') {
-                $containerClasses[] = 'toggle-block';
-              }
-            } else if ($key == 'class') {
-              $containerClasses[] = $value;
-            } else if ($key == 'sound-file') {
-              $containerClasses[] = 'sound-file';
-              if ($wrapper = \Drupal::service('stream_wrapper_manager')->getViaUri('public://atomizer/' . $value)) {
-                $fileUrl = $wrapper->getExternalUrl();
-//              $filepath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/atomizer/' . $value;
-              }
-
-//            $filepath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/atomizer/' . $value;
-              $soundId = str_replace ('.', '-', $value);
-              $control['sound_file'] = [
-                '#type' => 'inline_template',
-                '#template' => '{{ embed_sound|raw }}',
-                '#context' => [
-//                'embed_sound' => '<embed src="' . $filepath . '" autostart="false" width="0" height="0" id="' . $soundId . '" enablejavascript="true">',
-                  'embed_sound' => '<audio src="' . $fileUrl . '" preload></audio>',
-                ],
-              ];
-            } else if ($key == 'font-awesome') {
-              $control = [
-                '#type' => 'container',
-                '#attributes' => [
-                  'title' => $controlConf[0],
-                ],
-              ];
-              if (!empty($controlConf[2]['label'])) {
-                $control['label'] = ['#markup' => $controlConf[2]['label']];
-              }
-              $containerClasses[] = 'az-button';
-              $containerClasses[] = 'fa';
-              $containerClasses[] = $controlConf[2]['font-awesome'];
-            }
-          }
-        }
         $addValue = true;
         break;
 
       case 'toggle':
+      case 'toggleDialog':
         $control = [
           '#type' => 'button',
           '#value' => $controlConf[0],
@@ -276,6 +235,7 @@ class AtomizerControlBlock {
             '#attributes' => [
               'title' => $controlConf[0],
             ],
+            'markup' => ['#markup' => 'shitty'],
           ];
           $containerClasses[] = 'fa';
           $containerClasses[] = $controlConf[2]['font-awesome'];
@@ -469,6 +429,49 @@ class AtomizerControlBlock {
 
       default:
         break;
+    }
+
+    if (!empty($controlConf[2]) && is_array($controlConf[2])) {
+      foreach ($controlConf[2] as $key => $value) {
+        if (preg_match('/^data\-/', $key)) {
+          $control['#attributes'][$key] = $value;
+          if ($key == 'data-blockid') {
+            $containerClasses[] = 'toggle-block';
+          }
+        } else if ($key == 'class') {
+          $containerClasses[] = $value;
+        } else if ($key == 'sound-file') {
+          $containerClasses[] = 'sound-file';
+          if ($wrapper = \Drupal::service('stream_wrapper_manager')->getViaUri('public://atomizer/' . $value)) {
+            $fileUrl = $wrapper->getExternalUrl();
+            //              $filepath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/atomizer/' . $value;
+          }
+
+          //            $filepath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/atomizer/' . $value;
+          $soundId = str_replace ('.', '-', $value);
+          $control['sound_file'] = [
+            '#type' => 'inline_template',
+            '#template' => '{{ embed_sound|raw }}',
+            '#context' => [
+              //                'embed_sound' => '<embed src="' . $filepath . '" autostart="false" width="0" height="0" id="' . $soundId . '" enablejavascript="true">',
+              'embed_sound' => '<audio src="' . $fileUrl . '" preload></audio>',
+            ],
+          ];
+        } else if ($key == 'font-awesome') {
+          $control = [
+            '#type' => 'container',
+            '#attributes' => [
+              'title' => $controlConf[0],
+            ],
+          ];
+          if (!empty($controlConf[2]['label'])) {
+            $control['label'] = ['#markup' => $controlConf[2]['label']];
+          }
+          $containerClasses[] = 'az-button';
+          $containerClasses[] = 'fa';
+          $containerClasses[] = $controlConf[2]['font-awesome'];
+        }
+      }
     }
     if ($addValue) {
       $theme[$id] = [

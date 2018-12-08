@@ -44,6 +44,14 @@ class AtomizerControlsForm extends FormBase {
       foreach ($controlSet['blocks'] as $blockName => $blockConf) {
         $form['blocks'][$blockName] = AtomizerControlBlock::create('blocks', $blockName, $blockConf, $theme['settings']);
         $form['blocks'][$blockName]['#az-hidden'] = true;
+        if (!empty($blockConf['destination'])) {
+          $dest = $blockConf['destination'];
+          if ($dest == 'dialog') {
+            // Nothing really to do here.  JavaScript will deal with it.
+            // Link button to popup the dialog
+            // Link
+          }
+        }
       }
     }
 
@@ -61,6 +69,10 @@ class AtomizerControlsForm extends FormBase {
           }
         }
       }
+    }
+
+    if (isset($controlSet['sidebar'])) {
+
     }
 
     // Set options for the theme block selector control

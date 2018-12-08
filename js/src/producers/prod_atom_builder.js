@@ -596,10 +596,107 @@
       editNuclet = nuclet;
     }
 
+    function findBindingEnergy(az) {
+      var name = 'unknown';
+      var grow0, grow1;
+      var be = drupalSettings.atomizer_bindingEnergies;
+      if (az.id == 'N0') {  // disabled
+        switch (az.state) {
+
+          case 'lithium':
+            name = 'lithium_6';
+            break;
+
+          case 'beryllium':
+            name = 'beryllium_9';
+            break;
+
+          case 'boron10':
+            name = 'boron_10';
+            break;
+
+          case 'boron11':
+            name = 'boron_11';
+            break;
+
+          case 'carbon':
+            name = 'carbon_12';
+            break;
+
+          case 'initial':
+          case 'final':
+            if (az.conf.nuclets) {
+              grow0 = az.id + '0';
+              grow1 = az.id + '1';
+              // if it has 2 nuclets attached
+              if (az.conf.nuclets[az.id + '0' && az.conf.nuclets[az.id + '1']]) {
+              } // if only the 0 nuclet is attached
+              else if (az.conf.nuclets[az.id + '0']) {
+                name = 'carbon_12';
+              } // if only the 1 nuclet is attached
+              else if (az.conf.nuclets[az.id + '1']) {
+                name = 'carbon_12';
+              } // no nuclets are attached
+            }
+            else {
+              name = 'carbon_12';
+            }
+//          Check the grow points?
+            break;
+        }
+      } else { // if this in NOT 'N0'
+        switch (az.state) {
+
+          case 'lithium':
+            name = 'lithium_on_carbon'
+            break;
+
+          case 'beryllium':
+            name = 'beryllium_on_carbon'
+            break;
+
+          case 'boron10':
+            name = 'boron_on_carbon';
+            break;
+
+          case 'boron11':
+            name = 'boron_on_carbon';
+            break;
+
+          case 'carbon':
+            name = 'carbon_on_carbon';
+            break;
+
+          case 'initial':
+          case 'final':
+            if (az.conf.nuclets) {
+              if (az.conf.nuclets[grow0] && az.conf.nuclets[grow1]) {
+                name = 'carbon_12';
+              } // if only the 0 nuclet is attached
+              else if (az.conf.nuclets[az.id + '0']) {
+                name = 'carbon_12';
+              } // if only the 1 nuclet is attached
+              else if (az.conf.nuclets[az.id + '1']) {
+                name = 'carbon_12';
+              } // no nuclets are attached
+            }
+            else {
+              name = 'carbon_12';
+            }
+//          Check the grow points?
+            break;
+        }
+      }
+      az.bindingNuclet = name;
+      az.bindingEnergy = (name === 'unknown') ? 0 : be[name];
+    }
+
     /**
      * Create a list of nuclets for the nuclet edit form.
      */
     function createNucletList(atom) {
+      var totalBE = 0; // total Binding Energy for this atom.
+      var actualBE = $('.field--name-field-binding-energy-actual .field__item').html();
       /**
        * Recursive function to extract a nuclets information.
        *
@@ -622,13 +719,19 @@
             }
           }
         }
-        var out = '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">' +
+
+        findBindingEnergy(nuclet.az);
+        totalBE += parseFloat(nuclet.az.bindingEnergy);
+        var out = '<div class="binding-energy" title="' + nuclet.az.bindingNuclet + '">' +
+            nuclet.az.bindingEnergy + '</div>\n';
+        out += '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">' +
           id + ' ' + nuclet.az.state +
           ' - ' + numProtons;
         if (numNeutral) {
           out += ' - ' + numNeutral;
         }
         out += '</div>\n';
+
 
         // Recursively add the children nuclets.
         var grow0 = atom.az.nuclets[id + '0'];
@@ -667,6 +770,17 @@
         });
       } else {
         $nucletList.html(addNucletToList('N0', 0));
+      }
+
+      $('.atom--binding-calc--value').html(totalBE.toString().substring(0,6));
+      if (actualBE) {
+        var perc = ((totalBE > actualBE) ? actualBE / totalBE : totalBE / actualBE) * 100;
+        $('.atom--binding-actual--value').html(actualBE.toString().substring(0,6));
+        $('.atom--binding-perc--value').html(perc.toString().substring(0,6) + '%');
+      }
+      else {
+        $('.atom--binding-actual--value').html('');
+        $('.atom--binding-perc--value').html('');
       }
     }
 

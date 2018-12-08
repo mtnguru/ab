@@ -63,5 +63,11 @@ atomizer.loadNode:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadNode'
   requirements:
     _permission: 'access content'
+atomizer.loadDialog:
+  path: '/ajax-ab/load-dialog'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::loadDialog'
+  requirements:
+    _permission: 'access content'
 
 
