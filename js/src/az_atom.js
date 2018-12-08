@@ -786,13 +786,10 @@
 
 
         // If this is the node-atom-form being opened then fill in the atomic structure field.
-        var nodeForm = $('.node-atom-form, .node-atom-edit-form')[0];
-        if (nodeForm) {
-          var atomicStructure = nodeForm.getElementsByClassName('field--name-field-atomic-structure')[0];
-          var textarea = atomicStructure.getElementsByTagName('textarea')[0];
-          var value = extractStructure();
-          textarea.value = value;
-          var fart = 5;
+        var $nodeForm = $('.node-atom-form, .node-atom-edit-form');
+        if ($nodeForm) {
+          var $textarea = re = $nodeForm.find('.field--name-field-atomic-structure textarea')[0];
+          $textarea.val(extractStructure());
         }
       }
     };
