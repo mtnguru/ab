@@ -10,7 +10,7 @@
 
   Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     var viewer = _viewer;
-    var atom;
+    var bindingEnergies = drupalSettings.atomizer_bindingEnergies;
 
 //  var mouseMode = $('#blocks--mouse-mode input[name=mouse--mode]:checked', viewer.context).val();
     var mouseMode;
@@ -596,10 +596,39 @@
       editNuclet = nuclet;
     }
 
+    function findNeutralEnding(az, id) {
+      pList = (id == 0) ? [12,13,14,15,20] : [16,17,18,19,21];
+      var np = 0;
+      for (var p in pList) {
+        if (pList.hasOwnProperty(p)) {
+          var proton = az.protons['P' + p];
+          if (proton.az.active) {
+            np++;
+          }
+        }
+      }
+
+      switch (np) {
+        case 2:
+          return [
+            bindingEnergies['deuterium_on_carbon'],
+            bindingEnergies['extra_neutron'],
+          ];
+        case 4:
+          return [bindingEnergies['neutral_ending_4']];
+        case 5:
+          return [bindingEnergies['neutral_ending_5']];
+      }
+
+      // check the protons on this grow point and categorize it
+      return;
+    }
+
     function findBindingEnergy(az) {
       var name = 'unknown';
       var grow0, grow1;
-      var be = drupalSettings.atomizer_bindingEnergies;
+      var addl = [];
+      var extra = [];
       if (az.id == 'N0') {  // disabled
         switch (az.state) {
 
@@ -633,15 +662,19 @@
               } // if only the 0 nuclet is attached
               else if (az.conf.nuclets[az.id + '0']) {
                 name = 'carbon_12';
+                addl.push(findNeutralEnding(az, 1));
               } // if only the 1 nuclet is attached
               else if (az.conf.nuclets[az.id + '1']) {
                 name = 'carbon_12';
+                addl.push(findNeutralEnding(az, 0));
               } // no nuclets are attached
             }
             else {
               name = 'carbon_12';
+              addl.push(findNeutralEnding(az, 0));
+              addl.push(findNeutralEnding(az, 1));
+              extra.push()
             }
-//          Check the grow points?
             break;
         }
       } else { // if this in NOT 'N0'
@@ -675,18 +708,23 @@
               } // if only the 0 nuclet is attached
               else if (az.conf.nuclets[az.id + '0']) {
                 name = 'carbon_12';
+                addl.push(findNeutralEnding(az, 1));
               } // if only the 1 nuclet is attached
               else if (az.conf.nuclets[az.id + '1']) {
                 name = 'carbon_12';
+                addl.push(findNeutralEnding(az, 0));
               } // no nuclets are attached
             }
             else {
               name = 'carbon_12';
+              addl.push(findNeutralEnding(az, 0));
+              addl.push(findNeutralEnding(az, 1));
             }
 //          Check the grow points?
             break;
         }
       }
+      // Add additional neutrons
       az.bindingNuclet = name;
       az.bindingEnergy = (name === 'unknown') ? 0 : be[name];
     }

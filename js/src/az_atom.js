@@ -379,7 +379,6 @@
             $save.replaceWith(result.data.link);
             if (Drupal.attachBehaviors) {
               Drupal.attachBehaviors($save[0]);
-//            Drupal.attachBehaviors('.atom--save');
             }
           }
 
@@ -787,9 +786,19 @@
 
         // If this is the node-atom-form being opened then fill in the atomic structure field.
         var $nodeForm = $('.node-atom-form, .node-atom-edit-form');
-        if ($nodeForm) {
-          var $textarea = re = $nodeForm.find('.field--name-field-atomic-structure textarea')[0];
+        if ($(context).hasClass('node-atom-edit-form') || $(context).hasClass('node-atom-form')) {
+
+          var $textarea = $nodeForm.find('.field--name-field-atomic-structure textarea');
           $textarea.val(extractStructure());
+
+          var protons = $('.atom--num-protons--value').html();
+          $nodeForm.find('.field--name-field__protons input').val(protons);
+
+          var electrons = $('.atom--num-electrons--value').html();
+          $nodeForm.find('.field--name-field__electrons input').val(electrons);
+
+          var be_calc = $('.atom--binding-calc--value').html();
+          $nodeForm.find('.field--name-field-binding-energy-calculated input').val(be_calc);
         }
       }
     };
