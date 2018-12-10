@@ -597,12 +597,13 @@
     }
 
     function findNeutralEnding(az, id) {
-      pList = (id == 0) ? [12,13,14,15,20] : [16,17,18,19,21];
+      var bes = [];
+      var pList = (id == 0) ? [12,13,14,15] : [16,17,18,19];
       var np = 0;
       for (var p in pList) {
         if (pList.hasOwnProperty(p)) {
-          var proton = az.protons['P' + p];
-          if (proton.az.active) {
+          var proton = az.protons['P' + pList[p]];
+          if (proton.az.visible) {
             np++;
           }
         }
@@ -610,70 +611,83 @@
 
       switch (np) {
         case 2:
-          return [
-            bindingEnergies['deuterium_on_carbon'],
-            bindingEnergies['extra_neutron'],
-          ];
+          bes = ['deuterium_on_carbon', 'extra_neutron'];
+          break;
+
         case 4:
-          return [bindingEnergies['neutral_ending_4']];
-        case 5:
-          return [bindingEnergies['neutral_ending_5']];
+          var uid = 'U' + id + '0';
+          if (az.neutrons[uid].az.visible) {
+            bes = ['neutral_ending_5'];
+          } else {
+            bes = ['neutral_ending_4'];
+          }
+          break;
+
+      }
+
+
+      for (var u in az.neutrons) {
+        if (az.neutrons.hasOwnProperty(u)) {
+          if (u == 'U00' || u == 'U10') continue;
+          var neutron = az.neutrons[u];
+          if (neutron.az.visible) {
+            bes.push('extra_neutron');
+          }
+        }
       }
 
       // check the protons on this grow point and categorize it
-      return;
+      return bes;
     }
 
     function findBindingEnergy(az) {
-      var name = 'unknown';
-      var grow0, grow1;
-      var addl = [];
+      var be = [];
       var extra = [];
+      var grow0 = az.id + '0';
+      var grow1 = az.id + '1';
       if (az.id == 'N0') {  // disabled
         switch (az.state) {
 
           case 'lithium':
-            name = 'lithium_6';
+            be.push('lithium_6');
             break;
 
           case 'beryllium':
-            name = 'beryllium_9';
+            be.push('beryllium_9');
             break;
 
           case 'boron10':
-            name = 'boron_10';
+            be.push('boron_10');
             break;
 
           case 'boron11':
-            name = 'boron_11';
+            be.push('boron_11');
             break;
 
           case 'carbon':
-            name = 'carbon_12';
+            be.push('carbon_12');
             break;
 
           case 'initial':
           case 'final':
             if (az.conf.nuclets) {
-              grow0 = az.id + '0';
-              grow1 = az.id + '1';
               // if it has 2 nuclets attached
-              if (az.conf.nuclets[az.id + '0' && az.conf.nuclets[az.id + '1']]) {
+              if (az.conf.nuclets[grow0] && az.conf.nuclets[grow1]) {
+                be.push('carbon_12');
               } // if only the 0 nuclet is attached
-              else if (az.conf.nuclets[az.id + '0']) {
-                name = 'carbon_12';
-                addl.push(findNeutralEnding(az, 1));
+              else if (az.conf.nuclets[grow0]) {
+                be.push('carbon_12');
+                be.push.apply(be, findNeutralEnding(az, 1));
               } // if only the 1 nuclet is attached
-              else if (az.conf.nuclets[az.id + '1']) {
-                name = 'carbon_12';
-                addl.push(findNeutralEnding(az, 0));
+              else if (az.conf.nuclets[grow1]) {
+                be.push('carbon_12');
+                be.push.apply(be, findNeutralEnding(az, 0));
               } // no nuclets are attached
             }
             else {
-              name = 'carbon_12';
-              addl.push(findNeutralEnding(az, 0));
-              addl.push(findNeutralEnding(az, 1));
-              extra.push()
+              be.push('carbon_12');
+              be.push.apply(be, findNeutralEnding(az, 0));
+              be.push.apply(be, findNeutralEnding(az, 1));
             }
             break;
         }
@@ -681,52 +695,51 @@
         switch (az.state) {
 
           case 'lithium':
-            name = 'lithium_on_carbon'
+            be.push('lithium_on_carbon');
             break;
 
           case 'beryllium':
-            name = 'beryllium_on_carbon'
+            be.push('beryllium_on_carbon');
             break;
 
           case 'boron10':
-            name = 'boron_on_carbon';
+            be.push('boron_on_carbon');
             break;
 
           case 'boron11':
-            name = 'boron_on_carbon';
+            be.push('boron_on_carbon');
             break;
 
           case 'carbon':
-            name = 'carbon_on_carbon';
+            be.push('carbon_on_carbon');
             break;
 
           case 'initial':
           case 'final':
             if (az.conf.nuclets) {
               if (az.conf.nuclets[grow0] && az.conf.nuclets[grow1]) {
-                name = 'carbon_12';
+                be.push('carbon_on_carbon');
               } // if only the 0 nuclet is attached
-              else if (az.conf.nuclets[az.id + '0']) {
-                name = 'carbon_12';
-                addl.push(findNeutralEnding(az, 1));
+              else if (az.conf.nuclets[grow0]) {
+                be.push('carbon_on_carbon');
+                be.push.apply(be, findNeutralEnding(az, 1));
               } // if only the 1 nuclet is attached
-              else if (az.conf.nuclets[az.id + '1']) {
-                name = 'carbon_12';
-                addl.push(findNeutralEnding(az, 0));
+              else if (az.conf.nuclets[grow1]) {
+                be.push('carbon_on_carbon');
+                be.push.apply(be, findNeutralEnding(az, 0));
               } // no nuclets are attached
             }
             else {
-              name = 'carbon_12';
-              addl.push(findNeutralEnding(az, 0));
-              addl.push(findNeutralEnding(az, 1));
+              be.push('carbon_on_carbon');
+              be.push.apply(be, findNeutralEnding(az, 0));
+              be.push.apply(be, findNeutralEnding(az, 1));
             }
 //          Check the grow points?
             break;
         }
       }
-      // Add additional neutrons
-      az.bindingNuclet = name;
-      az.bindingEnergy = (name === 'unknown') ? 0 : be[name];
+
+      return be;
     }
 
     /**
@@ -734,7 +747,7 @@
      */
     function createNucletList(atom) {
       var totalBE = 0; // total Binding Energy for this atom.
-      var actualBE = $('.field--name-field-binding-energy-actual .field__item').html();
+      var actualBE = parseFloat($('.field--name-field-be-actual .field__item').html());
       /**
        * Recursive function to extract a nuclets information.
        *
@@ -758,18 +771,23 @@
           }
         }
 
-        findBindingEnergy(nuclet.az);
-        totalBE += parseFloat(nuclet.az.bindingEnergy);
-        var out = '<div class="binding-energy" title="' + nuclet.az.bindingNuclet + '">' +
-            nuclet.az.bindingEnergy + '</div>\n';
-        out += '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">' +
-          id + ' ' + nuclet.az.state +
-          ' - ' + numProtons;
-        if (numNeutral) {
-          out += ' - ' + numNeutral;
+        var out = '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">';
+        out += '<div class="header">' + id + ' ' + nuclet.az.state + ' - ' + numProtons + '</div>';
+        // Add the binding energy
+        var beList = findBindingEnergy(nuclet.az);
+        if (beList.length > 0) {
+          out += '<div class="binding-energy-wrapper">\n';
+          for (var b = 0; b < beList.length; b++) {
+            var en = beList[b];
+            out += '  <div class="binding-energy">\n';
+            out += '    <span class="title">' + en + '</span>\n';
+            out += '    <span class="value">' + bindingEnergies[en] + '</span>\n';
+            out += '  </div>\n';
+            totalBE += parseFloat(bindingEnergies[en]);
+          }
+          out += '</div>\n';
         }
         out += '</div>\n';
-
 
         // Recursively add the children nuclets.
         var grow0 = atom.az.nuclets[id + '0'];
@@ -813,8 +831,8 @@
       $('.atom--binding-calc--value').html(totalBE.toString().substring(0,6));
       if (actualBE) {
         var perc = ((totalBE > actualBE) ? actualBE / totalBE : totalBE / actualBE) * 100;
-        $('.atom--binding-actual--value').html(actualBE.toString().substring(0,6));
-        $('.atom--binding-perc--value').html(perc.toString().substring(0,6) + '%');
+        $('.atom--binding-actual--value').html(actualBE.toString().substring(0,7));
+        $('.atom--binding-perc--value').html(perc.toString().substring(0,5) + '%');
       }
       else {
         $('.atom--binding-actual--value').html('');

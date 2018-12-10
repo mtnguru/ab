@@ -77,6 +77,7 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
     }
   }
 
+  $form['#validate'][] = '_atomizer_atom_form_validate';
   $form['actions']['submit']['#submit'][] = '_atomizer_atom_form_submit';
   $form['actions']['submit']['#attributes']['class'][] = 'use-ajax-submit';
 //foreach (array_keys($form['actions']) as $action) {
@@ -86,7 +87,29 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
 //}
 }
 
+function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
+  if ($form_state->hasValue(['field_be_nucleon', 0, 'value']) &&
+      $form_state->hasValue(['field__protons', 0, 'value'])) {
+    $be_nucleon = $form_state->getValue('field_be_nucleon')[0]['value'];
+    $protons = $form_state->getValue('field__protons')[0]['value'];
+    $be_actual = $be_nucleon * $protons / 1000;
+    $form_state->setValue(['field_be_actual', 0, 'value'], $be_actual);
+    if ($form_state->hasValue(['field_be_sam', 0, 'value'])) {
+      $be_sam = $form_state->getValue('field_be_sam')[0]['value'];
+      $be_accuracy = (($be_sam > $be_actual) ? $be_actual/ $be_sam : $be_sam / $be_actual) * 100;
+      $form_state->setValue(['field_be_accuracy', 0, 'value'], $be_accuracy);
+    }
+  }
+}
+
 function _atomizer_atom_form_submit(&$form, FormStateInterface &$form_state) {
+//if ($form_state->hasValue('field_be_nucleon')) {
+//  $be_nucleon = $form_state->getValue('field_be_nucleon')[0]['value'];
+//  $form_state->setValue(['field_be_actual', 0, 'value'], $be_nucleon + 1);
+//}
+//$be_accuracy = $form_state->getValue('field_be_accuracy')[0]['value'];
+//$be_sam = $form_state.getValue('field_be_sam')[0];
+  $form_state->setRebuild();
   $response = new AjaxResponse();
   $response->addCommand(new CloseModalDialogCommand());
   $form_state->setResponse($response);

@@ -798,7 +798,11 @@
           $nodeForm.find('.field--name-field__electrons input').val(electrons);
 
           var be_calc = $('.atom--binding-calc--value').html();
-          $nodeForm.find('.field--name-field-binding-energy-calculated input').val(be_calc);
+          $nodeForm.find('.field--name-field-be-sam input').val(be_calc);
+
+          var be_accuracy = $('.atom--binding-perc--value').html().replace('%','');
+          var $fart = $nodeForm.find('.field--name-field-be-accuracy input');
+          $nodeForm.find('.field--name-field-be-accuracy input').val(be_accuracy);
         }
       }
     };
