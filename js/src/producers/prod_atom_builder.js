@@ -611,7 +611,7 @@
 
       switch (np) {
         case 2:
-          bes = ['deuterium_on_carbon', 'extra_neutron'];
+          bes = ['deuterium_on_carbon'];
           break;
 
         case 4:
@@ -622,7 +622,6 @@
             bes = ['neutral_ending_4'];
           }
           break;
-
       }
 
 
