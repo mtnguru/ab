@@ -79,6 +79,11 @@
         viewer.canvas.height = window.innerHeight;
         viewer.canvas.width = window.innerWidth;
       } else {
+        var $bar = $('.toolbar-bar');
+        var $tray = $('.toolbar-tray');
+        var $toolbarHeight = ($bar) ? $bar.height() : 0;
+        $toolbarHeight += ($tray) ? $tray.height() : 0;
+
         if (window.innerWidth < 960) {
           if (displayMode != 'mobile') {
             $atomList.addClass('az-hidden');
@@ -86,12 +91,11 @@
           displayMode = 'mobile';
           viewer.context.addClass('display-mode-' + displayMode);
           viewer.canvasContainer.style.width = null;
-          viewer.canvas.width = viewer.canvasContainer.clientWidth;
+          viewer.canvas.width = viewer.canvasContainer.clientWidth - 15;
           viewer.canvasContainer.style.width = viewer.canvas.width + 'px';
-          var maxHeight = viewer.canvas.width;
-          var fullHeight = window.innerHeight - 150;
-          viewer.canvas.height = (maxHeight < fullHeight) ? maxHeight : fullHeight;
+          viewer.canvas.height = window.innerHeight - 40 - $toolbarHeight;
           viewer.canvasContainer.style.height = viewer.canvas.height + 'px';
+//        viewer.canvas.width = viewer.canvasContainer.clientWidth;
         }
         else {
           if (displayMode != 'desktop') {
@@ -101,8 +105,9 @@
           viewer.context.addClass('display-mode-' + displayMode);
           viewer.canvasContainer.style.width = null;
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
+
           if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
-            viewer.canvas.height = window.innerHeight - 170;
+            viewer.canvas.height = window.innerHeight - 40 - $toolbarHeight;
           } else {
             viewer.canvas.height = viewer.canvas.width * viewer.atomizer.canvasRatio;
           }
@@ -110,8 +115,6 @@
           // Now that we set the height, set the width again,
           // the page scrollbar changes the container width.
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
-//        viewer.canvas.width = 1;
-//        viewer.canvas.height = 1;
         }
       }
 

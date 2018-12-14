@@ -622,8 +622,21 @@
      * @param id
      */
     var buttonClicked = function buttonClicked(button) {
+      // User pressed Select Atom button
       if (button.id == 'atom--select') {
-        $(viewer.context).toggleClass('select-atom-enabled');
+        $(viewer.context).toggleClass('select-atom-enabled', viewer.context);
+      }
+
+      // User pressed button to view binding energies
+      if (button.id == 'atom--be-button') {
+        var $bindingEnergy = $('.binding-energy-wrapper', viewer.context);
+        if ($(button).hasClass('az-selected')) {
+          $(button).removeClass('az-selected');
+          $bindingEnergy.addClass('az-hidden');
+        } else {
+          $(button).addClass('az-selected');
+          $bindingEnergy.removeClass('az-hidden');
+        }
       }
     };
 

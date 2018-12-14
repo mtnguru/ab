@@ -115,9 +115,6 @@ function _atomizer_atom_form_submit(&$form, FormStateInterface &$form_state) {
   $form_state->setResponse($response);
 }
 
-
-
-
 function _atomizer_what_is_this_form_alter_for (&$form, FormStateInterface $form_state) {
   // Set the field_configuration_file option to the list of files in atomizer/config/atomizers.
   $form['field_configuration_file']['#access'] = false;
@@ -295,10 +292,10 @@ function atomizer_preprocess_block(&$variables){
 
 function atomizer_preprocess_node(&$variables) {
   $type = $variables['node']->getType();
-  $nid = $variables['node']->id();
   switch ($type) {
 
     case 'atomizer':
+      $nid = $variables['node']->id();
       \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  node type ' . $type . ' nid ' . $nid);
 
       // Read in configuration yml file
@@ -314,6 +311,8 @@ function atomizer_preprocess_node(&$variables) {
           $atomizerConfig['filename'] = $configFile;
           $atomizer_block->getPlugin()->setConfigurationValue('atomizer_configuration', $atomizerConfig);
           $atomizer_block->save();
+
+          $variables['atomizer_id'] = $atomizerConfig['atomizerId'];
 
           // Add view block if defined.
 /*        if (!empty($atomizerConfig['view'])) {

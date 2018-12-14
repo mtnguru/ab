@@ -186,13 +186,7 @@
           break;
 
         case 'dialog':
-          var module = args[0];
-          var dialog;
-          if (dialogs[module]) {
-            dialog = Dialogs[module];
-          } else {
-            dialog = Drupal.atomizer.dialogs[module + 'C'](viewer, event.target.dataset);
-          }
+          var dialog = Drupal.atomizer.dialogs.getDialog(viewer, args[0]);
           dialog.dialogToggle();
           break;
 

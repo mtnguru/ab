@@ -19,7 +19,7 @@ class AtomizerBessel implements AtomizerDialogsInterface {
    *   Render array for Hue/Saturation/Lightness dialog.
    */
   static public function build(array $config) {
-    $file = File::load(619);
+    $file = File::load(633);
     $id = 'atomizer-bessel';
     // What is it - just a dialog with a div and canvas
     $content = [

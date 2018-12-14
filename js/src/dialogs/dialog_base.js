@@ -48,7 +48,7 @@
 (function ($) {
   'use strict';
 
-  Drupal.atomizer.dialogs = {};
+  Drupal.atomizer.dialogs = {loaded: {}};
 
   /**
    * Initialize a dialog.
@@ -79,7 +79,7 @@
           $button.click(processFunc);
         }
         else {
-          $button.click(dialog.dialogToggle);
+          $button.click(this.dialogToggle);
         }
       }
     }
@@ -92,6 +92,14 @@
   };
   */
 
+  Drupal.atomizer.dialogs.getDialog = function (viewer, name) {
+    if (Drupal.atomizer.dialogs.loaded[name]) {
+      return Drupal.atomizer.dialogs.loaded[name];
+    } else {
+      return Drupal.atomizer.dialogs[name + 'C'](viewer, {});
+    }
+  };
+
   Drupal.atomizer.dialogs.baseC = function baseC(spec) {
     var dialog = {
       settings: {},
@@ -100,7 +108,7 @@
 
     // Return if dialog is loaded.
     dialog.dialogHave = function dialogHave() {
-      return (dialog.$dialog) ? true : false;
+      return (this.$dialog) ? true : false;
     };
 
     // Load the dialog using AJAX.
@@ -109,19 +117,22 @@
         '/ajax-ab/load-dialog',
         {
           action: 'load-dialog',
-          dialogName: dialog.spec.name
+          dialogName: this.spec.name
         },
-        dialog.dialogCreate);
+        this.dialogCreate);
     };
 
     // Create dialog from AJAX response.
     dialog.dialogCreate = function dialogCreate(response, $callingElement) {
+
+      var settings = response[0].data;
 
       // Create the wrapper for this dialog.
       dialog.$wrapper = $(document.createElement('DIV'))
         .attr('id', dialog.spec.cssId)
         .addClass('atomizer-dialog');
       $(dialog.spec.container).append(dialog.$wrapper);
+      Drupal.atomizer.dialogs.loaded[settings.id] = dialog;
 
       // Create the dialog title
       if (dialog.spec.title) {
@@ -134,7 +145,7 @@
       // Create the dialog content
       dialog.$content = $(document.createElement('DIV'))
         .addClass('content')
-        .html(response[0].data.content);
+        .html(settings.content);
       dialog.$wrapper.append(dialog.$content);
 
 
@@ -191,61 +202,61 @@
      *   True if open, False if closed.
      */
     dialog.dialogIsOpen = function dialogIsOpen() {
-      return (dialog.$dialog && dialog.isOpen) ? true : false;
+      return (this.$dialog && this.isOpen) ? true : false;
     };
 
     /**
      * If the dialog is open then close it.
      */
     dialog.dialogClose = function dialogClose() {
-      if (dialog.$dialog) {
-        if (dialog.spec.$selectButton) {
-          dialog.spec.$selectButton.removeClass('checked');
+      if (this.$dialog) {
+        if (this.spec.$selectButton) {
+          this.spec.$selectButton.removeClass('checked');
         }
-        if (dialog.isOpen) {
-          dialog.isOpen = false;
-          dialog.$dialog.hide();
+        if (this.isOpen) {
+          this.isOpen = false;
+          this.$dialog.hide();
         }
-        dialog.dialogOnClose();
-        dialog.settings = {};
+        this.dialogOnClose();
+        this.settings = {};
       }
     };
     // Open the dialog if it exists, otherwise create it.
     dialog.dialogOpen = function dialogOpen(settings) {
-      $.extend(dialog.settings, settings);
-      if (dialog.$dialog) {
-        if (dialog.spec.$selectButton) {
-          dialog.spec.$selectButton.addClass('checked');
+      $.extend(this.settings, settings);
+      if (this.$dialog) {
+        if (this.spec.$selectButton) {
+          this.spec.$selectButton.addClass('checked');
         }
-        if (!dialog.isOpen) {
-          dialog.isOpen = true;
-          dialog.$dialog.show();
-          dialog.dialogOnOpen();
+        if (!this.isOpen) {
+          this.isOpen = true;
+          this.$dialog.show();
+          this.dialogOnOpen();
         }
       }
       else {
-        dialog.dialogLoad();
+        this.dialogLoad();
       }
     };
     // Toggle the dialog if it exists, otherwise create it.
     dialog.dialogToggle = function dialogToggle(settings) {
-      $.extend(dialog.settings, settings);
-      if (dialog.dialogHave()) {
-        if (dialog.dialogIsOpen()) {
-          dialog.dialogClose();
+      $.extend(this.settings, settings);
+      if (this.dialogHave()) {
+        if (this.dialogIsOpen()) {
+          this.dialogClose();
         }
         else {
-          dialog.dialogOpen(settings);
+          this.dialogOpen(settings);
         }
       }
       else {
-        dialog.dialogLoad();
+        this.dialogLoad();
       }
     };
 
     dialog.setSelectButton = function setSelectButton($dialog) {
-      dialog.spec.$selectButton = $dialog;
-      if (dialog.dialogHave()) {
+      this.spec.$selectButton = $dialog;
+      if (this.dialogHave()) {
 //      dialog.$dialog.dialog({
 //        position: {
 //          my: 'left',

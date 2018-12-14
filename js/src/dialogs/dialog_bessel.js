@@ -28,7 +28,7 @@
    * @return {dialog}
    *   Return the bessel dialog.
    */
-  Drupal.atomizer.dialogs.besselC = function besselC(_viewer, spec) {
+  Drupal.atomizer.dialogs.besselC = function (_viewer, spec) {
     var dialog;
     var $wrapper;
     var $image;

@@ -219,6 +219,16 @@
         currentSet.settings[args[0] + '--' + args[1]].setting = value;
       }
 
+      if (argNames[1] == 'master') {
+        var $slaves = $('#' + id).parent().find('.az-control-opacity');
+        $slaves.each(function () {
+          $(this).find('.az-slider, .az-value').val(value);
+          applyControl(this.id, value);
+        });
+        $('#' + id).parent().parent().find('.opacity--value')
+        return;
+      }
+
       switch (argNames[0]) {
 
         case 'renderer':
