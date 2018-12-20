@@ -298,6 +298,23 @@ class AtomizerController extends ControllerBase {
   }
 
   /**
+   * Save data for an atom - currently just saving binding energy.
+   */
+  public function saveAtom() {
+    $data = json_decode(file_get_contents("php://input"), TRUE);
+    $atom = Node::load($data['nid']);
+    if ($data['be_sam'] != '0') {
+      $atom->field_be_sam->setValue($data['be_sam']);
+    }
+    if ($data['be_accuracy'] != '0%') {
+      $atom->field_be_accuracy->setValue(str_replace('%', '', $data['be_accuracy']));
+    }
+    $atom->setNewRevision(TRUE);
+    $atom->save();
+    return new AjaxResponse();
+  }
+
+  /**
    * Save an edited image into a new media entity.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse

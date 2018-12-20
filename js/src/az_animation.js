@@ -250,19 +250,19 @@
       $(button).addClass('az-selected');
     }
 
-    var buttonClicked = function buttonClicked(button) {
-      switch (button.id) {
+    var buttonClicked = function buttonClicked(event) {
+      switch (event.target.id) {
         case 'animation--play':
           play();
           $buttons.removeClass('az-selected');
-          $(button).addClass('az-selected');
+          $(event.target).addClass('az-selected');
           break;
 
         case 'animation--pause':
           state = 'paused';
           stopTimers();
           $buttons.removeClass('az-selected');
-          $(button).addClass('az-selected');
+          $(event.target).addClass('az-selected');
           break;
 
         case 'animation--stop':

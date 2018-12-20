@@ -192,11 +192,11 @@
 
         default:
           if (args[0] === 'viewer') {
-            viewer.buttonClicked(event.target);
+            viewer.buttonClicked(event);
           }
           else {
             if (viewer[args[0]] && viewer[args[0]].buttonClicked) {
-              viewer[args[0]].buttonClicked(event.target);
+              viewer[args[0]].buttonClicked(event);
             }
           }
           break;

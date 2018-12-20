@@ -648,7 +648,11 @@
         switch (az.state) {
 
           case 'lithium':
-            be.push('lithium_6');
+            if (az.protons.P5.az.active) {
+              be.push('lithium_7');
+            } else {
+              be.push('lithium_6');
+            }
             break;
 
           case 'beryllium':
@@ -827,15 +831,15 @@
         $nucletList.html(addNucletToList('N0', 0));
       }
 
-      $('.atom--binding-calc--value').html(totalBE.toString().substring(0,6));
+      $('.atom--binding-sam--value').html(totalBE.toString().substring(0,6));
       if (actualBE) {
-        var perc = ((totalBE > actualBE) ? actualBE / totalBE : totalBE / actualBE) * 100;
+        var perc = ((totalBE > actualBE) ? actualBE / totalBE : -totalBE / actualBE) * 100;
         $('.atom--binding-actual--value').html(actualBE.toString().substring(0,7));
-        $('.atom--binding-perc--value').html(perc.toString().substring(0,5) + '%');
+        $('.atom--binding-accuracy--value').html(perc.toString().substring(0,5) + '%');
       }
       else {
         $('.atom--binding-actual--value').html('');
-        $('.atom--binding-perc--value').html('');
+        $('.atom--binding-accuracy--value').html('');
       }
     }
 

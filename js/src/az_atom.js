@@ -19,8 +19,6 @@
     var $atomSelectClose = $atomList.find('.az-close');
     var $atoms = $('.atom-name, .atomic-number', viewer.context);
 
-    var loadCallback;
-
     /**
      * Align an object to an internal axis (x, y or z) and then align that axis
      * to an external axis in the scene.
@@ -337,105 +335,105 @@
      * @param nid
      */
     var loadObject = function loadObject (nid, callback) {
-      loadCallback = callback;
+      var loadCallback = callback;
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadAtom',
         { nid: nid },
         doCreateAtom
       );
-    };
 
-    /**
-     * Callback from ajax call to load and display an atom.
-     *
-     * @param results
-     */
-    var doCreateAtom = function doCreateAtom (results) {
-      var az;
-      // Write a PHP program to read in all atoms one by one and convert the proton and electron arrays to associative arrays?
-      // Don't use javascript for it.
-      // Query all atoms using the atom query thing
-      //   Read in the atom
-      //   Convert the arrays
-      //   Save the atom
-      for (var i = 0; i < results.length; i++) {
-        var result = results[i];
-        if (result.command == 'loadAtomCommand') {
-          if ($sceneName) {
-            $sceneName.html(result.data.atomTitle);
-          }
-          if (atomInformation) {
-            atomInformation.innerHTML = result.data.information;
-          }
-          if (atomProperties) {
-            atomProperties.innerHTML = result.data.properties;
-          }
-          if ($atoms.length > 0) {
-            $atoms.removeClass('atom-active');
-            $('.atom-select-' + result.data.nid, viewer.context).addClass('atom-active');
-          }
-          var $save = $('.atom--save a', viewer.context);
-          if ($save.length) {
-            $save.replaceWith(result.data.link);
-            if (Drupal.attachBehaviors) {
-              Drupal.attachBehaviors($save[0]);
+      /**
+       * Callback from ajax call to load and display an atom.
+       *
+       * @param results
+       */
+      function doCreateAtom (results) {
+        var az;
+        // Write a PHP program to read in all atoms one by one and convert the proton and electron arrays to associative arrays?
+        // Don't use javascript for it.
+        // Query all atoms using the atom query thing
+        //   Read in the atom
+        //   Convert the arrays
+        //   Save the atom
+        for (var i = 0; i < results.length; i++) {
+          var result = results[i];
+          if (result.command == 'loadAtomCommand') {
+            if ($sceneName) {
+              $sceneName.html(result.data.atomTitle);
             }
-          }
+            if (atomInformation) {
+              atomInformation.innerHTML = result.data.information;
+            }
+            if (atomProperties) {
+              atomProperties.innerHTML = result.data.properties;
+            }
+            if ($atoms.length > 0) {
+              $atoms.removeClass('atom-active');
+              $('.atom-select-' + result.data.nid, viewer.context).addClass('atom-active');
+            }
+            var $save = $('.atom--save a', viewer.context);
+            if ($save.length) {
+              $save.replaceWith(result.data.link);
+              if (Drupal.attachBehaviors) {
+                Drupal.attachBehaviors($save[0]);
+              }
+            }
 
-          if (atom) {
-            // Remove any atom's currently displayed
-            deleteAtom(atom);
-            atom = null;
-            az = null;
-            viewer.atom.atom = null;
-          } else {
-            az = {nuclets: {}}
-          }
+            if (atom) {
+              // Remove any atom's currently displayed
+              deleteAtom(atom);
+              atom = null;
+              az = null;
+              viewer.atom.atom = null;
+            } else {
+              az = {nuclets: {}}
+            }
 
-          createAtom(result.data.atomConf['N0']);
-          atom.az.nid = result.data.nid;
-          atom.az.name = result.data.atomName;
-          atom.az.title = result.data.atomTitle;
+            createAtom(result.data.atomConf['N0']);
+            atom.az.nid = result.data.nid;
+            atom.az.name = result.data.atomName;
+            atom.az.title = result.data.atomTitle;
 
-          // Move atom position
-          if (viewer.dataAttr['atom--position--x']) {
-            if (!atom.position) atom.position = new THREE.Vector3();
-            atom.position.x = viewer.dataAttr['atom--position--x'];
-          }
-          if (viewer.dataAttr['atom--position--y']) {
-            if (!atom.position) atom.position = new THREE.Vector3();
-            atom.position.y = viewer.dataAttr['atom--position--y'];
-          }
-          if (viewer.dataAttr['atom--position--z']) {
-            if (!atom.position) atom.position = new THREE.Vector3();
-            atom.position.z = viewer.dataAttr['atom--position--z'];
-          }
+            // Move atom position
+            if (viewer.dataAttr['atom--position--x']) {
+              if (!atom.position) atom.position = new THREE.Vector3();
+              atom.position.x = viewer.dataAttr['atom--position--x'];
+            }
+            if (viewer.dataAttr['atom--position--y']) {
+              if (!atom.position) atom.position = new THREE.Vector3();
+              atom.position.y = viewer.dataAttr['atom--position--y'];
+            }
+            if (viewer.dataAttr['atom--position--z']) {
+              if (!atom.position) atom.position = new THREE.Vector3();
+              atom.position.z = viewer.dataAttr['atom--position--z'];
+            }
 
 //        if (!atom.rotation) atom.rotation = new THREE.Vector3();
 //        atom.rotation.x =  30 / 360 * 2 * Math.PI;
 //        atom.rotation.z = -45 / 360 * 2 * Math.PI;
 
-          // Rotate atom
-          if (viewer.dataAttr['atom--rotation--x']) {
-            if (!atom.rotation) atom.rotation = new THREE.Vector3();
-            atom.rotation.x = viewer.dataAttr['atom--rotation--x'] * Math.PI / 180;
-          }
-          if (viewer.dataAttr['atom--rotation--y']) {
-            if (!atom.rotation) atom.rotation = new THREE.Vector3();
-            atom.rotation.y = viewer.dataAttr['atom--rotation--y'] * Math.PI / 180;
-          }
-          if (viewer.dataAttr['atom--rotation--z']) {
-            if (!atom.rotation) atom.rotation = new THREE.Vector3();
-            atom.rotation.z = viewer.dataAttr['atom--rotation--z'] * Math.PI / 180;
-          }
-          viewer.producer.objectLoaded(atom);
-          viewer.render();
+            // Rotate atom
+            if (viewer.dataAttr['atom--rotation--x']) {
+              if (!atom.rotation) atom.rotation = new THREE.Vector3();
+              atom.rotation.x = viewer.dataAttr['atom--rotation--x'] * Math.PI / 180;
+            }
+            if (viewer.dataAttr['atom--rotation--y']) {
+              if (!atom.rotation) atom.rotation = new THREE.Vector3();
+              atom.rotation.y = viewer.dataAttr['atom--rotation--y'] * Math.PI / 180;
+            }
+            if (viewer.dataAttr['atom--rotation--z']) {
+              if (!atom.rotation) atom.rotation = new THREE.Vector3();
+              atom.rotation.z = viewer.dataAttr['atom--rotation--z'] * Math.PI / 180;
+            }
+            viewer.producer.objectLoaded(atom);
+            viewer.render();
 
-          if (loadCallback) {
-            loadCallback();
+            if (loadCallback) {
+              loadCallback();
+            }
           }
         }
-      }
+      };
     };
 
     /**
@@ -560,6 +558,54 @@
     }
 
     /**
+     * Cycle through all atoms, calculate their BE, save it to Drupal.
+     */
+    var running = false;
+    function calculateAllBindingEnergies(event) {
+      if (running) {
+        running = false;
+        $(event.target).removeClass('az-selected');
+      } else {
+        running = true;
+        $(event.target).addClass('az-selected');
+        var $isotopes = $('.isotope', viewer.context);
+        var lastIsotope = $isotopes.length;
+        var isotope = 0;
+
+        var $isotope = $($isotopes[isotope]);
+        var nid = $isotope.data('nid');
+        loadObject (nid, displayAtom);
+      }
+
+      function displayAtom() {
+        console.log('Save Atom ' + nid);
+
+        var be_sam = $('.atom--binding-sam--value',viewer.context).html();
+        var be_accuracy = $('.atom--binding-accuracy--value',viewer.context).html();
+        if (be_sam != '0') {
+          Drupal.atomizer.base.doAjax(
+              '/ajax-ab/saveAtom',
+              { nid: nid,
+                be_sam: be_sam,
+                be_accuracy: be_accuracy
+              },
+              null  // No callback - assume it saved okay.
+          );
+        }
+        // Save the binding energy to Drupal
+        if (++isotope < lastIsotope && running) {
+          setTimeout(function() {
+            $isotope = $($isotopes[isotope]);
+            nid = $isotope.data('nid');
+            loadObject (nid, displayAtom);
+          }, 10);
+        } else {
+          $(event.target).removeClass('az-selected');
+        }
+      }
+    }
+
+    /**
      * Add a single proton to the current atom.
      *
      * @param nuclet
@@ -621,22 +667,28 @@
      *
      * @param id
      */
-    var buttonClicked = function buttonClicked(button) {
+    var buttonClicked = function buttonClicked(event) {
       // User pressed Select Atom button
-      if (button.id == 'atom--select') {
+      if (event.target.id == 'atom--select') {
         $(viewer.context).toggleClass('select-atom-enabled', viewer.context);
       }
 
       // User pressed button to view binding energies
-      if (button.id == 'atom--be-button') {
+      if (event.target.id == 'atom--be-button') {
         var $bindingEnergy = $('.binding-energy-wrapper', viewer.context);
-        if ($(button).hasClass('az-selected')) {
-          $(button).removeClass('az-selected');
+        if ($(event.target).hasClass('az-selected')) {
+          $(event.target).removeClass('az-selected');
           $bindingEnergy.addClass('az-hidden');
         } else {
-          $(button).addClass('az-selected');
+          $(event.target).addClass('az-selected');
           $bindingEnergy.removeClass('az-hidden');
         }
+        event.preventDefault();
+      }
+      // User pressed button to view binding energies
+      if (event.target.id == 'atom--calc-button') {
+        event.preventDefault();
+        calculateAllBindingEnergies(event);
       }
     };
 
@@ -810,10 +862,10 @@
           var electrons = $('.atom--num-electrons--value').html();
           $nodeForm.find('.field--name-field__electrons input').val(electrons);
 
-          var be_calc = $('.atom--binding-calc--value').html();
+          var be_calc = $('.atom--binding-sam--value').html();
           $nodeForm.find('.field--name-field-be-sam input').val(be_calc);
 
-          var be_accuracy = $('.atom--binding-perc--value').html().replace('%','');
+          var be_accuracy = $('.atom--binding-accuracy--value').html().replace('%','');
           var $fart = $nodeForm.find('.field--name-field-be-accuracy input');
           $nodeForm.find('.field--name-field-be-accuracy input').val(be_accuracy);
         }

@@ -465,8 +465,8 @@
      *
      * @param id
      */
-    var buttonClicked = function buttonClicked(button) {
-      if (button.id == 'atom--select') {
+    var buttonClicked = function buttonClicked(event) {
+      if (event.target.id == 'atom--select') {
         $(viewer.context).toggleClass('select-atom-enabled');
       }
     };

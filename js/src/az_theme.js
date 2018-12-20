@@ -550,8 +550,8 @@
       }
     };
 
-    var buttonClicked = function buttonClicked (target) {
-      switch (target.id) {
+    var buttonClicked = function buttonClicked (event) {
+      switch (event.target.id) {
         case 'theme--saveButton':
           saveTheme(currentSet);
           break;

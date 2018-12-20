@@ -91,7 +91,7 @@
           displayMode = 'mobile';
           viewer.context.addClass('display-mode-' + displayMode);
           viewer.canvasContainer.style.width = null;
-          viewer.canvas.width = viewer.canvasContainer.clientWidth - 15;
+          viewer.canvas.width = viewer.canvasContainer.clientWidth;
           viewer.canvasContainer.style.width = viewer.canvas.width + 'px';
           viewer.canvas.height = window.innerHeight - 40 - $toolbarHeight;
           viewer.canvasContainer.style.height = viewer.canvas.height + 'px';
@@ -313,8 +313,8 @@
       }
     };
 
-    viewer.buttonClicked = function buttonClicked (target) {
-      if (target.id === 'viewer--fullScreen') {
+    viewer.buttonClicked = function buttonClicked (event) {
+      if (event.target.id === 'viewer--fullScreen') {
         fullScreen = !fullScreen;
         if (fullScreen) {
           screenfull.request(viewer.context[0]);

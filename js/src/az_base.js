@@ -45,13 +45,21 @@
             }
             if (successCallback) successCallback(response);
           } else {
-            (errorCallback) ? errorCallback(response) : successCallback(response);
+            if (errorCallback) {
+              errorCallback(response);
+            } else if (successCallback) {
+              successCallback(response);
+            }
           }
           return false;
         },
         error: function (response) {
           alert('atomizer_base doAjax: ' + response.responseText);
-          (errorCallback) ? errorCallback(response) : successCallback(response);
+          if (errorCallback) {
+            errorCallback(response);
+          } else if (successCallback) {
+            successCallback(response);
+          }
         }
       });
     }
