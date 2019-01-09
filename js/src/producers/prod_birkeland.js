@@ -232,6 +232,11 @@
      * @param event
      */
     function buttonClicked(event) {
+      if (!viewer.besselGraph) {
+        viewer.besselGraph = Drupal.atomizer.besselDialogC(viewer);
+      } else {
+        viewer.besselGraph.toggle();
+      }
     }
 
     return {

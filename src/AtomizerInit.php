@@ -227,6 +227,9 @@ class AtomizerInit {
           '#markup' => '<canvas class="az-canvas"></canvas>',
           '#allowed_tags' => array_merge(Xss::getHtmlTagList(), ['canvas'])
         ],
+        'labels' => [
+          '#markup' => '<div class="az-canvas-labels">shit faced</div>',
+        ],
         'copyright' => [
           '#markup' => '<div title="Copyright 2018 by Ethereal Matters, LLC" class="az-fa-copyright copyright"></div>'
         ],

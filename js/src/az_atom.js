@@ -10,7 +10,7 @@
 
     var viewer = _viewer;
     var atom;
-    var $sceneName = $('.scene--name, .az-scene-name', viewer.context);
+    var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
     var atomInformation = $('.atom--information', viewer.context)[0];
     var atomProperties = $('.atom--properties', viewer.context)[0];
 

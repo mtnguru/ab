@@ -625,6 +625,13 @@
       }
 
 
+
+      // check the protons on this grow point and categorize it
+      return bes;
+    }
+
+    function findExtraNeutrons(az) {
+      var bes = [];
       for (var u in az.neutrons) {
         if (az.neutrons.hasOwnProperty(u)) {
           if (u == 'U00' || u == 'U10') continue;
@@ -634,8 +641,6 @@
           }
         }
       }
-
-      // check the protons on this grow point and categorize it
       return bes;
     }
 
@@ -741,6 +746,8 @@
             break;
         }
       }
+
+      be.push.apply(be, findExtraNeutrons(az));
 
       return be;
     }
@@ -885,10 +892,12 @@
      * Create the view - add any objects to scene.
      */
     var createView = function () {
+      let ctx = viewer.canvas.getContext("2d");
       viewer.nuclet = Drupal.atomizer.nucletC(viewer);
       viewer.atom = Drupal.atomizer.atomC(viewer);
       viewer.shapes = Drupal.atomizer.shapesC(viewer);
       viewer.sprites = Drupal.atomizer.spritesC(viewer);
+      viewer.labels = Drupal.atomizer.labelsC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
 
       // Load and display the default atom

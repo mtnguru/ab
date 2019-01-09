@@ -12,6 +12,7 @@ Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
   viewer.controls = Drupal.atomizer.controlsC(viewer);
   viewer.nuclet = Drupal.atomizer.nucletC(viewer);
   viewer.sprites = Drupal.atomizer.spritesC(viewer);
+  viewer.labels = Drupal.atomizer.labelsC(viewer);
   viewer.shapes = Drupal.atomizer.shapesC(viewer);
   viewer.atom = Drupal.atomizer.atomC(viewer);
   /**

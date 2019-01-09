@@ -151,7 +151,9 @@
      * @returns {boolean}
      */
     function onButtonClicked(event) {
-      event.preventDefault();
+      if (this.type != 'checkbox') {
+        event.preventDefault();
+      }
 
       var args = this.id.split("--");
       switch (args[1]) {
@@ -187,7 +189,7 @@
 
         case 'dialog':
           var dialog = Drupal.atomizer.dialogs.getDialog(viewer, args[0]);
-          dialog.dialogToggle();
+          dialog.toggle();
           break;
 
         default:

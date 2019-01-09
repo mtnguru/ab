@@ -12,6 +12,7 @@ atomizer-base:
     js/src/az_theme.js: {}
     js/src/az.js: {}
     js/src/az_sprites.js: {}
+    js/src/az_labels.js: {}
     js/src/az_shapes.js: {}
     js/src/az_nuclet.js: {}
     js/src/az_atom.js: {}
@@ -35,6 +36,7 @@ atomizer-obfuscator:
     js/min/az_theme.js: {}
     js/min/az.js: {}
     js/min/az_sprites.js: {}
+    js/min/az_labels.js: {}
     js/min/az_shapes.js: {}
     js/min/az_nuclet.js: {}
     js/min/az_atom.js: {}
@@ -76,6 +78,10 @@ atomizer-birkeland:
     js/src/dialogs/dialog_base.js: {}
     js/src/dialogs/dialog_bessel.js: {}
     js/src/producers/prod_birkeland.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.draggable
+    - core/jquery.ui.resizeable
 
 atomizer-birkeland-obfuscator:
   js:

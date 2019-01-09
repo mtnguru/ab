@@ -147,13 +147,18 @@
       // Create and position the scene
       viewer.scene = new THREE.Scene();
 //    viewer.scene = new Physijs.Scene();
-      viewer.scene.position.set(0,0,0);
 
       // Make controls
       viewer.controls = Drupal.atomizer.controlsC(viewer);
 
+      // Set the camera lookAt
+      viewer.scene.position.set(
+          viewer.theme.get('camera--focus', 'x'),
+          viewer.theme.get('camera--focus', 'y'),
+          viewer.theme.get('camera--focus', 'z')
+      );
+
       // Create the renderer
-//    viewer.producer.createRenderer();
       switch (viewer.atomizer.renderer) {
 
         case 'webgl':
@@ -176,19 +181,14 @@
         case 'css2d':
           break;
         case 'css3d':
-          viewer.renderer = new THREE.CSS3DRenderer({
-//          antialias: true,
-//          canvas: viewer.canvas,
-//          preserveDrawingBuffer: true,
-//          shadowEnabled: true
-          });
+          viewer.renderer = new THREE.CSS3DRenderer({ });
           viewer.CSS2DRenderer({
             antialias: true,
 //          canvas: viewer.canvas,
             preserveDrawingBuffer: true,
 //          shadowEnabled: true
-
           });
+
           viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
           viewer.canvasContainer.appendChild(viewer.renderer.domElement);
 
@@ -201,6 +201,7 @@
           break;
       }
 //    viewer.renderer.shadowEnabled = true;
+
 
       // add the output of the renderer to the html element
 
