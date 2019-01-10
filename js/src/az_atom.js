@@ -594,11 +594,11 @@
         }
         // Save the binding energy to Drupal
         if (++isotope < lastIsotope && running) {
-          setTimeout(function() {
+//        setTimeout(function() {
             $isotope = $($isotopes[isotope]);
             nid = $isotope.data('nid');
             loadObject (nid, displayAtom);
-          }, 10);
+//        }, 10);
         } else {
           $(event.target).removeClass('az-selected');
         }
