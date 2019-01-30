@@ -1,2 +1,2 @@
-js/min/** -diff
+#js/min/* -diff
 css/* -diff

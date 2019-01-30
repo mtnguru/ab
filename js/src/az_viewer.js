@@ -79,11 +79,17 @@
         viewer.canvas.height = window.innerHeight;
         viewer.canvas.width = window.innerWidth;
       } else {
-        var $bar = $('.toolbar-bar');
-        var $tray = $('.toolbar-tray');
         var $toolbarHeight = 0;
-        $toolbarHeight += ($bar.length) ? $bar.height() : 0;
-        $toolbarHeight += ($tray.length) ? $tray.height() : 0;
+
+        var $bar = $('.toolbar-bar');
+        if ($bar.length) {
+          $toolbarHeight += ($bar.length) ? $bar.height() : 0;
+        }
+
+        var $tray = $('.toolbar-tray');
+        if ($tray.length && $tray.hasClass('is-active')) {
+          $toolbarHeight += ($tray.length) ? $tray.height() : 0;
+        }
 
         if (window.innerWidth < 960) {
           if (displayMode != 'mobile') {

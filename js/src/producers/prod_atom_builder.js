@@ -770,6 +770,7 @@
        * @returns {string}
        */
       function addNucletToList(id, shell) {
+        var showBindingEnergy = $('#atom--be-button').hasClass('az-selected') ? '' : 'az-hidden';
         var nuclet = atom.az.nuclets[id];
         var numProtons = 0;
         var numNeutral = 0;
@@ -790,7 +791,7 @@
         // Add the binding energy
         var beList = findBindingEnergy(nuclet.az);
         if (beList.length > 0) {
-          out += '<div class="binding-energy-wrapper">\n';
+          out += `<div class="binding-energy-wrapper ${showBindingEnergy}">\n`;
           for (var b = 0; b < beList.length; b++) {
             var en = beList[b];
             out += '  <div class="binding-energy">\n';
@@ -817,9 +818,11 @@
         return out;
       }
 
-      // Save the nuclet form before overwriting the list.
       if ($nucletFormBlock.length) {
+        // Save the nuclet form before overwriting the list.
         $nucletFormBlock.insertAfter($('.blocks--nuclet-list'), viewer.context);
+
+        // Create a new list recursively
         $nucletList.html(addNucletToList('N0', 0));
 
         $nucletButtons = $nucletList.find('.nuclet');

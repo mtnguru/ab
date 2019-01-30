@@ -69,10 +69,12 @@ class AtomizerInit {
     $atoms = self::queryAtoms()['results'];
 
     // Go through each atom and count number of atoms per element
+    $isomers = [];
     foreach ($atoms as $atom) {
       $eid = $atom->field_element_target_id;
       if (!empty($elements[$eid])) {
         $elements[$eid]['isotopes'][] = $atom;
+        $isomers[$atom->field__protons_value][] = $atom;
         if (empty($elements[$eid]['numIsotopes'])) {
           $elements[$eid]['numIsotopes'] = 1;
         } else {
@@ -80,6 +82,11 @@ class AtomizerInit {
         }
       }
     }
+
+    foreach ($atoms as $atom) {
+      $atom->isomers = $isomers[$atom->field__protons_value];
+    }
+
 
     // Create render array of elements and their isotopes.
     $list = [];
@@ -100,7 +107,7 @@ class AtomizerInit {
         '#num_isotopes' => $element['numIsotopes'],
         '#num_isomers' => $element['numIsomers'],
         '#isotopes' => ($element['numIsotopes']) ? $element['isotopes'] : null,
-        '#isomers' => ($element['numIsomers']) ? $element['isomers'] : null,
+        '#isomers' => $isomers,
       ];
     }
 
@@ -132,9 +139,6 @@ class AtomizerInit {
         'elements' => $list,
       ],
     ];
-  }
-  static function buildSelectAtom() {
-
   }
 
   static function build($config) {

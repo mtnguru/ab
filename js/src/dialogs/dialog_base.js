@@ -40,7 +40,7 @@
       if (settings.title) {
         html =  '<div class="title-pane">';
         html += '<div class="az-fa-close button"></div>';
-        html += `<h2>${settings.title}</h2>`;
+        html += `<h3>${settings.title}</h3>`;
         html += '</div>';
         this.elements.wrapper.innerHTML += html;
 
@@ -77,13 +77,14 @@
 
       // Make the dialog resizable.
       if (settings.resizeable) {
-        $dialog.resizable({
+        $.extend(settings.resizeable, {
           resize: function (event, ui) {
-//        if (this.onResize) {
-//          this.onResize(event, ui);
-//        }
+            if (dialog.onResize) {
+              dialog.onResize(event, ui);
+            }
           }
         });
+        $dialog.resizable(settings.resizeable);
       }
 
       // Make the dialog draggable.

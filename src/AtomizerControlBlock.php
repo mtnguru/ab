@@ -519,6 +519,7 @@ class AtomizerControlBlock {
         }
       }
     }
+
     return $block;
   }
 }

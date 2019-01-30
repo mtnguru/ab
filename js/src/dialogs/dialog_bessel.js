@@ -8,12 +8,14 @@
     dialog.name('Bessel Graph');
 
     let imageSpecs = {
-      top: 15,
-      bottom: 26,
-      left: 62,
-      right: 19,
+      top: .030,
+      bottom: .073,
+      left: .114,
+      right: .034,
 
-      locY: 350,        // y location of x value label
+      width: 544,
+      height: 356,
+      locY: .983,        // y location of x value label
       xMax: 112,        // Maximum value of x in the image.
       correction: .073, // Correct for different scales
       spread: .40,      // Width of the opacity
@@ -21,20 +23,23 @@
 
     dialog.onCreate = function () {
       // Load the image.
-      let img = this.$dialog.find('img')[0];
-      img.onload = function() {
-        let canvas = dialog.$dialog.find('canvas')[0];
-        canvas.width = img.width;
-        canvas.height = img.height;
+      dialog.img = this.$dialog.find('img')[0];
+      dialog.img.onload = function() {
+        dialog.canvas = dialog.$dialog.find('canvas')[0];
+        dialog.canvas.width = dialog.img.width;
+        dialog.canvas.height = dialog.img.height;
 
-        let ctx = canvas.getContext('2d');
+        let ctx = dialog.canvas.getContext('2d');
         ctx.lineWidth = 2;
         ctx.strokeStyle = '#441166';
         ctx.font = "14pt Callibri";
         ctx.textAlign = "center";
 
-        let line = new Line(ctx);
-        canvas.onmousemove = update;
+        dialog.line = new Line(ctx);
+        dialog.canvas.onmousemove = update;
+        window.addEventListener('resize', function() {
+          dialog.onResize();
+        });
 
         /// This lets us define a custom line object which self-draws
         function Line(ctx) {
@@ -42,8 +47,8 @@
 
           this.x1 = 0;
           this.x2 = 0;
-          this.y1 = imageSpecs.top;
-          this.y2 = img.height - imageSpecs.bottom;
+          this.y1 = imageSpecs.top * dialog.img.width;
+          this.y2 = dialog.img.height - dialog.img.height * imageSpecs.bottom;
 
           // update the line
           this.draw = function () {
@@ -56,33 +61,33 @@
 
         function update(e) {
           /// correct mouse position so it's relative to canvas
-          let r = canvas.getBoundingClientRect(),
+          let r = dialog.canvas.getBoundingClientRect(),
               x = e.clientX - r.left,
               y = e.clientY - r.top;
 
-          if (x < imageSpecs.left) x = imageSpecs.left;
-          if (x > img.width - imageSpecs.right) x = img.width - imageSpecs.right;
+          if (x < imageSpecs.left * dialog.img.width) x = imageSpecs.left * dialog.img.width;
+          if (x > dialog.img.width - imageSpecs.right * dialog.img.width) x = dialog.img.width - imageSpecs.right * dialog.img.width;
 
           /// draw background image to clear previous line and text
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          ctx.drawImage(dialog.img, 0, 0, dialog.canvas.width, dialog.canvas.height);
 
           /// update line object and draw it
-          line.x1 = x;
-          line.x2 = x;
-          line.draw();
+          dialog.line.x1 = x;
+          dialog.line.x2 = x;
+          dialog.line.draw();
 
           // Update the particles opacity
-          updateOpacity(line.x1);
+          updateOpacity(dialog.line.x1);
         }
 
         function updateOpacity(_x) {
           // Subtract space to the left of image.
-          let x = _x - imageSpecs.left;
-          let sx = x * imageSpecs.xMax / (img.width - (imageSpecs.left + imageSpecs.right));
-          ctx.fillText(Math.round(sx * 100) / 100, x + imageSpecs.left, imageSpecs.locY);
+          let x = _x - imageSpecs.left * dialog.img.width;
+          let sx = x * imageSpecs.xMax / (dialog.img.width - (imageSpecs.left + imageSpecs.right) * dialog.img.width);
+          ctx.fillText(Math.round(sx * 100) / 100, x + imageSpecs.left * dialog.img.width, imageSpecs.locY * dialog.img.height);
 
           let nx = sx * imageSpecs.correction;
-          ctx.fillText(Math.round(nx * 1000) / 1000, x + imageSpecs.left, imageSpecs.locY - 30);
+          ctx.fillText(Math.round(nx * 1000) / 1000, x + imageSpecs.left * dialog.img.width, imageSpecs.locY * dialog.img.height - 30);
 
           let bc = viewer.scene.az.bc;
           for (let c in bc.cylinders) {
@@ -103,7 +108,7 @@
           viewer.render();
         }
       }
-      img.src = '/sites/default/files/image/2019-01/bessel_graph.jpg';
+      dialog.img.src = '/sites/default/files/image/2019-01/bessel_graph.jpg';
     };
 
     dialog.onOpen = function () {
@@ -117,6 +122,14 @@
       return;
     };
 
+    dialog.onResize = function() {
+       dialog.canvas.width = dialog.img.width;
+       dialog.canvas.height = dialog.img.height;
+       dialog.line.y1 = imageSpecs.top * dialog.img.width;
+       dialog.line.y2 = dialog.img.height - dialog.img.height * imageSpecs.bottom;
+       dialog.$dialog.resizeable({aspectRatio: imageSpecs.width / (imageSpecs.height + 28)});
+    };
+
     dialog.onButtonClick = function () {
       // Nothing?
       return;
@@ -124,12 +137,13 @@
 
     let settings = {
       name: 'bessel',
-      title: 'Bessel Function Graph',
+      title: 'Bessel Function',
       id: `${dialog.name()}-dialog-container`,
       class: 'az-dialog',
       containerSelector: '.az-wrapper',
       content: '<div class="image-wrapper"><img><canvas></canvas></div>',
 //    selectButtonId: 'open-bessel-dialog',
+      resizeable: {aspectRatio: imageSpecs.width / (imageSpecs.height + 28)},
       closeButton: true,
       draggable: true,
       isLoaded: true,
