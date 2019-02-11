@@ -627,9 +627,6 @@
           }
           break;
       }
-
-
-
       // check the protons on this grow point and categorize it
       return bes;
     }
@@ -638,7 +635,8 @@
       var bes = [];
       for (var u in az.neutrons) {
         if (az.neutrons.hasOwnProperty(u)) {
-          if (u == 'U00' || u == 'U10') continue;
+          if ((az.state == 'initial' || az.state == 'final') &&
+              (u == 'U00' || u == 'U10')) continue;
           var neutron = az.neutrons[u];
           if (neutron.az.visible) {
             bes.push('extra_neutron');
