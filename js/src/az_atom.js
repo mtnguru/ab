@@ -796,7 +796,6 @@
           $(this).removeClass('az-closed');
           $isotopes.removeClass('az-closed');
         } else {
-          $(this).addClass('az-closed');
           $isotopes.addClass('az-closed');
         }
       });
@@ -808,7 +807,7 @@
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
       $atoms.click(function (event) {
-        loadObject($(event.target).data('nid'), null);
+        loadObject($(event.target.parentNode).data('nid'), null);
         if (viewer.getDisplayMode() == 'mobile' ||
             viewer.getDisplayMode() == 'tablet') {
           $atomList.addClass('az-hidden');

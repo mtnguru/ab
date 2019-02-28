@@ -45,7 +45,6 @@
     function advanceOrbitals() {
 
       var rotSpeed = viewer.theme.get('animation--speed') / 1000;
-//    var rotSpeed =
 
       var x = viewer.camera.position.x,
         y = viewer.camera.position.y,

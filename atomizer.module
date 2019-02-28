@@ -38,14 +38,15 @@ function atomizer_theme() {
     'atomizer_select_atom' => [
       'variables' => [
         'title' => '',
+        'symbol' => '',
         'element_nid' => 0,
         'stability' => '',
         'default_atom_nid' => 0,
         'atomic_number' => 0,
         'num_isotopes' => 0,
-        'num_isomers' => 0,
+        'num_isobars' => 0,
         'isotopes' => [],
-        'isomers' => [],
+        'isobars' => [],
       ],
     ],
   ];

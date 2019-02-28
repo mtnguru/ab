@@ -618,6 +618,10 @@
           bes = ['deuterium_on_carbon'];
           break;
 
+        case 3:
+          bes = ['deuterium_on_carbon', 'extra_neutron'];
+          break;
+
         case 4:
           var uid = 'U' + id + '0';
           if (az.neutrons[uid].az.visible) {

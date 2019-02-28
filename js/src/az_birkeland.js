@@ -420,10 +420,14 @@
       return point;
     }
 
+    let animateCycle = 0;
     function animate(animateConf) {
-      var speed = viewer.theme.get('animation--speed') / 5;
-      for (var cylinder in viewer.scene.az.bc.cylinders) {
-        var cyl = viewer.scene.az.bc.cylinders[cylinder];
+      animateCycle = (animateCycle > 1) ? 0 : animateCycle + 1;
+      var speed = viewer.theme.get('animation--speed') / 2;
+      var cn = 0;
+      for (var c in viewer.scene.az.bc.cylinders) {
+        if (cn++ % 2 != animateCycle) continue;
+        var cyl = viewer.scene.az.bc.cylinders[c];
         if (cyl) {
           var conf = cyl.conf;
           switch (cyl.conf.markerType) {

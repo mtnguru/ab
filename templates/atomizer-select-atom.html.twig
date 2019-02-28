@@ -2,18 +2,18 @@
 
   <div class="default-isotope" data-nid="{{ default_atom_nid }}">
     {% set expand_isotopes = (num_isotopes > 0) ? 'expand' : '' %}
-    {% set expand_isomers = (num_isomers > 0) ? 'expand' : '' %}
+    {% set expand_isobars = (num_isobars > 0) ? 'expand' : '' %}
     <span class="atomic-number">{{ atomic_number }}</span>
     <span class="atom-title {{ stability | lower }}">
       <a data-nid="{{ default_atom_nid }}" href="#" class="atom-name">
-          {{ title }}
+          <span class="symbol">{{ symbol }}</span> <span class="title">{{ title }}</span>
       </a>
     </span>
-    {# <span class="num-isomers {{ expand_isomers }}">{{ num_isomers }}</span> #}
+    {# <span class="num-isobars {{ expand_isobars }}">{{ num_isobars }}</span> #}
     <span class="num-isotopes az-closed {{ expand_isotopes }}">{{ num_isotopes }}</span>
   </div>
 
-  <div class="isomers" title="Isomers">
+  <div class="isobars" title="Isobars">
   </div>
 
   <div class="isotopes az-closed" title="Isotopes">

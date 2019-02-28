@@ -27,13 +27,14 @@ class AtomizerInit {
 //    if (!$element->get('field_pt')->isEmpty() && !$element->get('field_period')->isEmpty()) {
         $objects[$nid] = [
           'name' => $element->getTitle(),
+          'symbol' => $element->field_symbol->value,
           'nid' => $nid,
           'period' =>      ($element->field_period->isEmpty())        ? null : $element->field_period->value,
           'defaultAtom' => ($element->field_default_atom->isEmpty())  ? null : $element->field_default_atom->entity->id(),
           'group' =>       ($element->field_pt->isEmpty())            ? null : $element->field_pt->value,
           'atomicNumber' =>($element->field_atomic_number->isEmpty()) ? 999  : $element->field_atomic_number->value,
           'numIsotopes' => 0,
-          'numIsomers' => 0,
+          'numIsobars' => 0,
         ];
 //    }
     }
@@ -69,12 +70,12 @@ class AtomizerInit {
     $atoms = self::queryAtoms()['results'];
 
     // Go through each atom and count number of atoms per element
-    $isomers = [];
+    $isobars = [];
     foreach ($atoms as $atom) {
       $eid = $atom->field_element_target_id;
       if (!empty($elements[$eid])) {
         $elements[$eid]['isotopes'][] = $atom;
-        $isomers[$atom->field__protons_value][] = $atom;
+        $isobars[$atom->field__protons_value][] = $atom;
         if (empty($elements[$eid]['numIsotopes'])) {
           $elements[$eid]['numIsotopes'] = 1;
         } else {
@@ -84,9 +85,8 @@ class AtomizerInit {
     }
 
     foreach ($atoms as $atom) {
-      $atom->isomers = $isomers[$atom->field__protons_value];
+      $atom->isobars = $isobars[$atom->field__protons_value];
     }
-
 
     // Create render array of elements and their isotopes.
     $list = [];
@@ -98,6 +98,7 @@ class AtomizerInit {
 
       $list[$element['name']] = [
         '#type' => 'theme',
+        '#symbol' => $element['symbol'],
         '#theme' => 'atomizer_select_atom',
         '#title' => $defaultAtom->title,
         '#element_nid' => $element['nid'],
@@ -105,9 +106,9 @@ class AtomizerInit {
         '#stability' => (!empty($defaultAtom->name)) ? $defaultAtom->name : 'Not Set',
         '#atomic_number' => $element['atomicNumber'],
         '#num_isotopes' => $element['numIsotopes'],
-        '#num_isomers' => $element['numIsomers'],
+        '#num_isobars' => $element['numIsobars'],
         '#isotopes' => ($element['numIsotopes']) ? $element['isotopes'] : null,
-        '#isomers' => $isomers,
+        '#isobars' => $isobars,
       ];
     }
 
