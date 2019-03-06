@@ -8,6 +8,7 @@
 use Drupal\atomizer\AtomizerFiles;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Component\Serialization\Yaml;
@@ -271,7 +272,7 @@ function atomizer_form_node_atomizer_validate (&$form, FormStateInterface $form_
  * @param $display
  * @param $view_mode
  */
-function atomizer_node_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, $display, $view_mode) {
+function atomizer_node_view(array &$build, EntityInterface $entity, $display, $view_mode) {
 //if ($node->getType() == 'book') {
 //  $build['#cache']['max-age'] = 0;
 //}
@@ -358,4 +359,20 @@ function atomizer_preprocess_node(&$variables) {
   } // switch ($type)
 
   return;
+}
+
+function atomizer_entity_presave(EntityInterface $entity) {
+  if ($entity->bundle() == 'atom') {
+    // Calculate mass using Carl Johnsons formula
+    $massProton = 1.007276466879;
+    $massElectron = .000548579909070;
+    if (!$entity->field__protons->isEmpty() &&
+        !$entity->field__inner_electrons->isEmpty() &&
+        !$entity->field__outer_electrons->isEmpty()) {
+      $mass = $massElectron * ($entity->field__inner_electrons->value + $entity->field__outer_electrons->value) +
+              $massProton + $entity->field__protons->value;
+//    $entity->field_mass_actual->value = $mass;
+      $entity->field_mass_calculated->value = $mass;
+    }
+  }
 }
