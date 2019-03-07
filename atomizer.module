@@ -65,7 +65,6 @@ function atomizer_theme() {
  */
 function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
   $form['actions']['preview']['#access'] = false;
-
   $form['path']['#access'] = false;
 
   if (!\Drupal::currentUser()->hasPermission('atomizer display structure')) {
@@ -79,6 +78,9 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
     }
   }
 
+  $form['field_mass_actual']['widget'][0]['value']['#step'] = 'any';
+  $form['field_mass_calculated']['widget'][0]['value']['#step'] = 'any';
+
   $form['#validate'][] = '_atomizer_atom_form_validate';
   $form['actions']['submit']['#submit'][] = '_atomizer_atom_form_submit';
   $form['actions']['submit']['#attributes']['class'][] = 'use-ajax-submit';
@@ -90,6 +92,14 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
 }
 
 function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
+  $h0 = $form_state->hasValue('field_be_nucleon');
+  $h1 = $form_state->hasValue(['field_be_nucleon', 0]);
+  $h2 = $form_state->hasValue(['field_be_nucleon', 0, 'value']);
+
+  $v0 = $form_state->getValue('field_be_nucleon');
+  $v1 = $form_state->getValue(['field_be_nucleon', 'value']);
+  $v2 = $form_state->getValue(['field_be_nucleon', 0, 'value']);
+
   if ($form_state->hasValue(['field_be_nucleon', 0, 'value']) &&
       $form_state->hasValue(['field__protons', 0, 'value'])) {
     $be_nucleon = $form_state->getValue('field_be_nucleon')[0]['value'];
@@ -102,15 +112,27 @@ function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
       $form_state->setValue(['field_be_accuracy', 0, 'value'], $be_accuracy);
     }
   }
+    // Calculate mass using Carl Johnsons formula
+  if ($form_state->hasValue(['field__protons', 0, 'value']) &&
+      $form_state->hasValue(['field__inner_electrons', 0, 'value']) &&
+      $form_state->hasValue(['field__outer_electrons', 0, 'value'])) {
+    $massProton = 1.007276466879;
+    $massElectron = .000548579909070;
+    $mass = $massElectron * ($form_state->getValue('field__inner_electrons')[0]['value'] + $form_state->getValue('field__outer_electrons')[0]['value']) +
+            $massProton * $form_state->getValue('field__protons')[0]['value'];
+//  $form_state->setValue(['field_mass_actual', 0, 'value'], $mass);
+    $form_state->setValue(['field_mass_calculated', 0, 'value'], $mass);
+
+    if ($form_state->hasValue(['field_mass_actual', 0, 'value'])) {
+      $actual = $form_state->getValue('field_mass_actual')[0]['value'];
+      if ($actual > 1000000) {
+        $form_state->setValue(['field_mass_actual', 0, 'value'], $actual / 1000000);
+      }
+    }
+  }
 }
 
 function _atomizer_atom_form_submit(&$form, FormStateInterface &$form_state) {
-//if ($form_state->hasValue('field_be_nucleon')) {
-//  $be_nucleon = $form_state->getValue('field_be_nucleon')[0]['value'];
-//  $form_state->setValue(['field_be_actual', 0, 'value'], $be_nucleon + 1);
-//}
-//$be_accuracy = $form_state->getValue('field_be_accuracy')[0]['value'];
-//$be_sam = $form_state.getValue('field_be_sam')[0];
   $form_state->setRebuild();
   $response = new AjaxResponse();
   $response->addCommand(new CloseModalDialogCommand());
@@ -361,18 +383,10 @@ function atomizer_preprocess_node(&$variables) {
   return;
 }
 
-function atomizer_entity_presave(EntityInterface $entity) {
-  if ($entity->bundle() == 'atom') {
-    // Calculate mass using Carl Johnsons formula
-    $massProton = 1.007276466879;
-    $massElectron = .000548579909070;
-    if (!$entity->field__protons->isEmpty() &&
-        !$entity->field__inner_electrons->isEmpty() &&
-        !$entity->field__outer_electrons->isEmpty()) {
-      $mass = $massElectron * ($entity->field__inner_electrons->value + $entity->field__outer_electrons->value) +
-              $massProton + $entity->field__protons->value;
-//    $entity->field_mass_actual->value = $mass;
-      $entity->field_mass_calculated->value = $mass;
-    }
-  }
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ */
+function atomizer_node_presave(EntityInterface $entity) {
 }
