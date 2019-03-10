@@ -49,7 +49,10 @@ class AtomizerInit {
 
     $result = AzContentQuery::nodeQuery([
       'type' => 'entity-table',
+      'types' => 'atom',
+//    'sort' => 'changed',
       'sort' => 'select-atom',
+
       'fields' => [
         'nfd' => ['nid', 'title'],
         'nfan' => ['field_atomic_number_value'],
@@ -58,7 +61,7 @@ class AtomizerInit {
         'ttfd' => ['name'],
       ],
       'more' => 'none',
-      'types' => 'atom',
+//    'limit' => 1000,
       'approval' => $perm,
     ]);
 
@@ -90,11 +93,21 @@ class AtomizerInit {
 
     // Create render array of elements and their isotopes.
     $list = [];
-    $defaultAtom = null;
     foreach ($elements as $element) {
+      $defaultAtom = null;
+
       if ($element['numIsotopes'] == 0) continue;
       $defaultAtomNid = (!empty($element['defaultAtom'])) ? $element['defaultAtom'] : $element['isotopes'][0]->nid;
-      $defaultAtom = $atoms[$defaultAtomNid];
+      if ($defaultAtomNid) {
+        if (empty($atoms[$defaultAtomNid])) {
+          $defaultAtom = $atoms[$element['isotopes'][0]->nid];
+        } else {
+          $defaultAtom = $atoms[$defaultAtomNid];
+        }
+      }
+      else {
+        print "build_select_atom_list - defaultAtom error\n";
+      }
 
       $list[$element['name']] = [
         '#type' => 'theme',
