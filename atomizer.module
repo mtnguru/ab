@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Component\Serialization\Yaml;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 
 /**
@@ -91,6 +92,12 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
 //}
 }
 
+/**
+ * Validate the atom form
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
 function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
   $h0 = $form_state->hasValue('field_be_nucleon');
   $h1 = $form_state->hasValue(['field_be_nucleon', 0]);
@@ -119,8 +126,8 @@ function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
     $massProton = 1.007276466879;
     $massElectron = .000548579909070;
     $mass = $massElectron * ($form_state->getValue('field__inner_electrons')[0]['value'] + $form_state->getValue('field__outer_electrons')[0]['value']) +
-            $massProton * $form_state->getValue('field__protons')[0]['value'];
-//  $form_state->setValue(['field_mass_actual', 0, 'value'], $mass);
+      $massProton * $form_state->getValue('field__protons')[0]['value'];
+    //  $form_state->setValue(['field_mass_actual', 0, 'value'], $mass);
     $form_state->setValue(['field_mass_calculated', 0, 'value'], $mass);
 
     if ($form_state->hasValue(['field_mass_actual', 0, 'value'])) {
@@ -177,19 +184,6 @@ function atomizer_form_node_atom_edit_form_alter (&$form, FormStateInterface $fo
  */
 function atomizer_form_node_atom_form_alter (&$form, FormStateInterface $form_state) {
   _atomizer_atom_form_alter($form, $form_state);
-}
-
-function atomizer_views_pre_render($view) {
-  return $view;
-}
-
-function atomizer_views_post_render($view, &$output, $cache) {
-  return;
-}
-
-
-function atomizer_form_atomizer_controls_form_alter (&$form, FormStateInterface $form_state) {
-  return;
 }
 
 function atomizer_form_views_exposed_form_alter (&$form, FormStateInterface $form_state) {
@@ -383,10 +377,49 @@ function atomizer_preprocess_node(&$variables) {
   return;
 }
 
+function atomizer_calculate_mass($protons, $inner, $outer) {
+  $massProton = 1.007276466879;
+  $massElectron = .000548579909070;
+  $mass = $massElectron * ($inner + $outer) + $massProton * $protons;
+  return $mass;
+}
+
 /**
  * Implements hook_ENTITY_TYPE_presave().
  *
  * @param \Drupal\Core\Entity\EntityInterface $entity
  */
 function atomizer_node_presave(EntityInterface $entity) {
+  if ($entity->getType() == 'atom') {
+    $element = Node::load($entity->field_element->target_id);
+    $protons = $entity->field__protons->value;
+    $inner = $entity->field__inner->value;
+    $outer = $entity->field__outer->value;
+//  if (!$inner) {
+      $inner = $protons - $element->field_atomic_number->value;
+      $entity->field__inner_electrons->value = $inner;
+//  }
+//  if (!$outer) {
+      $outer = $element->field_atomic_number->value;
+      $entity->field__outer_electrons->value = $outer;
+//  }
+    $mass = atomizer_calculate_mass($protons, $inner, $outer);
+    $entity->field_mass_calculated->value = $mass;
+  }
+  return;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ *
+ * When creatings a new atom - set the path to /atom/{$nid}
+ **/
+function az_content_node_insert(NodeInterface $node) {
+
+  if ($node->getType() == 'atom') {
+    if ($node->toArray()['path'][0]['alias'] == "") {
+      $pathTitle = substr(str_replace(" ","-",trim(strtolower($node->label()))),0,60);
+      \Drupal::service('path.alias_storage')->save("/node/" . $node->id(), "/atom/" . $pathTitle, "en");
+    }
+  }
 }
