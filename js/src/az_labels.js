@@ -16,8 +16,21 @@
       }
     };
 
+    let display = (doit) => {
+      if (doit == null) {
+        doit = viewer.theme.get('labels--enable');
+      }
+      if (doit) {
+        $div.show();
+      }
+      else {
+        $div.hide();
+      }
+    };
+
     return {
       buttonClicked: buttonClicked,
+      display: display,
     }
   };
 })(jQuery);

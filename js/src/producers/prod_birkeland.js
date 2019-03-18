@@ -164,7 +164,12 @@
         $(input).prop('checked', true);
         viewer.birkeland.loadObject(event.target.value);
       });
+      Drupal.atomizer.dialogs.getDialog(viewer,'bessel');
+//    viewer.besselGraph = Drupal.atomizer.dialogs.besselC(viewer);
 
+      if (viewer.atomizer.startAnimation == true) {
+        viewer.animation.play();
+      }
     };
 
     var loadBirkeland = function loadBirkeland(filename) {

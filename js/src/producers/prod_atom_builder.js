@@ -888,6 +888,7 @@
         name: atom.az.name,  // Use atom name as the scene name
         atomNid: atom.az.nid
       };
+      viewer.labels.display();
     };
 
     function changeNuclet(editNuclet, id) {
@@ -914,7 +915,7 @@
       viewer.atom.loadObject((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
 
       // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
-      viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, null, 1, {x: 300, y: 50, z: 0});
+//    viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, null, 1, {x: 300, y: 50, z: 0});
     };
 
     /////////// Attach event listeners
@@ -997,7 +998,6 @@
         var normalizedVolume = Math.round(volume / 4.1887902047863905 * 1000) / 1000;
         $('#nuclet-volume--volume').html('<span class="az-name">Volume: &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="az-value">' + normalizedVolume + '</span>');
       }
-      var fart = 5;
     }
 
     return {

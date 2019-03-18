@@ -32,6 +32,8 @@
       this.elements.wrapper = document.createElement('DIV');
       this.elements.wrapper.id = settings.id.toLowerCase().replace(' ', '-');
       this.elements.wrapper.classList.add(settings.class);
+//    this.elements.wrapper.tabIndex = 0;
+//    this.elements.wrapper.contentEditable = true;
       document.querySelector(settings.containerSelector).appendChild(this.elements.wrapper);
       let $dialog = this.$dialog = $('.az-dialog');
 
@@ -39,7 +41,7 @@
 
       if (settings.title) {
         html =  '<div class="title-pane">';
-        html += '<div class="az-fa-close button"></div>';
+        html += '<div class="fas fa-times button"></div>';
         html += `<h3>${settings.title}</h3>`;
         html += '</div>';
         this.elements.wrapper.innerHTML += html;

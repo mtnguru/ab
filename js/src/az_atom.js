@@ -349,11 +349,11 @@
        */
       function doCreateAtom (results) {
         var az;
+        //   Read in the atom
+        //   Convert the arrays
         // Write a PHP program to read in all atoms one by one and convert the proton and electron arrays to associative arrays?
         // Don't use javascript for it.
         // Query all atoms using the atom query thing
-        //   Read in the atom
-        //   Convert the arrays
         //   Save the atom
         for (var i = 0; i < results.length; i++) {
           var result = results[i];

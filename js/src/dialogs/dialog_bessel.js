@@ -40,6 +40,10 @@
         window.addEventListener('resize', function() {
           dialog.onResize();
         });
+        dialog.canvas.onmouseleave = function (event) {
+          let opacity = viewer.theme.get('particles-master--opacity');
+          viewer.theme.applyControl('particles-master--opacity', opacity);
+        };
 
         /// This lets us define a custom line object which self-draws
         function Line(ctx) {
@@ -147,6 +151,7 @@
       closeButton: true,
       draggable: true,
       isLoaded: true,
+      isOpen: true,
     };
 
     dialog.create(settings);

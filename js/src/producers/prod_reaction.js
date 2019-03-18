@@ -1,12 +1,14 @@
 /**
- * @file - prod_molecule_builder.js
+ * @file - prod_atom_builder.js
  *
- * This is a 'producer' which allows users to build molecules.
+ * This is a 'producer' which allows users to build atoms.
+ * This module provides functions to handle deleting/adding nuclets,
+ * changing a nuclets slider angle, etc.
  */
 
 (function ($) {
 
-  Drupal.atomizer.producers.molecule_builderC = function (_viewer) {
+  Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     var viewer = _viewer;
     var bindingEnergies = drupalSettings.atomizer_bindingEnergies;
 

@@ -422,9 +422,10 @@
 
     let animateCycle = 0;
     function animate(animateConf) {
-      animateCycle = (animateCycle > 1) ? 0 : animateCycle + 1;
-      var speed = viewer.theme.get('animation--speed') / 2;
-      var cn = 0;
+      let speed = viewer.theme.get('animation--speed') / 2;
+      let smooth = viewer.theme.get('animation--smooth');
+      animateCycle = (animateCycle > 5 - smooth) ? 0 : animateCycle + 1;
+      let cn = 0;
       for (var c in viewer.scene.az.bc.cylinders) {
         if (cn++ % 2 != animateCycle) continue;
         var cyl = viewer.scene.az.bc.cylinders[c];

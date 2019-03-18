@@ -48,7 +48,7 @@ atomizer-obfuscator:
     - core/drupal.dialog.ajax
     - core/drupal.ajax
 
-# Atom Builder
+############ Atom Builder
 
 atomizer-atom-builder:
   js:
@@ -60,7 +60,7 @@ atomizer-atom-builder-obfuscator:
     js/threejs/renderers/CSS2DRenderer.js: {}
     js/min/producers/prod_atom_builder.js: {}
 
-# Atom Viewer
+############ Atom Viewer
 
 atomizer-atom-viewer:
   js:
@@ -70,7 +70,19 @@ atomizer-atom-viewer-obfuscator:
   js:
     js/min/producers/prod_atom_viewer.js: {}
 
-# Birkeland Currents
+############ Molecule Builder
+
+atomizer-molecule-builder:
+  js:
+    js/threejs/renderers/CSS2DRenderer.js: {}
+    js/src/producers/prod_molecule_builder.js: {}
+
+atomizer-molecule-builder-obfuscator:
+  js:
+    js/threejs/renderers/CSS2DRenderer.js: {}
+    js/min/producers/prod_molecule_builder.js: {}
+
+############ Birkeland Currents
 
 atomizer-birkeland:
   js:
@@ -90,7 +102,7 @@ atomizer-birkeland-obfuscator:
     js/min/dialogs/dialog_bessel.js: {}
     js/min/producers/prod_birkeland.js: {}
 
-# Periodic Table
+############ Periodic Table
 
 atomizer-ptable:
   js:
@@ -106,7 +118,7 @@ atomizer-ptable-obfuscator:
     js/min/az_ptable.js: {}
     js/min/producers/prod_ptable.js: {}
 
-# Platonic Solids
+############ Platonic Solids
 
 atomizer-platonic-solids:
   js:
@@ -116,7 +128,7 @@ atomizer-platonic-solids-obfuscator:
   js:
     js/min/producers/prod_platonic_solids.js: {}
 
-# Platonic Solids Duals
+############ Platonic Solids Duals
 
 atomizer-platonic-duals:
   js:
@@ -126,7 +138,7 @@ atomizer-platonic-duals-obfuscator:
   js:
     js/min/producers/prod_platonic_duals.js: {}
 
-# Icosahedron - Dodecahedron
+############ Icosahedron - Dodecahedron
 
 atomizer-ico-dodeca:
   js:
