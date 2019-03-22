@@ -304,13 +304,16 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), TRUE);
     $atom = Node::load($data['nid']);
     if ($data['be_sam_nuclets'] != '0') {
-      $atom->field_be_sam_nuclets->setValue($data['be_sam_nuclets']);
+      $atom->set('field_be_sam_nuclets', $data['be_sam_nuclets']);
     }
     if ($data['be_sam_nuclets_perc'] != '0%') {
-      $atom->field_be_sam_nuclets_->setValue(str_replace('%', '', $data['be_sam_nuclets_perc']));
+      $atom->set('field_be_sam_nuclets_', str_replace('%', '', $data['be_sam_nuclets_perc']));
     }
     $atom->setNewRevision(TRUE);
-    $atom->save();
+    $retcode = $atom->save();
+    $nuclets = $data['be_sam_nuclets'];
+    $perc = $data['be_sam_nuclets_perc'];
+    \Drupal::logger('atomizer')->notice("AtomizerController::saveAtom - $retcode  nuclets: $nuclets  nuclets perc: $perc");
     return new AjaxResponse();
   }
 

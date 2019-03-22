@@ -329,17 +329,17 @@ function atomizer_preprocess_node(&$variables) {
 
     case 'atomizer':
       $nid = $variables['node']->id();
-      \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  node type ' . $type . ' nid ' . $nid);
+      \Drupal::logger('atomizer')->notice('atomizer_preprocess_node:  node type ' . $type . ' nid ' . $nid);
 
       // Read in configuration yml file
       if (!empty($variables['node']->field_configuration_file)) {
-        \Drupal::logger('my_module')->notice('atomizer_preprocess_node:  has field_configuration_file');
+        \Drupal::logger('atomizer')->notice('atomizer_preprocess_node:  has field_configuration_file');
         $atomizer_block = \Drupal::entityManager()->getStorage('block')->load('atom_builder');
 
         if (!empty($atomizer_block)) {
           // Read in the configuration file and save it back into the block for use later.
           $configFile = $variables['node']->field_configuration_file->value;
-          \Drupal::logger('my_module')->notice('atomizer_preprocess_node: configFile ' . $configFile . '  nid ' . $nid);
+          \Drupal::logger('atomizer')->notice('atomizer_preprocess_node: configFile ' . $configFile . '  nid ' . $nid);
           $atomizerConfig = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $configFile));
           $atomizerConfig['filename'] = $configFile;
           $atomizer_block->getPlugin()->setConfigurationValue('atomizer_configuration', $atomizerConfig);
@@ -408,8 +408,8 @@ function atomizer_node_presave(EntityInterface $entity) {
   if ($entity->getType() == 'atom') {
     $element = Node::load($entity->field_element->target_id);
     $protons = $entity->field__protons->value;
-    $inner = $entity->field__inner->value;
-    $outer = $entity->field__outer->value;
+//  $inner = $entity->field__inner->value;
+//  $outer = $entity->field__outer->value;
 //  if (!$inner) {
       $inner = $protons - $element->field_atomic_number->value;
       $entity->field__inner_electrons->value = $inner;
