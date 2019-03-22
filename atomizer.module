@@ -81,6 +81,7 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
 
   $form['field_mass_actual']['widget'][0]['value']['#step'] = 'any';
   $form['field_mass_calculated']['widget'][0]['value']['#step'] = 'any';
+  $form['field_mass_h_norm']['widget'][0]['value']['#step'] = 'any';
 
   $form['#validate'][] = '_atomizer_atom_form_validate';
   $form['actions']['submit']['#submit'][] = '_atomizer_atom_form_submit';
@@ -113,11 +114,25 @@ function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
     $protons = $form_state->getValue('field__protons')[0]['value'];
     $be_actual = $be_nucleon * $protons / 1000;
     $form_state->setValue(['field_be_actual', 0, 'value'], $be_actual);
-    if ($form_state->hasValue(['field_be_sam', 0, 'value'])) {
-      $be_sam = $form_state->getValue('field_be_sam')[0]['value'];
-      $be_accuracy = (($be_sam > $be_actual) ? $be_actual/ $be_sam : $be_sam / $be_actual) * 100;
-      $form_state->setValue(['field_be_accuracy', 0, 'value'], $be_accuracy);
+
+    // Calculate the binding energy accuracy using SAM nuclet calculation.
+    if ($form_state->hasValue(['field_be_sam_nuclets', 0, 'value'])) {
+      $be_sam_nuclets = $form_state->getValue('field_be_sam_nuclets')[0]['value'];
+      $be_sam_nuclets_ = (($be_sam_nuclets > $be_actual) ? $be_actual/ $be_sam_nuclets : $be_sam_nuclets / $be_actual) * 100;
+      $form_state->setValue(['field_be_sam_nuclets_', 0, 'value'], substr($be_sam_nuclets_, 0, 10));
     }
+
+    // Calculate the binding energy accuracy using SAM lines calculation.
+    if ($form_state->hasValue(['field_sam_lines', 0, 'value'])) {
+      $sam_lines = $form_state->getValue('field_sam_lines')[0]['value'];
+      $be_sam_lines = $sam_lines * 2.225;
+      $be_sam_lines_ = (($be_sam_lines > $be_actual) ? $be_actual/ $be_sam_lines : $be_sam_lines / $be_actual) * 100;
+      $form_state->setValue(['field_be_sam_lines', 0, 'value'], $be_sam_lines);
+      $form_state->setValue(['field_be_sam_lines_', 0, 'value'], substr($be_sam_lines_, 0,10));
+    }
+  }
+  if ($form_state->hasValue(['field_mass_actual', 0, 'value'])) {
+    $form_state->setValue(['field_mass_h_norm', 0, 'value'], $form_state->getValue('field_mass_actual')[0]['value'] / 1.0078250322);
   }
     // Calculate mass using Carl Johnsons formula
   if ($form_state->hasValue(['field__protons', 0, 'value']) &&
@@ -403,8 +418,13 @@ function atomizer_node_presave(EntityInterface $entity) {
       $outer = $element->field_atomic_number->value;
       $entity->field__outer_electrons->value = $outer;
 //  }
+
+    // Calculate the mass as per Carl Johnson
     $mass = atomizer_calculate_mass($protons, $inner, $outer);
     $entity->field_mass_calculated->value = $mass;
+
+    // Calculate the hydrogen normalized mass.
+    $entity->field_mass_h_norm->value = $entity->field_mass_actual->value / 1.0078250322 ;
   }
   return;
 }

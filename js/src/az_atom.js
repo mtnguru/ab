@@ -580,19 +580,19 @@
       function displayAtom() {
         console.log('Save Atom ' + nid);
 
-        var be_sam = $('.atom--binding-sam--value',viewer.context).html();
-        var be_accuracy = $('.atom--binding-accuracy--value',viewer.context).html();
-        if (be_sam != '0') {
+        var be_sam_nuclets = $('.atom--be-sam-nuclets--value',viewer.context).html();
+        var be_sam_nuclets_perc = $('.atom--be-sam-nuclets-perc--value',viewer.context).html();
+        // Save the binding energy to Drupal
+        if (be_sam_nuclets != '0') {
           Drupal.atomizer.base.doAjax(
               '/ajax-ab/saveAtom',
               { nid: nid,
-                be_sam: be_sam,
-                be_accuracy: be_accuracy
+                be_sam_nuclets: be_sam_nuclets,
+                be_sam_nuclets_perc: be_sam_nuclets_perc
               },
               null  // No callback - assume it saved okay.
           );
         }
-        // Save the binding energy to Drupal
         if (++isotope < lastIsotope && running) {
 //        setTimeout(function() {
             $isotope = $($isotopes[isotope]);
@@ -861,12 +861,11 @@
           var electrons = $('.atom--num-electrons--value').html();
           $nodeForm.find('.field--name-field__electrons input').val(electrons);
 
-          var be_calc = $('.atom--binding-sam--value').html();
-          $nodeForm.find('.field--name-field-be-sam input').val(be_calc);
+          var be_sam_nuclets = $('.atom--be-sam-nuclets--value').html();
+          $nodeForm.find('.field--name-field-be-sam-nuclets input').val(be_sam_nuclets);
 
-          var be_accuracy = $('.atom--binding-accuracy--value').html().replace('%','');
-          var $fart = $nodeForm.find('.field--name-field-be-accuracy input');
-          $nodeForm.find('.field--name-field-be-accuracy input').val(be_accuracy);
+          var be_sam_nuclets_perc = $('.atom--be-sam-nuclets-perc--value').html().replace('%','');
+          $nodeForm.find('.field--name-field-be-sam-nuclets- input').val(be_sam_nuclets_perc);
         }
       }
     };

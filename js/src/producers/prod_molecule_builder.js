@@ -845,15 +845,15 @@
         $nucletList.html(addNucletToList('N0', 0));
       }
 
-      $('.atom--binding-sam--value').html(totalBE.toString().substring(0,6));
+      $('.atom--be-sam-nuclets--value').html(totalBE.toString().substring(0,6));
       if (actualBE) {
         var perc = ((totalBE > actualBE) ? actualBE / totalBE : -totalBE / actualBE) * 100;
-        $('.atom--binding-actual--value').html(actualBE.toString().substring(0,7));
-        $('.atom--binding-accuracy--value').html(perc.toString().substring(0,5) + '%');
+        $('.atom--be-actual--value').html(actualBE.toString().substring(0,7));
+        $('.atom--be-sam-nuclets-perc--value').html(perc.toString().substring(0,5) + '%');
       }
       else {
-        $('.atom--binding-actual--value').html('');
-        $('.atom--binding-accuracy--value').html('');
+        $('.atom--be-actual--value').html('');
+        $('.atom--be-sam-nuclets-perc--value').html('');
       }
     }
 
