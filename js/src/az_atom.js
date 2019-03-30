@@ -14,7 +14,7 @@
     var atomInformation = $('.atom--information', viewer.context)[0];
     var atomProperties = $('.atom--properties', viewer.context)[0];
 
-    var $atomList = $('#az-select-atom', viewer.content);
+    var $atomList = $('#select-atom-wrapper', viewer.content);
     var $atomSelectEnable = $('#atom-select-enable', viewer.context);
     var $atomSelectClose = $atomList.find('.az-close');
     var $atoms = $('.atom-name, .atomic-number', viewer.context);
@@ -842,7 +842,7 @@
     Drupal.behaviors.atomizer_atom = {
       attach: function (context, settings) {
         var value = '';
-        $(context).find('#az-select-atom').once('selectAtomAttached').each(function () {
+        $(context).find('#select-atom-wrapper').once('selectAtomAttached').each(function () {
           addIsotopeEnableEventListeners();
           addSelectAtomEventListeners();
         });

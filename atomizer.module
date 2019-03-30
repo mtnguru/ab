@@ -51,6 +51,13 @@ function atomizer_theme() {
         'isobars' => [],
       ],
     ],
+    // Display atom select list items and their sublists.
+    'atomizer_select_molecule' => [
+      'variables' => [
+        'title' => '',
+        'molecule_nid' => 0,
+      ],
+    ],
   ];
 }
 
@@ -162,7 +169,7 @@ function _atomizer_atom_form_submit(&$form, FormStateInterface &$form_state) {
 }
 
 function _atomizer_what_is_this_form_alter_for (&$form, FormStateInterface $form_state) {
-  // Set the field_configuration_file option to the list of files in atomizer/config/atomizers.
+  // Set the field_configuration_file option to the list of files in atomizer/config/producers.
   $form['field_configuration_file']['#access'] = false;
   $entity = $form_state->getFormObject()->getEntity();
   $configFile = $entity->field_configuration_file->value;
@@ -170,7 +177,7 @@ function _atomizer_what_is_this_form_alter_for (&$form, FormStateInterface $form
     '#type' => 'select',
     '#title' => t('Configuration file'),
     '#default_value' => $configFile,
-    '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/'),
+    '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/producers', '/\.yml/'),
   ];
 
   $form['#validate'][] = 'atomizer_form_node_atomizer_validate';
@@ -267,7 +274,7 @@ function atomizer_form_node_atomizer_edit_form_alter (&$form, FormStateInterface
 }
 
 function _atomizer_atomizer_form_alter (&$form, FormStateInterface $form_state) {
-  // Set the field_configuration_file option to the list of files in atomizer/config/atomizers.
+  // Set the field_configuration_file option to the list of files in atomizer/config/producers.
   $form['field_configuration_file']['#access'] = false;
   $entity = $form_state->getFormObject()->getEntity();
   $configFile = $entity->field_configuration_file->value;
@@ -275,7 +282,7 @@ function _atomizer_atomizer_form_alter (&$form, FormStateInterface $form_state) 
     '#type' => 'select',
     '#title' => t('Configuration file'),
     '#default_value' => $configFile,
-    '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/atomizers', '/\.yml/'),
+    '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/producers', '/\.yml/'),
   ];
 
   $form['#validate'][] = 'atomizer_form_node_atomizer_validate';
@@ -340,42 +347,12 @@ function atomizer_preprocess_node(&$variables) {
           // Read in the configuration file and save it back into the block for use later.
           $configFile = $variables['node']->field_configuration_file->value;
           \Drupal::logger('atomizer')->notice('atomizer_preprocess_node: configFile ' . $configFile . '  nid ' . $nid);
-          $atomizerConfig = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $configFile));
+          $atomizerConfig = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/producers/' . $configFile));
           $atomizerConfig['filename'] = $configFile;
           $atomizer_block->getPlugin()->setConfigurationValue('atomizer_configuration', $atomizerConfig);
           $atomizer_block->save();
 
           $variables['atomizer_id'] = $atomizerConfig['atomizerId'];
-
-          // Add view block if defined.
-/*        if (!empty($atomizerConfig['view'])) {
-//          $view = $atomizerConfig['view'];
-//          if (\Drupal::currentUser()->hasPermission('atomizer display all atoms')) {
-//            $view .= '_all';
-//          }
-//          $variables['content']['view_select_atom'] = views_embed_view('az_atom', $view);
-
-
-            $variables['content']['view_select_atom'] = [
-              '#type' => 'container',
-              'markup' => ['#markup' => 'Wow cool'],
-            ];
-            $variables['content']['view_select_atom'] = _az_content_build_block('select-atom', [
-              'type' => 'entity-table',
-              'id' => 'select-atom',
-              'sort' => 'select-atom',
-              'fields' => [
-                'nfd' => ['nid', 'title'],
-                'nfan' => ['field_atomic_number_value'],
-              ],
-              'more' => 'none',
-//            'status' => NODE_PUBLISHED, // Make this dependent on user?
-              'types' => 'atom',
-              'approval' => ['members', 'public', 'development', 'trusted'],
-              'viewMode' => 'teaser_short',
-              'empty' => 'NO DISPLAY'
-            ]);
-          } */
 
           $blockManager = \Drupal::service('plugin.manager.block');
           $variables['content']['atomizer_block'] = $blockManager->createInstance('atomizer_block', [

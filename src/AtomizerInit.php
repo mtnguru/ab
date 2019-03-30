@@ -19,24 +19,41 @@ class AtomizerInit {
     $objects = [];
     $result = AzContentQuery::nodeQuery([
       'types' => 'element',
-      'sort' => 'elements',
+      'sort' => 'element',
     ]);
     $nids = array_keys($result['results']);
     $elements = entity_load_multiple('node', $nids);
     foreach ($elements as $nid => $element) {
-//    if (!$element->get('field_pt')->isEmpty() && !$element->get('field_period')->isEmpty()) {
-        $objects[$nid] = [
-          'name' => $element->getTitle(),
-          'symbol' => $element->field_symbol->value,
-          'nid' => $nid,
-          'period' =>      ($element->field_period->isEmpty())        ? null : $element->field_period->value,
-          'defaultAtom' => ($element->field_default_atom->isEmpty())  ? null : $element->field_default_atom->entity->id(),
-          'group' =>       ($element->field_pt->isEmpty())            ? null : $element->field_pt->value,
-          'atomicNumber' =>($element->field_atomic_number->isEmpty()) ? 999  : $element->field_atomic_number->value,
-          'numIsotopes' => 0,
-          'numIsobars' => 0,
-        ];
-//    }
+      //    if (!$element->get('field_pt')->isEmpty() && !$element->get('field_period')->isEmpty()) {
+      $objects[$nid] = [
+        'name' => $element->getTitle(),
+        'symbol' => $element->field_symbol->value,
+        'nid' => $nid,
+        'period' =>      ($element->field_period->isEmpty())        ? null : $element->field_period->value,
+        'defaultAtom' => ($element->field_default_atom->isEmpty())  ? null : $element->field_default_atom->entity->id(),
+        'group' =>       ($element->field_pt->isEmpty())            ? null : $element->field_pt->value,
+        'atomicNumber' =>($element->field_atomic_number->isEmpty()) ? 999  : $element->field_atomic_number->value,
+        'numIsotopes' => 0,
+        'numIsobars' => 0,
+      ];
+      //    }
+    }
+    return $objects;
+  }
+
+  static function queryMolecules() {
+    $objects = [];
+    $result = AzContentQuery::nodeQuery([
+      'types' => 'molecule',
+      'sort' => 'molecules',
+    ]);
+    $nids = array_keys($result['results']);
+    $elements = entity_load_multiple('node', $nids);
+    foreach ($elements as $nid => $element) {
+      $objects[$nid] = [
+        'name' => $element->getTitle(),
+        'nid' => $nid,
+      ];
     }
     return $objects;
   }
@@ -129,28 +146,72 @@ class AtomizerInit {
     return [
       '#type' => 'container',
       '#attributes' => [
-        'class' => ['az-elements-wrapper'],
-        'id' => 'az-select-atom',
+        'class' => ['select-wrapper'],
+        'id' => 'select-atom-wrapper',
       ],
       'title' => [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['az-select-atom-title'],
+          'class' => ['select-title'],
         ],
         'title' => ['#markup' => '<h2>Select Atom</h2>'],
         'close' => [
           '#type' => 'container',
           '#attributes' => [
-            'class' => ['az-fa-times az-close'],
+            'class' => ['fas fa-times az-close'],
           ],
         ],
       ],
       'element_list' => [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['element-list'],
+          'class' => ['select-list'],
         ],
         'elements' => $list,
+      ],
+    ];
+  }
+
+  static function build_select_molecule_list() {
+    $molecules = self::queryMolecules();
+
+    // Create render array of elements and their isotopes.
+    $list = [];
+    foreach ($molecules as $molecule) {
+      $list[$molecule['name']] = [
+        '#type' => 'theme',
+        '#theme' => 'atomizer_select_molecule',
+        '#title' => $molecule['name'],
+        '#molecule_nid' => $molecule['nid'],
+      ];
+    }
+
+    // Wrap in a container with a title, the select atom button, and list of elements.
+    return [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['select-wrapper'],
+        'id' => 'select-molecule-wrapper',
+      ],
+      'title' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['select-title'],
+        ],
+        'title' => ['#markup' => '<h2>Select molecule</h2>'],
+        'close' => [
+          '#type' => 'container',
+          '#attributes' => [
+            'class' => ['fas fa-times az-close'],
+          ],
+        ],
+      ],
+      'molecule_list' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['select-list'],
+        ],
+        'molecules' => $list,
       ],
     ];
   }
@@ -162,7 +223,7 @@ class AtomizerInit {
 // Read in the config/atomizer file
     if (empty($config['atomizer_configuration'])) {
       $atomizer_config = Yaml::decode(file_get_contents(
-        drupal_get_path('module', 'atomizer') . '/config/atomizers/' . $config['atomizerFile']
+        drupal_get_path('module', 'atomizer') . '/config/producers/' . $config['atomizerFile']
       ));
       $atomizer_config['filename']   = $config['atomizerFile'];
       $atomizer_config['atomizerId'] = $atomizerId;
@@ -230,8 +291,13 @@ class AtomizerInit {
     ];
 
     // Build the select-atom dialog.
-    if (!empty($atomizer_config['select']) && $atomizer_config['select'] == 'select_atom') {
-      $build['content']['select_atom'] = self::build_select_atom_list();
+    if (!empty($atomizer_config['select'])) {
+      if ($atomizer_config['select'] == 'select_atom') {
+        $build['content']['select_atom'] = self::build_select_atom_list();
+      }
+      if ($atomizer_config['select'] == 'select_molecule') {
+        $build['content']['select_molecule'] = self::build_select_molecule_list();
+      }
     }
 
     // Build atomizer container with canvas - attach drupalSettings
@@ -245,9 +311,9 @@ class AtomizerInit {
           '#markup' => '<canvas class="az-canvas"></canvas>',
           '#allowed_tags' => array_merge(Xss::getHtmlTagList(), ['canvas'])
         ],
-        'labels' => [
-          '#markup' => '<div class="az-canvas-labels">shit faced</div>',
-        ],
+//      'labels' => [
+//        '#markup' => '<div class="az-canvas-labels">shit faced</div>',
+//      ],
         'copyright' => [
           '#markup' => '<div title="Copyright 2018 by Ethereal Matters, LLC" class="az-fa-copyright copyright"></div>'
         ],

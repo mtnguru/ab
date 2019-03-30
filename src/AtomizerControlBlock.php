@@ -235,7 +235,6 @@ class AtomizerControlBlock {
             '#attributes' => [
               'title' => $controlConf[0],
             ],
-            'markup' => ['#markup' => 'shitty'],
           ];
           $containerClasses[] = 'fa';
           $containerClasses[] = $controlConf[2]['font-awesome'];

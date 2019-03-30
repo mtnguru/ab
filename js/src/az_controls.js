@@ -433,7 +433,8 @@
           if (viewer.context.hasClass('az-overlay-controls') && viewer.context.hasClass('display-mode-desktop')) {
             $('.toggle-block', viewer.context).removeClass('az-selected');
             $('.control-block', viewer.context).each(function () {
-              if (this.id != 'blocks--buttons' && this.id != 'blocks--animation--wrapper') {
+//            if (this.id != 'blocks--buttons' && this.id != 'blocks--animation--wrapper') {
+              if (this.id != 'blocks--buttons') {
                 $(this).addClass('az-hidden');
               }
             });
