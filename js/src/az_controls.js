@@ -496,7 +496,7 @@
         Drupal.atomizer.base.doAjax(
           '/ajax-ab/save-image',
           {
-            atomNid: viewer.scene.az.atomNid,
+            sceneNid: viewer.scene.az.sceneNid,
             action: 'save-image',
             filename: filename,
             directory: 'atoms',

@@ -51,6 +51,12 @@ atomizer.loadAtom:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadAtom'
   requirements:
     _permission: 'access content'
+atomizer.loadMolecule:
+  path: '/ajax-ab/loadMolecule'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::loadMolecule'
+  requirements:
+    _permission: 'access content'
 atomizer.saveAtom:
   path: '/ajax-ab/saveAtom'
   defaults:

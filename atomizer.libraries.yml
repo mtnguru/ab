@@ -53,11 +53,13 @@ atomizer-obfuscator:
 atomizer-atom-builder:
   js:
     js/threejs/renderers/CSS2DRenderer.js: {}
+    js/src/producers/prod_atom.js: {}
     js/src/producers/prod_atom_builder.js: {}
 
 atomizer-atom-builder-obfuscator:
   js:
     js/threejs/renderers/CSS2DRenderer.js: {}
+    js/min/producers/prod_atom.js: {}
     js/min/producers/prod_atom_builder.js: {}
 
 ############ Atom Viewer
@@ -75,11 +77,13 @@ atomizer-atom-viewer-obfuscator:
 atomizer-molecule-builder:
   js:
     js/threejs/renderers/CSS2DRenderer.js: {}
+    js/src/producers/prod_atom.js: {}
     js/src/producers/prod_molecule_builder.js: {}
 
 atomizer-molecule-builder-obfuscator:
   js:
     js/threejs/renderers/CSS2DRenderer.js: {}
+    js/min/producers/prod_atom.js: {}
     js/min/producers/prod_molecule_builder.js: {}
 
 ############ Birkeland Currents

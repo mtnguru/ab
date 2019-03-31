@@ -22,6 +22,7 @@ use Drupal\atomizer\Ajax\RenderNodeCommand;
 use Drupal\atomizer\Ajax\LoadYmlCommand;
 use Drupal\atomizer\Ajax\SaveYmlCommand;
 use Drupal\atomizer\Ajax\LoadAtomCommand;
+use Drupal\atomizer\Ajax\LoadMoleculeCommand;
 use Drupal\atomizer\Ajax\LoadNodeCommand;
 use Drupal\atomizer\Ajax\LoadDialogCommand;
 use Drupal\atomizer\Ajax\ListDirectoryCommand;
@@ -231,6 +232,62 @@ class AtomizerController extends ControllerBase {
   }
 
   /**
+   * Load a molecule.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
+  public function loadMolecule() {
+    $response = new AjaxResponse();
+    $data = json_decode(file_get_contents("php://input"), true);
+    $link = [
+      '#type' => 'link',
+      '#title' => 'Save Molecule',
+      '#url' => Url::fromRoute('entity.node.edit_form',['node' => $data['nid']]),
+      '#attached' => ['library' => ['core/drupal.dialog.ajax']],
+      '#attributes' => [
+        'class' => ['use-ajax'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode([
+          'dialogClass' => 'az-dialog az-molecule-form',
+          'width' => '600px',
+          'draggable' => true,
+          'autoResize' => false,
+          'position' => [
+            'my' => 'center top-20',
+            'at' => 'center top',
+          ],
+        ]),
+        'data-drupal-selector' => "edit-link",
+        'id' =>"edit-link",
+      ],
+    ];
+    $data['link'] = render($link);
+
+    $node = Node::load($data['nid']);
+
+    // Render the node/atom using teaser atom_viewer mode.
+    $data['moleculeName'] = $node->label();
+    $data['moleculeTitle'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';
+
+    // Build the properties block using the atom_viewer view'.
+    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
+
+    // Render the properties block.
+    $data['properties'] = render($build);
+
+    // Render the atom information using teaser view.
+    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
+    $data['information'] = render($build);
+
+    // Get the atomic structure field.
+    $field = $node->field_molecule_structure;
+    $data['moleculeConf'] = (empty($field)) ? 'Object not found' : Yaml::decode($field->value);
+
+    $response->addCommand(new LoadMoleculeCommand($data));
+    return $response;
+  }
+
+  /**
    * Execute ImageMagick convert command to scale image.
    *
    * @param string $spath
@@ -378,7 +435,7 @@ class AtomizerController extends ControllerBase {
     $media = $this->entityTypeManager->loadEntityByUuid('media', $media->uuid->value);
 
     // Read in the Atom, assign the media entity and save.
-    $atom = $this->entityTypeManager->getStorage('node')->load($data['atomNid']);
+    $atom = $this->entityTypeManager->getStorage('node')->load($data['sceneNid']);
     $atom->field_media->target_id = $media->id();
     $atom->save();
 
