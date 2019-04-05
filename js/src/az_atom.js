@@ -14,6 +14,7 @@
     var atomInformation = $('.atom--information', viewer.context)[0];
     var atomProperties = $('.atom--properties', viewer.context)[0];
 
+    // Page elements to select a new atom.
     var $atomList = $('#select-atom-wrapper', viewer.content);
     var $atomSelectEnable = $('#atom-select-enable', viewer.context);
     var $atomSelectClose = $atomList.find('.az-close');

@@ -29,19 +29,21 @@
     };
 
     var objectLoaded = function (_atom) {
-      atom = _atom;
-      viewer.scene.az = {
-        title: atom.az.title, // Use atom title as scene title
-        name: atom.az.name,  // Use atom name as the scene name
-
-        sceneNid: atom.az.nid
-      };
-      viewer.labels.display();
+//    atom = _atom;
+//    viewer.scene.az = {
+//      title: atom.az.title, // Use atom title as scene title
+//      name: atom.az.name,  // Use atom name as the scene name
+//       sceneNid: atom.az.nid
+//    };
+//    viewer.labels.display();
     };
 
     return {
       createView: createView,
-      objectLoaded: objectLoaded,
+      objectLoaded: function (atom) { return viewer.prod_atom.objectLoaded(atom)},
+      mouseUp: function (event) { return viewer.prod_atom.mouseUp(event)},
+      hovered: function (hovered) { return viewer.prod_atom.hovered(hovered)},
+      hoverObjects: function () { return viewer.prod_atom.hoverObjects()},
     };
   };
 

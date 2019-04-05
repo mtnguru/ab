@@ -883,7 +883,7 @@
         hoverOuterFaces = viewer.objects.icosaOutFaces;
       }
       createNucletList(atom);
-      viewer.producer.objectLoaded(atom);
+//    viewer.producer.objectLoaded(atom);
     };
 
     function changeNuclet(editNuclet, id) {

@@ -35,8 +35,8 @@
 
           moleculeConf = data.moleculeConf;
           for (let a in moleculeConf.atoms) {
-            let atom = moleculeConf.atoms[a];
-            viewer.atom.loadObject(atom.nid);
+            let atomConf = moleculeConf.atoms[a];
+            viewer.atom.loadObject(atomConf);
           }
         }
       }
@@ -68,7 +68,7 @@
 
       // Read in the molecule .yml file
       moleculeNid = localStorage.getItem('atomizer_molecule_nid');
-      moleculeNid = (!moleculeNid || moleculeNid == 'undefined') ? 1060 : moleculeNid;
+      moleculeNid = (!moleculeNid || moleculeNid == 'undefined') ? 1315 : moleculeNid;
       moleculeLoad(moleculeNid);
     };
 
