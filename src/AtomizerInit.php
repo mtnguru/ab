@@ -24,13 +24,23 @@ class AtomizerInit {
     $nids = array_keys($result['results']);
     $elements = entity_load_multiple('node', $nids);
     foreach ($elements as $nid => $element) {
-      //    if (!$element->get('field_pt')->isEmpty() && !$element->get('field_period')->isEmpty()) {
+      if ($element->field_default_atom->isEmpty()) {
+        $anid = null;
+      }
+      else {
+        $anid = $element->field_default_atom->target_id;
+        $defaultAtom =  \Drupal\node\Entity\Node::load($anid);
+        if (!$defaultAtom) {
+          $anid = NULL;
+        }
+      }
+
       $objects[$nid] = [
         'name' => $element->getTitle(),
         'symbol' => $element->field_symbol->value,
         'nid' => $nid,
         'period' =>      ($element->field_period->isEmpty())        ? null : $element->field_period->value,
-        'defaultAtom' => ($element->field_default_atom->isEmpty())  ? null : $element->field_default_atom->entity->id(),
+        'defaultAtom' => $anid,
         'group' =>       ($element->field_pt->isEmpty())            ? null : $element->field_pt->value,
         'atomicNumber' =>($element->field_atomic_number->isEmpty()) ? 999  : $element->field_atomic_number->value,
         'numIsotopes' => 0,
