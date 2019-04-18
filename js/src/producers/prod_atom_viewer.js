@@ -70,7 +70,9 @@ Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
 
   var objectLoaded = function objectLoaded(atom) {
     localStorage.setItem('atomizer_viewer_atom_nid', atom.az.nid);
-    viewer.labels.display();
+    viewer.addObject(atom);
+    viewer.render();
+//  viewer.labels.display();
   };
 
   /**

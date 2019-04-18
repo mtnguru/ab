@@ -331,7 +331,7 @@
      *
      * @param nid
      */
-    var loadObject = function loadObject (nid, deleteScene, callback) {
+    var loadObject = function loadObject (nid, callback) {
       var loadCallback = callback;
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadAtom',
@@ -441,7 +441,7 @@
       updateParticleCount(atom);
 
       var explode = viewer.theme.get('attachLines--scale');
-      if (explode != 1) {
+      if (explode > 1) {
         explodeAtom(explode);
       }
 
@@ -461,6 +461,7 @@
     };
 
     var explodeAtom = function explodeAtom(atom, scale) {
+      let fart = 5;
       for (var n in atom.az.nuclets) {
         var nuclet = atom.az.nuclets[n];
         if (nuclet.az.id !== 'N0') {
