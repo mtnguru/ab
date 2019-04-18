@@ -129,7 +129,7 @@
 //    wireframe.position.y = offsetY * viewer.theme.get('proton--radius');
 //    wireframe.init_offsetY = offsetY * viewer.theme.get('proton--radius');
 //  }
-      addObject(id, wireframe);
+      addItem(id, wireframe);
       return wireframe;
     }
 
@@ -209,7 +209,7 @@
 //    lines.position.y = offsetY * viewer.theme.get('proton--radius');
 //    lines.init_offsetY = offsetY * viewer.theme.get('proton--radius');
 //  }
-      addObject(id, lines);
+      addItem(id, lines);
       return lines;
     }
 
@@ -280,7 +280,7 @@
        if (offsetY.z) faces.position.z = offsetY.z;
        faces.init_offset = offsetY;
        } */
-      addObject(id, faces);
+      addItem(id, faces);
       return faces;
     }
 
@@ -468,11 +468,11 @@
      * @param proton
      */
     function deleteProtons(protons) {
-      // Remove the proton from the viewer.objects.protons array
+      // Remove the proton from the viewer.items.protons array
 //    for (var p = 0; p < protons.length; p++) {
 //      var proton = protons[p];
 //      // Remove protons from the objects.protons array
-//      viewer.objects.protons = viewer.objects.protons.filter(function (e) {return e !== proton;})
+//      viewer.items.protons = viewer.items.protons.filter(function (e) {return e !== proton;})
 //    }
     }
 
@@ -482,16 +482,16 @@
      * @param proton
      */
     function showProtons(nuclet, show, protons) {
-      // Remove the proton from the viewer.objects.protons array
+      // Remove the proton from the viewer.items.protons array
       for (var p = 0; p < protons.length; p++) {
         var proton = nuclet.az.protons[protons[p]];
         if (show) {
-//      if (viewer.objects.protons.indexOf(proton) === -1) viewer.objects.protons.push(proton);
+//      if (viewer.items.protons.indexOf(proton) === -1) viewer.items.protons.push(proton);
           proton.material.visible = true;
           proton.material.opacity = 1;
           proton.material.transparent = false;
         } else {
-//      viewer.objects.protons = viewer.objects.protons.filter(function (e) { return e !== proton; });
+//      viewer.items.protons = viewer.items.protons.filter(function (e) { return e !== proton; });
           proton.material.visible = false;
           proton.material.opacity = 0;
           proton.material.transparent = true;
@@ -1063,7 +1063,7 @@
           azNuclet.reactiveState
         );
         nucletGroup.add(faces);
-  //    viewer.objects['selectFace'] = [faces];
+  //    viewer.items['selectFace'] = [faces];
       }
 
 //    if (shapeConf.vertexids) {
@@ -1227,13 +1227,14 @@
     function deleteNuclet(nuclet) {
 
       // If there is a '0' nuclet, delete it recursively
-      if (viewer.atom.az().nuclets[nuclet.az.id + '0']) {
-        deleteNuclet(viewer.atom.az().nuclets[nuclet.az.id + '0'])
+      let atom = nuclet.az.atom;
+      if (atom.az.nuclets[nuclet.az.id + '0']) {
+        deleteNuclet(atom.az.nuclets[nuclet.az.id + '0'])
       }
 
       // If there is a '1' nuclet, delete it recursively
-      if (viewer.atom.az().nuclets[nuclet.az.id + '1']) {
-        deleteNuclet(viewer.atom.az().nuclets[nuclet.az.id + '1'])
+      if (atom.az.nuclets[nuclet.az.id + '1']) {
+        deleteNuclet(atom.az.nuclets[nuclet.az.id + '1'])
       }
 
       // Delete protons
@@ -1244,7 +1245,7 @@
       }
 
       // Remove nuclet from the atom
-      delete viewer.atom.az().nuclets[nuclet.az.id];
+      delete atom.az.nuclets[nuclet.az.id];
       nuclet.parent.parent.parent.remove(nuclet.parent.parent);
     }
 
@@ -1365,12 +1366,12 @@
      * @param name
      * @param object
      */
-    function addObject(name, object) {
-      if (!viewer.objects) viewer.objects = {};
-      if (viewer.objects[name]) {
-        viewer.objects[name].push(object);
+    function addItem(name, object) {
+      if (!viewer.items) viewer.items = {};
+      if (viewer.items[name]) {
+        viewer.items[name].push(object);
       } else {
-        viewer.objects[name] = [object];
+        viewer.items[name] = [object];
       }
     }
 

@@ -91,7 +91,7 @@
         case 'nuclets':
           return visibleProtons;
         case 'inner-faces':
-          return viewer.objects.icosaFaces;
+          return viewer.items.icosaFaces;
         case 'outer-faces':
           return hoverOuterFaces;
       }
@@ -248,7 +248,7 @@
                   }
                 }
 
-                viewer.objects.icosaFaces = null;
+                viewer.items.icosaFaces = null;
                 var faces = viewer.nuclet.createGeometryFaces(
                   oldFaces.name,
                   1,
@@ -257,8 +257,8 @@
                   oldFaces.geometry.reactiveState
                 );
                 var nucletGroup = oldFaces.parent;
-                viewer.objects[oldFaces.name] = [];
-                viewer.objects[oldFaces.name].push(faces);
+                viewer.items[oldFaces.name] = [];
+                viewer.items[oldFaces.name].push(faces);
                 faces.geometry.reactiveState = oldFaces.geometry.reactiveState;
                 faces.geometry.shapeConf = oldFaces.geometry.shapeConf;
                 nucletGroup.remove(oldFaces);
@@ -440,11 +440,11 @@
     var objectLoaded = function objectLoaded(atom) {
       localStorage.setItem('atomizer_viewer_atom_nid', atom.az.nid);
       createProtonLists();
-      if (viewer.objects.icosaFaces) {
-        hoverInnerFaces = viewer.objects.icosaFaces;
+      if (viewer.items.icosaFaces) {
+        hoverInnerFaces = viewer.items.icosaFaces;
       }
-      if (viewer.objects.icosaOutFaces) {
-        hoverOuterFaces = viewer.objects.icosaOutFaces;
+      if (viewer.items.icosaOutFaces) {
+        hoverOuterFaces = viewer.items.icosaOutFaces;
       }
       createNucletList(atom);
     };

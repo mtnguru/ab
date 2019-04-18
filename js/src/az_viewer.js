@@ -14,6 +14,7 @@
     var ambient;
     var spotlights = [];
     var viewer = {
+      items: {},  // icosafaces, couple other things - need to look into what this is for.,
       objects: {},
       context: $('#azid-' + atomizer.atomizerId.toLowerCase())
     };
@@ -23,8 +24,7 @@
 //Physijs.scripts.worker = '/modules/custom/atomizer/js/physijs/physijs_worker.js';
 //Physijs.scripts.ammo =   '/modules/custom/atomizer/js/libs/ammo.js';
 
-    var render = function render () {
-//    viewer.scene.simulate();
+    viewer.render = function render () {
       viewer.renderer.render(viewer.scene, viewer.camera);
     };
 
@@ -137,7 +137,7 @@
       }
     }
 
-    var makeScene = function () {
+    viewer.makeScene = function () {
 
       // Canvas size is set through CSS.
       // Retrieve canvas dimensions and set renderer size to that.
@@ -263,7 +263,7 @@
 
       // Render the initial scene
       viewer.producer.createView();
-      render();
+      viewer.render();
     };
 
 
@@ -335,9 +335,31 @@
       }
     };
 
-    // Attach functions for external use
-    viewer.render = render;
-    viewer.makeScene = makeScene;
+    viewer.deleteObject = (key) => {
+      let object = viewer.objects[key];
+      if (object) {
+        viewer.scene.remove(object);
+        viewer[object.name].deleteObject(object);
+        delete(viewer.objects[object.az.id]);
+      }
+      else {
+        console.log(`Could not delete object - not found: ${key}`);
+      }
+    }
+
+    viewer.addObject = (object) => {
+      viewer.objects[object.az.id] = object;
+      viewer.scene.add(object);
+    };
+
+    viewer.clearScene = function clearScene () {
+      for (let key in viewer.objects) {
+        viewer.deleteObject(key);
+      }
+    };
+
+    // Attach functions for external access/api
+    viewer.getObject = (name) => viewer.objects[name];
     viewer.getDisplayMode = function() { return displayMode };
     viewer.atomizer = atomizer;
     viewer.view = atomizer.views[atomizer.defaultView];
@@ -349,8 +371,7 @@
       viewer.atomizer.views[viewer.atomizer.defaultView].defaultTheme = viewer.dataAttr['theme'];
     }
 
-    // Load theme
-    viewer.theme = Drupal.atomizer.themeC(viewer, makeScene);
+    viewer.theme = Drupal.atomizer.themeC(viewer, viewer.makeScene);
 
     return viewer;
   };

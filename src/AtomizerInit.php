@@ -30,6 +30,8 @@ class AtomizerInit {
       else {
         $anid = $element->field_default_atom->target_id;
         $defaultAtom =  \Drupal\node\Entity\Node::load($anid);
+
+        // If the default atom has been deleted then set to null
         if (!$defaultAtom) {
           $anid = NULL;
         }

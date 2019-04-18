@@ -93,6 +93,7 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
   $form['#validate'][] = '_atomizer_atom_form_validate';
   $form['actions']['submit']['#submit'][] = '_atomizer_atom_form_submit';
   $form['actions']['submit']['#attributes']['class'][] = 'use-ajax-submit';
+
 //foreach (array_keys($form['actions']) as $action) {
 //  if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
 //    $form['actions'][$action]['#submit'][] = '_atomizer_atom_form_submit';
@@ -107,16 +108,10 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  */
 function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
-  $h0 = $form_state->hasValue('field_be_nucleon');
-  $h1 = $form_state->hasValue(['field_be_nucleon', 0]);
-  $h2 = $form_state->hasValue(['field_be_nucleon', 0, 'value']);
-
-  $v0 = $form_state->getValue('field_be_nucleon');
-  $v1 = $form_state->getValue(['field_be_nucleon', 'value']);
-  $v2 = $form_state->getValue(['field_be_nucleon', 0, 'value']);
-
+  //
   if ($form_state->hasValue(['field_be_nucleon', 0, 'value']) &&
       $form_state->hasValue(['field__protons', 0, 'value'])) {
+    // Given the per nucleon binding energy, calculate the binding energy for the full nucleus
     $be_nucleon = $form_state->getValue('field_be_nucleon')[0]['value'];
     $protons = $form_state->getValue('field__protons')[0]['value'];
     $be_actual = $be_nucleon * $protons / 1000;
@@ -138,10 +133,14 @@ function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
       $form_state->setValue(['field_be_sam_lines_', 0, 'value'], substr($be_sam_lines_, 0,10));
     }
   }
+
+  $form_state->setValue(['field_an_isotope',0,'value'], sprintf ("%3s:%3s\n", $element['atomicNumber'], $protons));
+
+  // Normalize the actual mass using hydrogen instead of carbon.
   if ($form_state->hasValue(['field_mass_actual', 0, 'value'])) {
     $form_state->setValue(['field_mass_h_norm', 0, 'value'], $form_state->getValue('field_mass_actual')[0]['value'] / 1.0078250322);
   }
-    // Calculate mass using Carl Johnsons formula
+    // Calculate mass using Carl Johnsons formula - this isn't correct - needs work.
   if ($form_state->hasValue(['field__protons', 0, 'value']) &&
       $form_state->hasValue(['field__inner_electrons', 0, 'value']) &&
       $form_state->hasValue(['field__outer_electrons', 0, 'value'])) {
@@ -162,6 +161,7 @@ function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
 }
 
 function _atomizer_atom_form_submit(&$form, FormStateInterface &$form_state) {
+  // @TODO this needs to be conditional - messes up the normal node/{nid}/edit submit process.
   $form_state->setRebuild();
   $response = new AjaxResponse();
   $response->addCommand(new CloseModalDialogCommand());

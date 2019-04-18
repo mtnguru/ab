@@ -9,16 +9,9 @@
   Drupal.atomizer.atomC = function (_viewer) {
 
     var viewer = _viewer;
-    var atom;
     var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
     var atomInformation = $('.atom--information', viewer.context)[0];
     var atomProperties = $('.atom--properties', viewer.context)[0];
-
-    // Page elements to select a new atom.
-    var $atomList = $('#select-atom-wrapper', viewer.content);
-    var $atomSelectEnable = $('#atom-select-enable', viewer.context);
-    var $atomSelectClose = $atomList.find('.az-close');
-    var $atoms = $('.atom-name, .atomic-number', viewer.context);
 
     /**
      * Align an object to an internal axis (x, y or z) and then align that axis
@@ -58,19 +51,21 @@
      * @param value
      */
     function changeNucletState(nuclet, state) {
-      var id = nuclet.az.id;
-      var attachAngle = nuclet.az.attachAngle;
-      var parent = nuclet.parent.parent.parent;
+      let id = nuclet.az.id;
+      let atom = nuclet.az.atom;
+      let attachAngle = nuclet.az.attachAngle;
+      let parent = nuclet.parent.parent.parent;
       viewer.nuclet.deleteNuclet(nuclet);
 
-      var nucletOuterShell = createNuclet(
+      let nucletOuterShell = createNuclet(
+        atom,
         id,
         {state: state, attachAngle: attachAngle},
         parent
       );
       nuclet = nucletOuterShell.children[0].children[0];
-      updateValenceRings();
-      updateParticleCount();
+      updateValenceRings(atom);
+      updateParticleCount(atom);
 
       return nuclet;
     }
@@ -142,7 +137,7 @@
      * @param id
      * @returns {null}
      */
-    function getNuclet(id) {
+    function getNuclet(atom, id) {
       return (atom.az.nuclets[id]) ? atom.az.nuclets[id] : null;
     }
 
@@ -152,7 +147,7 @@
      *
      * @param event
      */
-    function addNuclet(id) {
+    function addNuclet(atom, id) {
       /*  conf = {
        state: 'final',
        attachAngle: 3,
@@ -173,9 +168,9 @@
       activateNeutralParticles(id.charAt(id.length-1), parent, false, false);
 
       // Create the new nuclet
-      var nucletOuterShell = createNuclet(id, conf, parent);
-      updateValenceRings();
-      updateParticleCount();
+      var nucletOuterShell = createNuclet(atom, id, conf, parent);
+      updateValenceRings(atom);
+      updateParticleCount(atom);
       return nucletOuterShell.children[0].children[0];
     }
 
@@ -184,16 +179,17 @@
      *
      * @param id
      */
-    function deleteNuclet(id) {
-      var nuclet = atom.az.nuclets[id];
-      var parent = atom.az.nuclets[id.slice(0, -1)];
+    function deleteNuclet(nuclet) {
+      let id = nuclet.az.id;
+      let atom = nuclet.az.atom;
+      var parentNuclet = nuclet.az.atom.az.nuclets[id.slice(0, -1)];
 
       viewer.nuclet.deleteNuclet(nuclet);
 
       // Activate the neutral ending protons on the parent but don't show.
-      activateNeutralParticles(id.charAt(id.length-1), parent, true, false);
-      updateValenceRings();
-      updateParticleCount();
+      activateNeutralParticles(id.charAt(id.length-1), parentNuclet, true, false);
+      updateValenceRings(atom);
+      updateParticleCount(atom);
     }
 
     /**
@@ -201,8 +197,7 @@
      *
      * @param event
      */
-    function changeNucletAngle(id, angle) {
-      var nuclet = atom.az.nuclets[id];
+    function changeNucletAngle(nuclet, angle) {
       nuclet.parent.rotation.y = (nuclet.parent.initial_rotation_y + ((angle - 1) * 72.2)) / 180 * Math.PI;
       nuclet.az.conf.attachAngle = angle;
     }
@@ -212,12 +207,13 @@
      *
      * @param nucletConf
      */
-    function createNuclet(id, nucletConf, parent) {
+    function createNuclet(atom, id, nucletConf, parent) {
       // Create Nuclet - get references to nuclet and shells
       var nucletOuterShell = viewer.nuclet.createNuclet(id, nucletConf);
       var nucletInnerShell = nucletOuterShell.children[0];
       var nuclet = nucletOuterShell.children[0].children[0];
       nuclet.az.attachAngle = nucletConf.attachAngle;
+      nuclet.az.atom = atom;
       parent.add(nucletOuterShell);
 
       // Rotate and position the nuclet onto it's parents grow point.
@@ -323,7 +319,7 @@
 
       if (nucletConf.nuclets) {
         for (var id in nucletConf.nuclets) {
-          createNuclet(id, nucletConf.nuclets[id], nuclet);
+          createNuclet(atom, id, nucletConf.nuclets[id], nuclet);
           activateNeutralParticles(id.charAt(id.length-1), nuclet, false, false);
         }
       }
@@ -335,7 +331,7 @@
      *
      * @param nid
      */
-    var loadObject = function loadObject (nid, callback) {
+    var loadObject = function loadObject (nid, deleteScene, callback) {
       var loadCallback = callback;
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadAtom',
@@ -349,7 +345,6 @@
        * @param results
        */
       function doCreateAtom (results) {
-        var az;
         //   Read in the atom
         //   Convert the arrays
         // Write a PHP program to read in all atoms one by one and convert the proton and electron arrays to associative arrays?
@@ -368,10 +363,13 @@
             if (atomProperties) {
               atomProperties.innerHTML = result.data.properties;
             }
-            if ($atoms.length > 0) {
-              $atoms.removeClass('atom-active');
-              $('.atom-select-' + result.data.nid, viewer.context).addClass('atom-active');
-            }
+
+// @TODO - move this to az_atom_select.js - needs rewriting
+//          if ($atoms.length > 0) {
+//            $atoms.removeClass('atom-active');
+//            $('.atom-select-' + result.data.nid, viewer.context).addClass('atom-active');
+//          }
+
             var $save = $('.atom--save a', viewer.context);
             if ($save.length) {
               $save.replaceWith(result.data.link);
@@ -380,17 +378,7 @@
               }
             }
 
-            if (atom) {
-              // Remove any atom's currently displayed
-              deleteAtom(atom);
-              atom = null;
-              az = null;
-              viewer.atom.atom = null;
-            } else {
-              az = {nuclets: {}}
-            }
-
-            createAtom(result.data.atomConf['N0']);
+            let atom = createAtom(result.data.atomConf['N0']);
             atom.az.nid = result.data.nid;
             atom.az.name = result.data.atomName;
             atom.az.title = result.data.atomTitle;
@@ -445,21 +433,17 @@
      */
     var createAtom = function createAtom (atomConf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
-      atom = new THREE.Group();
+      let atom = new THREE.Group();
       atom.name = 'atom';
       atom.az = {nuclets: {}};
-      viewer.atom.atom = atom;
-      createNuclet('N0', atomConf, atom);
-      updateValenceRings();
-      updateParticleCount();
+      createNuclet(atom, 'N0', atomConf, atom);
+      updateValenceRings(atom);
+      updateParticleCount(atom);
 
       var explode = viewer.theme.get('attachLines--scale');
       if (explode != 1) {
         explodeAtom(explode);
       }
-
-      viewer.scene.add(atom);
-      viewer.render();
 
       return atom;
     };
@@ -468,14 +452,15 @@
      * Delete an atom - calls recursive function deleteNuclet
      * @param atom
      */
-    var deleteAtom = function deleteAtom (atom) {
+    deleteObject = function deleteObject (atom) {
+      let fart = 5;
       for (var n in atom.az.nuclets) {
         viewer.nuclet.deleteNuclet(atom.az.nuclets[n]);
       }
       viewer.scene.remove(atom);
     };
 
-    var explodeAtom = function explodeAtom(scale) {
+    var explodeAtom = function explodeAtom(atom, scale) {
       for (var n in atom.az.nuclets) {
         var nuclet = atom.az.nuclets[n];
         if (nuclet.az.id !== 'N0') {
@@ -491,7 +476,7 @@
     /**
      * Check all valence rings and color active/inactive rings - count total Active and update atom information.
      */
-    function updateValenceRings() {
+    function updateValenceRings(atom) {
       var numActive = 0;
       var activeColor = viewer.theme.get('valence-active--color');
       var inactiveColor = viewer.theme.get('valence-inactive--color');
@@ -518,7 +503,7 @@
     /**
      * Show the number of protons and electrons
      */
-    function updateParticleCount() {
+    function updateParticleCount(atom) {
       var numProtons = 0;
       var numElectrons = 0;
       var numNuclets = 0;
@@ -669,10 +654,6 @@
      * @param id
      */
     var buttonClicked = function buttonClicked(event) {
-      // User pressed Select Atom button
-      if (event.target.id == 'atom--select') {
-        $(viewer.context).toggleClass('select-atom-enabled', viewer.context);
-      }
 
       // User pressed button to view binding energies
       if (event.target.id == 'atom--be-button') {
@@ -686,24 +667,19 @@
         }
         event.preventDefault();
       }
-      // User pressed button to view binding energies
+      // User pressed button to calculate all binding energies
       if (event.target.id == 'atom--calc-button') {
         event.preventDefault();
         calculateAllBindingEnergies(event);
       }
     };
 
-    // Set up event handler when user closes atom-select button
-    $('.atom--select-close').click(function () {
-      $(viewer.context).removeClass('select-atom-enabled');
-    });
-
     /**
      * Extract the text description of the current atom currently displayed.
      *
      * @returns {*}
      */
-    function extractStructure () {
+    function extractStructure (atom) {
 
       /**
        * Recursive function to extract a nuclets information.
@@ -788,49 +764,6 @@
     }
 
     /**
-     *
-     */
-    function addIsotopeEnableEventListeners () {
-      $('.num-isotopes').click(function () {
-        var $isotopes = $(this).parent().siblings('.isotopes');
-        if ($isotopes.hasClass('az-closed')) {
-          $(this).removeClass('az-closed');
-          $isotopes.removeClass('az-closed');
-        } else {
-          $isotopes.addClass('az-closed');
-        }
-      });
-    }
-
-    /**
-     * Add event listeners for when a user selects an atom.
-     */
-    function addSelectAtomEventListeners() {
-      // Add Event listeners to atoms to select.
-      $atoms.click(function (event) {
-        loadObject($(event.target.parentNode).data('nid'), null);
-        if (viewer.getDisplayMode() == 'mobile' ||
-            viewer.getDisplayMode() == 'tablet') {
-          $atomList.addClass('az-hidden');
-        }
-        event.preventDefault();
-      });
-
-
-      $atomSelectEnable.click(function () {
-        if ($atomList.hasClass('az-hidden')) {
-          $atomList.removeClass('az-hidden');
-        } else {
-          $atomList.addClass('az-hidden');
-        }
-      });
-
-      $atomSelectClose.click(function () {
-        $atomList.addClass('az-hidden');
-      })
-    }
-
-    /**
      * Define Drupal behavior attach functions.
      *
      * Nuclet Edit form popup
@@ -842,19 +775,13 @@
      */
     Drupal.behaviors.atomizer_atom = {
       attach: function (context, settings) {
-        var value = '';
-        $(context).find('#select-atom-wrapper').once('selectAtomAttached').each(function () {
-          addIsotopeEnableEventListeners();
-          addSelectAtomEventListeners();
-        });
-
-
         // If this is the node-atom-form being opened then fill in the atomic structure field.
         var $nodeForm = $('.node-atom-form, .node-atom-edit-form');
         if ($(context).hasClass('node-atom-edit-form') || $(context).hasClass('node-atom-form')) {
 
           var $textarea = $nodeForm.find('.field--name-field-atomic-structure textarea');
-          $textarea.val(extractStructure());
+          let atom = viewer.getObject("A1");
+          $textarea.val(extractStructure(atom));
 
           var protons = $('.atom--num-protons--value').html();
           $nodeForm.find('.field--name-field__protons input').val(protons);
@@ -871,9 +798,6 @@
       }
     };
 
-    addIsotopeEnableEventListeners();
-    addSelectAtomEventListeners();
-
     /**
      * Interface to this atomC.
      */
@@ -881,17 +805,15 @@
       addNuclet: addNuclet,
       addProton: addProton,
       deleteNElectron: deleteNElectron,
-      az: function () { return atom.az; },
       buttonClicked: buttonClicked,
       changeNucletState: changeNucletState,
       changeNucletAngle: changeNucletAngle,
       createAtom: createAtom,
-      deleteAtom: deleteAtom,
       deleteNuclet: deleteNuclet,
       explodeAtom: explodeAtom,
       getNuclet: getNuclet,
-      getYmlDirectory: function () { return 'config/atom'; },
       loadObject: loadObject,
+      deleteObject: deleteObject,
       overwriteYml: overwriteYml,
       saveYml: saveYml,
       updateValenceRings: updateValenceRings,

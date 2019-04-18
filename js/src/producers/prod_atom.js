@@ -14,7 +14,7 @@
 
 //  var mouseMode = $('#blocks--mouse-mode input[name=mouse--mode]:checked', viewer.context).val();
     var mouseMode;
-    var editNuclet;
+    var editNuclet;   // The nuclet currently being edited.
 
     var $nucletBlock = $('.blocks--nuclet-list', viewer.context);
 
@@ -56,7 +56,7 @@
      * @param event
      */
     function onAngleChanged(event) {
-      viewer.atom.changeNucletAngle(editNuclet.az.id, event.target.value);
+      viewer.atom.changeNucletAngle(editNuclet, event.target.value);
       viewer.render();
     }
 
@@ -68,10 +68,11 @@
     function onNucletDelete(event) {
       // Delete the protons from the
 //    event.preventDefault();
-      viewer.atom.deleteNuclet(editNuclet.az.id);
+      let atom = editNuclet.az.atom;
+      viewer.atom.deleteNuclet(editNuclet);
       delete viewer.atom.az().nuclets[editNuclet.az.id];
-      createNucletList(viewer.atom.atom);
-      createIntersectLists();
+      createNucletList(atom);
+      createIntersectLists(atom);
       viewer.render();
 
       $nucletFormBlock.addClass('az-hidden');
@@ -84,9 +85,10 @@
      */
     function onNucletAddButton(event) {
       var id = event.target.id.split('-', 2)[1];
-      var nuclet = viewer.atom.addNuclet(id);
-      viewer.atom.updateValenceRings();
-      createIntersectLists();
+      var atom = editNuclet.az.atom;
+      var nuclet = viewer.atom.addNuclet(atom, id);
+      viewer.atom.updateValenceRings(atom);
+      createIntersectLists(atom);
       setEditNuclet(nuclet);
       viewer.render();
     }
@@ -107,7 +109,7 @@
         case 'protonsColor':
           return visibleProtons;
         case 'inner-faces':
-          return viewer.objects.icosaFaces;
+          return viewer.items.icosaFaces;
         case 'outer-faces':
           return hoverOuterFaces;
       }
@@ -316,6 +318,7 @@
               var intersects = viewer.controls.findIntersects(optionalProtons);
               if (intersects.length) {
                 proton = intersects[0].object;
+                let atom = proton.az.nuclet.atom;
                 switch (event.which) {
                   case 1:       // Left click - select
                     if (proton.az.optional) {
@@ -326,9 +329,9 @@
                           proton.az.tetrahedrons[t].material.visible = proton.az.visible;
                         }
                       }
-                      viewer.atom.updateValenceRings();
-                      createIntersectLists();
-                      viewer.atom.updateParticleCount();
+                      viewer.atom.updateValenceRings(atom);
+                      createIntersectLists(atom);
+                      viewer.atom.updateParticleCount(atom);
                     }
                     break;
                   case 3:       // Right click - deselect
@@ -363,7 +366,7 @@
                     break;
                   }
                 }
-                viewer.objects.icosaFaces = null;
+                viewer.items.icosaFaces = null;
                 var faces = viewer.nuclet.createGeometryFaces(
                   oldFaces.name,
                   1,
@@ -372,8 +375,8 @@
                   oldFaces.geometry.reactiveState
                 );
                 var nucletGroup = oldFaces.parent;
-                viewer.objects[oldFaces.name] = [];
-                viewer.objects[oldFaces.name].push(faces);
+                viewer.items[oldFaces.name] = [];
+                viewer.items[oldFaces.name].push(faces);
                 faces.geometry.reactiveState = oldFaces.geometry.reactiveState;
                 faces.geometry.shapeConf = oldFaces.geometry.shapeConf;
                 nucletGroup.remove(oldFaces);
@@ -412,9 +415,11 @@
               var objects = viewer.controls.findIntersects(visibleParticles);
               if (objects.length) {          // Object found
                 // PROTON
+                let atom;
                 if (objects[0].object.az) {
                   var proton = objects[0].object;
                   var nuclet = proton.az.nuclet;
+                  atom = nuclet.atom;
                   var pid = proton.az.nuclet.id + '-' + proton.az.id;
                   var arr = Object.keys(selectedProtons);
                   var len = Object.keys(selectedProtons).length;
@@ -444,14 +449,16 @@
                   // ELECTRON
                 } else {
                   electron = objects[0].object.parent;
+
                   if (electron == selectedNElectron) {
                     viewer.atom.deleteNElectron(selectedNElectron);
+                    atom = electron.az.nuclet.atom;
                     selectedNElectron = null;
-                    createIntersectLists();
+                    createIntersectLists(atom);
                   }
                 }
-                createIntersectLists();
-                viewer.atom.updateParticleCount();
+                createIntersectLists(atom);
+                viewer.atom.updateParticleCount(atom);
                 viewer.render();
               }
               break;   // electronsAdd
@@ -464,11 +471,11 @@
     /**
      * Create the visibleProtons and optionalProtons lists.
      */
-    function createIntersectLists() {
+    function createIntersectLists(atom) {
       optionalProtons = [];
       visibleProtons = [];
       visibleNElectrons = [];
-      var nuclets = viewer.atom.az().nuclets;
+      var nuclets = atom.az.nuclets;
       for (var id in nuclets) {
         if (nuclets.hasOwnProperty(id)) {
 
@@ -525,14 +532,14 @@
      * @param id
      * @param nucletAttach
      */
-    function createNucletAttachItem(id, nucletAttach) {
+    function createNucletAttachItem(atom, id, nucletAttach) {
       var label = nucletAttach.getElementsByTagName('LABEL')[0];
       var div = nucletAttach.getElementsByTagName('DIV')[0];
 
       label.innerHTML = id;
 
-      if (viewer.atom.az().nuclets[id]) {
-        div.innerHTML = viewer.atom.az().nuclets[id].az.state;
+      if (atom.az.nuclets[id]) {
+        div.innerHTML = atom.az.nuclets[id].az.state;
       } else {
         div.innerHTML = '';
         var button = document.createElement('input');
@@ -553,7 +560,7 @@
      */
     function setEditNuclet(nuclet) {
       var id = nuclet.az.id;
-      createNucletList(viewer.atom.atom);
+      createNucletList(nuclet.az.atom);
       if (editNuclet) {
         viewer.nuclet.highlight(editNuclet, false);
       }
@@ -591,8 +598,8 @@
         $('#edit-nuclet-grow-1', viewer.context).removeClass('az-hidden');
       }
       // Add buttons to add nuclet.
-      createNucletAttachItem(id + '0', nucletAttach0);
-      createNucletAttachItem(id + '1', nucletAttach1);
+      createNucletAttachItem(nuclet.az.atom, id + '0', nucletAttach0);
+      createNucletAttachItem(nuclet.az.atom, id + '1', nucletAttach1);
       editNuclet = nuclet;
     }
 
@@ -789,7 +796,7 @@
         }
 
         var out = '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">';
-        out += '<div class="header">' + id + ' ' + nuclet.az.state + ' - ' + numProtons + '</div>';
+        out += `<div class="header" data-nuclet-id="${id}" data-atom-id="${atom.az.id}">${id} ${nuclet.az.state} - ${numProtons}</div>`;
         // Add the binding energy
         var beList = findBindingEnergy(nuclet.az);
         if (beList.length > 0) {
@@ -828,9 +835,11 @@
         $nucletList.html(addNucletToList('N0', 0));
 
         $nucletButtons = $nucletList.find('.nuclet');
-        $nucletButtons.click(function (e) {
-          var nucletName = e.target.innerHTML.split(' ')[0];
-          var nuclet = viewer.atom.getNuclet(nucletName);
+        $nucletButtons.click((e) => {
+          let nucletId = $(e.target).data('nuclet-id');
+          let atomId = $(e.target).data('atom-id');
+          let atom = viewer.getObject(atomId);
+          var nuclet = viewer.atom.getNuclet(atom, nucletId);
           if ($nucletFormBlock.hasClass('az-hidden') || nuclet !== editNuclet) {
             setEditNuclet(nuclet);
             $nucletFormBlock.removeClass('az-hidden');
@@ -875,12 +884,12 @@
 
     var objectLoaded = function objectLoaded(atom) {
       localStorage.setItem('atomizer_builder_atom_nid', atom.az.nid);
-      createIntersectLists();
-      if (viewer.objects.icosaFaces) {
-        hoverInnerFaces = viewer.objects.icosaFaces;
+      createIntersectLists(atom);
+      if (viewer.items.icosaFaces) {
+        hoverInnerFaces = viewer.items.icosaFaces;
       }
-      if (viewer.objects.icosaOutFaces) {
-        hoverOuterFaces = viewer.objects.icosaOutFaces;
+      if (viewer.items.icosaOutFaces) {
+        hoverOuterFaces = viewer.items.icosaOutFaces;
       }
       createNucletList(atom);
 //    viewer.producer.objectLoaded(atom);
@@ -888,7 +897,7 @@
 
     function changeNuclet(editNuclet, id) {
       var nuclet = viewer.atom.changeNucletState(editNuclet, id);
-      createIntersectLists();
+      createIntersectLists(nuclet.az.atom);
       setEditNuclet(nuclet);
       viewer.render();
     }
