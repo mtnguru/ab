@@ -79,9 +79,6 @@
     };
 
     var viewer = _viewer;
-    var $sceneName = $('.scene--name', viewer.context);
-    var sceneInformation = $('.scene--information', viewer.context)[0];
-    var sceneProperties = $('.scene--properties', viewer.context)[0];
     var cylinders = {};
     var points;
 
@@ -100,11 +97,11 @@
      *
      * @param nid
      */
-    var loadObject = function loadObject (nid, callback) {
+    var loadObject = function loadObject (conf, callback) {
       loadCallback = callback;
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/load-node',
-        { nid: nid },
+        {conf},
         doCreateBirkeland
       );
     };
@@ -118,16 +115,6 @@
       for (var i = 0; i < results.length; i++) {
         var result = results[i];
         if (result.command == 'loadNodeCommand') {
-          if ($sceneName) {
-            $sceneName.html(result.data.nodeTitle);
-          }
-          if (sceneInformation) {
-            sceneInformation.innerHTML = result.data.information;
-          }
-          if (sceneProperties) {
-            sceneProperties.innerHTML = result.data.properties;
-          }
-
           if (viewer.scene.az && viewer.scene.az.bc) {
             // Remove any birkeland current's currently displayed
             deleteScene(bc);
@@ -139,6 +126,7 @@
             nid: result.data.nid,
             name: result.data.nodeName,
             title: result.data.nodeTitle,
+            conf: result.data.conf,
           };
 
           // Move bc position

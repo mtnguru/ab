@@ -11,6 +11,10 @@
   Drupal.atomizer.producers.birkelandC = function (_viewer) {
     var viewer = _viewer;
     var mouseMode;
+    var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
+    var $sceneName = $('.scene--name', viewer.context);
+    var sceneInformation = $('.scene--information', viewer.context)[0];
+    var sceneProperties = $('.scene--properties', viewer.context)[0];
 
     /**
      * Return the objects which are active for hovering
@@ -110,6 +114,16 @@
         bc: bc                 // Birkeland current object
       };
 
+      if ($sceneName) {
+        $sceneName.html(bc.az.title);
+      }
+      if ($sceneInformation) {
+        $sceneInformation.html(bc.az.information);
+      }
+      if ($sceneProperties) {
+        $sceneProperties.html(bc.az.properties);
+      }
+
       $('opacity--')
       for (var c in bc.cylinders) {
         if (bc.cylinders.hasOwnProperty(c)) {
@@ -138,7 +152,7 @@
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
       objectNid = ((!objectNid || objectNid == 'undefined') ? 627 : objectNid);  // Loads a birkeland content type
-      viewer.birkeland.loadObject(objectNid);
+      viewer.birkeland.loadObject({nid: objectNid},objectLoaded);
 
       // Set the ID of the scene select radio buttons - scene--select--610
       var $radios = $('#edit-scene-select .az-control-radios', viewer.context);
@@ -154,7 +168,7 @@
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {
           viewer.scene.remove(viewer.scene.az.bc);
-          viewer.birkeland.loadObject(event.target.value);
+          viewer.birkeland.loadObject({nid: event.target.value});
         }
       });
 
@@ -162,7 +176,7 @@
       $radios.siblings('label').click(function (event) {
         var input =$(this).siblings('input')[0];
         $(input).prop('checked', true);
-        viewer.birkeland.loadObject(event.target.value);
+        viewer.birkeland.loadObject({nid: event.target.value});
       });
       Drupal.atomizer.dialogs.getDialog(viewer,'bessel');
 //    viewer.besselGraph = Drupal.atomizer.dialogs.besselC(viewer);
@@ -172,6 +186,7 @@
       }
     };
 
+    /*
     var loadBirkeland = function loadBirkeland(filename) {
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadYml',
@@ -185,7 +200,9 @@
     var birkelandLoaded = function birkelandLoaded(results) {
       var conf = results[0].ymlContents;
       var bc = viewer.birkeland.createScene(conf);
+      objectLoaded(bc);
     };
+    */
 
     // Initialize Event Handlers
 

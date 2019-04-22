@@ -54,7 +54,9 @@
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
       $atoms.click(function (event) {
-        viewer.atom.loadObject($(event.target.parentNode).data('nid'), null);
+        viewer.atom.loadObject({
+          nid: $(event.target.parentNode).data('nid'),
+        }, null);
         if (viewer.getDisplayMode() == 'mobile' ||
             viewer.getDisplayMode() == 'tablet') {
           $atomList.addClass('az-hidden');

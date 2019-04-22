@@ -115,7 +115,7 @@
 
           stopTimers();
           state = 'paused';
-          viewer.atom.loadObject(conf.atoms[currentAtom].nid, function() {
+          viewer.atom.loadObject({nid: conf.atoms[currentAtom].nid}, function() {
             if (conf.atoms[currentAtom].time) {
                conf.time = conf.atoms[currentAtom].time;
             }

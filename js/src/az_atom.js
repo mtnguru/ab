@@ -9,9 +9,6 @@
   Drupal.atomizer.atomC = function (_viewer) {
 
     var viewer = _viewer;
-    var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
-    var atomInformation = $('.atom--information', viewer.context)[0];
-    var atomProperties = $('.atom--properties', viewer.context)[0];
 
     /**
      * Align an object to an internal axis (x, y or z) and then align that axis
@@ -331,13 +328,18 @@
      *
      * @param nid
      */
-    var loadObject = function loadObject (nid, callback) {
+    var loadObject = function loadObject (conf, callback) {
       var loadCallback = callback;
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadAtom',
-        { nid: nid },
-        doCreateAtom
+        { conf: conf },
+        doCreateAtom,
+        loadObjectError
       );
+
+      function loadObjectError(response) {
+        alert(`ERROR: ${response.responseText} - ${response.statusText}`);
+      }
 
       /**
        * Callback from ajax call to load and display an atom.
@@ -354,16 +356,6 @@
         for (var i = 0; i < results.length; i++) {
           var result = results[i];
           if (result.command == 'loadAtomCommand') {
-            if ($sceneName) {
-              $sceneName.html(result.data.atomTitle);
-            }
-            if (atomInformation) {
-              atomInformation.innerHTML = result.data.information;
-            }
-            if (atomProperties) {
-              atomProperties.innerHTML = result.data.properties;
-            }
-
 // @TODO - move this to az_atom_select.js - needs rewriting
 //          if ($atoms.length > 0) {
 //            $atoms.removeClass('atom-active');
@@ -382,6 +374,9 @@
             atom.az.nid = result.data.nid;
             atom.az.name = result.data.atomName;
             atom.az.title = result.data.atomTitle;
+            atom.az.conf = result.data.conf;
+            atom.az.information = result.data.information;
+            atom.az.properties = result.data.properties;
 
             // Move atom position
             if (viewer.dataAttr['atom--position--x']) {
@@ -561,7 +556,7 @@
 
         var $isotope = $($isotopes[isotope]);
         var nid = $isotope.data('nid');
-        loadObject (nid, displayAtom);
+        loadObject ({nid: nid}, displayAtom);
       }
 
       function displayAtom() {
@@ -584,7 +579,7 @@
 //        setTimeout(function() {
             $isotope = $($isotopes[isotope]);
             nid = $isotope.data('nid');
-            loadObject (nid, displayAtom);
+            loadObject ({nid: nid}, displayAtom);
 //        }, 10);
         } else {
           $(event.target).removeClass('az-selected');

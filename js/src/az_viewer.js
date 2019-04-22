@@ -348,6 +348,8 @@
     }
 
     viewer.addObject = (object) => {
+      let numObjects = Object.keys(viewer.objects).length;
+      object.az.id = `${object.az.conf.type}-${numObjects}`;
       viewer.objects[object.az.id] = object;
       viewer.scene.add(object);
     };

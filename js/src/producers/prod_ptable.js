@@ -115,7 +115,7 @@
       // Load and display the periodic table.
       var objectNid = localStorage.getItem('atomizer_ptable_nid');
       objectNid = ((!objectNid || objectNid == 'undefined') ? 627 : objectNid);  // Loads a ptable content type
-      viewer.ptable.loadObject(objectNid);
+      viewer.ptable.loadObject({nid: objectNid});
 
       // Set the ID of the scene select radio buttons - scene--select--610  // TODO Do I need scenes for the table?  Not really
       var $radios = $('#edit-scene-select .az-control-radios', viewer.context);
@@ -130,7 +130,7 @@
       // Click on the scene select radio button
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {
-          viewer.ptable.loadObject(event.target.value);
+          viewer.ptable.loadObject({nid: event.target.value});
 //        loadPtable(scene, event.target.value);
         }
       });
@@ -139,7 +139,7 @@
       $radios.siblings('label').click(function (event) {
         var input =$(this).siblings('input')[0];
         $(input).prop('checked', true);
-        viewer.ptable.loadObject(event.target.value);
+        viewer.ptable.loadObject({nid: event.target.value});
 //      loadPtable(scene, input.value);
       });
 

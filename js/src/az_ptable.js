@@ -31,11 +31,11 @@
      *
      * @param nid
      */
-    var loadObject = function loadObject (nid, callback) {
+    var loadObject = function loadObject (conf, callback) {
       loadCallback = callback;
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/load-node',
-        { nid: nid },
+        { conf },
         doCreateObject
       );
     };

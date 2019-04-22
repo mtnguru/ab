@@ -11,12 +11,15 @@
     let viewer = _viewer;
     let moleculeConf;
     let moleculeNid;
-    let atoms = [];
+    let objects = [];
+    var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
+    var $sceneInformation = $('.molecule--information', viewer.context);
+    var $sceneProperties = $('.molecule--properties', viewer.context);
 
-    var moleculeLoad = function(nid) {
+    var moleculeLoad = function(conf) {
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadMolecule',
-        { nid: nid },
+        { conf },
         moleculeLoaded
       );
     };
@@ -24,26 +27,46 @@
     var moleculeLoaded = function (response) {
       for (var i = 0; i < response.length; i++) {
         if (response[i].command == 'loadMoleculeCommand') {
+          viewer.clearScene();
+          viewer.render();
           let data = response[i].data;
           viewer.scene.az = {
             title: data.moleculeTitle,
             name: data.moleculeName,
             sceneNid: data.nid,
           };
+          if ($sceneName) {
+            $sceneName.html(data.moleculeTitle);
+          }
+          if ($sceneInformation) {
+            $sceneInformation.html(data.information);
+          }
+          if ($sceneProperties) {
+            $sceneProperties.html(data.properties);
+          }
           viewer.labels.display();
           localStorage.setItem('atomizer_molecule_nid', data.nid);
 
           moleculeConf = data.moleculeConf;
-          for (let a in moleculeConf.atoms) {
-            let atomConf = moleculeConf.atoms[a];
-            viewer.atom.loadObject(atomConf);
+          for (let o in moleculeConf.objects) {
+            let objectConf = moleculeConf.objects[o];
+            viewer[objectConf.type].loadObject(objectConf), objectLoaded;
           }
         }
       }
     };
 
-    var objectLoaded = function (_atom) {
-      atoms.push(_atom);
+    var objectLoaded = function (object) {
+      object.position.x = object.az.conf.position[0];
+      object.position.y = object.az.conf.position[1];
+      object.position.z = object.az.conf.position[2];
+
+      object.rotation.x = object.az.conf.rotation[0] / 360 * 2 * Math.PI;
+      object.rotation.y = object.az.conf.rotation[1] / 360 * 2 * Math.PI;
+      object.rotation.z = object.az.conf.rotation[2] / 360 * 2 * Math.PI;
+      viewer.scene.add(object);
+      viewer.addObject(object);
+      viewer.render();
     };
 
     /**
@@ -60,16 +83,17 @@
       viewer.prod_atom = Drupal.atomizer.prod_atomC(viewer);
 
       // Set eventhandler for select molecule block
+      let $d = $('#select-molecule-wrapper .select-item-wrapper a');
       $('#select-molecule-wrapper .select-item-wrapper a').click((event) => {
         let $link = $(event.target).closest('a');
         let nid = $link.data('nid');
-        moleculeLoad(nid);
+        moleculeLoad({nid: nid});
       });
 
       // Read in the molecule .yml file
       moleculeNid = localStorage.getItem('atomizer_molecule_nid');
       moleculeNid = (!moleculeNid || moleculeNid == 'undefined') ? 1315 : moleculeNid;
-      moleculeLoad(moleculeNid);
+      moleculeLoad({nid: moleculeNid});
     };
 
     return {

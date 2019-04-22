@@ -174,7 +174,7 @@ class AtomizerController extends ControllerBase {
     $link = [
       '#type' => 'link',
       '#title' => 'Save Atom',
-      '#url' => Url::fromRoute('entity.node.edit_form',['node' => $data['nid']]),
+      '#url' => Url::fromRoute('entity.node.edit_form',['node' => $data['conf']['nid']]),
       '#attached' => ['library' => ['core/drupal.dialog.ajax']],
       '#attributes' => [
         'class' => ['use-ajax'],
@@ -195,7 +195,7 @@ class AtomizerController extends ControllerBase {
     ];
     $data['link'] = render($link);
 
-    $node = Node::load($data['nid']);
+    $node = Node::load($data['conf']['nid']);
 
     // Render the node/atom using teaser atom_viewer mode.
     $data['atomName'] = $node->label();
@@ -242,7 +242,7 @@ class AtomizerController extends ControllerBase {
     $link = [
       '#type' => 'link',
       '#title' => 'Save Molecule',
-      '#url' => Url::fromRoute('entity.node.edit_form',['node' => $data['nid']]),
+      '#url' => Url::fromRoute('entity.node.edit_form',['node' => $data['conf']['nid']]),
       '#attached' => ['library' => ['core/drupal.dialog.ajax']],
       '#attributes' => [
         'class' => ['use-ajax'],
@@ -263,7 +263,7 @@ class AtomizerController extends ControllerBase {
     ];
     $data['link'] = render($link);
 
-    $node = Node::load($data['nid']);
+    $node = Node::load($data['conf']['nid']);
 
     // Render the node/atom using teaser atom_viewer mode.
     $data['moleculeName'] = $node->label();
@@ -454,7 +454,7 @@ class AtomizerController extends ControllerBase {
     $response = new AjaxResponse();
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $node = Node::load($data['nid']);
+    $node = Node::load($data['conf']['nid']);
 
     // Render the node using teaser atom_viewer mode.
     $data['nodeName'] = $node->label();
@@ -479,7 +479,7 @@ class AtomizerController extends ControllerBase {
         break;
       case 'birkeland':
         $field = $node->field_structure;
-        $path = drupal_get_path('module', 'atomizer') . '/config/objects/birkeland/' . $data['nid'] . '.yml';
+        $path = drupal_get_path('module', 'atomizer') . '/config/objects/birkeland/' . $data['conf']['nid'] . '.yml';
         if (file_exists($path)) {
           $data['nodeConf'] = Yaml::decode(file_get_contents($path));
         } else {

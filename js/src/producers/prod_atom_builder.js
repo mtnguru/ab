@@ -10,6 +10,10 @@
   Drupal.atomizer.producers.atom_builderC = function (_viewer) {
     var viewer = _viewer;
     var atom;
+    var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
+    var $atomInformation = $('.atom--information', viewer.context);
+    var $atomProperties = $('.atom--properties', viewer.context);
+
     /**
      * Create the view - add any objects to scene.
      */
@@ -29,7 +33,7 @@
       if (atom) {
         viewer.atom.deleteObject(atom);
       }
-      viewer.atom.loadObject((!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid);
+      viewer.atom.loadObject({nid: (!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid});
     };
 
     var objectLoaded = function (_atom) {
@@ -37,6 +41,17 @@
       atom = _atom;
       atom.az.id = "A1";
       viewer.prod_atom.objectLoaded(atom);
+      if ($sceneName) {
+        $sceneName.html(atom.az.title);
+      }
+      if ($atomInformation) {
+        $atomInformation.html(atom.az.information);
+      }
+      if ($atomProperties) {
+        $atomProperties.html(atom.az.properties);
+      }
+
+
       viewer.scene.az = {
         title: atom.az.title, // Use atom title as scene title
         name: atom.az.name,  // Use atom name as the scene name
