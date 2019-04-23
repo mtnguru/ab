@@ -33,7 +33,10 @@
       if (atom) {
         viewer.atom.deleteObject(atom);
       }
-      viewer.atom.loadObject({nid: (!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid});
+      viewer.atom.loadObject({
+        nid: (!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid,
+        type: 'atom',
+      });
     };
 
     var objectLoaded = function (_atom) {
@@ -50,7 +53,6 @@
       if ($atomProperties) {
         $atomProperties.html(atom.az.properties);
       }
-
 
       viewer.scene.az = {
         title: atom.az.title, // Use atom title as scene title
