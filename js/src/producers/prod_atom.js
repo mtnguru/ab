@@ -70,7 +70,7 @@
 //    event.preventDefault();
       let atom = editNuclet.az.atom;
       viewer.atom.deleteNuclet(editNuclet);
-      delete viewer.atom.az().nuclets[editNuclet.az.id];
+//    delete viewer.atom.az().nuclets[editNuclet.az.id];
       createNucletList(atom);
       createIntersectLists(atom);
       viewer.render();
@@ -231,6 +231,9 @@
      * @returns {boolean}
      */
     function mouseUp(event, distance) {
+      return;
+    }
+    function mouseDown(event, distance) {
 
       /**
        * A electron has been deselected, deselect the protons also.
@@ -987,6 +990,7 @@
     return {
       setDefaults: setDefaults,
       mouseUp: mouseUp,
+      mouseDown: mouseDown,
       hoverObjects: hoverObjects,
       hovered: hovered,
       objectLoaded: objectLoaded,

@@ -371,7 +371,7 @@
             }
 
             let atom = createAtom(result.data.atomConf['N0']);
-            atom.az.nid = result.data.nid;
+            atom.az.nid = result.data.conf.nid;
             atom.az.name = result.data.atomName;
             atom.az.title = result.data.atomTitle;
             atom.az.conf = result.data.conf;

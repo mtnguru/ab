@@ -39,9 +39,9 @@
       });
     };
 
-    var objectLoaded = function (_atom) {
+    var objectLoaded = function (atom) {
       viewer.clearScene();
-      atom = _atom;
+      localStorage.setItem('atomizer_builder_atom_nid', atom.az.nid);
       atom.az.id = "A1";
       viewer.prod_atom.objectLoaded(atom);
       if ($sceneName) {
@@ -70,6 +70,7 @@
       objectLoaded: objectLoaded,
       getObject: () => atom,
       mouseUp: function (event) { return viewer.prod_atom.mouseUp(event)},
+      mouseDown: function (event) { return viewer.prod_atom.mouseDown(event)},
       hovered: function (hovered) { return viewer.prod_atom.hovered(hovered)},
       hoverObjects: function () { return viewer.prod_atom.hoverObjects()},
     };
