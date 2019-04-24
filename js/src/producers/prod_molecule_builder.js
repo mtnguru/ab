@@ -1,7 +1,7 @@
 /**
  * @file - prod_molecule_builder.js
  *
- * This 'producer' creates the view with a single atom for editing 
+ * This 'producer' creates the view with a single atom for editing
  * with the atom_builder.
  */
 
@@ -11,10 +11,10 @@
     let viewer = _viewer;
     let moleculeConf;
     let moleculeNid;
-    let objects = [];
     var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
     var $sceneInformation = $('.molecule--information', viewer.context);
     var $sceneProperties = $('.molecule--properties', viewer.context);
+    var atoms = {};
 
     var moleculeLoad = function(conf) {
       Drupal.atomizer.base.doAjax(
@@ -45,11 +45,13 @@
             $sceneProperties.html(data.properties);
           }
           viewer.labels.display();
-          localStorage.setItem('atomizer_molecule_nid', data.nid);
+          localStorage.setItem('atomizer_molecule_nid', data.conf.nid);
 
           moleculeConf = data.moleculeConf;
-          for (let o in moleculeConf.objects) {
-            let objectConf = moleculeConf.objects[o];
+          atoms = {};
+          for (let key in moleculeConf.objects) {
+            let objectConf = moleculeConf.objects[key];
+            objectConf.id = key;
             viewer[objectConf.type].loadObject(objectConf), objectLoaded;
           }
         }
@@ -65,6 +67,8 @@
       object.rotation.y = object.az.conf.rotation[1] / 360 * 2 * Math.PI;
       object.rotation.z = object.az.conf.rotation[2] / 360 * 2 * Math.PI;
       viewer.scene.add(object);
+      object.az.id = object.az.conf.id;
+      atoms[object.az.id] = object;
       viewer.addObject(object);
       viewer.render();
     };
@@ -96,10 +100,28 @@
       moleculeLoad({nid: moleculeNid});
     };
 
+    const hovered = () => {
+
+    };
+
+    const hoverObjects = () => {
+      let objects = [];
+      for (let id in atoms) {
+        let atom = atoms[id];
+        objects = viewer.prod_atom.hoverObjects(atom);
+      }
+      return objects;
+    };
+
     return {
       createView: createView,
       objectLoaded: objectLoaded,
+      getObject: () => atom,
+      mouseUp: function (event) { return viewer.prod_atom.mouseUp(event)},
+      mouseDown: function (event) { return viewer.prod_atom.mouseDown(event)},
+      hovered: function (hovered) { return viewer.prod_atom.hovered(hovered)},
+      hoverObjects: function () { return viewer.prod_atom.hoverObjects()},
     };
-    };
+  };
 
 })(jQuery);
