@@ -16,14 +16,10 @@
     var mouseMode;
     var editNuclet;   // The nuclet currently being edited.
 
-    var $nucletBlock = $('.blocks--nuclet-list', viewer.context);
-
     var $nucletList = $('.nuclet--list', viewer.context);
     var $nucletFormBlock = $('.blocks--nuclet-form', viewer.context);
     var $nucletButtons;
 
-    var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
-    var protonColor;
     if ($nucletFormBlock.length) {
       var nucletAngle = $('.nuclet--attachAngle', viewer.context)[0];
       var nucletAngleSlider = $('.nuclet--attachAngle--az-slider', viewer.context)[0]
@@ -34,6 +30,10 @@
       var nucletAttach1 = $('#edit-nuclet-grow-1', viewer.context)[0];
     }
 
+    var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
+    var protonColor;
+
+    // @TODO These all have to be added to the atoms themselves - on demand
     var hoverInnerFaces = [];
     var hoverOuterFaces = [];
     var optionalProtons = [];
@@ -828,7 +828,7 @@
           }
         }
         return out;
-      }
+      } // end function  addNucletToList
 
       if ($nucletFormBlock.length) {
         // Save the nuclet form before overwriting the list.

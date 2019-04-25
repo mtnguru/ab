@@ -14,7 +14,7 @@
     var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
     var $sceneInformation = $('.molecule--information', viewer.context);
     var $sceneProperties = $('.molecule--properties', viewer.context);
-    var atoms = {};
+    var objects = {};
 
     var moleculeLoad = function(conf) {
       Drupal.atomizer.base.doAjax(
@@ -48,17 +48,25 @@
           localStorage.setItem('atomizer_molecule_nid', data.conf.nid);
 
           moleculeConf = data.moleculeConf;
-          atoms = {};
+          let molecule = {
+            az: moleculeConf,
+          };
+          viewer.prod_molecule.moleculeLoaded(molecule);
+
+          objects = {};
           for (let key in moleculeConf.objects) {
             let objectConf = moleculeConf.objects[key];
             objectConf.id = key;
-            viewer[objectConf.type].loadObject(objectConf), objectLoaded;
+            viewer[objectConf.type].loadObject(objectConf);
           }
+
         }
       }
     };
 
     var objectLoaded = function (object) {
+      viewer.prod_molecule.objectLoaded(object);
+
       object.position.x = object.az.conf.position[0];
       object.position.y = object.az.conf.position[1];
       object.position.z = object.az.conf.position[2];
@@ -68,7 +76,7 @@
       object.rotation.z = object.az.conf.rotation[2] / 360 * 2 * Math.PI;
       viewer.scene.add(object);
       object.az.id = object.az.conf.id;
-      atoms[object.az.id] = object;
+      objects[object.az.id] = object;
       viewer.addObject(object);
       viewer.render();
     };
@@ -85,6 +93,7 @@
       viewer.labels = Drupal.atomizer.labelsC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
       viewer.prod_atom = Drupal.atomizer.prod_atomC(viewer);
+      viewer.prod_molecule = Drupal.atomizer.prod_moleculeC(viewer);
 
       // Set eventhandler for select molecule block
       let $d = $('#select-molecule-wrapper .select-item-wrapper a');
@@ -106,8 +115,8 @@
 
     const hoverObjects = () => {
       let objects = [];
-      for (let id in atoms) {
-        let atom = atoms[id];
+      for (let id in objects) {
+        let atom = objects[id];
         objects = viewer.prod_atom.hoverObjects(atom);
       }
       return objects;

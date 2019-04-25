@@ -12,7 +12,7 @@
     var viewer = _viewer;
     var cameraTrackballControls;
     var objectTrackballControls;
-    var cameraMode = 'none';
+    var controlsMode = 'none';
     var selectBlock = $('.theme--selectBlock', viewer.context)[0];
     var img = document.createElement('IMG'); // Storage for current image.
     var dialogs = {};
@@ -23,16 +23,14 @@
     var mouseDown = new THREE.Vector2(-1000, -1000);
 
     /**
-     * Change the mouse mode - builder, move camera, none, etc.
-     *
-     * @NOTE - This function isn't really used - called once with mode atom_builder.
+     * Change the controls mode
      *
      * @param newMode
      */
-    function changeCameraMode(newMode) {
+    function changeControlsMode(newMode, object) {
 
-      switch (cameraMode) {
-        case 'atom_builder':
+      switch (controlsMode) {
+        case 'scene':
           cameraTrackballControls.dispose();
           delete cameraTrackballControls;
           viewer.canvasContainer.removeEventListener('mousemove', onMouseMove);
@@ -41,7 +39,7 @@
           cameraTrackballControls.dispose();
           delete cameraTrackballControls;
           break;
-        case 'atom':
+        case 'object':
           objectTrackballControls.dispose();
           delete objectTrackballControls;
           break;
@@ -52,9 +50,9 @@
           break;
       }
 
-      cameraMode = newMode;
-      switch (cameraMode) {
-        case 'atom_builder':
+      controlsMode = newMode;
+      switch (controlsMode) {
+        case 'scene':
           cameraTrackballControls = createCameraTrackballControls();
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
           viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
@@ -63,8 +61,8 @@
         case 'camera':
           cameraTrackballControls = createCameraTrackballControls();
           break;
-        case 'atom':
-          objectTrackballControls = createObjectTrackballControls(Drupal.atomizer.octolet);
+        case 'object':
+          objectTrackballControls = createObjectTrackballControls(object);
           break;
         case 'attach':
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
@@ -590,7 +588,8 @@
      * @returns {THREE.TrackballControls}
      */
     function createObjectTrackballControls(object) {
-      var controls = new THREE.TrackballControls(object, viewer.renderer.domElement);
+//    var controls = new THREE.TrackballControls(object, viewer.renderer.domElement);
+      var controls = new THREE.OrbitControls(object, viewer.renderer.domElement);
       controls.rotateSpeed = 2.0;
       controls.zoomSpeed = 1.0;
       controls.panSpeed = 3.0;
@@ -713,7 +712,7 @@
       initializeControls();
 
       // Set the current camera mode - this could probably go away.
-      changeCameraMode('atom_builder');
+      changeControlsMode('scene');
 
       // Set any default values the producer may have.
       if (viewer.producer.setDefaults) viewer.producer.setDefaults();
@@ -731,6 +730,7 @@
       init: init,
       getDefault: getDefault,
       findIntersects: findIntersects,
+      changeControlsMode: changeControlsMode,
     }
   };
 })(jQuery);

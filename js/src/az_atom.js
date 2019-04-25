@@ -470,6 +470,18 @@
       }
     };
 
+    function highlight(atom, highlight) {
+      highlight = highlight || false;
+      atom.az.highlight = highlight;
+      /*
+      for (var id in nuclet.az.protons) {
+        if (nuclet.az.protons.hasOwnProperty(id)) {
+          setProtonColor(nuclet.az.protons[id], null, highlight);
+        }
+      }
+      */
+    }
+
     /**
      * Check all valence rings and color active/inactive rings - count total Active and update atom information.
      */
@@ -808,6 +820,7 @@
       createAtom: createAtom,
       deleteNuclet: deleteNuclet,
       explodeAtom: explodeAtom,
+      highlight: highlight,
       getNuclet: getNuclet,
       loadObject: loadObject,
       deleteObject: deleteObject,
