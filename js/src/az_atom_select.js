@@ -8,20 +8,26 @@
 
   Drupal.atomizer.atom_selectC = function (_viewer) {
 
-    var viewer = _viewer;
+    let viewer = _viewer;
 
     // Page elements to select a new atom.
-    var $atomList = $('#select-atom-wrapper', viewer.content);
-    var $atomSelectEnable = $('#atom-select-enable', viewer.context);
-    var $atomSelectClose = $atomList.find('.az-close');
-    var $atoms = $('.atom-name, .atomic-number', viewer.context);
+    const $wrapper = ('#select-atom-wrapper', viewer.context);
+    const $atomSelectEnable = $('#atom-select-enable', viewer.context);
+    const $atomSelectClose = $wrapper.find('.az-close');
+    const $isotopes = $wrapper.find('#select-atom-wrapper .isotopes .isotope');
+    const $atoms = $wrapper.find('#select-atom-wrapper .default-isotope');
+
+    let atomListSequence = [];
+    let selectedNid;
+    let selectedIndex = 0;
+    let includeIsotopes = false;
 
     /**
      * User pressed a button on the main form - act on it.
      *
      * @param id
      */
-    var buttonClicked = function buttonClicked(event) {
+    const buttonClicked = function buttonClicked(event) {
       // User pressed Select Atom button
       if (event.target.id == 'atom--select') {
         $(viewer.context).toggleClass('select-atom-enabled', viewer.context);
@@ -38,7 +44,7 @@
      */
     function addIsotopeEnableEventListeners () {
       $('.num-isotopes').click(function () {
-        var $isotopes = $(this).parent().siblings('.isotopes');
+        let $isotopes = $(this).parent().siblings('.isotopes');
         if ($isotopes.hasClass('az-closed')) {
           $(this).removeClass('az-closed');
           $isotopes.removeClass('az-closed');
@@ -53,30 +59,77 @@
      */
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
+      let $atoms = $('.atom-name, .atomic-number', viewer.context);
       $atoms.click(function (event) {
-        viewer.atom.loadObject({
-          nid: $(event.target.parentNode).data('nid'),
-        }, null);
+        let nid = $(event.target.parentNode).data('nid');
+        nid = (nid) ? nid : $(event.target).data('nid');
+        viewer.atom.loadObject({ nid: nid }, null);
         if (viewer.getDisplayMode() == 'mobile' ||
             viewer.getDisplayMode() == 'tablet') {
-          $atomList.addClass('az-hidden');
+          $wrapper.addClass('az-hidden');
         }
         event.preventDefault();
       });
 
-
       $atomSelectEnable.click(function () {
-        if ($atomList.hasClass('az-hidden')) {
-          $atomList.removeClass('az-hidden');
+        if ($wrapper.hasClass('az-hidden')) {
+          $wrapper.removeClass('az-hidden');
         } else {
-          $atomList.addClass('az-hidden');
+          $wrapper.addClass('az-hidden');
         }
       });
 
       $atomSelectClose.click(function () {
-        $atomList.addClass('az-hidden');
+        $wrapper.addClass('az-hidden');
       })
     }
+
+    function buildList() {
+
+      // If the list doesn't exist then build it.
+      if (atomListSequence.length == 0) {
+        // Extract the list of atoms from the html
+        for (let atom of $atoms) {
+//        let atom = $atoms[key];
+          let nid = $(atom).find('.atom-name').data('nid');
+          atomListSequence.push(nid);
+//        atomList[`A${nid}`] = {
+//          nid: $(atom).data('nid'),
+//          name: atom.text,
+//          stability: $(atom).data('stability'),
+//        };
+        }
+      }
+    }
+
+    const getSelectedAtom = () => selectedNid;
+
+    const getNextAtom = () => {
+      if (atomListSequence.length == 0) {
+        buildList();
+      }
+      selectedIndex = (++selectedIndex < atomListSequence.length) ? selectedIndex : 0;
+      return selectedNid = atomListSequence[selectedIndex];
+    };
+
+    const getPreviousAtom = () => {
+      if (atomListSequence.length == 0) {
+        buildList();
+      }
+      selectedIndex = (--selectedIndex < 0) ? atomListSequence.length - 1 : selectedIndex;
+      return selectedNid = atomListSequence[selectedIndex];
+    };
+
+    const setSelectedAtom = (atomNid) => {
+      selectedNid = atomNid;
+      selectedIndex = atomListSequence.indexOf(selectedNid);
+
+      $atoms.removeClass('selected');
+      $isotopes.removeClass('selected');
+
+      $atoms.find(`.nid-${atomNid}`).parents('.default-isotope').addClass('selected');
+      $isotopes.find(`.nid-${atomNid}`).parent('.isotope').addClass('selected');
+    };
 
     addIsotopeEnableEventListeners();
     addSelectAtomEventListeners();
@@ -86,6 +139,14 @@
      */
     return {
       buttonClicked: buttonClicked,
+      getSelectedAtom: getSelectedAtom,
+      getNextAtom: getNextAtom,
+      getPreviousAtom: getPreviousAtom,
+      setSelectedAtom: setSelectedAtom,
+      setIncludeIsotopes: setIncludeIsotopes = (include) => {
+        includeIsotopes = include;
+        buildList();
+      }
     };
   };
 

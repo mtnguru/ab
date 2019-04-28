@@ -87,10 +87,10 @@ class AtomizerInit {
         'nfan' => ['field_atomic_number_value'],
         'nfp' => ['field__protons_value'],
         'nfe' => ['field_element_target_id'],
-        'ttfd' => ['name'],
+        'ttfd' => ['name'],  // Stability - taxonomy term name
       ],
       'more' => 'none',
-//    'limit' => 1000,
+//    'limit' => 5,
       'approval' => $perm,
     ]);
 

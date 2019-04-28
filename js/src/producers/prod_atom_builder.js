@@ -40,10 +40,12 @@
     };
 
     var objectLoaded = function (atom) {
+//    console.log(`prod_atom_builder::objectLoaded ${atom.az.nid}`);
       viewer.clearScene();
       localStorage.setItem('atomizer_builder_atom_nid', atom.az.nid);
       atom.az.id = "A1";
       viewer.prod_atom.objectLoaded(atom);
+
       if ($sceneName) {
         $sceneName.html(atom.az.title);
       }
@@ -56,11 +58,12 @@
 
       viewer.scene.az = {
         title: atom.az.title, // Use atom title as scene title
-        name: atom.az.name,  // Use atom name as the scene name
+        name: atom.az.name,   // Use atom name as the scene name
         sceneNid: atom.az.nid
       };
       viewer.labels.display();
       viewer.addObject(atom);
+      viewer.atom_select.setSelectedAtom(atom.az.nid);
 
       viewer.render();
     };

@@ -414,7 +414,7 @@
             viewer.render();
 
             if (loadCallback) {
-              loadCallback();
+              loadCallback(atom);
             }
           }
         }

@@ -9,9 +9,13 @@
   'use strict';
 
   Drupal.atomizer.animationC = function (_viewer) {
+    const FORWARD = 1;
+    const REVERSE = -1;
+
     var viewer = _viewer;
     var state = 'stopped';
     var animation;
+    var direction = FORWARD
     var animateFile;
     var animateConf;
     var $selectAnimation = $('.animation--selectyml select');
@@ -22,8 +26,9 @@
     var loopStepIndex = 0;
     var loopTimeout;
     var loopValues
-    var currentAtom = -1;
+    var currentAtom = 0;
     var atomIndex = null;
+    var increment = false;
 
     var $wrapper = $('.blocks--animation--wrapper');
     var $buttons = $wrapper.find('.az-button');
@@ -57,7 +62,8 @@
       viewer.camera.lookAt(viewer.scene.position);
     };
 
-    function play() {
+    function play(_direction) {
+      direction = _direction;
       var currentFile = $selectAnimation.val();
       if (animateFile != currentFile) {
         // Check to see if file is loaded, load if necessary.
@@ -65,14 +71,15 @@
         Drupal.atomizer.base.doAjax(
           '/ajax-ab/loadYml',
           {
+            component: 'animation',
             directory: viewer.atomizer.animateDirectory,
             filepath: viewer.atomizer.animateDirectory + '/' + animateFile,
             filename: animateFile,
-            component: 'animation'
           },
           loadYml
         );
       } else {
+        increment = true;
         if (state == 'paused') {
           state = 'running';
           animate();
@@ -92,6 +99,7 @@
       timeouts = {};
       if (loopTimeout) {
         clearTimeout(loopTimeout);
+        ut
         loopTimeout = null;
       }
     }
@@ -99,51 +107,67 @@
     function startTimers() {
       for (var timerName in animateConf.timers) {
         var timerConf = animateConf.timers[timerName];
-        timeouts[timerName] = setTimeout(function() {
+        var speed = viewer.theme.get('animation--speed');
+        timeouts[timerName] = setTimeout(() => {
           applyTimer(timerName, timerConf);
-        }, timerConf.time);
+          increment = true;
+        }, timerConf.time * (100 - speed) / 250);
       }
       if (loopStep) {
         setLoopTimeout();
       }
+
+      function applyTimer(name, conf) {
+        switch (name) {
+          case 'cycleatoms':
+            if (increment) {
+              if (direction == FORWARD) {
+                currentAtom = viewer.atom_select.getNextAtom();
+              } else {
+                currentAtom = viewer.atom_select.getPreviousAtom();
+              }
+            }
+            else {
+              currentAtom = viewer.atom_select.getSelectedAtom();
+            }
+
+            console.log(`applyTimer: ${currentAtom}`);
+            pauseAnimation();
+            viewer.clearScene();
+            viewer.atom.loadObject({nid: currentAtom}, function (object) {
+//            viewer.producer.objectLoaded(object);
+//            viewer.render();
+              continueAnimation();
+            });
+            break;
+
+          case 'loop':
+            loop = conf;
+            loopValues = [];
+            loopIndex = 0;
+            loopStepIndex = 0;
+            loopStep = loop[loopIndex];
+            if (loopStep.parms) {
+              for (var parm in loopStep.parms) {
+                var vals = loopStep.parms[parm];
+                vals[2] = (vals[0] - vals[1]) / loopStep.steps;
+                vals[3] = vals[0];
+                viewer.theme.applyControl(parm, vals[3]);
+              }
+            }
+
+            setLoopTimeout();
+            break;
+
+          case 'opacity':
+            break
+        }
+      }
     }
 
-    function applyTimer(name, conf) {
-      switch (name) {
-        case 'loadatoms':
-          currentAtom = (currentAtom >= conf.atoms.length - 1) ? 0 : currentAtom + 1;
-
-          stopTimers();
-          state = 'paused';
-          viewer.atom.loadObject({nid: conf.atoms[currentAtom].nid}, function() {
-            if (conf.atoms[currentAtom].time) {
-               conf.time = conf.atoms[currentAtom].time;
-            }
-            continueAnimation;
-          });
-          break;
-
-        case 'loop':
-          loop = conf;
-          loopValues = [];
-          loopIndex = 0;
-          loopStepIndex = 0;
-          loopStep = loop[loopIndex];
-          if (loopStep.parms) {
-            for (var parm in loopStep.parms) {
-              var vals = loopStep.parms[parm];
-              vals[2] = (vals[0] - vals[1]) / loopStep.steps;
-              vals[3] = vals[0];
-              viewer.theme.applyControl(parm, vals[3]);
-            }
-          }
-
-          setLoopTimeout();
-          break;
-
-        case 'opacity':
-          break
-      }
+    function pauseAnimation() {
+      stopTimers();
+      state = 'paused';
     }
 
     function continueAnimation() {
@@ -205,9 +229,9 @@
       state = 'running';
       var key;
       if (animateConf.timers) {
-        if (animateConf.timers.loadatoms) {
-          animateConf.timers.loadatoms.time = animateConf.timers.loadatoms.atoms[0].time;
-        }
+//      if (animateConf.timers.cycleatoms) {
+//        animateConf.timers.cycleatoms.time = animateConf.timers.cycleatoms.atoms[0].time;
+//      }
         startTimers();
       }
 
@@ -222,7 +246,7 @@
         switch (animateConf.type) {
           case 'atoms':
             requestAnimationFrame(animate);
-            if (animateConf.animations.rotation) {
+            if (animateConf.animateions && animateConf.animations.rotation) {
               if (animateConf.animations.rotation.name === 'orbitals') {
                 advanceOrbitals();
               }
@@ -251,15 +275,20 @@
 
     var buttonClicked = function buttonClicked(event) {
       switch (event.target.id) {
+        case 'animation--reverse':
+          play(REVERSE);
+          $buttons.removeClass('az-selected');
+          $(event.target).addClass('az-selected');
+          break;
+
         case 'animation--play':
-          play();
+          play(FORWARD);
           $buttons.removeClass('az-selected');
           $(event.target).addClass('az-selected');
           break;
 
         case 'animation--pause':
-          state = 'paused';
-          stopTimers();
+          pauseAnimation();
           $buttons.removeClass('az-selected');
           $(event.target).addClass('az-selected');
           break;
