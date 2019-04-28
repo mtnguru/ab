@@ -63,6 +63,7 @@
       $atoms.click(function (event) {
         let nid = $(event.target.parentNode).data('nid');
         nid = (nid) ? nid : $(event.target).data('nid');
+        viewer.atom_select.setSelectedAtom(nid);
         viewer.atom.loadObject({ nid: nid }, null);
         if (viewer.getDisplayMode() == 'mobile' ||
             viewer.getDisplayMode() == 'tablet') {

@@ -33,10 +33,13 @@
       if (atom) {
         viewer.atom.deleteObject(atom);
       }
+      nid = (!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid;
       viewer.atom.loadObject({
-        nid: (!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid,
+        nid: nid,
         type: 'atom',
       });
+
+      viewer.atom_select.setSelectedAtom(nid);
     };
 
     var objectLoaded = function (atom) {
@@ -63,7 +66,6 @@
       };
       viewer.labels.display();
       viewer.addObject(atom);
-      viewer.atom_select.setSelectedAtom(atom.az.nid);
 
       viewer.render();
     };

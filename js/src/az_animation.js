@@ -134,6 +134,7 @@
             console.log(`applyTimer: ${currentAtom}`);
             pauseAnimation();
             viewer.clearScene();
+            viewer.atom_select.setSelectedAtom(currentAtom);
             viewer.atom.loadObject({nid: currentAtom}, function (object) {
 //            viewer.producer.objectLoaded(object);
 //            viewer.render();
