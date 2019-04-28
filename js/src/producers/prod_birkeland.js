@@ -13,8 +13,8 @@
     var mouseMode;
     var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
     var $sceneName = $('.scene--name', viewer.context);
-    var sceneInformation = $('.scene--information', viewer.context)[0];
-    var sceneProperties = $('.scene--properties', viewer.context)[0];
+    var $sceneInformation = $('.scene--information', viewer.context);
+    var $sceneProperties = $('.scene--properties', viewer.context);
 
     /**
      * Return the objects which are active for hovering
@@ -105,12 +105,12 @@
     }
 
     var objectLoaded = function objectLoaded(bc) {
-      localStorage.setItem('atomizer_birkeland_nid', bc.az.nid);
+      localStorage.setItem('atomizer_birkeland_nid', bc.az.conf.nid);
       createIntersectLists();
       viewer.scene.az = {
         title: bc.az.title,    // Use object title as scene title
         name: bc.az.name,      // Use object name as the scene name
-        objectNid: bc.az.nid,  // Nid of current birkeland current
+        objectNid: bc.az.conf.nid,  // Nid of current birkeland current
         bc: bc                 // Birkeland current object
       };
 
@@ -151,8 +151,8 @@
 
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
-      objectNid = ((!objectNid || objectNid == 'undefined') ? 627 : objectNid);  // Loads a birkeland content type
-      viewer.birkeland.loadObject({nid: objectNid},objectLoaded);
+      objectNid = ((!objectNid || objectNid == 'undefined') ? 628 : objectNid);  // Loads a birkeland content type
+      viewer.birkeland.loadObject({nid: objectNid},null);
 
       // Set the ID of the scene select radio buttons - scene--select--610
       var $radios = $('#edit-scene-select .az-control-radios', viewer.context);
@@ -182,7 +182,9 @@
 //    viewer.besselGraph = Drupal.atomizer.dialogs.besselC(viewer);
 
       if (viewer.atomizer.startAnimation == true) {
-        viewer.animation.play();
+        setTimeout((event) => {
+          viewer.animation.play();
+        }, 1000);
       }
     };
 

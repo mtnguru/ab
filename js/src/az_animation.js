@@ -243,8 +243,8 @@
     }
 
     function animate() {
-      if (state == pausing) {
-        state = paused;
+      if (state == 'pausing') {
+        state = 'paused';
       }
       if (state == 'running') {
         switch (animateConf.type) {
