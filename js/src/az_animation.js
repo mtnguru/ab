@@ -167,7 +167,7 @@
 
     function pauseAnimation() {
       stopTimers();
-      state = 'paused';
+      state = 'pausing';
     }
 
     function continueAnimation() {
@@ -242,6 +242,9 @@
     }
 
     function animate() {
+      if (state == pausing) {
+        state = paused;
+      }
       if (state == 'running') {
         switch (animateConf.type) {
           case 'atoms':
