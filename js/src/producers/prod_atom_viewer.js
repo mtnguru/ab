@@ -15,6 +15,14 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
   viewer.labels = Drupal.atomizer.labelsC(viewer);
   viewer.shapes = Drupal.atomizer.shapesC(viewer);
   viewer.atom = Drupal.atomizer.atomC(viewer);
+
+  viewer.objects = [];
+  const addObject = (object) => {
+    let numObjects = Object.keys(viewer.objects).length;
+    viewer.objects[object.az.id] = object;
+    viewer.scene.add(object);
+  };
+
   /**
    * Return the objects which are active for hovering
    *
@@ -70,7 +78,7 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
 
   var objectLoaded = function objectLoaded(atom) {
     localStorage.setItem('atomizer_viewer_atom_nid', atom.az.nid);
-    viewer.addObject(atom);
+    viewer.producer.addObject(atom);
     viewer.render();
 //  viewer.labels.display();
   };
@@ -95,7 +103,8 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
     mouseUp: mouseUp,
     hoverObjects: hoverObjects,
     hovered: hovered,
-    objectLoaded: objectLoaded
+    objectLoaded: objectLoaded,
+    addObject: addObject,
   };
 };
 
