@@ -219,6 +219,8 @@
         currentSet.settings[args[0] + '--' + args[1]].setting = value;
       }
 
+      let objectId = $('#blocks--atom-form', viewer.context).data('object-id');
+
       if (argNames[1] == 'master') {
         var $slaves = $('#' + id).parent().find('.az-control-opacity');
         $slaves.each(function () {
@@ -287,6 +289,13 @@
               }
             }
 
+            // If this form is specific to an object then apply control only to that object.
+            if (ok && objectId) {
+              if (node.az && node.az.conf && node.az.conf.id != objectId) {
+                ok = false;
+              }
+            }
+
             if (ok) {
               switch (args[1]) {
 
@@ -296,7 +305,11 @@
                   break;
 
                 case 'position':
-                  node.position[args[2]] = value;
+                  if (node.parent.name == 'objectShell') {
+                    node.parent.position[args[2]] = value;
+                  } else {
+                    node.position[args[2]] = value;
+                  }
                   break;
 
                 case 'scale':
@@ -308,7 +321,8 @@
                     node.scale.y = value * node.initScale.y;
                     node.scale.z = value * node.initScale.z;
                   } else if (args[0] == 'attachLines') {
-                    viewer.atom.explodeAtom(value);
+                    let object = viewer.producer.getObject();
+                    viewer.atom.explodeAtom(viewer.producer.getObject(), value);
                     viewer.render();
                   } else {
                     var scale = value;

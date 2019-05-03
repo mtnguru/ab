@@ -1,5 +1,5 @@
 /**
- * @file - prod_atom.js
+ * @file - dir_atom.js
  *
  * This is a 'producer' which allows users to build atoms.
  * This module provides functions to handle deleting/adding nuclets,
@@ -8,12 +8,10 @@
 
 (function ($) {
 
-  Drupal.atomizer.prod_atomC = function (_viewer) {
+  Drupal.atomizer.dir_atomC = function (_viewer) {
     var viewer = _viewer;
     var bindingEnergies = drupalSettings.atomizer_bindingEnergies;
 
-//  var mouseMode = $('#blocks--mouse-mode input[name=mouse--mode]:checked', viewer.context).val();
-    var mouseMode;
     var editNuclet;   // The nuclet currently being edited.
 
     var $nucletList = $('.nuclet--list', viewer.context);
@@ -30,18 +28,12 @@
       var nucletAttach1 = $('#edit-nuclet-grow-1', viewer.context)[0];
     }
 
-    var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
-    var protonColor;
-
     // @TODO These all have to be added to the atoms themselves - on demand
-    var hoverInnerFaces = [];
-    var hoverOuterFaces = [];
     var optionalProtons = [];
-    var visibleProtons = [];
     var selectedProtons = [];
     var selectedNElectron = null;
     var visibleNElectrons = [];
-    var visibleParticles = [];
+
     var highlightedProton;
     var highlightedNElectron;
     var highlightedFace;
@@ -92,40 +84,18 @@
       setEditNuclet(nuclet);
       viewer.render();
     }
-
-    /**
-     * Return the objects which are active for hovering
-     *
-     * @returns {*}
-     */
-    var hoverObjects = function hoverObjects() {
-      switch (mouseMode) {
-        case 'none':
-          return null;
-        case 'electronsAdd':
-          return visibleParticles;
-        case 'protonsAdd':
-          return optionalProtons;
-        case 'protonsColor':
-          return visibleProtons;
-        case 'inner-faces':
-          return viewer.items.icosaFaces;
-        case 'outer-faces':
-          return hoverOuterFaces;
-      }
-    };
-
     /**
      * User has hovered over a proton, reset last highlighted proton to original color
      * Make the current hovered proton pink.
      *
      * @param event
      */
-    var hovered = function hovered(objects) {
+    var hovered = function hovered(mouseMode, objects) {
       switch (mouseMode) {
         case 'none':
           return;
 
+        case 'atomsMove':
         case 'electronsAdd':
         case 'protonsColor':
         case 'protonsAdd':
@@ -230,10 +200,10 @@
      * @param event
      * @returns {boolean}
      */
-    function mouseUp(event, distance) {
+    function mouseUp(event, distance, mouseMode) {
       return;
     }
-    function mouseDown(event, distance) {
+    function mouseDown(event, distance, {mouseMode, protonColor}) {
 
       /**
        * A electron has been deselected, deselect the protons also.
@@ -263,7 +233,8 @@
         case 1:   // Select/Unselect protons to add an electron to.
           switch (mouseMode) {
             case 'electronsAdd':
-              var objects = viewer.controls.findIntersects(visibleParticles);
+
+              var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleParticles);
               if (objects.length) {          // Object found
 
                 // PROTON
@@ -318,7 +289,7 @@
               break;
 
             case 'protonsAdd':
-              var intersects = viewer.controls.findIntersects(optionalProtons);
+              var intersects = viewer.controls.findIntersects(viewer.producer.intersect().optionalProtons);
               if (intersects.length) {
                 proton = intersects[0].object;
                 let atom = proton.az.nuclet.atom;
@@ -345,7 +316,7 @@
               break;
 
             case 'protonsColor':
-              var intersects = viewer.controls.findIntersects(visibleProtons);
+              var intersects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtons);
               if (intersects.length != 0) {
                 viewer.nuclet.setProtonColor(intersects[0].object, protonColor);
                 viewer.render();
@@ -353,7 +324,7 @@
               break;
 
             case 'inner-faces':
-              var objects = viewer.controls.findIntersects(hoverInnerFaces);
+              var objects = viewer.controls.findIntersects(viewer.producer.intersect().hoverInnerFaces);
               if (objects.length) {
                 var oldFaces = objects[0].object;
                 var face = objects[0].face;
@@ -392,7 +363,7 @@
 
         case 2:
           // Middle button always sets the edit nuclet
-          var intersects = viewer.controls.findIntersects(visibleProtons);
+          var intersects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtons);
           if (intersects.length == 0) {
             // Pop down the nuclet edit dialog.
             if (editNuclet) {
@@ -415,7 +386,7 @@
         case 3:
           switch (mouseMode) {
             case 'electronsAdd':
-              var objects = viewer.controls.findIntersects(visibleParticles);
+              var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleParticles);
               if (objects.length) {          // Object found
                 // PROTON
                 let atom;
@@ -457,7 +428,6 @@
                     viewer.atom.deleteNElectron(selectedNElectron);
                     atom = electron.az.nuclet.atom;
                     selectedNElectron = null;
-                    createIntersectLists(atom);
                   }
                 }
                 createIntersectLists(atom);
@@ -475,9 +445,6 @@
      * Create the visibleProtons and optionalProtons lists.
      */
     function createIntersectLists(atom) {
-      optionalProtons = [];
-      visibleProtons = [];
-      visibleNElectrons = [];
       var nuclets = atom.az.nuclets;
       for (var id in nuclets) {
         if (nuclets.hasOwnProperty(id)) {
@@ -489,8 +456,8 @@
               if (protons.hasOwnProperty(p)) {
                 if (protons[p]) {
                   if (!protons[p].az.active) continue;
-                  if (protons[p].az.optional) optionalProtons.push(protons[p]);
-                  if (protons[p].az.visible)  visibleProtons.push(protons[p]);
+                  if (protons[p].az.optional) atom.az.intersect.optionalProtons.push(protons[p]);
+                  if (protons[p].az.visible) atom.az.intersect.visibleProtons.push(protons[p]);
                 }
               }
             }
@@ -503,8 +470,8 @@
               if (neutrons.hasOwnProperty(p)) {
                 if (neutrons[p]) {
                   if (!neutrons[p].az.active) continue;
-                  if (neutrons[p].az.optional) optionalProtons.push(neutrons[p]);
-                  if (neutrons[p].az.visible)  visibleProtons.push(neutrons[p]);
+                  if (neutrons[p].az.optional) atom.az.intersect.optionalProtons.push(neutrons[p]);
+                  if (neutrons[p].az.visible)  atom.az.intersect.visibleProtons.push(neutrons[p]);
                 }
               }
             }
@@ -521,11 +488,15 @@
           }
         }
       }
-      visibleParticles = visibleProtons.concat();
+      atom.az.intersect.visibleParticles = atom.az.intersect.visibleProtons.concat();
       for (var e in visibleNElectrons) {
         if (visibleNElectrons.hasOwnProperty(e)) {
-          visibleParticles.push(visibleNElectrons[e]);
+          atom.az.intersect.visibleParticles.push(visibleNElectrons[e]);
         }
+      }
+
+      if (viewer.producer.updateIntersectLists) {
+        viewer.producer.updateIntersectLists();
       }
     }
 
@@ -841,7 +812,7 @@
         $nucletButtons.click((e) => {
           let nucletId = $(e.target).data('nuclet-id');
           let atomId = $(e.target).data('atom-id');
-          let atom = viewer.getObject(atomId);
+          let atom = viewer.producer.getObject(atomId);
           var nuclet = viewer.atom.getNuclet(atom, nucletId);
           if ($nucletFormBlock.hasClass('az-hidden') || nuclet !== editNuclet) {
             setEditNuclet(nuclet);
@@ -895,7 +866,6 @@
         hoverOuterFaces = viewer.items.icosaOutFaces;
       }
       createNucletList(atom);
-//    viewer.producer.objectLoaded(atom);
     };
 
     function changeNuclet(editNuclet, id) {
@@ -932,48 +902,6 @@
       });
     }
 
-    var $mouseBlock = $('#blocks--mouse-mode', viewer.context);
-    $protonsColor.addClass('az-hidden');
-    if ($mouseBlock.length) {
-      mouseMode = $mouseBlock.find('input[name=mouse]:checked').val();
-      // Add event listeners to mouse mode form radio buttons
-      var $mouseRadios = $mouseBlock.find('#edit-mouse--wrapper input');
-      $mouseRadios.click(function (event) {
-        console.log('mode: ' + event.target.value);
-        mouseMode = event.target.value;
-        if (mouseMode == 'protonsColor') {
-          $protonsColor.removeClass('az-hidden');
-        } else {
-          $protonsColor.addClass('az-hidden');
-        }
-      });
-
-      // Add event listeners to proton colors block
-      // Set default color
-      $mouseBlock.find('#proton-original-color').addClass('selected');
-      protonColor = 'original';
-
-      var $colorRadios = $mouseBlock.find('.proton-color');
-
-      // Set the background color of buttons
-      $colorRadios.each(function () {
-        var name = $(this).attr('id').split("-")[1];
-        if (name != 'original') {
-          var color = viewer.theme.getColor('proton-' + name + '--color', 'lighten');
-          $(this).css('background-color', color.hex);
-        }
-      });
-
-      // Set button click event handler.
-      $colorRadios.click(function (event) {
-        $colorRadios.removeClass('selected');
-        $(this).addClass('selected');
-        var $input = $(this).parent().parent().find('input');
-        $input.prop('checked', true);
-        protonColor = $input.val();
-      });
-    }
-
     function applyControl (id, value) {
       if (id == 'electron1-orbital--scale') {
         var volume = 4.0 / 3.0 *  Math.PI * Math.pow(value, 3);
@@ -988,13 +916,13 @@
     }
 
     return {
-      setDefaults: setDefaults,
-      mouseUp: mouseUp,
-      mouseDown: mouseDown,
-      hoverObjects: hoverObjects,
-      hovered: hovered,
-      objectLoaded: objectLoaded,
-      applyControl: applyControl
+      setDefaults,
+      mouseUp,
+      mouseDown,
+      hovered,
+      objectLoaded,
+      applyControl,
+      createIntersectLists,
     };
   };
 

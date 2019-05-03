@@ -1,5 +1,5 @@
 /**
- * @file - az_ptable.js
+ * @file - prod_ptable.js
  *
  * This is a 'producer' which allows users to build atoms.
  * This module provides functions to handle deleting/adding nuclets,
@@ -8,7 +8,7 @@
 
 (function ($) {
 
-  Drupal.atomizer.producers.ptableC = function (_viewer) {
+  Drupal.atomizer.prod_ptableC = function (_viewer) {
     var viewer = _viewer;
     var mouseMode;
 

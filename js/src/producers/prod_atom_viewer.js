@@ -6,7 +6,7 @@
  * changing a nuclets slider angle, etc.
  */
 
-Drupal.atomizer.producers.atom_viewerC = function (_viewer) {
+Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
   var viewer = _viewer;
 
   viewer.controls = Drupal.atomizer.controlsC(viewer);

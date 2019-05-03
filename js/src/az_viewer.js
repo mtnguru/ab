@@ -3,11 +3,11 @@
  */
 
 
-// Initialize namespace for viewer classes in js/producers directory
 
 (function ($) {
 
-  Drupal.atomizer.producers = {};
+  // Initialize namespace for viewer classes in js/directors directory
+  Drupal.atomizer.directors = {};
 
   Drupal.atomizer.viewerC = function (atomizer) {
 
@@ -15,7 +15,6 @@
     var spotlights = [];
     var viewer = {
       items: {},  // icosafaces, couple other things - need to look into what this is for.,
-      objects: {},
       context: $('#azid-' + atomizer.atomizerId.toLowerCase())
     };
     var fullScreen = false;
@@ -148,7 +147,7 @@
       setSize();
 
       // Create the producer.
-      viewer.producer = Drupal.atomizer.producers[viewer.view.producer + 'C'](viewer);
+      viewer.producer = Drupal.atomizer[viewer.view.producer + 'C'](viewer);
 
       // Create and position the scene
       viewer.scene = new THREE.Scene();
@@ -335,33 +334,6 @@
       }
     };
 
-    viewer.deleteObject = (key) => {
-      let object = viewer.objects[key];
-      if (object) {
-        viewer.scene.remove(object);
-        viewer[object.name].deleteObject(object);
-        delete(viewer.objects[object.az.id]);
-      }
-      else {
-        console.log(`Could not delete object - not found: ${key}`);
-      }
-    }
-
-    viewer.addObject = (object) => {
-      let numObjects = Object.keys(viewer.objects).length;
-//    object.az.id = `${object.az.conf.type}-${numObjects}`;
-      viewer.objects[object.az.id] = object;
-      viewer.scene.add(object);
-    };
-
-    viewer.clearScene = function clearScene () {
-      for (let key in viewer.objects) {
-        viewer.deleteObject(key);
-      }
-    };
-
-    // Attach functions for external access/api
-    viewer.getObject = (name) => viewer.objects[name];
     viewer.getDisplayMode = function() { return displayMode };
     viewer.atomizer = atomizer;
     viewer.view = atomizer.views[atomizer.defaultView];

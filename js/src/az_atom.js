@@ -378,6 +378,14 @@
             atom.az.conf = result.data.conf;
             atom.az.information = result.data.information;
             atom.az.properties = result.data.properties;
+            atom.az.intersect = {
+              visibleParticles: [],
+              visibleProtons: [],
+              visibleNElectrons: [],
+              hoverInnerFaces: [],
+              hoverOuterFaces: [],
+              optionalProtons: [],
+            };
 
             // Move atom position
             if (viewer.dataAttr['atom--position--x']) {
@@ -429,7 +437,7 @@
      */
     var createAtom = function createAtom (atomConf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
-      let atom = new THREE.Group();
+      let atom = new THREE.Object3D();
       atom.name = 'atom';
       atom.az = {nuclets: {}};
       createNuclet(atom, 'N0', atomConf, atom);
@@ -438,7 +446,7 @@
 
       var explode = viewer.theme.get('attachLines--scale');
       if (explode > 1) {
-        explodeAtom(explode);
+        explodeAtom(atom, explode);
       }
 
       return atom;
@@ -449,7 +457,6 @@
      * @param atom
      */
     deleteObject = function deleteObject (atom) {
-      let fart = 5;
       for (var n in atom.az.nuclets) {
         viewer.nuclet.deleteNuclet(atom.az.nuclets[n]);
       }
@@ -457,7 +464,6 @@
     };
 
     var explodeAtom = function explodeAtom(atom, scale) {
-      let fart = 5;
       for (var n in atom.az.nuclets) {
         var nuclet = atom.az.nuclets[n];
         if (nuclet.az.id !== 'N0') {
@@ -568,7 +574,7 @@
         var isotope = 0;
 
         var $isotope = $($isotopes[isotope]);
-        var nid = $isotope.data('nid');
+        var nid = $isotope.find('.atom-name').data('nid');
         loadObject ({nid: nid}, displayAtom);
       }
 
@@ -591,7 +597,7 @@
         if (++isotope < lastIsotope && running) {
 //        setTimeout(function() {
             $isotope = $($isotopes[isotope]);
-            nid = $isotope.data('nid');
+            nid = $isotope.find('.atom-name').data('nid');
             loadObject ({nid: nid}, displayAtom);
 //        }, 10);
         } else {

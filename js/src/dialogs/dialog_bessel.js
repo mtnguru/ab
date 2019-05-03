@@ -141,7 +141,7 @@
 
     let settings = {
       name: 'bessel',
-      title: 'Bessel Function',
+      title: '<i class="fas fa-chart-line"></i> Bessel Function',
       id: `${dialog.name()}-dialog-container`,
       class: 'az-dialog',
       containerSelector: '.az-wrapper',

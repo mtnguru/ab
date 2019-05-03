@@ -14,8 +14,8 @@
 
     var viewer = _viewer;
     var state = 'stopped';
-    var animation;
-    var direction = FORWARD
+    var pausing = false;
+    var direction = FORWARD;
     var animateFile;
     var animateConf;
     var $selectAnimation = $('.animation--selectyml select');
@@ -25,9 +25,8 @@
     var loopIndex = 0;
     var loopStepIndex = 0;
     var loopTimeout;
-    var loopValues
+    var loopValues;
     var currentAtom = 0;
-    var atomIndex = null;
     var increment = false;
 
     var $wrapper = $('.blocks--animation--wrapper');
@@ -60,7 +59,7 @@
       viewer.camera.position.z = z * Math.cos(rotSpeed) - x * Math.sin(rotSpeed);
 
       viewer.camera.lookAt(viewer.scene.position);
-    };
+    }
 
     function play(_direction) {
       direction = _direction;
@@ -82,10 +81,10 @@
         increment = true;
         if (state == 'paused') {
           state = 'running';
-          animate();
           if (loopStep) {
             setLoopTimeout();
           }
+          startAnimation();
         } else {
           startAnimation();
         }
@@ -99,7 +98,6 @@
       timeouts = {};
       if (loopTimeout) {
         clearTimeout(loopTimeout);
-        ut
         loopTimeout = null;
       }
     }
@@ -133,7 +131,6 @@
 
             console.log(`applyTimer: ${currentAtom}`);
             pauseAnimation();
-            viewer.clearScene();
             viewer.atom_select.setSelectedAtom(currentAtom);
             viewer.atom.loadObject({nid: currentAtom}, function (object) {
 //            viewer.producer.objectLoaded(object);
@@ -168,13 +165,19 @@
 
     function pauseAnimation() {
       stopTimers();
-      state = 'pausing';
+      state = 'paused';
     }
 
     function continueAnimation() {
-      startTimers();
-      state = 'running';
-      animate();
+      if (pausing) {
+        pauseAnimation();
+        state = 'paused';
+
+      } else {
+        startTimers();
+        state = 'running';
+        animate();
+      }
     }
 
     function setLoopTimeout() {
@@ -227,12 +230,8 @@
     } */
 
     function startAnimation() {
-      state = 'running';
       var key;
       if (animateConf.timers) {
-//      if (animateConf.timers.cycleatoms) {
-//        animateConf.timers.cycleatoms.time = animateConf.timers.cycleatoms.atoms[0].time;
-//      }
         startTimers();
       }
 
@@ -243,14 +242,16 @@
     }
 
     function animate() {
-      if (state == 'pausing') {
+      if (pausing) {
+        pausing = false;
+        pauseAnimation();
         state = 'paused';
       }
       if (state == 'running') {
         switch (animateConf.type) {
           case 'atoms':
             requestAnimationFrame(animate);
-            if (animateConf.animateions && animateConf.animations.rotation) {
+            if (animateConf.animations && animateConf.animations.rotation) {
               if (animateConf.animations.rotation.name === 'orbitals') {
                 advanceOrbitals();
               }
@@ -292,7 +293,7 @@
           break;
 
         case 'animation--pause':
-          pauseAnimation();
+          pausing = true;
           $buttons.removeClass('az-selected');
           $(event.target).addClass('az-selected');
           break;
@@ -313,7 +314,8 @@
       buttonClicked: buttonClicked,
       loadYml: loadYml,
       play: play,
-      stopAnimation: stopAnimation
+      stopAnimation: stopAnimation,
+      getYmlDirectory: () => viewer.atomizer.animateDirectory,
     };
   };
 })(jQuery);

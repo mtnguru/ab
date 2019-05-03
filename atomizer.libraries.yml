@@ -5,6 +5,7 @@ atomizer-base:
     js/threejs/three.js: {}
     js/threejs/renderers/Projector.js: {}
     js/threejs/controls/OrbitControls.js: {}
+    js/threejs/controls/TrackballControls.js: {}
     js/libs/screenfull.js: {}
     js/src/az_base.js: {}
     js/src/az_viewer.js: {}
@@ -29,6 +30,7 @@ atomizer-obfuscator:
   js:
     js/threejs/three.js: {}
     js/threejs/renderers/Projector.js: {}
+    js/threejs/controls/TrackballControls.js: {}
     js/threejs/controls/OrbitControls.js: {}
     js/libs/screenfull.js: {}
     js/min/az_base.js: {}
@@ -55,13 +57,13 @@ atomizer-obfuscator:
 atomizer-atom-builder:
   js:
     js/threejs/renderers/CSS2DRenderer.js: {}
-    js/src/producers/prod_atom.js: {}
+    js/src/directors/dir_atom.js: {}
     js/src/producers/prod_atom_builder.js: {}
 
 atomizer-atom-builder-obfuscator:
   js:
     js/threejs/renderers/CSS2DRenderer.js: {}
-    js/min/producers/prod_atom.js: {}
+    js/min/directors/dir_atom.js: {}
     js/min/producers/prod_atom_builder.js: {}
 
 ############ Atom Viewer
@@ -79,16 +81,16 @@ atomizer-atom-viewer-obfuscator:
 atomizer-molecule-builder:
   js:
     js/threejs/renderers/CSS2DRenderer.js: {}
-    js/src/producers/prod_atom.js: {}
-    js/src/producers/prod_molecule.js: {}
-    js/src/producers/prod_molecule_builder.js: {}
+    js/src/directors/dir_atom.js: {}
+    js/src/directors/dir_molecule.js: {}
+    js/src/producers/prod_scene.js: {}
 
 atomizer-molecule-builder-obfuscator:
   js:
     js/threejs/renderers/CSS2DRenderer.js: {}
-    js/min/producers/prod_atom.js: {}
-    js/min/producers/prod_molecule.js: {}
-    js/min/producers/prod_molecule_builder.js: {}
+    js/min/directors/dir_atom.js: {}
+    js/min/directors/dir_molecule.js: {}
+    js/min/producers/prod_scene.js: {}
 
 ############ Birkeland Currents
 

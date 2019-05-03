@@ -265,6 +265,14 @@ class AtomizerController extends ControllerBase {
 
     $node = Node::load($data['conf']['nid']);
 
+    // Get the atomic structure field. -- append it to the conf array.
+    $field = $node->field_molecule_structure;
+    if ($field == empty('field')) {
+      $data['conf']['error'][] = 'field_molecule_structure field is empty';
+    } else {
+      $data['conf'] = array_merge($data['conf'], YAML::decode($field->value));
+    }
+
     // Render the node/atom using teaser atom_viewer mode.
     $data['moleculeName'] = $node->label();
     $data['moleculeTitle'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';
@@ -279,9 +287,6 @@ class AtomizerController extends ControllerBase {
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
     $data['information'] = render($build);
 
-    // Get the atomic structure field.
-    $field = $node->field_molecule_structure;
-    $data['moleculeConf'] = (empty($field)) ? 'Object not found' : Yaml::decode($field->value);
 
     $response->addCommand(new LoadMoleculeCommand($data));
     return $response;

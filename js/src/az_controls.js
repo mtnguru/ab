@@ -10,8 +10,7 @@
   Drupal.atomizer.controlsC = function (_viewer, controlSet) {
 
     var viewer = _viewer;
-    var cameraTrackballControls;
-    var objectTrackballControls;
+    var trackballControls;
     var controlsMode = 'none';
     var selectBlock = $('.theme--selectBlock', viewer.context)[0];
     var img = document.createElement('IMG'); // Storage for current image.
@@ -31,17 +30,17 @@
 
       switch (controlsMode) {
         case 'scene':
-          cameraTrackballControls.dispose();
-          delete cameraTrackballControls;
+          trackballControls.dispose();
+          delete trackballControls;
           viewer.canvasContainer.removeEventListener('mousemove', onMouseMove);
           break;
         case 'camera':
-          cameraTrackballControls.dispose();
-          delete cameraTrackballControls;
+          trackballControls.dispose();
+          delete trackballControls;
           break;
         case 'object':
-          objectTrackballControls.dispose();
-          delete objectTrackballControls;
+          trackballControls.dispose();
+          delete trackballControls;
           break;
         case 'attach':
           viewer.canvasContainer.removeEventListener('mousemove', onMouseMove);
@@ -53,16 +52,16 @@
       controlsMode = newMode;
       switch (controlsMode) {
         case 'scene':
-          cameraTrackballControls = createCameraTrackballControls();
+          trackballControls = createCameraTrackballControls();
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
           viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
           viewer.canvasContainer.addEventListener('mouseup',   onMouseUp, false);
           break;
         case 'camera':
-          cameraTrackballControls = createCameraTrackballControls();
+          trackballControls = createCameraTrackballControls();
           break;
         case 'object':
-          objectTrackballControls = createObjectTrackballControls(object);
+          trackballControls = createObjectTrackballControls(object.parent);
           break;
         case 'attach':
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
@@ -132,13 +131,14 @@
      */
     function selectYmlChanged(event) {
       var args = this.id.split("--");
+      let directory = viewer[args[0]].getYmlDirectory();
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadYml',
         { component: args[0],
+          directory: viewer[args[0]].getYmlDirectory(),
           filepath: viewer[args[0]].getYmlDirectory() + '/' + event.target.value,
           filename: event.target.value
         },
-        viewer[args[0]].loadYml
       );
     }
 
@@ -506,7 +506,6 @@
         );
 
         function imageSaved(response) {
-          var fart = response;
           return;
         }
       });
@@ -588,23 +587,27 @@
      * @returns {THREE.TrackballControls}
      */
     function createObjectTrackballControls(object) {
+      function changeTrackball (event) {
+        viewer.render();
+      }
+
 //    var controls = new THREE.TrackballControls(object, viewer.renderer.domElement);
       var controls = new THREE.OrbitControls(object, viewer.renderer.domElement);
       controls.rotateSpeed = 2.0;
       controls.zoomSpeed = 1.0;
       controls.panSpeed = 3.0;
-      controls.noZoom = false;
-      controls.noPan = false;
-      controls.staticMoving = true;
+      controls.enableZoom = true;
+      controls.enablePan = true;
+      controls.enableDamping = true;
       // controls.dynamicDampingFactor=0.3;
 
       controls.keys = [65, 83, 68];
-      controls.addEventListener('change', viewer.render);
+      controls.addEventListener('change', changeTrackball);
       return controls;
     }
 
     /**
-     * Find intersection with mouse and the producers list of intersection objects.
+     * Find intersection with mouse and the directors list of intersection objects.
      *
      * @returns {*}
      */
@@ -626,7 +629,7 @@
     /**
      * Save the current mouse position - X, Y
      * When the user moves the mouse, if the producer has an intersected handler,
-     * then build a list of intersected objects and call the producers intersected handler.
+     * then build a list of intersected objects and call the directors intersected handler.
      * @param event
      */
     function onMouseMove(event) {
@@ -639,7 +642,7 @@
     }
 
     /**
-     * When user clicks mouse button, call the producers mouseDown function if it exists.
+     * When user clicks mouse button, call the directors mouseDown function if it exists.
      * @param event
      */
     function onMouseDown(event) {
@@ -652,7 +655,7 @@
     }
 
     /**
-     * When user clicks mouse button, call the producers mouseUp function if it exists.
+     * When user clicks mouse button, call the directors mouseUp function if it exists.
      * @param event
      */
     function onMouseUp(event) {

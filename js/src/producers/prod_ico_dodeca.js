@@ -3,11 +3,18 @@
  *
  */
 
-Drupal.atomizer.producers.ico_dodecaC = function (_viewer) {
+Drupal.atomizer.prod_ico_dodecaC = function (_viewer) {
   var viewer = _viewer;
   viewer.controls = Drupal.atomizer.controlsC(viewer);
   viewer.nuclet = Drupal.atomizer.nucletC(viewer);
   viewer.atom = Drupal.atomizer.atomC(viewer);
+
+  viewer.objects = [];
+  const addObject = (object) => {
+    let numObjects = Object.keys(viewer.objects).length;
+    viewer.objects[object.az.id] = object;
+    viewer.scene.add(object);
+  };
 
   var createView = function () {
     var scale = .59;
@@ -52,6 +59,7 @@ Drupal.atomizer.producers.ico_dodecaC = function (_viewer) {
     setDefaults: setDefaults,
     mouseUp: mouseUp,
 //  hoverObjects: hoverObjects,
-    hovered: hovered
+    hovered: hovered,
+    addObject: addObject,
   };
 };

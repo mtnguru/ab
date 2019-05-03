@@ -1,5 +1,5 @@
 /**
- * @file - az_birkeland.js
+ * @file - prod_birkeland.js
  *
  * This is a 'producer' which allows users to build atoms.
  * This module provides functions to handle deleting/adding nuclets,
@@ -8,13 +8,20 @@
 
 (function ($) {
 
-  Drupal.atomizer.producers.birkelandC = function (_viewer) {
+  Drupal.atomizer.prod_birkelandC = function (_viewer) {
     var viewer = _viewer;
     var mouseMode;
     var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
     var $sceneName = $('.scene--name', viewer.context);
     var $sceneInformation = $('.scene--information', viewer.context);
     var $sceneProperties = $('.scene--properties', viewer.context);
+
+    viewer.objects = [];
+    const addObject = (object) => {
+      let numObjects = Object.keys(viewer.objects).length;
+      viewer.objects[object.az.id] = object;
+      viewer.scene.add(object);
+    };
 
     /**
      * Return the objects which are active for hovering
