@@ -90,8 +90,8 @@
      *
      * @param event
      */
-    var hovered = function hovered(mouseMode, objects) {
-      switch (mouseMode) {
+    var mouseMove = function mouseMove(event, mouse) {
+      switch (mouse.mode) {
         case 'none':
           return;
 
@@ -103,7 +103,7 @@
           // If there is already a highlighted proton then set it back to original color
           if (highlightedProton) {
             // Return if the proton is already highlighted
-            if (objects.length && highlightedProton == objects[0].object) return;
+            if (mouse.intersected.length && highlightedProton == mouse.intersected[0].object) return;
 
             // Change the proton back to it's original color and visibility.
             viewer.nuclet.setProtonColor(highlightedProton, null);
@@ -123,7 +123,7 @@
           // If there is already a highlighted electron then set it back to original color
           if (highlightedNElectron) {
             // Return if the proton is already highlighted
-            if (objects.length && highlightedNElectron == objects[0].object.parent) return;
+            if (mouse.intersected.length && highlightedNElectron == mouse.intersected[0].object.parent) return;
 
             // 1 is the field - 0 is the core.
 
@@ -131,23 +131,22 @@
             highlightedNElectron = null;
           }
 
-          if (objects.length) {
+          if (mouse.intersected.length) {
+            if (mouse.intersected[0].object.az) {  // PROTON
+              if (!mouse.intersected[0].object.az.active) return;
 
-            if (objects[0].object.az) {  // PROTON
-              if (!objects[0].object.az.active) return;
-
-              if (mouseMode == 'protonsAdd') {
+              if (mouse.mode == 'protonsAdd') {
                 // Return if this proton isn't optional
-                if (!objects[0].object.az.optional) return;
+                if (!mouse.intersected[0].object.az.optional) return;
               }
 
               // Highlight the proton
-              highlightedProton = objects[0].object;
+              highlightedProton = mouse.intersected[0].object;
               highlightedProton.material.visible = true;
               highlightedProton.material.color = viewer.theme.getColor('proton-ghost--color');
             } else {                     // ELECTRON
               // Highlight the electron
-              highlightedNElectron = objects[0].object.parent;
+              highlightedNElectron = mouse.intersected[0].object.parent;
               viewer.nuclet.setElectronColor(highlightedNElectron, true, false);
             }
           }
@@ -157,15 +156,15 @@
         case 'inner-faces':
           // If there is already a highlighted proton
           if (highlightedFace) {
-            if (objects.length && highlightedFace == objects[0]) return;
+            if (mouse.intersected.length && highlightedFace == mouse.intersected[0]) return;
             highlightedFace.color.setHex(parseInt("0x00ff00"));
             highlightedIcosa.geometry.colorsNeedUpdate = true;
             highlightedFace = null;
           }
 
-          if (objects.length) {
-            highlightedFace = objects[0].face;
-            highlightedIcosa = objects[0].object;
+          if (mouse.intersected.length) {
+            highlightedFace = mouse.intersected[0].face;
+            highlightedIcosa = mouse.intersected[0].object;
             highlightedFace.color.setHex(parseInt("0x00ffff"));
             highlightedIcosa.geometry.colorsNeedUpdate = true;
             highlightedIcosa.geometry.elementsNeedUpdate = true;
@@ -177,16 +176,16 @@
         case 'outer-faces':
           // If there is already a highlighted proton
           if (highlightedOuterFace) {
-            if (objects.length && highlightedOuterFace == objects[0]) return;
+            if (mouse.intersected.length && highlightedOuterFace == mouse.intersected[0]) return;
             highlightedOuterFace.color.setHex(parseInt("0xff00ff"));
             highlightedOuterFace = null;
           }
 
-          if (objects.length) {
-            highlightedOuterFace = objects[0].face;
+          if (mouse.intersected.length) {
+            highlightedOuterFace = mouse.intersected[0].face;
             highlightedOuterFace.color.setHex(parseInt("0xffff00"));
           }
-          objects[0].object.geometry.colorsNeedUpdate = true;
+          mouse.intersected[0].object.geometry.colorsNeedUpdate = true;
           break;
       }
     };
@@ -200,10 +199,10 @@
      * @param event
      * @returns {boolean}
      */
-    function mouseUp(event, distance, mouseMode) {
+    function mouseUp(event, mouse) {
       return;
     }
-    function mouseDown(event, distance, {mouseMode, protonColor}) {
+    function mouseDown(event, mouse) {
 
       /**
        * A electron has been deselected, deselect the protons also.
@@ -231,7 +230,7 @@
       var proton;
       switch (event.which) {
         case 1:   // Select/Unselect protons to add an electron to.
-          switch (mouseMode) {
+          switch (mouse.mode) {
             case 'electronsAdd':
 
               var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleParticles);
@@ -318,7 +317,7 @@
             case 'protonsColor':
               var intersects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtons);
               if (intersects.length != 0) {
-                viewer.nuclet.setProtonColor(intersects[0].object, protonColor);
+                viewer.nuclet.setProtonColor(intersects[0].object, mouse.protonColor);
                 viewer.render();
               }
               break;
@@ -384,7 +383,7 @@
           break;
 
         case 3:
-          switch (mouseMode) {
+          switch (mouse.mode) {
             case 'electronsAdd':
               var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleParticles);
               if (objects.length) {          // Object found
@@ -436,7 +435,7 @@
               }
               break;   // electronsAdd
 
-          } // switch mouseMode
+          } // switch mouse.mode
           break;
       } // switch which mouse button
     }
@@ -446,6 +445,7 @@
      */
     function createIntersectLists(atom) {
       var nuclets = atom.az.nuclets;
+      visibleNElectrons = [];
       for (var id in nuclets) {
         if (nuclets.hasOwnProperty(id)) {
 
@@ -919,7 +919,7 @@
       setDefaults,
       mouseUp,
       mouseDown,
-      hovered,
+      mouseMove,
       objectLoaded,
       applyControl,
       createIntersectLists,

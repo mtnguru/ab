@@ -290,11 +290,22 @@
       */
     }
 
+    function toRadians(degrees) {
+      return degrees * (Math.PI / 180);
+    }
+
+    function toDegrees(radians) {
+      return radians * (180 / Math.PI);
+    }
+
+
     return {
-      doAjax: doAjax,
-      alignObjectToAxis: alignObjectToAxis,
-      initDraggable: initDraggable,
-      makeObject: makeObject,
+      toDegrees,
+      toRadians,
+      doAjax,
+      alignObjectToAxis,
+      initDraggable,
+      makeObject,
       constants: {
         visibleThresh: .01,
         transparentThresh: .99

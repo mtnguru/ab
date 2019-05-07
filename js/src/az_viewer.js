@@ -146,15 +146,15 @@
 
       setSize();
 
+      // Make controls
+      viewer.controls = Drupal.atomizer.controlsC(viewer);
+
       // Create the producer.
       viewer.producer = Drupal.atomizer[viewer.view.producer + 'C'](viewer);
 
       // Create and position the scene
       viewer.scene = new THREE.Scene();
 //    viewer.scene = new Physijs.Scene();
-
-      // Make controls
-      viewer.controls = Drupal.atomizer.controlsC(viewer);
 
       // Set the camera lookAt
       viewer.scene.position.set(

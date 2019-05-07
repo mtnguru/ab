@@ -375,6 +375,7 @@
             atom.az.id = result.data.conf.id;
             atom.az.name = result.data.atomName;
             atom.az.title = result.data.atomTitle;
+            atom.az.link = result.data.link;
             atom.az.conf = result.data.conf;
             atom.az.information = result.data.information;
             atom.az.properties = result.data.properties;
@@ -406,6 +407,7 @@
 //        atom.rotation.z = -45 / 360 * 2 * Math.PI;
 
             // Rotate atom
+            /*
             if (viewer.dataAttr['atom--rotation--x']) {
               if (!atom.rotation) atom.rotation = new THREE.Vector3();
               atom.rotation.x = viewer.dataAttr['atom--rotation--x'] * Math.PI / 180;
@@ -418,8 +420,9 @@
               if (!atom.rotation) atom.rotation = new THREE.Vector3();
               atom.rotation.z = viewer.dataAttr['atom--rotation--z'] * Math.PI / 180;
             }
+            */
+
             viewer.producer.objectLoaded(atom);
-            viewer.render();
 
             if (loadCallback) {
               loadCallback(atom);
@@ -795,7 +798,7 @@
         if ($(context).hasClass('node-atom-edit-form') || $(context).hasClass('node-atom-form')) {
 
           var $textarea = $nodeForm.find('.field--name-field-atomic-structure textarea');
-          let atom = viewer.getObject("A1");
+          let atom = viewer.producer.getObject("A1");
           $textarea.val(extractStructure(atom));
 
           var protons = $('.atom--num-protons--value').html();

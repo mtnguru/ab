@@ -18,8 +18,19 @@
 
     // Variables for detecting items mouse is hovering over.
     var raycaster;
-    var mouse = new THREE.Vector2(-1000, -1000);
-    var mouseDown = new THREE.Vector2(-1000, -1000);
+    var mouse = {
+      now:  new THREE.Vector2(0,0),
+      up:   new THREE.Vector2(0,0),
+      down: new THREE.Vector2(0,0),
+      object: null,
+      objectStartPosition: new THREE.Vector3(0,0,0),
+      objectStartRotation: new THREE.Vector3(0,0,0),
+      distance: 0,
+    };
+
+    function changeControlsSettings(settings) {
+      Object.assign(trackballControls, settings);
+    }
 
     /**
      * Change the controls mode
@@ -27,7 +38,6 @@
      * @param newMode
      */
     function changeControlsMode(newMode, object) {
-
       switch (controlsMode) {
         case 'scene':
           trackballControls.dispose();
@@ -49,6 +59,7 @@
           break;
       }
 
+      console.log(`changeControlsMode ${newMode}`);
       controlsMode = newMode;
       switch (controlsMode) {
         case 'scene':
@@ -62,6 +73,9 @@
           break;
         case 'object':
           trackballControls = createObjectTrackballControls(object.parent);
+          viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
+          viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
+          viewer.canvasContainer.addEventListener('mouseup',   onMouseUp, false);
           break;
         case 'attach':
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
@@ -588,7 +602,7 @@
      */
     function createObjectTrackballControls(object) {
       function changeTrackball (event) {
-        viewer.render();
+//      viewer.render();
       }
 
 //    var controls = new THREE.TrackballControls(object, viewer.renderer.domElement);
@@ -607,13 +621,13 @@
     }
 
     /**
-     * Find intersection with mouse and the directors list of intersection objects.
+     * Find intersection with mouse and list of intersection objects.
      *
      * @returns {*}
      */
     function findIntersects(objects) {
       if (objects) {
-        var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
+        var vector = new THREE.Vector3(mouse.now.x, mouse.now.y, .5);
         vector.unproject(viewer.camera);
 
         var raycaster = new THREE.Raycaster(viewer.camera.position, vector.sub(viewer.camera.position).normalize());
@@ -629,28 +643,31 @@
     /**
      * Save the current mouse position - X, Y
      * When the user moves the mouse, if the producer has an intersected handler,
-     * then build a list of intersected objects and call the directors intersected handler.
+     * then build a list of intersected objects and call the producers intersected handler.
      * @param event
      */
     function onMouseMove(event) {
-      mouse.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
-      mouse.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
-      if (viewer.producer.hoverObjects) {
-        viewer.producer.hovered(findIntersects(viewer.producer.hoverObjects()));
+      mouse.now.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
+      mouse.now.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
+      mouse.distance = mouse.down.distanceTo(mouse.now);
+      if (viewer.producer.mouseMove) {
+        let hoverObjects = viewer.producer.hoverObjects ? viewer.producer.hoverObjects(mouse) : null;
+        mouse.intersected = hoverObjects ? findIntersects(hoverObjects) : [];
+        viewer.producer.mouseMove(event, mouse);
       }
-      viewer.render();
     }
 
     /**
-     * When user clicks mouse button, call the directors mouseDown function if it exists.
+     * When user clicks mouse button, call the producers mouseDown function if it exists.
      * @param event
      */
     function onMouseDown(event) {
-      mouseDown.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
-      mouseDown.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
-//    console.log('onMouseDown ' + mouse.x + ' ' + mouse.y);
+      mouse.down.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
+      mouse.down.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
+      mouse.distance = 0;
+//    console.log('onMouseDown ' + mouse.now.x + ' ' + mouse.now.y);
       if (viewer.producer.mouseDown) {
-        return viewer.producer.mouseDown(event);
+        return viewer.producer.mouseDown(event, mouse);
       }
     }
 
@@ -659,13 +676,13 @@
      * @param event
      */
     function onMouseUp(event) {
-      mouse.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
-      mouse.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
-      var distance = mouse.distanceTo(mouseDown);
-//    console.log('onMouseUp ' + mouse.x + ' ' + mouse.y + '  ' + distance);
+      mouse.up.x =  (event.offsetX / viewer.canvas.width) * 2 - 1;
+      mouse.up.y = -(event.offsetY / viewer.canvas.height) * 2 + 1;
+      mouse.distance = mouse.down.distanceTo(mouse.up);
+//    console.log('onMouseUp ' + mouse.now.x + ' ' + mouse.now.y + '  ' + mouse.distance);
 
       if (viewer.producer.mouseUp) {
-        return viewer.producer.mouseUp(event, distance);
+        return viewer.producer.mouseUp(event, mouse);
       }
     }
 
@@ -730,10 +747,13 @@
      * Interface to this module.
      */
     return {
-      init: init,
-      getDefault: getDefault,
-      findIntersects: findIntersects,
-      changeControlsMode: changeControlsMode,
+      init,
+      getDefault,
+      findIntersects,
+      changeControlsMode,
+      changeControlsSettings,
+      mouse: mouse,
+      mouseMode: (mode) => mouse.mode = mode,
     }
   };
 })(jQuery);

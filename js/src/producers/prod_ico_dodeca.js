@@ -50,9 +50,9 @@ Drupal.atomizer.prod_ico_dodecaC = function (_viewer) {
   };
 
   var setDefaults = function (){};
-  var mouseUp = function (){viewer.render();}
 //var hoverObjects = function () {};
-  var hovered = function () {};
+  var mouseUp = function (){viewer.render();}
+  var mouseMove = function () {};
 
   return {
     createView: createView,

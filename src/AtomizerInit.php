@@ -158,7 +158,7 @@ class AtomizerInit {
     return [
       '#type' => 'container',
       '#attributes' => [
-        'class' => ['select-wrapper'],
+        'class' => ['select-wrapper', 'az-hidden'],
         'id' => 'select-atom-wrapper',
       ],
       'title' => [
@@ -308,6 +308,7 @@ class AtomizerInit {
         $build['content']['select_atom'] = self::build_select_atom_list();
       }
       if ($atomizer_config['select'] == 'select_molecule') {
+        $build['content']['select_atom'] = self::build_select_atom_list();
         $build['content']['select_molecule'] = self::build_select_molecule_list();
       }
     }

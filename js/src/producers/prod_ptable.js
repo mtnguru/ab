@@ -10,15 +10,14 @@
 
   Drupal.atomizer.prod_ptableC = function (_viewer) {
     var viewer = _viewer;
-    var mouseMode;
 
     /**
      * Return the objects which are active for hovering
      *
      * @returns {*}
      */
-    var hoverObjects = function hoverObjects() {
-      switch (mouseMode) {
+    var hoverObjects = function hoverObjects(mouse) {
+      switch (mouse.mode) {
         case 'none':
           return null;
         case 'electronsAdd':
@@ -34,8 +33,8 @@
      *
      * @param event
      */
-    var hovered = function hovered(objects) {
-      switch (mouseMode) {
+    var mouseMove = function mouseMove(event, mouse) {
+      switch (mouse.mode) {
         case 'none':
           return;
 
@@ -56,11 +55,11 @@
      * @param event
      * @returns {boolean}
      */
-    function mouseUp(event, distance) {
+    function mouseUp(event, mouse) {
       event.preventDefault();
       switch (event.which) {
         case 1:   // Select/Unselect protons to add an electron to.
-          switch (mouseMode) {
+          switch (mouse.mode) {
             case 'electronsAdd_breakit':
               viewer.render();
               break;
@@ -164,12 +163,12 @@
 
     var $mouseBlock = $('#blocks--mouse-mode', viewer.context);
     if ($mouseBlock.length) {
-      mouseMode = $mouseBlock.find('input[name=mouse]:checked').val();
+      mouse.mode = $mouseBlock.find('input[name=mouse]:checked').val();
       // Add event listeners to mouse mode form radio buttons
       var $mouseRadios = $mouseBlock.find('#edit-mouse--wrapper input');
       $mouseRadios.click(function (event) {
         console.log('mode: ' + event.target.value);
-        mouseMode = event.target.value;
+        mouse.mode = event.target.value;
       });
     }
 
@@ -177,8 +176,8 @@
       createView: createView,
       setDefaults: setDefaults,
       mouseUp: mouseUp,
+      mouseMove: mouseMove,
       hoverObjects: hoverObjects,
-      hovered: hovered,
       objectLoaded: objectLoaded
     };
   };

@@ -11,11 +11,9 @@ Drupal.atomizer.prod_platonic_solidsC = function (_viewer) {
   viewer.labels = Drupal.atomizer.labelsC(viewer);
   viewer.shapes = Drupal.atomizer.shapesC(viewer);
   viewer.atom = Drupal.atomizer.atomC(viewer);
-  var atomFilename;
 
   viewer.objects = [];
   const addObject = (object) => {
-    let numObjects = Object.keys(viewer.objects).length;
     viewer.objects[object.az.id] = object;
     viewer.scene.add(object);
   };
@@ -46,21 +44,21 @@ Drupal.atomizer.prod_platonic_solidsC = function (_viewer) {
     viewer.producer.addObject(atom);
 
     viewer.render();
-
-    return;
   };
 
   var setDefaults = function (){};
-  var mouseUp = function (){viewer.render();}
-//var hoverObjects = function () {};
-  var hovered = function () {};
+  var hoverObjects = () => [];
+  var mouseUp   = function () {};
+  var mouseDown = function () {};
+  var mouseMove = function () {};
 
   return {
     createView: createView,
     setDefaults: setDefaults,
+    hoverObjects: hoverObjects,
     mouseUp: mouseUp,
-//  hoverObjects: hoverObjects,
-    hovered: hovered,
+    mouseDown: mouseDown,
+    mouseMove: mouseMove,
     addObject: addObject,
   };
 };

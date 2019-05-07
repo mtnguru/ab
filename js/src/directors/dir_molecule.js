@@ -8,7 +8,6 @@
     let viewer = _viewer;
 
     let editAtom;
-    let objects = {};
 
     let $atomList = $('.atom--list', viewer.context);
     let $atomFormBlock = $('#blocks--atom-form', viewer.context);
@@ -18,41 +17,66 @@
     }
     let $atomButtons;
 
+    /**
+     * Set value for the az-value and az-slider components.
+     * @TODO move this to controls?  Requires creating a SetControl function.
+     * @TODO How about set Position and Rotation sliders that gets all three?
+     *
+     *
+     * @param id
+     * @param value
+     */
     const setSlider = (id, value) => {
       $(`#${id}--az-value`, viewer.context).val(value);
       $(`#${id}--az-slider`, viewer.context).val(value);
     };
 
+    /**
+     * Set values for position sliders.
+     *
+     * @param atom
+     */
+    const setPositionSliders = (atom) => {
+      setSlider('atom--position--x', parseInt(atom.parent.position.x));
+      setSlider('atom--position--y', parseInt(atom.parent.position.y));
+      setSlider('atom--position--z', parseInt(atom.parent.position.z));
+    };
+
+    /**
+     * Set values for rotation sliders
+     *
+     * @param atom
+     */
+    const setRotationSliders = (atom) => {
+      setSlider('atom--rotation--x', parseInt(Drupal.atomizer.base.toDegrees(atom.rotation.x)));
+      setSlider('atom--rotation--y', parseInt(Drupal.atomizer.base.toDegrees(atom.rotation.y)));
+      setSlider('atom--rotation--z', parseInt(Drupal.atomizer.base.toDegrees(atom.rotation.z)));
+    };
+
     const setEditAtom = (atom) => {
-      viewer.render();
-      var id = atom.az.id;
-      createAtomList(atom.az.atom);
-      if (editAtom) {
-        viewer.atom.highlight(editAtom, false);
+      if (atom) {
+        var id = atom.az.conf.id;
+        createAtomList();
+//      viewer.controls.changeControlsMode('object', atom);
+
+        if (editAtom) {
+          viewer.atom.highlight(editAtom, false);
+        }
+        viewer.atom.highlight(atom, 'darken');
+        editAtom = atom;
+
+        // Move the atom edit form to the appropriate nuclet
+        $atomFormBlock.insertAfter($atomList.find('.atom-' + id));
+        $atomFormBlock.attr('data-object-id', id);
+        $atomFormBlock.data('object-id', id);
+        $atomFormBlock.removeClass('az-hidden');
+
+        setPositionSliders(atom);
+        setRotationSliders(atom);
       }
-      viewer.atom.highlight(atom, 'darken');
-      editAtom = atom;
-
-      viewer.render();
-
-      // Move the atom edit form to the appropriate nuclet
-      $atomFormBlock.insertAfter($atomList.find('.atom-' + id));
-
-      $atomFormBlock.attr('data-object-id', id);
-      $atomFormBlock.data('object-id', id);
-
-//    setTimeout(() => {
-        setSlider('atom--position--x', atom.parent.position.x);
-        setSlider('atom--position--y', atom.parent.position.y);
-        setSlider('atom--position--z', atom.parent.position.z);
-
-        setSlider('atom--rotation--x', atom.rotation.x * 180 / Math.PI);
-        setSlider('atom--rotation--y', atom.rotation.y * 180 / Math.PI);
-        setSlider('atom--rotation--z', atom.rotation.z * 180 / Math.PI);
-        viewer.render();
-//      setTimeout(() => {
-//      }, 1000);
-//    }, 1000);
+      else {
+        $atomFormBlock.addClass('az-hidden');
+      }
       viewer.render();
     };
 
@@ -64,7 +88,7 @@
      */
     const addAtomToList = (atom) => {
       let out = '<div class="atom atom-' + atom.az.id + '">';
-      out += `<div class="header" data-type="${atom.az.conf.type}" data-atom-id="${atom.az.id}">${atom.az.conf.name}</div>`;
+      out += `<div class="header" data-type="${atom.az.conf.type}" data-atom-id="${atom.az.id}">${atom.az.conf.name.replace(' ','-')}</div>`;
       out += '</div>\n';
       return out;
     };
@@ -78,8 +102,8 @@
         $atomFormBlock.insertAfter($('.blocks--molecule-structure'), viewer.context);
 
         let out = '';
-        for (let key in objects) {
-          let atom = objects[key];
+        for (let key in viewer.objects) {
+          let atom = viewer.objects[key];
           if (atom.az.conf.type == 'atom') {
             out += addAtomToList(atom);
           }
@@ -93,15 +117,13 @@
           let atom = viewer.producer.getObject(atomId);
           if ($atomFormBlock.hasClass('az-hidden') || atom !== editAtom) {
             setEditAtom(atom);
-//          viewer.controls.changeControlsMode('object', atom);
-            $atomFormBlock.removeClass('az-hidden');
           }
           else {
             if (editAtom) {
               viewer.atom.highlight(editAtom, false);
               viewer.render();
             }
-            viewer.controls.changeControlsMode('scene');
+//          viewer.controls.changeControlsMode('scene');
             $atomFormBlock.addClass('az-hidden');
           }
         });
@@ -110,92 +132,48 @@
 
     /**
      * Extract the yml structure of the molecule.
-     *
-     * -------------------------------
-     * name: Calcium Chloride
-     * zoom: 1
-     * objects:
-     *   calcium-1:
-     *     type: atom
-     *     name: Calcium 40
-     *     nid: 730
-     *     position: {x: 0, y: -150, z: 0}
-     *     rotation: {x: 0, y: 0, z: 0}
-     *   chlorine-1:
-     *     type: atom
-     *     name: Chlorine 35
-     *     nid: 466
-     *     position: {x: -250, y: 250, z: 0}
-     *     rotation: {x: 0, y: 0, z: 0}
-     *   chlorine-2:
-     *     type: atom
-     *     name: Chlorine 35
-     *     nid: 466
-     *     position: {x: 250, y: 250, z: 0}
-     *     rotation: {x: 0, y: 180, z: 0}
-     * -------------------------------
-     *
-     * @returns {*}
      */
     function extractStructure (molecule) {
-      var out = spacing + id + ':\n';
-      out += `name: ${molecule}\n`;
-      out += `zoom: ${molecule}\n`;
-      out += `objects: ${molecule}\n`;
-      out += `    ${molecule.id}\n:`;
-      out += `      type: atom`;
-      out += `      name: ${atom.id}\n`;
-      out += `      nid: ${atom.nid}\n`;
-      out += `      position: {xatom.position.x]${atom.id}\n`;
-      out += `      name: ${atom.id}\n`;
-      out += `      name: ${atom.id}\n`;
-      out += `      name: ${atom.id}\n`;
-      /*
-      * name: Calcium Chloride
-      * zoom: 1
-      * objects:
-      *   calcium-1:
-      *     type: atom
-      *     name: Calcium 40
-      *     nid: 730
-      *     position: [0,-150,0]
-      *     rotation: [0,0,0]
-      *   chlorine-1:
-      *     type: atom
-      *     name: Chlorine 35
-      *     nid: 466
-      *     position: [-250,250,0]
-      *     rotation: [0,0,0]
-      *   chlorine-2:
-    *     type: atom
-      *     name: Chlorine 35
-      *     nid: 466
-      *     position: [250,250,0]
-      *     rotation: [0,0,0]
-      *     */
+      var out = '';
 
+      out += `name: ${molecule.conf.name}\n`;
+      out += `zoom: ${molecule.conf.zoom}\n`;
+      out += `objects:\n`;
+      for (let a in viewer.objects) {
+        let object = viewer.objects[a];
+        out += `  ${object.az.id}:\n`;
+        out += `    type: ${object.az.conf.type}\n`;
+        out += `    name: ${object.az.conf.name}\n`;
+        out += `    nid: ${object.az.conf.nid}\n`;
+
+        out += '    position: [';
+        out += parseInt(object.parent.position.x) + ', ';
+        out += parseInt(object.parent.position.y) + ', ';
+        out += parseInt(object.parent.position.z) + ']\n';
+
+        out += '    rotation: [';
+        out += parseInt(Drupal.atomizer.base.toDegrees(object.rotation.x)) + ', ';
+        out += parseInt(Drupal.atomizer.base.toDegrees(object.rotation.y)) + ', ';
+        out += parseInt(Drupal.atomizer.base.toDegrees(object.rotation.z)) + ']\n';
+      }
       return out;
     }
 
     /**
      * Define Drupal behavior attach functions.
+     * When the molecule edit form is popped up, initialize the molecule structure.
      *
-     * Nuclet Edit form popup
-     *   Attach Listener to "Add nuclet" button
-     * Atom Edit form popup
-     *   Populate Atomic Structure field with current Viewer contents.
-     *
-     * @type {{attach: Drupal.behaviors.atomizer_atom.attach}}
+     * @type {{attach: Drupal.behaviors.atomizer_molecule.attach}}
      */
     Drupal.behaviors.atomizer_molecule = {
       attach: function (context, settings) {
         // If this is the node-molecule-form being opened then fill in the molecule structure field.
-        var $nodeForm = $('.node-molecule-form, .node-molecule-edit-form');
         if ($(context).hasClass('node-molecule-edit-form') || $(context).hasClass('node-molecule-form')) {
-
+          var $nodeForm = $(context);
           var $textarea = $nodeForm.find('.field--name-field-molecule-structure textarea');
-          let molecule = viewer.getObject("A1");
-          $textarea.val(extractStructure(molecule));
+          let molecule = viewer.scene.az;
+          let txt = extractStructure(molecule);
+          $textarea.val(txt);
         }
       }
     };
@@ -204,9 +182,9 @@
      * mouseUp
      *
      * @param event
-     * @param distance
+     * @param mouse
      */
-    const mouseUp = (event, distance) => {
+    const mouseUp = (event, mouse) => {
       return;
     };
 
@@ -214,40 +192,65 @@
      * mouseDown
      *
      * @param event
-     * @param distance
-     * @param protonColor
+     * @param mouse
      */
-    const mouseDown = (event, distance, protonColor) => {
+    const mouseDown = (event, mouse) => {
       if (editAtom) {
         // The mouseDown event applies to the current edit atom?
       } else {
         // The mouseDown even
       }
-      return;
     };
 
     /**
      * onAtomAddButton
+     *
+     * @param event
      */
     const onAtomAddButton = (event) => {
 
     };
 
     /**
-     * onAtomDeleteButton
-     *
-     * @param event
+     * User pressed button to delete atom.
      */
-    const onAtomDeleteButton = (event) => {
+    $atomFormBlock.find('.atom--delete').click(() => {
+      viewer.producer.deleteObject($atomFormBlock.data('object-id'));
+      createAtomList();
+      viewer.render();
+    });
 
-    };
+    /**
+     * User pressed button to Add Atom.
+     */
+    /*
+    let shit = $('#molecule--addAtom', viewer.context);
+    $('#molecule--addAtom', viewer.context).mousedown((event) => {
+      event.preventDefault();
+      return false;
+    });
+    $('#molecule--addAtom', viewer.context).click((event) => {
+      event.preventDefault();
+      return false;
+    });
+    */
 
     /**
      * moleculeLoaded
+     *
      * @param molecule
      */
     const moleculeLoaded = (molecule) => {
-      objects = {};
+      viewer.objects = {};
+
+      // Replace the link on the save button with a link to the current molecule.
+      var $save = $('.molecule--save a', viewer.context);
+      if ($save.length) {
+        $save.replaceWith(molecule.az.link);
+        if (Drupal.attachBehaviors) {
+          Drupal.attachBehaviors($save[0]);
+        }
+      }
     };
 
     /**
@@ -256,14 +259,17 @@
      * @param object
      */
     const objectLoaded = (object) => {
-      objects[object.az.id] = object;
+      viewer.objects[object.az.id] = object;
       createAtomList();
-      return;
     };
 
+
     return {
-      objectLoaded: objectLoaded,
-      moleculeLoaded: moleculeLoaded,
+      objectLoaded,
+      moleculeLoaded,
+      setEditAtom,
+      setPositionSliders,
+      setRotationSliders,
     };
   };
 

@@ -16,10 +16,10 @@
     var $sceneProperties = $('.scene--properties', viewer.context);
     viewer.objects = {};
     let intersect = {};
-    let mouseMode = 'electronsAdd';
+    let mousePressed = false;
 
     var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
-    var protonColor;
+    viewer.controls.mouseMode('electronsAdd');
 
     const deleteObject = (key) => {
       let object = viewer.objects[key];
@@ -33,12 +33,43 @@
       }
     }
 
+    const createUniqueObjectName = (basename) => {
+      let num = 0;
+      let name;
+      do {
+        name = `${basename.toLowerCase().replace(' ', '-')}-${++num}`;
+      } while (viewer.objects[name]);
+      return name;
+
+    };
+
     const addObject = (object) => {
       viewer.objects[object.az.id] = object;
       viewer.scene.add(object.parent);
     };
 
     const getObject = (name) => viewer.objects[name];
+
+    const moveObject = (event, mouse) => {
+      // Calculate the difference in x and y.
+      let x = 700 * (mouse.now.x - mouse.down.x);
+      let y = 700 * (mouse.now.y - mouse.down.y);
+      mouse.object.parent.position.y = mouse.objectStartPosition.y + y;
+      if (event.ctrlKey) {
+        mouse.object.parent.position.z = mouse.objectStartPosition.z - x;
+      } else {
+        mouse.object.parent.position.x = mouse.objectStartPosition.x - x;
+      }
+      viewer.dir_molecule.setPositionSliders(mouse.object);
+      console.log(`mouse: ${mouse.now.x} ${mouse.now.y}`);
+//    console.log(`moveObject: ${x} ${y} - ${mouse.object.parent.position.x} ${mouse.object.parent.position.y}`);
+
+      viewer.render();
+    };
+
+//  const moveObject = () => {
+//
+//  };
 
     const clearScene = () => {
       var keys = Object.keys(viewer.objects);
@@ -56,8 +87,8 @@
      *
      * @returns {*}
      */
-    var hoverObjects = function hoverObjects() {
-      switch (mouseMode) {
+    var hoverObjects = function hoverObjects(mouse) {
+      switch (mouse.mode) {
         case 'none':
           return null;
         case 'atomsMove':
@@ -75,59 +106,115 @@
       }
     };
 
-    let hovered = (hovered) => {
-
-      viewer.dir_atom.hovered(mouseMode, hovered)
-    };
-
-    const mouseUp = (event, distance) => {
-      if (mouseMode == 'atomsMove') {
+    const setControlsObject = (mode, object) => {
+      if (object) {
+        viewer.controls.changeControlsMode('none');
       } else {
-        viewer.dir_atom.mouseUp(event, distance, mouseMode);
+        viewer.controls.changeControlsMode('scene');
       }
     };
 
-    const mouseDown = (event, distance) => {
+    const findObjectFromIntersects = (intersects) => {
+      if (!intersects.length)      return null;
+      if (intersects[0].object.az) return intersects[0].object.az.nuclet.atom;  // It's a proton
+      return intersects[0].object.parent.parent.parent.az.atom;
+    };
+
+    const grabObject = (mouse, object) => {
+      if (object) {
+//      setControlsObject('none');
+        mouse.object = object;
+        mouse.objectStartPosition.copy(object.parent.position);
+        mouse.objectStartRotation.copy(object.rotation);
+        viewer.controls.changeControlsSettings({enablePan: false});
+      } else {
+//      setControlsObject('scene');
+        mouse.object = null;
+        viewer.controls.changeControlsSettings({enablePan: true});
+      }
+    };
+
+    const mouseUp = (event, mouse) => {
       event.preventDefault();
-      switch (mouseMode) {
+      mousePressed = false;
+      if (mouse.mode == 'atomsMove') {
+        switch (event.which) {
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            mouse.object = null;
+//          setControlsObject('scene');
+            break;
+        } // switch which mouse button
+      } else {
+        viewer.dir_atom.mouseUp(event, mouse);
+      }
+    };
+
+    const mouseDown = (event, mouse) => {
+      event.preventDefault();
+      mousePressed = true;
+
+      switch (mouse.mode) {
         case 'none':
           return null;
+
         case 'atomsMove':
+          let object = findObjectFromIntersects(viewer.controls.findIntersects(intersect.visibleParticles));
           switch (event.which) {
             case 1:   // Left button clicked -  Look at intersects and set either object or camera controls mode
               break;
-
-            case 2:   // Center button clicked - Intersects - select this atom - enable the form
+            case 2:   // Center button clicked - Intersects - select this object - enable the form
+              viewer.dir_molecule.setEditAtom(object);
               break;
-
-            case 3:   // Right button clicked - Select this atom to move in x/y plane - CTRL z/y plane - SHIFT x/z place
+            case 3:   // Right button clicked - Select this object to move in x/y plane - CTRL z/y plane - SHIFT x/z place
+              grabObject(mouse, object);
               break;
-
           } // switch which mouse button
           break;
 
         case 'electronsAdd':
-          viewer.dir_atom.mouseDown(event, distance, {mouseMode, protonColor});
-          break;
-
         case 'protonsAdd':
-          viewer.dir_atom.mouseDown(event, distance, {mouseMode, protonColor});
-          break;
-
         case 'protonsColor':
-          viewer.dir_atom.mouseDown(event, distance, {mouseMode, protonColor});
-          break;
-
         case 'inner-faces':
-          viewer.dir_atom.mouseDown(event, distance, {mouseMode, protonColor});
-          break;
-
         case 'outer-faces':
-          viewer.dir_atom.mouseDown(event, distance, {mouseMode, protonColor});
+          viewer.dir_atom.mouseDown(event, mouse);
           break;
-
       }
       viewer.render();
+    };
+
+    let mouseMove = (event, mouse) => {
+      if (mouse.object) {
+        event.preventDefault();
+        moveObject(event, mouse);
+      }
+      else {
+        if (mouse.intersects) {
+          console.log(`hovered: ${mouse.intersects.length}`);
+        }
+        switch (mouse.mode) {
+          case 'none':
+            return null;
+          case 'atomsMove':
+            if (!mousePressed) {
+//            let object = findObjectFromIntersects(viewer.controls.findIntersects(intersect.visibleParticles));
+//            setControlsObject('object', object);
+            }
+            viewer.dir_atom.mouseMove(event, mouse);
+            break;
+
+          case 'electronsAdd':
+          case 'protonsAdd':
+          case 'protonsColor':
+          case 'inner-faces':
+          case 'outer-faces':
+            viewer.dir_atom.mouseMove(event, mouse);
+            break;
+        }
+      }
     };
 
     const sceneLoad = function(conf) {
@@ -147,9 +234,13 @@
           viewer.objects = {};
           let data = response[i].data;
           viewer.scene.az = {
+            conf: data.conf,
             title: data.title,
             name: data.name,
             sceneNid: data.nid,
+            properties: data.properties,
+            information: data.information,
+            link: data.link,
           };
 
           if ($sceneName)                            { $sceneName.html(data.title); }
@@ -159,21 +250,15 @@
           viewer.labels.display();
           localStorage.setItem('atomizer_scene_nid', data.conf.nid);
 
-          // Build the scene
-          sceneConf = data.conf;
-          let scene = {
-            az: sceneConf,
-          };
           // The scene is a single molecule for now.
           // A molecule is one drupal node. - Currently called molecule
-          // Let me keep it that way - I'll distinguish the scene type and load the correct object that way.
-          viewer.dir_molecule.moleculeLoaded(scene);
+          viewer.dir_molecule.moleculeLoaded(viewer.scene);
 
-          // Load the scene objects - they themselves are also nodes - atoms in this case
+          // Load the scene objects - atoms
           // @TODO Have objects that aren't loaded, they are defined in the yml.  Create them directly.
           objects = {};
-          for (let key in sceneConf.objects) {
-            let objectConf = sceneConf.objects[key];
+          for (let key in data.conf.objects) {
+            let objectConf = data.conf.objects[key];
             objectConf.id = key;
             viewer[objectConf.type].loadObject(objectConf);
           }
@@ -184,16 +269,31 @@
     var objectLoaded = function (object) {
       object.az.id = object.az.conf.id;
 
-      object.rotation.set(...object.az.conf.rotation);
+      if (object.az.conf.rotation) {
+        object.rotation.x = parseInt(Drupal.atomizer.base.toRadians(object.az.conf.rotation[0]));
+        object.rotation.y = parseInt(Drupal.atomizer.base.toRadians(object.az.conf.rotation[1]));
+        object.rotation.z = parseInt(Drupal.atomizer.base.toRadians(object.az.conf.rotation[2]));
+      }
 
       let objectShell = new THREE.Object3D();
       objectShell.name = 'objectShell';
-      objectShell.position.set(...object.az.conf.position);
+      if (object.az.conf.position) {
+        objectShell.position.set(...object.az.conf.position);
+      }
       objectShell.add(object);
+
+//    let objectShell1 = new THREE.Object3D();
+//    objectShell1.name = 'objectShell1';
+//    objectShell1.position.set(...object.az.conf.position);
+//    objectShell1.add(objectShell);
 
       addObject(object);
       viewer.dir_molecule.objectLoaded(object);
       viewer.dir_atom.objectLoaded(object);
+
+      if (object.az.conf.needsPosition) {
+        grabObject(viewer.controls.mouse, object);
+      }
 
       viewer.render();
     };
@@ -210,6 +310,7 @@
       viewer.labels = Drupal.atomizer.labelsC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
       viewer.dir_atom = Drupal.atomizer.dir_atomC(viewer);
+      viewer.atom_select = Drupal.atomizer.atom_selectC(viewer, false);
       viewer.dir_molecule = Drupal.atomizer.dir_moleculeC(viewer);
 
       // Set eventhandler for select molecule block
@@ -230,13 +331,13 @@
       var $mouseBlock = $('#blocks--mouse-mode', viewer.context);
       $protonsColor.addClass('az-hidden');
       if ($mouseBlock.length) {
-        mouseMode = $mouseBlock.find('input[name=mouse]:checked').val();
+        viewer.controls.mouse.mode = $mouseBlock.find('input[name=mouse]:checked').val();
         // Add event listeners to mouse mode form radio buttons
         var $mouseRadios = $mouseBlock.find('#edit-mouse--wrapper input');
         $mouseRadios.click(function (event) {
           console.log('mode: ' + event.target.value);
-          mouseMode = event.target.value;
-          if (mouseMode == 'protonsColor') {
+          mouse.mode = event.target.value;
+          if (mouse.mode == 'protonsColor') {
             $protonsColor.removeClass('az-hidden');
           } else {
             $protonsColor.addClass('az-hidden');
@@ -246,7 +347,7 @@
         // Add event listeners to proton colors block
         // Set default color
         $mouseBlock.find('#proton-original-color').addClass('selected');
-        protonColor = 'original';
+        viewer.controls.mouse.protonColor = 'original';
 
         var $colorRadios = $mouseBlock.find('.proton-color');
 
@@ -265,7 +366,7 @@
           $(this).addClass('selected');
           var $input = $(this).parent().parent().find('input');
           $input.prop('checked', true);
-          protonColor = $input.val();
+          viewer.controls.mouse.protonColor = $input.val();
         });
       }
     };
@@ -305,20 +406,21 @@
       createView,
       objectLoaded,
 
-      deleteObject,
+      createUniqueObjectName,
       getObject,
       addObject,
+      deleteObject,
       clearScene,
+
+      grabObject,
 
       explode,
       updateIntersectLists,
 
       mouseUp,
       mouseDown,
-
-
+      mouseMove,
       intersect: intersect,
-      hovered: hovered,
       hoverObjects,
     };
   };

@@ -10,7 +10,6 @@
 
   Drupal.atomizer.prod_birkelandC = function (_viewer) {
     var viewer = _viewer;
-    var mouseMode;
     var $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
     var $sceneName = $('.scene--name', viewer.context);
     var $sceneInformation = $('.scene--information', viewer.context);
@@ -28,8 +27,8 @@
      *
      * @returns {*}
      */
-    var hoverObjects = function hoverObjects() {
-      switch (mouseMode) {
+    var hoverObjects = function hoverObjects(mouse) {
+      switch (mouse.mode) {
         case 'none':
           return null;
         case 'electronsAdd':
@@ -45,8 +44,8 @@
      *
      * @param event
      */
-    var hovered = function hovered(objects) {
-      switch (mouseMode) {
+    var mouseMove = function mouseMove(event, mouse) {
+      switch (mouse.mode) {
         case 'none':
           return;
 
@@ -67,11 +66,11 @@
      * @param event
      * @returns {boolean}
      */
-    function mouseUp(event, distance) {
+    function mouseUp(event, mouse) {
       event.preventDefault();
       switch (event.which) {
         case 1:   // Select/Unselect protons to add an electron to.
-          switch (mouseMode) {
+          switch (mouse.mode) {
             case 'electronsAdd_breakit':
               break;
           }
@@ -217,12 +216,12 @@
 
     var $mouseBlock = $('#blocks--mouse-mode', viewer.context);
     if ($mouseBlock.length) {
-      mouseMode = $mouseBlock.find('input[name=mouse]:checked').val();
+      viewer.controls.mouse.mode = $mouseBlock.find('input[name=mouse]:checked').val();
       // Add event listeners to mouse mode form radio buttons
       var $mouseRadios = $mouseBlock.find('#edit-mouse--wrapper input');
       $mouseRadios.click(function (event) {
         console.log('mode: ' + event.target.value);
-        mouseMode = event.target.value;
+        viewer.controls.mouse.mode = event.target.value;
       });
     }
 
@@ -273,9 +272,9 @@
     return {
       createView: createView,
       setDefaults: setDefaults,
-      mouseUp: mouseUp,
       hoverObjects: hoverObjects,
-      hovered: hovered,
+      mouseUp: mouseUp,
+      mouseMove: mouseMove,
       objectLoaded: objectLoaded,
       applyControl: applyControl,
       buttonClicked: buttonClicked

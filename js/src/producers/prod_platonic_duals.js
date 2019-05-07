@@ -112,17 +112,13 @@ Drupal.atomizer.prod_platonic_dualsC = function (_viewer) {
     return;
   };
 
-  var setDefaults = function (){};
-  var mouseUp = function (){viewer.render();}
-//var hoverObjects = function () {};
-  var hovered = function () {};
-
   return {
     createView: createView,
-    setDefaults: setDefaults,
-    mouseUp: mouseUp,
-//  hoverObjects: hoverObjects,
-    hovered: hovered,
+    setDefaults: () => null,
+    hoverObjects: () => [],
+    mouseUp: () => null,
+    mouseUp: () => null,
+    mouseMove: () => null,
     addObject: addObject,
   };
 };

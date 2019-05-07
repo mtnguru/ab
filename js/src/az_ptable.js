@@ -19,13 +19,6 @@
 
     var loadCallback;
 
-    function toRadians(degrees) {
-      return degrees * (Math.PI / 180);
-    }
-
-    function toDegrees(radians) {
-      return radians * (180 / Math.PI);
-    }
     /**
      * Execute AJAX command to load a new atom.
      *
@@ -94,15 +87,15 @@
           // Rotate pte
           if (viewer.dataAttr['pte--rotation--x']) {
             if (!pte.rotation) pte.rotation = new THREE.Vector3();
-            pte.rotation.x = toRadians(viewer.dataAttr['pte--rotation--x']);
+            pte.rotation.x = Drupal.atomizer.base.toRadians(viewer.dataAttr['pte--rotation--x']);
           }
           if (viewer.dataAttr['pte--rotation--y']) {
             if (!pte.rotation) pte.rotation = new THREE.Vector3();
-            pte.rotation.y = toRadians(viewer.dataAttr['pte--rotation--y']);
+            pte.rotation.y = Drupal.atomizer.base.toRadians(viewer.dataAttr['pte--rotation--y']);
           }
           if (viewer.dataAttr['pte--rotation--z']) {
             if (!pte.rotation) pte.rotation = new THREE.Vector3();
-            pte.rotation.z = toRadians(viewer.dataAttr['pte--rotation--z']);
+            pte.rotation.z = Drupal.atomizer.base.toRadians(viewer.dataAttr['pte--rotation--z']);
           }
           viewer.producer.objectLoaded(pte);
           viewer.render();

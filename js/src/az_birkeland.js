@@ -84,14 +84,6 @@
 
     var loadCallback;
 
-    function toRadians(degrees) {
-      return degrees * (Math.PI / 180);
-    }
-
-    function toDegrees(radians) {
-      return radians * (180 / Math.PI);
-    }
-
     /**
      * Execute AJAX command to load a new birkeland current.
      *
@@ -146,15 +138,15 @@
           // Rotate bc
           if (viewer.dataAttr['bc--rotation--x']) {
             if (!bc.rotation) bc.rotation = new THREE.Vector3();
-            bc.rotation.x = toRadians(viewer.dataAttr['bc--rotation--x']);
+            bc.rotation.x = Drupal.atomizer.base.toRadians(viewer.dataAttr['bc--rotation--x']);
           }
           if (viewer.dataAttr['bc--rotation--y']) {
             if (!bc.rotation) bc.rotation = new THREE.Vector3();
-            bc.rotation.y = toRadians(viewer.dataAttr['bc--rotation--y']);
+            bc.rotation.y = Drupal.atomizer.base.toRadians(viewer.dataAttr['bc--rotation--y']);
           }
           if (viewer.dataAttr['bc--rotation--z']) {
             if (!bc.rotation) bc.rotation = new THREE.Vector3();
-            bc.rotation.z = toRadians(viewer.dataAttr['bc--rotation--z']);
+            bc.rotation.z = Drupal.atomizer.base.toRadians(viewer.dataAttr['bc--rotation--z']);
           }
           viewer.producer.objectLoaded(bc);
 
@@ -251,9 +243,9 @@
       if (conf.object.rotation) {
         bc.rotation = new THREE.Vector3();
         bc.rotation.set(
-          (conf.object.rotation.x) ? toRadians(conf.object.rotation.x) : 0,
-          (conf.object.rotation.y) ? toRadians(conf.object.rotation.y) : 0,
-          (conf.object.rotation.z) ? toRadians(conf.object.rotation.z) : 0
+          (conf.object.rotation.x) ? Drupal.atomizer.base.toRadians(conf.object.rotation.x) : 0,
+          (conf.object.rotation.y) ? Drupal.atomizer.base.toRadians(conf.object.rotation.y) : 0,
+          (conf.object.rotation.z) ? Drupal.atomizer.base.toRadians(conf.object.rotation.z) : 0
         );
       }
       // Add the birkeland current to the scene.

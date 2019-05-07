@@ -28,7 +28,7 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
    *
    * @returns {*}
    */
-  var hoverObjects = function hoverObjects() {
+  var hoverObjects = function hoverObjects(mouse) {
     return [];
   };
 
@@ -37,8 +37,8 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
    *
    * @param event
    */
-  var hovered = function hovered(protons) {
-    return;
+  var mouseMove = function mouseMove(event, mouse) {
+//  return;
   };
 
   /**
@@ -53,12 +53,16 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
   var mouseUp = function mouseUp(event) {
     switch (event.which) {
       case 1:
-        event.preventDefault();
+//      event.preventDefault();
         break;
       case 3:
-        event.preventDefault();
+//      event.preventDefault();
         break;
     }
+  };
+
+  var mouseDown = function mouseDown(event) {
+//  event.preventDefault();
   };
 
 
@@ -100,9 +104,10 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
   return {
     createView: createView,
     setDefaults: setDefaults,
-    mouseUp: mouseUp,
     hoverObjects: hoverObjects,
-    hovered: hovered,
+    mouseUp: mouseUp,
+    mouseDown: mouseDown,
+    mouseMove: mouseMove,
     objectLoaded: objectLoaded,
     addObject: addObject,
   };

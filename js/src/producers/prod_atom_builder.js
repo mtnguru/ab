@@ -9,15 +9,14 @@
 
   Drupal.atomizer.prod_atom_builderC = function (_viewer) {
     let viewer = _viewer;
-    let mouseMode = 'electronsAdd';
     let atom;
     let $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
     let $atomInformation = $('.atom--information', viewer.context);
     let $atomProperties = $('.atom--properties', viewer.context);
 
     var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
-    var protonColor;
 
+    viewer.controls.mouseMode('electronsAdd');
 
     viewer.objects = [];
 
@@ -60,8 +59,8 @@
      *
      * @returns {*}
      */
-    var hoverObjects = function hoverObjects() {
-      switch (mouseMode) {
+    var hoverObjects = function hoverObjects(mouse) {
+      switch (mouse.mode) {
         case 'none':
           return null;
         case 'electronsAdd':
@@ -73,13 +72,15 @@
         case 'inner-faces':
           return atom.az.intersect.hoverInnerFaces;
         case 'outer-faces':
-          return atom.az.intersect.hoverOuterFaces;
+          return atom.az.ntersect.hoverOuterFaces;
       }
     };
 
-    const mouseUp = (event, distance) => viewer.dir_atom.mouseUp(event, distance, mouseMode);
+    const mouseUp   = (event, mouse) => viewer.dir_atom.mouseUp(event, mouse);
 
-    const mouseDown = (event, distance) => viewer.dir_atom.mouseDown(event, distance, {mouseMode, protonColor});
+    const mouseDown = (event, mouse) => viewer.dir_atom.mouseDown(event, mouse);
+
+    const mouseMove = (event, mouse) => viewer.dir_atom.mouseMove(event, mouse);
 
     /**
      * Create the view - add any objects to scene.
@@ -140,15 +141,16 @@
 
     const initMouse = () => {
       var $mouseBlock = $('#blocks--mouse-mode', viewer.context);
+      var mouse = viewer.controls.mouse;
       $protonsColor.addClass('az-hidden');
       if ($mouseBlock.length) {
-        mouseMode = $mouseBlock.find('input[name=mouse]:checked').val();
+        mouse.mode = $mouseBlock.find('input[name=mouse]:checked').val();
         // Add event listeners to mouse mode form radio buttons
         var $mouseRadios = $mouseBlock.find('#edit-mouse--wrapper input');
         $mouseRadios.click(function (event) {
           console.log('mode: ' + event.target.value);
-          mouseMode = event.target.value;
-          if (mouseMode == 'protonsColor') {
+          mouse.mode = event.target.value;
+          if (mouse.mode == 'protonsColor') {
             $protonsColor.removeClass('az-hidden');
           } else {
             $protonsColor.addClass('az-hidden');
@@ -158,7 +160,7 @@
         // Add event listeners to proton colors block
         // Set default color
         $mouseBlock.find('#proton-original-color').addClass('selected');
-        protonColor = 'original';
+        mouse.protonColor = 'original';
 
         var $colorRadios = $mouseBlock.find('.proton-color');
 
@@ -177,7 +179,7 @@
           $(this).addClass('selected');
           var $input = $(this).parent().parent().find('input');
           $input.prop('checked', true);
-          protonColor = $input.val();
+          mouse.protonColor = $input.val();
         });
       }
     };
@@ -201,9 +203,9 @@
 
       mouseUp,
       mouseDown,
+      mouseMove,
 
       intersect: () => atom.az.intersect,
-      hovered: (hovered) => viewer.dir_atom.hovered(mouseMode, hovered),
       hoverObjects: hoverObjects,
     };
   };
