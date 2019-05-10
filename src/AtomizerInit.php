@@ -166,6 +166,7 @@ class AtomizerInit {
         '#attributes' => [
           'class' => ['select-title'],
         ],
+        'pte_enable' => ['#markup' => '<i class="pte-enable fas fa-table"></i>'],
         'title' => ['#markup' => '<h2>Select Atom</h2>'],
         'close' => [
           '#type' => 'container',
@@ -174,12 +175,19 @@ class AtomizerInit {
           ],
         ],
       ],
-      'element_list' => [
+//    'pte' => ['#markup' => '<div class="pte-container">Periodic Table</div>'],
+      'element_list_wrapper' => [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['select-list'],
+          'class' => ['select-list-wrapper'],
         ],
-        'elements' => $list,
+        'element_list' => [
+          '#type' => 'container',
+          '#attributes' => [
+            'class' => ['select-list'],
+          ],
+          'elements' => $list,
+        ],
       ],
     ];
   }
@@ -264,7 +272,7 @@ class AtomizerInit {
     }
 
     // The objects for the periodic table is an array of elements
-    if ($atomizer_config['atomizerClass'] == 'ptable') {
+    if ($atomizer_config['atomizerClass'] == 'pte') {
       $objects = self::queryElements();
     }
 

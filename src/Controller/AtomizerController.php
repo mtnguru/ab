@@ -196,6 +196,7 @@ class AtomizerController extends ControllerBase {
     $data['link'] = render($link);
 
     $node = Node::load($data['conf']['nid']);
+    $data['element'] = $node->field_element->entity->label();
 
     // Render the node/atom using teaser atom_viewer mode.
     $data['atomName'] = $node->label();

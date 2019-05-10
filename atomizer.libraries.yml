@@ -56,13 +56,21 @@ atomizer-obfuscator:
 
 atomizer-atom-builder:
   js:
+    js/threejs/renderers/CSS3DRenderer.js: {}
     js/threejs/renderers/CSS2DRenderer.js: {}
+    js/src/az_pte.js: {}
+    js/src/dialogs/dialog_base.js: {}
+    js/src/dialogs/dialog_pte.js: {}
     js/src/directors/dir_atom.js: {}
     js/src/producers/prod_atom_builder.js: {}
 
 atomizer-atom-builder-obfuscator:
   js:
+    js/threejs/renderers/CSS3DRenderer.js: {}
     js/threejs/renderers/CSS2DRenderer.js: {}
+    js/min/az_pte.js: {}
+    js/min/dialogs/dialog_base.js: {}
+    js/min/dialogs/dialog_pte.js: {}
     js/min/directors/dir_atom.js: {}
     js/min/producers/prod_atom_builder.js: {}
 
@@ -70,10 +78,12 @@ atomizer-atom-builder-obfuscator:
 
 atomizer-atom-viewer:
   js:
+    js/src/az_pte.js: {}
     js/src/producers/prod_atom_viewer.js: {}
 
 atomizer-atom-viewer-obfuscator:
   js:
+    js/src/az_pte.js: {}
     js/min/producers/prod_atom_viewer.js: {}
 
 ############ Molecule Builder
@@ -114,19 +124,21 @@ atomizer-birkeland-obfuscator:
 
 ############ Periodic Table
 
-atomizer-ptable:
+atomizer-pte:
   js:
     js/threejs/renderers/CSS3DRenderer.js: {}
     js/threejs/renderers/CSS2DRenderer.js: {}
-    js/threejs/libs/tween.src.js: {}
-    js/src/az_ptable.js: {}
-    js/src/producers/prod_ptable.js: {}
+    js/threejs/libs/tween.min.js: {}
+    js/src/az_pte.js: {}
+    js/src/producers/prod_pte.js: {}
 
-atomizer-ptable-obfuscator:
+atomizer-pte-obfuscator:
   js:
     js/threejs/renderers/CSS3DRenderer.js: {}
-    js/min/az_ptable.js: {}
-    js/min/producers/prod_ptable.js: {}
+    js/threejs/renderers/CSS2DRenderer.js: {}
+    js/threejs/libs/tween.min.js: {}
+    js/min/az_pte.js: {}
+    js/min/producers/prod_pte.js: {}
 
 ############ Platonic Solids
 
