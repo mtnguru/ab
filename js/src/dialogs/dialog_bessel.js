@@ -37,9 +37,9 @@
 
         dialog.line = new Line(ctx);
         dialog.canvas.onmousemove = update;
-        window.addEventListener('resize', function() {
-          dialog.onResize();
-        });
+
+//      window.addEventListener('resize', dialog.onResize);
+
         dialog.canvas.onmouseleave = function (event) {
           let opacity = viewer.theme.get('particles-master--opacity');
           viewer.theme.applyControl('particles-master--opacity', opacity);
@@ -111,7 +111,7 @@
           }
           viewer.render();
         }
-      }
+      };
       dialog.img.src = '/sites/default/files/image/2019-01/bessel_graph.jpg';
     };
 
@@ -131,7 +131,6 @@
        dialog.canvas.height = dialog.img.height;
        dialog.line.y1 = imageSpecs.top * dialog.img.width;
        dialog.line.y2 = dialog.img.height - dialog.img.height * imageSpecs.bottom;
-       dialog.$dialog.resizeable({aspectRatio: imageSpecs.width / (imageSpecs.height + 28)});
     };
 
     dialog.onButtonClick = function () {

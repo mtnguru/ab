@@ -184,8 +184,8 @@
         $(input).prop('checked', true);
         viewer.birkeland.loadObject({nid: event.target.value});
       });
-      Drupal.atomizer.dialogs.getDialog(viewer,'bessel');
-//    viewer.besselGraph = Drupal.atomizer.dialogs.besselC(viewer);
+      Drupal.atomizer.dialogs.initDialog(viewer,'bessel');
+//    viewer.besselDialog = Drupal.atomizer.dialogs.besselC(viewer);
 
       if (viewer.atomizer.startAnimation == true) {
         setTimeout((event) => {
@@ -262,10 +262,10 @@
      * @param event
      */
     function buttonClicked(event) {
-      if (!viewer.besselGraph) {
-        viewer.besselGraph = Drupal.atomizer.besselDialogC(viewer);
+      if (!viewer.besselDialog) {
+        viewer.besselDialog = Drupal.atomizer.besselDialogC(viewer);
       } else {
-        viewer.besselGraph.toggle();
+        viewer.besselDialog.toggle();
       }
     }
 

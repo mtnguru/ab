@@ -3,7 +3,7 @@
 (function ($) { // Wrap in jQuery
 
   Drupal.atomizer.dialogs = {};
-  Drupal.atomizer.dialogs.getDialog = function (viewer, name) {
+  Drupal.atomizer.dialogs.initDialog = function (viewer, name) {
     if (!Drupal.atomizer.dialogs[name]) {
       Drupal.atomizer.dialogs[name] = Drupal.atomizer.dialogs[name + 'C'](viewer);
     }

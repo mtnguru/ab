@@ -1,5 +1,5 @@
 /**
- * @file - prod_ptable.js
+ * @file - prod_pCtable.js
  *
  * This is a 'producer' which allows users to build atoms.
  * This module provides functions to handle deleting/adding nuclets,
@@ -8,7 +8,7 @@
 
 (function ($) {
 
-  Drupal.atomizer.prod_ptableC = function (_viewer) {
+  Drupal.atomizer.prod_pteC = function (_viewer) {
     var viewer = _viewer;
 
     /**
@@ -94,7 +94,7 @@
     }
 
     var objectLoaded = function objectLoaded(bc) {
-      localStorage.setItem('atomizer_ptable_nid', bc.az.nid);
+      localStorage.setItem('atomizer_pte_nid', bc.az.nid);
       createIntersectLists();
       viewer.scene.az = {
         title: bc.az.title, // Use object title as scene title
@@ -107,14 +107,14 @@
      * Create the view - add any objects to scene.
      */
     var createView = function () {
-      // Start ptableC and animationC
-      viewer.ptable = Drupal.atomizer.ptableC(viewer);
+      // Start pteC and animationC
+      viewer.pte = Drupal.atomizer.pteC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
 
       // Load and display the periodic table.
-      var objectNid = localStorage.getItem('atomizer_ptable_nid');
-      objectNid = ((!objectNid || objectNid == 'undefined') ? 627 : objectNid);  // Loads a ptable content type
-      viewer.ptable.loadObject({nid: objectNid});
+      var objectNid = localStorage.getItem('atomizer_pte_nid');
+      objectNid = ((!objectNid || objectNid == 'undefined') ? 627 : objectNid);  // Loads a pte content type
+      viewer.pte.loadObject({nid: objectNid});
 
       // Set the ID of the scene select radio buttons - scene--select--610  // TODO Do I need scenes for the table?  Not really
       var $radios = $('#edit-scene-select .az-control-radios', viewer.context);
@@ -129,7 +129,7 @@
       // Click on the scene select radio button
       $radios.click(function (event) {
         if (event.target.tagName == 'INPUT') {
-          viewer.ptable.loadObject({nid: event.target.value});
+          viewer.pte.loadObject({nid: event.target.value});
 //        loadPtable(scene, event.target.value);
         }
       });
@@ -138,7 +138,7 @@
       $radios.siblings('label').click(function (event) {
         var input =$(this).siblings('input')[0];
         $(input).prop('checked', true);
-        viewer.ptable.loadObject({nid: event.target.value});
+        viewer.pte.loadObject({nid: event.target.value});
 //      loadPtable(scene, input.value);
       });
 
@@ -147,20 +147,21 @@
     var loadPtable = function loadPtable(filename) {
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadYml',
-        { component: 'ptable--select',
-          filepath: 'config/objects/ptable/' + filename + '.yml',
+        { component: 'pte--select',
+          filepath: 'config/objects/pte/' + filename + '.yml',
         },
-        ptableLoaded
+        pteLoaded
       );
     };
 
-    var ptableLoaded = function ptableLoaded(results) {
+    var pteLoaded = function pteLoaded(results) {
       var conf = results[0].ymlContents;
-      viewer.ptable.createScene(conf);
+      viewer.pte.createScene(conf);
     };
 
     // Initialize Event Handlers
 
+    /*
     var $mouseBlock = $('#blocks--mouse-mode', viewer.context);
     if ($mouseBlock.length) {
       mouse.mode = $mouseBlock.find('input[name=mouse]:checked').val();
@@ -171,6 +172,7 @@
         mouse.mode = event.target.value;
       });
     }
+    */
 
     return {
       createView: createView,

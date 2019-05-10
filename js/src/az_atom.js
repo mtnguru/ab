@@ -374,6 +374,7 @@
             atom.az.nid = result.data.conf.nid;
             atom.az.id = result.data.conf.id;
             atom.az.name = result.data.atomName;
+            atom.az.element = result.data.element;
             atom.az.title = result.data.atomTitle;
             atom.az.link = result.data.link;
             atom.az.conf = result.data.conf;

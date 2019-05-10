@@ -64,6 +64,9 @@
         case 'none':
           return null;
         case 'electronsAdd':
+          if (!atom.az.intersect.visibleParticles) {
+            console.log(`hoverObjects - atom.az.intersect.visibleProtons`)
+          }
           return atom.az.intersect.visibleParticles;
         case 'protonsAdd':
           return atom.az.intersect.optionalProtons;
@@ -89,6 +92,7 @@
       let ctx = viewer.canvas.getContext("2d");
       viewer.nuclet = Drupal.atomizer.nucletC(viewer);
       viewer.atom = Drupal.atomizer.atomC(viewer);
+      viewer.pte = Drupal.atomizer.pteC(viewer);
       viewer.atom_select = Drupal.atomizer.atom_selectC(viewer);
       viewer.shapes = Drupal.atomizer.shapesC(viewer);
       viewer.sprites = Drupal.atomizer.spritesC(viewer);
@@ -116,7 +120,10 @@
       viewer.producer.clearScene();
       localStorage.setItem('atomizer_builder_atom_nid', atom.az.nid);
       atom.az.id = "A1";
+
       viewer.dir_atom.objectLoaded(atom);
+      viewer.pte.setElementColor();
+      viewer.pte.setElementColor(atom.az.element.toLowerCase(),'color-green');
 
       if ($sceneName) {
         $sceneName.html(atom.az.title);
@@ -198,6 +205,7 @@
       getObject,
       addObject,
       clearScene,
+      createUniqueObjectKey: () => 'A1',
 
       explode,
 

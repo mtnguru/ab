@@ -200,7 +200,7 @@
           break;
 
         case 'dialog':
-          var dialog = Drupal.atomizer.dialogs.getDialog(viewer, args[0]);
+          var dialog = Drupal.atomizer.dialogs.initDialog(viewer, args[0]);
           dialog.toggle();
           break;
 

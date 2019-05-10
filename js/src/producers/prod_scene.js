@@ -21,6 +21,10 @@
     var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
     viewer.controls.mouseMode('electronsAdd');
 
+    /**
+     * deleteObject from scene and objects arraw
+     * @param key
+     */
     const deleteObject = (key) => {
       let object = viewer.objects[key];
       if (object) {
@@ -33,16 +37,26 @@
       }
     }
 
-    const createUniqueObjectName = (basename) => {
+    /**
+     * Create a unique object key
+     *
+     * @param basename
+     * @returns {string}
+     */
+    const createUniqueObjectKey = (basename) => {
       let num = 0;
       let name;
       do {
         name = `${basename.toLowerCase().replace(' ', '-')}-${++num}`;
       } while (viewer.objects[name]);
       return name;
-
     };
 
+    /**
+     * addObject to the viewer.objects array
+     *
+     * @param object
+     */
     const addObject = (object) => {
       viewer.objects[object.az.id] = object;
       viewer.scene.add(object.parent);
@@ -54,11 +68,17 @@
       // Calculate the difference in x and y.
       let x = 700 * (mouse.now.x - mouse.down.x);
       let y = 700 * (mouse.now.y - mouse.down.y);
-      mouse.object.parent.position.y = mouse.objectStartPosition.y + y;
-      if (event.ctrlKey) {
+      if (event.ctrlKey) {        // Y/Z plane
         mouse.object.parent.position.z = mouse.objectStartPosition.z - x;
-      } else {
+        mouse.object.parent.position.y = mouse.objectStartPosition.y + y;
+      }
+      else if (event.shiftKey) {  // X/Z plane
         mouse.object.parent.position.x = mouse.objectStartPosition.x - x;
+        mouse.object.parent.position.z = mouse.objectStartPosition.z + y;
+      }
+      else {                      // X/Y plane
+        mouse.object.parent.position.x = mouse.objectStartPosition.x - x;
+        mouse.object.parent.position.y = mouse.objectStartPosition.y + y;
       }
       viewer.dir_molecule.setPositionSliders(mouse.object);
       console.log(`mouse: ${mouse.now.x} ${mouse.now.y}`);
@@ -406,7 +426,7 @@
       createView,
       objectLoaded,
 
-      createUniqueObjectName,
+      createUniqueObjectKey,
       getObject,
       addObject,
       deleteObject,

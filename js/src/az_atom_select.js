@@ -19,6 +19,7 @@
     const $atomSelectClose = $wrapper.find('.az-close');
     const $isotopes = $wrapper.find('.isotopes .isotope');
     const $atoms = $wrapper.find('.default-isotope');
+    const $pteEnable = $wrapper.find('.pte-enable');
 
     let atomListSequence = [];
     let selectedNid;
@@ -40,6 +41,15 @@
     // Set up event handler when user closes atom-select button
     $('.atom--select-close').click(() => {
       $(viewer.context).removeClass('select-atom-enabled');
+    });
+
+    // User clicked on PTE enable/disable button - popup or close the pte dialog.
+    $pteEnable.click((event) => {
+      if (!viewer.pteDialog) {
+        viewer.pteDialog = Drupal.atomizer.pteDialogC(viewer);
+      } else {
+        viewer.pteDialog.toggle();
+      }
     });
 
     /**
@@ -72,7 +82,7 @@
         nid = (nid) ? nid : $(event.target).data('nid');
         viewer.atom_select.setSelectedAtom(nid);
         let name = event.target.textContent;
-        let id = viewer.producer.createUniqueObjectName(name);
+        let id = viewer.producer.createUniqueObjectKey(name);
         viewer.atom.loadObject({
           nid,
           id,
@@ -88,9 +98,6 @@
 
       $atomSelectEnable.click((event) => {
         event.preventDefault();
-        if (!showDialog) {
-          $wrapper.addClass('az-hidden');
-        }
         if ($wrapper.hasClass('az-hidden')) {
           $wrapper.removeClass('az-hidden');
         } else {
@@ -156,6 +163,7 @@
 
     addIsotopeEnableEventListeners();
     addSelectAtomEventListeners();
+//  viewer.pte.create($('#select-atom-wrapper .pte-container', viewer.context));
 
     /**
      * Interface to this atom_selectC.
