@@ -8,7 +8,7 @@
 
   Drupal.atomizer.atomC = function (_viewer) {
 
-    var viewer = _viewer;
+    let viewer = _viewer;
 
     /**
      * Align an object to an internal axis (x, y or z) and then align that axis
@@ -91,15 +91,15 @@
       // Activate/Deactivate the neutral ending protons.
 
       // Neutral ending protons
-      var np = (side == '0') ? ['P12','P13','P14','P15'] : ['P16','P17','P18','P19'];
-      for (var p = 0; p < np.length; p++) {
+      let np = (side == '0') ? ['P12','P13','P14','P15'] : ['P16','P17','P18','P19'];
+      for (let p = 0; p < np.length; p++) {
         nuclet.az.protons[np[p]].material.visible = show;
         nuclet.az.protons[np[p]].az.visible = show;
         nuclet.az.protons[np[p]].az.active = activate;
       }
 
       // Neutrons
-      for (var n in nuclet.az.neutrons) {
+      for (let n in nuclet.az.neutrons) {
         if (nuclet.az.neutrons.hasOwnProperty(n)) {
           if (n.charAt(1) == side) {
             nuclet.az.neutrons[n].material.visible = false;
@@ -111,11 +111,11 @@
 
       // Electrons
       if (!activate && nuclet.az.nelectrons) {
-        for (var e in nuclet.az.nelectrons) {
+        for (let e in nuclet.az.nelectrons) {
           if (nuclet.az.nelectrons.hasOwnProperty(e)) {
-            var deleteIt = false;
+            let deleteIt = false;
             // Check to see if any of the protons for this electron are neutral ending protons, if so delete it.
-            for (var p = 0; p < np.length; p++) {
+            for (let p = 0; p < np.length; p++) {
               if (np[p] in nuclet.az.nelectrons[e].az.vertices) {
                 deleteIt = true;
               }
@@ -159,13 +159,13 @@
       };
 
       // Find the parent nuclet
-      var parent = atom.az.nuclets[id.slice(0, -1)];
+      let parent = atom.az.nuclets[id.slice(0, -1)];
 
       // Deactivate the neutral protons on the parent nuclet
       activateNeutralParticles(id.charAt(id.length-1), parent, false, false);
 
       // Create the new nuclet
-      var nucletOuterShell = createNuclet(atom, id, conf, parent);
+      let nucletOuterShell = createNuclet(atom, id, conf, parent);
       updateValenceRings(atom);
       updateParticleCount(atom);
       return nucletOuterShell.children[0].children[0];
@@ -179,7 +179,7 @@
     function deleteNuclet(nuclet) {
       let id = nuclet.az.id;
       let atom = nuclet.az.atom;
-      var parentNuclet = nuclet.az.atom.az.nuclets[id.slice(0, -1)];
+      let parentNuclet = nuclet.az.atom.az.nuclets[id.slice(0, -1)];
 
       viewer.nuclet.deleteNuclet(nuclet);
 
@@ -206,21 +206,21 @@
      */
     function createNuclet(atom, id, nucletConf, parent) {
       // Create Nuclet - get references to nuclet and shells
-      var nucletOuterShell = viewer.nuclet.createNuclet(id, nucletConf);
-      var nucletInnerShell = nucletOuterShell.children[0];
-      var nuclet = nucletOuterShell.children[0].children[0];
+      let nucletOuterShell = viewer.nuclet.createNuclet(id, nucletConf);
+      let nucletInnerShell = nucletOuterShell.children[0];
+      let nuclet = nucletOuterShell.children[0].children[0];
       nuclet.az.attachAngle = nucletConf.attachAngle;
       nuclet.az.atom = atom;
       parent.add(nucletOuterShell);
 
       // Rotate and position the nuclet onto it's parents grow point.
       if (nuclet.az.id != 'N0') {
-        var side = nuclet.az.id.substr(nuclet.az.id.length - 1);
-        var parentId = nuclet.az.id.slice(0, -1);
-        var growNuclet = atom.az.nuclets[parentId];
+        let side = nuclet.az.id.substr(nuclet.az.id.length - 1);
+        let parentId = nuclet.az.id.slice(0, -1);
+        let growNuclet = atom.az.nuclets[parentId];
         activateNeutralParticles( side, growNuclet, false, false );
-        var growId;
-        var attachId;
+        let growId;
+        let attachId;
         if (side == 0) {  // left side
           growId = 'P0';
 
@@ -243,31 +243,31 @@
 //        nucletInnerShell.initial_rotation_y = -162;
         }
 
-        var growProton = growNuclet.az.protons[growId];
-        var growPt = growProton.position.clone();
+        let growProton = growNuclet.az.protons[growId];
+        let growPt = growProton.position.clone();
 
         // Create normalized axis of vector to rotate to.
         //  The following 4 lines adjust the angle, position and length of the grow axis.
-//      var angleOrigin = new THREE.Vector3(0, 31, 0);
-//      var origin = new THREE.Vector3(0, 13, 0);
+//      let angleOrigin = new THREE.Vector3(0, 31, 0);
+//      let origin = new THREE.Vector3(0, 13, 0);
 //      growPt.y = growPt.y + 11;
-//      var attachScale = 2.28;
+//      let attachScale = 2.28;
 
-        var angleOrigin = new THREE.Vector3(0, 28, 0);
-        var origin = new THREE.Vector3(0, 6, 0);
+        let angleOrigin = new THREE.Vector3(0, 28, 0);
+        let origin = new THREE.Vector3(0, 6, 0);
         growPt.y = growPt.y + 11;
-        var attachScale;
+        let attachScale;
         if (growNuclet.az.conf.state == 'initial') {
           attachScale = 2.08;
         } else {
           attachScale = 2.37;
         }
 
-        var attachVertice = nuclet.az.protonGeometry.vertices[attachId.replace('P', '')];
-        var initialAxis = attachVertice.clone().normalize();
-        var alignAxis = new THREE.Vector3(0, 1, 0);
-        var attachAxis = angleOrigin.clone().sub(growPt);
-        var attachLen = attachAxis.length();
+        let attachVertice = nuclet.az.protonGeometry.vertices[attachId.replace('P', '')];
+        let initialAxis = attachVertice.clone().normalize();
+        let alignAxis = new THREE.Vector3(0, 1, 0);
+        let attachAxis = angleOrigin.clone().sub(growPt);
+        let attachLen = attachAxis.length();
         attachAxis.normalize();
 
         // Align the axis through the attach vertice to the y axis.
@@ -287,7 +287,7 @@
         );
 
         // Move the nuclet to the correct spot on the grow point axis.
-        var attachPt = origin.clone().add(attachAxis.multiplyScalar(-attachLen * attachScale));
+        let attachPt = origin.clone().add(attachAxis.multiplyScalar(-attachLen * attachScale));
         nucletOuterShell.position.set(attachPt.x, attachPt.y, attachPt.z);
 
         // Set the initial y rotation
@@ -295,10 +295,10 @@
 
         // Add attach Axis Lines
         nuclet.az.attachPt = attachPt;
-        var opacity = viewer.theme.get('attachLines--opacity');
-        var lineGeometry = new THREE.Geometry();
-        var constants = viewer.nuclet.getConstants();
-        var lineMaterial = new THREE.LineBasicMaterial({
+        let opacity = viewer.theme.get('attachLines--opacity');
+        let lineGeometry = new THREE.Geometry();
+        let constants = viewer.nuclet.getConstants();
+        let lineMaterial = new THREE.LineBasicMaterial({
           color: viewer.theme.get('attachLines--color'),
           opacity: opacity,
           transparent: (opacity < viewer.nuclet.getConstants().transparentThresh),
@@ -307,7 +307,7 @@
         });
         lineGeometry.vertices[0] = attachPt;
         lineGeometry.vertices[1] = new THREE.Vector3(0,0,0);
-        var lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+        let lines = new THREE.LineSegments(lineGeometry, lineMaterial);
         lines.name = 'attachLines';
         growNuclet.add(lines);
       }
@@ -315,7 +315,7 @@
       atom.az.nuclets[nuclet.az.id] = nuclet;
 
       if (nucletConf.nuclets) {
-        for (var id in nucletConf.nuclets) {
+        for (let id in nucletConf.nuclets) {
           createNuclet(atom, id, nucletConf.nuclets[id], nuclet);
           activateNeutralParticles(id.charAt(id.length-1), nuclet, false, false);
         }
@@ -328,8 +328,8 @@
      *
      * @param nid
      */
-    var loadObject = function loadObject (conf, callback) {
-      var loadCallback = callback;
+    let loadObject = function loadObject (conf, callback) {
+      let loadCallback = callback;
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/loadAtom',
         { conf: conf },
@@ -353,8 +353,8 @@
         // Don't use javascript for it.
         // Query all atoms using the atom query thing
         //   Save the atom
-        for (var i = 0; i < results.length; i++) {
-          var result = results[i];
+        for (let i = 0; i < results.length; i++) {
+          let result = results[i];
           if (result.command == 'loadAtomCommand') {
 // @TODO - move this to az_atom_select.js - needs rewriting
 //          if ($atoms.length > 0) {
@@ -362,7 +362,7 @@
 //            $('.atom-select-' + result.data.nid, viewer.context).addClass('atom-active');
 //          }
 
-            var $save = $('.atom--save a', viewer.context);
+            let $save = $('.atom--save a', viewer.context);
             if ($save.length) {
               $save.replaceWith(result.data.link);
               if (Drupal.attachBehaviors) {
@@ -439,7 +439,7 @@
      * @param atomConf
      * @returns {THREE.Group|*}
      */
-    var createAtom = function createAtom (atomConf) {
+    const createAtom = function createAtom (atomConf) {
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
       let atom = new THREE.Object3D();
       atom.name = 'atom';
@@ -448,7 +448,7 @@
       updateValenceRings(atom);
       updateParticleCount(atom);
 
-      var explode = viewer.theme.get('attachLines--scale');
+      let explode = viewer.theme.get('attachLines--scale');
       if (explode > 1) {
         explodeAtom(atom, explode);
       }
@@ -461,15 +461,15 @@
      * @param atom
      */
     deleteObject = function deleteObject (atom) {
-      for (var n in atom.az.nuclets) {
+      for (let n in atom.az.nuclets) {
         viewer.nuclet.deleteNuclet(atom.az.nuclets[n]);
       }
       viewer.scene.remove(atom);
     };
 
-    var explodeAtom = function explodeAtom(atom, scale) {
-      for (var n in atom.az.nuclets) {
-        var nuclet = atom.az.nuclets[n];
+    const explodeAtom = function explodeAtom(atom, scale) {
+      for (let n in atom.az.nuclets) {
+        let nuclet = atom.az.nuclets[n];
         if (nuclet.az.id !== 'N0') {
           nuclet.parent.parent.position.set(
             nuclet.az.attachPt.x * scale,
@@ -484,7 +484,7 @@
       highlight = highlight || false;
       atom.az.highlight = highlight;
       /*
-      for (var id in nuclet.az.protons) {
+      for (let id in nuclet.az.protons) {
         if (nuclet.az.protons.hasOwnProperty(id)) {
           setProtonColor(nuclet.az.protons[id], null, highlight);
         }
@@ -496,17 +496,17 @@
      * Check all valence rings and color active/inactive rings - count total Active and update atom information.
      */
     function updateValenceRings(atom) {
-      var numActive = 0;
-      var activeColor = viewer.theme.get('valence-active--color');
-      var inactiveColor = viewer.theme.get('valence-inactive--color');
-      for (var n in atom.az.nuclets) {
-        var nuclet = atom.az.nuclets[n];
+      let numActive = 0;
+      let activeColor = viewer.theme.get('valence-active--color');
+      let inactiveColor = viewer.theme.get('valence-inactive--color');
+      for (let n in atom.az.nuclets) {
+        let nuclet = atom.az.nuclets[n];
         if (nuclet.az.state === 'initial' || nuclet.az.state === 'final') {
-          for (var r in nuclet.az.rings) {
+          for (let r in nuclet.az.rings) {
             if (!nuclet.az.rings.hasOwnProperty(r)) continue;
-            var ring = nuclet.az.rings[r];
-            var gid = nuclet.az.id + ring.az.grow;
-            var color = activeColor;
+            let ring = nuclet.az.rings[r];
+            let gid = nuclet.az.id + ring.az.grow;
+            let color = activeColor;
             if (atom.az.nuclets[nuclet.az.id + ring.az.grow] ||
               (nuclet.az.protons[ring.az.lock[0]].az.visible && nuclet.az.protons[ring.az.lock[1]].az.visible)) {
               color = inactiveColor;
@@ -523,17 +523,17 @@
      * Show the number of protons and electrons
      */
     function updateParticleCount(atom) {
-      var numProtons = 0;
-      var numElectrons = 0;
-      var numNuclets = 0;
-      var numUnclassified = 0;
-      for (var n in atom.az.nuclets) {
+      let numProtons = 0;
+      let numElectrons = 0;
+      let numNuclets = 0;
+      let numUnclassified = 0;
+      for (let n in atom.az.nuclets) {
         numNuclets++;
-        var nuclet = atom.az.nuclets[n];
+        let nuclet = atom.az.nuclets[n];
 
         // Add protons
-        for (var p in nuclet.az.protons) {
-          var proton = nuclet.az.protons[p];
+        for (let p in nuclet.az.protons) {
+          let proton = nuclet.az.protons[p];
           if (!proton.az) {
             numUnclassified++;
           }
@@ -543,9 +543,9 @@
         }
 
         // Add neutrons
-        for (var p in nuclet.az.neutrons) {
+        for (let p in nuclet.az.neutrons) {
           if (nuclet.az.neutrons.hasOwnProperty(p)) {
-            var neutron = nuclet.az.neutrons[p];
+            let neutron = nuclet.az.neutrons[p];
             if (neutron.az.visible) {
               numProtons++;
             }
@@ -553,7 +553,7 @@
         }
 
         // Add NElectrons
-        for (var p in nuclet.az.nelectrons) {
+        for (let p in nuclet.az.nelectrons) {
           numElectrons++;
         }
       }
@@ -565,7 +565,7 @@
     /**
      * Cycle through all atoms, calculate their BE, save it to Drupal.
      */
-    var running = false;
+    let running = false;
     function calculateAllBindingEnergies(event) {
       if (running) {
         running = false;
@@ -573,20 +573,20 @@
       } else {
         running = true;
         $(event.target).addClass('az-selected');
-        var $isotopes = $('.isotope', viewer.context);
-        var lastIsotope = $isotopes.length;
-        var isotope = 0;
+        let $isotopes = $('.isotope', viewer.context);
+        let lastIsotope = $isotopes.length;
+        let isotope = 0;
 
-        var $isotope = $($isotopes[isotope]);
-        var nid = $isotope.find('.atom-name').data('nid');
+        let $isotope = $($isotopes[isotope]);
+        let nid = $isotope.find('.atom-name').data('nid');
         loadObject ({nid: nid}, displayAtom);
       }
 
       function displayAtom() {
         console.log('Save Atom ' + nid);
 
-        var be_sam_nuclets = $('.atom--be-sam-nuclets--value',viewer.context).html();
-        var be_sam_nuclets_perc = $('.atom--be-sam-nuclets-perc--value',viewer.context).html();
+        let be_sam_nuclets = $('.atom--be-sam-nuclets--value',viewer.context).html();
+        let be_sam_nuclets_perc = $('.atom--be-sam-nuclets-perc--value',viewer.context).html();
         // Save the binding energy to Drupal
         if (be_sam_nuclets != '0') {
           Drupal.atomizer.base.doAjax(
@@ -616,7 +616,7 @@
      * @param nuclet
      * @param face
      */
-    var addProton = function addProton (nuclet, face) {
+    const addProton = function addProton (nuclet, face) {
       // Ok, so we have our first proton to add.  We are adding it to an existing nuclet.
     };
 
@@ -625,8 +625,8 @@
      *
      * @param response
      */
-    var savedYml = function (response) {
-      var select = $('.theme--selectyml', viewer.context)[0].querySelector('select');
+    let savedYml = function (response) {
+      let select = $('.theme--selectyml', viewer.context)[0].querySelector('select');
       // Remove current options
     }
 
@@ -635,7 +635,7 @@
      *
      * @param controls
      */
-    var saveYml = function (controls) {
+    const saveYml = function (controls) {
       // Verify they entered a name.  If not popup an alert. return
       currentSet.name = controls.name;
       currentSet.filename = controls.filename;
@@ -654,7 +654,7 @@
      *
      * @param controls
      */
-    var overwriteYml = function (controls) {
+    const overwriteYml = function (controls) {
       // Verify they entered a name.  If not popup an alert. return
       Drupal.atomizer.base.doAjax(
         '/ajax-ab/saveYml',
@@ -672,11 +672,11 @@
      *
      * @param id
      */
-    var buttonClicked = function buttonClicked(event) {
+    const buttonClicked = function buttonClicked(event) {
 
       // User pressed button to view binding energies
       if (event.target.id == 'atom--be-button') {
-        var $bindingEnergy = $('.binding-energy-wrapper', viewer.context);
+        let $bindingEnergy = $('.binding-energy-wrapper', viewer.context);
         if ($(event.target).hasClass('az-selected')) {
           $(event.target).removeClass('az-selected');
           $bindingEnergy.addClass('az-hidden');
@@ -708,8 +708,8 @@
        * @returns {string}
        */
       function addNucletToStructure(id, spacing) {
-        var nuclet = atom.az.nuclets[id];
-        var out = spacing + id + ':\n';
+        let nuclet = atom.az.nuclets[id];
+        let out = spacing + id + ':\n';
         spacing += '  ';
         out += spacing + 'state: ' + nuclet.az.state + '\n';
         if (id !== 'N0') {
@@ -718,10 +718,10 @@
 
         // Add the protons.
         if (nuclet.az.protons) {
-          var nl = 0;
-          for (var p in nuclet.az.protons) {
+          let nl = 0;
+          for (let p in nuclet.az.protons) {
             if (nuclet.az.protons.hasOwnProperty(p)) {
-              var proton = nuclet.az.protons[p];
+              let proton = nuclet.az.protons[p];
               if (proton.az.active && proton.az.visible) {
                 if (nl++ == 0) {
                   out += spacing + 'protons:\n';
@@ -739,7 +739,7 @@
 
         // Add the neutrons.
         nl = 0;
-        for (var e in nuclet.az.neutrons) {
+        for (let e in nuclet.az.neutrons) {
           if (nuclet.az.neutrons.hasOwnProperty(e) && nuclet.az.neutrons[e].az.visible) {
             out += (nl++ == 0) ? spacing + 'neutrons: [' : ', ';
             out += nuclet.az.neutrons[e].az.id;
@@ -750,16 +750,16 @@
         // Add the nelectrons.
         if (nuclet.az.nelectrons) {
           nl = 0;
-          for (var e in nuclet.az.nelectrons) {
+          for (let e in nuclet.az.nelectrons) {
             if (nuclet.az.nelectrons.hasOwnProperty(e)) {
-              var electron = nuclet.az.nelectrons[e];
+              let electron = nuclet.az.nelectrons[e];
               if (nl++ == 0) {
                 out += spacing + 'electrons:\n';
               }
-              var num = (nl < 10) ? '0' + nl : nl;
+              let num = (nl < 10) ? '0' + nl : nl;
               out += spacing + '  E' + num + ': {protons: [';
-              var np = 0;
-              for (var v = 0; v < electron.az.vertices.length; v++) {
+              let np = 0;
+              for (let v = 0; v < electron.az.vertices.length; v++) {
                 if (np++ != 0) out += ', ';
                 out += electron.az.vertices[v];
               }
@@ -769,8 +769,8 @@
         }
 
         // Recursively add the children nuclets.
-        var grow0 = atom.az.nuclets[id + '0'];
-        var grow1 = atom.az.nuclets[id + '1'];
+        let grow0 = atom.az.nuclets[id + '0'];
+        let grow1 = atom.az.nuclets[id + '1'];
         if (grow0 || grow1) {
           out += spacing + 'nuclets:\n';
           if (grow0) { out += addNucletToStructure(id + '0', spacing + '  '); }
@@ -779,6 +779,7 @@
         return out;
       }
 
+      // Start with the N0 nuclet, build yml text recursively.
       return addNucletToStructure('N0', '');
     }
 
@@ -794,50 +795,52 @@
      */
     Drupal.behaviors.atomizer_atom = {
       attach: function (context, settings) {
-        // If this is the node-atom-form being opened then fill in the atomic structure field.
-        var $nodeForm = $('.node-atom-form, .node-atom-edit-form');
+
+        // If this is the node-atom-form being opened then automatcially fill in:
+        // Atomic Structure field, #protons, #electrons, be-sam-nuclets, be-sam-nuclets-perc
+        let $nodeForm = $('.node-atom-form, .node-atom-edit-form');
         if ($(context).hasClass('node-atom-edit-form') || $(context).hasClass('node-atom-form')) {
 
-          var $textarea = $nodeForm.find('.field--name-field-atomic-structure textarea');
+          let $textarea = $nodeForm.find('.field--name-field-atomic-structure textarea');
           let atom = viewer.producer.getObject("A1");
           $textarea.val(extractStructure(atom));
 
-          var protons = $('.atom--num-protons--value').html();
+          let protons = $('.atom--num-protons--value').html();
           $nodeForm.find('.field--name-field__protons input').val(protons);
 
-          var electrons = $('.atom--num-electrons--value').html();
+          let electrons = $('.atom--num-electrons--value').html();
           $nodeForm.find('.field--name-field__electrons input').val(electrons);
 
-          var be_sam_nuclets = $('.atom--be-sam-nuclets--value').html();
+          let be_sam_nuclets = $('.atom--be-sam-nuclets--value').html();
           $nodeForm.find('.field--name-field-be-sam-nuclets input').val(be_sam_nuclets);
 
-          var be_sam_nuclets_perc = $('.atom--be-sam-nuclets-perc--value').html().replace('%','');
+          let be_sam_nuclets_perc = $('.atom--be-sam-nuclets-perc--value').html().replace('%','');
           $nodeForm.find('.field--name-field-be-sam-nuclets- input').val(be_sam_nuclets_perc);
         }
       }
     };
 
     /**
-     * Interface to this atomC.
+     * Interface to atomC.
      */
     return {
-      addNuclet: addNuclet,
-      addProton: addProton,
-      deleteNElectron: deleteNElectron,
-      buttonClicked: buttonClicked,
-      changeNucletState: changeNucletState,
-      changeNucletAngle: changeNucletAngle,
-      createAtom: createAtom,
-      deleteNuclet: deleteNuclet,
-      explodeAtom: explodeAtom,
-      highlight: highlight,
-      getNuclet: getNuclet,
-      loadObject: loadObject,
-      deleteObject: deleteObject,
-      overwriteYml: overwriteYml,
-      saveYml: saveYml,
-      updateValenceRings: updateValenceRings,
-      updateParticleCount: updateParticleCount
+      addNuclet,
+      addProton,
+      deleteNElectron,
+      buttonClicked,
+      changeNucletState,
+      changeNucletAngle,
+      createAtom,
+      deleteNuclet,
+      explodeAtom,
+      highlight,
+      getNuclet,
+      loadObject,
+      deleteObject,
+      overwriteYml,
+      saveYml,
+      updateValenceRings,
+      updateParticleCount,
     };
   };
 

@@ -843,7 +843,7 @@
     }
 
     /**
-     * Set Default values for any forms.
+     * Set Default values for forms.
      */
     function setDefaults() {
       var userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');

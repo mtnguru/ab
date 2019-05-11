@@ -34,24 +34,6 @@
     var protonGeometry = null;
     var electronGeometry = null;
 
-    /*
-     computeFaceNormals: function () {
-     var cb = new THREE.Vector3(), ab = new THREE.Vector3();
-     for ( var f = 0, fl = this.faces.length; f < fl; f ++ ) {
-     var face = this.faces[ f ];
-
-     var vA = this.vertices[ face.a ];
-     var vB = this.vertices[ face.b ];
-     var vC = this.vertices[ face.c ];
-
-     cb.subVectors( vC, vB );
-     ab.subVectors( vA, vB );
-     cb.cross( ab );
-     cb.normalize();
-     face.normal.copy( cb );
-     }
-     } */
-
     /**
      * Create the axis lines for a nuclet.
      *
