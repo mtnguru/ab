@@ -31,7 +31,7 @@
       // Create the wrapper for this dialog.
       this.elements.wrapper = document.createElement('DIV');
       this.elements.wrapper.id = settings.id.toLowerCase().replace(' ', '-');
-      this.elements.wrapper.classList.add(settings.class);
+      this.elements.wrapper.classList.add(...settings.class);
 //    this.elements.wrapper.tabIndex = 0;
 //    this.elements.wrapper.contentEditable = true;
       document.querySelector(settings.containerSelector).appendChild(this.elements.wrapper);
@@ -91,7 +91,11 @@
 
       // Make the dialog draggable.
       if (settings['draggable']) {
-        $dialog.draggable();
+        $dialog.draggable({
+          drag: function(){
+            $(this).addClass("inmotion");
+          }
+        });
       }
 
       // Set the zIndex.

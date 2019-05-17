@@ -17,14 +17,94 @@
     }
     const $atomSelectEnable = $('#atom-select-enable, #molecule--addAtom', viewer.context);
     const $atomSelectClose = $wrapper.find('.az-close');
-    const $isotopes = $wrapper.find('.isotopes .isotope');
-    const $atoms = $wrapper.find('.default-isotope');
-    const $pteEnable = $wrapper.find('.pte-enable');
+    let $isotopes;
+    const $pteEnable = $wrapper.find('.pte-enable, .sam-enable');
 
-    let atomListSequence = [];
-    let selectedNid;
+    let elements = {};
+    let $atoms;
+    let atomListSequence = [];   // List of atoms so we can step through them
     let selectedIndex = 0;
+    let selectedNid;
     let includeIsotopes = false;
+
+    const createSelectList = (conf) => {
+      Drupal.atomizer.base.doAjax(
+        '/ajax-ab/loadAtomList',
+        { conf: conf },
+        doCreateSelectList
+      );
+    };
+
+    const doCreateSelectList = (results) => {
+      let html = '';
+      for (let i = 0; i < results.length; i++) {
+        if (results[i].command == 'loadAtomListCommand') {
+          elements = results[i].data.list;
+          for (let e in elements) {
+            let element = elements[e];
+            if (element.num_isotopes == 0) continue;
+
+            html += '<div class="select-item-wrapper">\n';
+
+            // Create the element div
+            html += `
+              <div class="default-isotope stability-${element.stability.toLowerCase()}">
+                <span class="atomic-number">${element.atomic_number}</span>
+                <span class="atom-title ${element.stability.toLowerCase()}">
+                  <a href="#" class="atom-name select-item-name nid-${element.default_atom_nid}"
+                    data-nid="${element.default_atom_nid}"
+                    data-stability="${element.stability.toLowerCase()}"
+                  >
+                    <span class="symbol">${element.symbol}</span>
+                    <span class="title">${element.name}</span>
+                  </a>
+                </span>
+                <span class="num-isotopes az-closed expand">${element.num_isotopes}</span>
+              </div>
+              
+              <div class="isotopes az-closed" title="Isotopes">
+                <ul class="isotope-list">
+            `;
+
+            // Add the isotope list
+            for (let i = 0; i < element.isotopes.length; i++) {
+              let isotope = element.isotopes[i];
+              html += `
+                <li class="isotope not-default">
+                  <a href="#" class="atom-name nid-${isotope.nid}"
+                     data-nid="${isotope.nid}"
+                     data-stability="${isotope.name.toLowerCase()}"
+                  >
+                    ${isotope.title}
+                  </a>
+                </li>
+              `;
+            } // for each isotope
+
+            // Close the isotope list elements
+            html += `
+                  </ul>
+                </div>
+              </div>
+            `;
+          } // for each element
+
+          $('#select-atom-list').html(html);
+
+          $atoms =    $wrapper.find('.default-isotope');
+          $isotopes = $wrapper.find('.isotopes .isotope');
+
+          // Add the event listeners.
+          addIsotopeEnableEventListeners();
+          addSelectAtomEventListeners();
+
+
+        } // if loadAtomListCommand
+      } // for each ajax response item
+
+//  viewer.pte.create($('#select-atom-wrapper .pte-container', viewer.context));
+
+    };
 
     /**
      * User pressed a button on the main form - act on it.
@@ -45,8 +125,9 @@
 
     // User clicked on PTE enable/disable button - popup or close the pte dialog.
     $pteEnable.click((event) => {
+      viewer.pte.setType($(event.target).data('type'));
       if (!viewer.pteDialog) {
-        viewer.pteDialog = Drupal.atomizer.pteDialogC(viewer);
+        viewer.pteDialog = Drupal.atomizer.pteDialogC(viewer, elements);
       } else {
         viewer.pteDialog.toggle();
       }
@@ -112,19 +193,12 @@
     }
 
     function buildList() {
-
       // If the list doesn't exist then build it.
       if (atomListSequence.length == 0) {
         // Extract the list of atoms from the html
-        for (let atom of $atoms) {
-//        let atom = $atoms[key];
-          let nid = $(atom).find('.atom-name').data('nid');
-          atomListSequence.push(nid);
-//        atomList[`A${nid}`] = {
-//          nid: $(atom).data('nid'),
-//          name: atom.text,
-//          stability: $(atom).data('stability'),
-//        };
+        for (let e in elements) {
+          let element = elements[e];
+          atomListSequence.push(element.default_atom_nid);
         }
       }
     }
@@ -154,27 +228,30 @@
       selectedNid = atomNid;
       selectedIndex = atomListSequence.indexOf(selectedNid);
 
-      $atoms.removeClass('selected');
-      $isotopes.removeClass('selected');
-
-      $atoms.find(`.nid-${atomNid}`).parents('.default-isotope').addClass('selected');
-      $isotopes.find(`.nid-${atomNid}`).parent('.isotope').addClass('selected');
+      if ($atoms) {
+        $atoms.removeClass('selected');
+        $atoms.find(`.nid-${atomNid}`).parents('.default-isotope').addClass('selected');
+      }
+      if ($isotopes) {
+        $isotopes.removeClass('selected');
+        $isotopes.find(`.nid-${atomNid}`).parent('.isotope').addClass('selected');
+      }
+      console.log(`setSelectedAtom ${atomNid}`);
     };
 
-    addIsotopeEnableEventListeners();
-    addSelectAtomEventListeners();
-//  viewer.pte.create($('#select-atom-wrapper .pte-container', viewer.context));
+    createSelectList({});
 
     /**
      * Interface to this atom_selectC.
      */
     return {
-      buttonClicked: buttonClicked,
-      getSelectedAtom: getSelectedAtom,
-      getNextAtom: getNextAtom,
-      getPreviousAtom: getPreviousAtom,
-      setSelectedAtom: setSelectedAtom,
-      setIncludeIsotopes: setIncludeIsotopes = (include) => {
+      createSelectList,
+      buttonClicked,
+      getSelectedAtom,
+      getNextAtom,
+      getPreviousAtom,
+      setSelectedAtom,
+      setIncludeIsotopes: (include) => {
         includeIsotopes = include;
         buildList();
       }

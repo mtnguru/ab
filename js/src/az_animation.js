@@ -120,19 +120,25 @@
           case 'cycleatoms':
             if (increment) {
               if (direction == FORWARD) {
+                console.log(`applyTimer::getNextAtom ${currentAtom}`);
                 currentAtom = viewer.atom_select.getNextAtom();
               } else {
+                console.log(`applyTimer::getNextAtom ${currentAtom}`);
                 currentAtom = viewer.atom_select.getPreviousAtom();
               }
             }
             else {
+              console.log(`applyTimer::getSelectedAtom ${currentAtom}`);
               currentAtom = viewer.atom_select.getSelectedAtom();
             }
 
             console.log(`applyTimer: ${currentAtom}`);
             pauseAnimation();
             viewer.atom_select.setSelectedAtom(currentAtom);
-            viewer.atom.loadObject({nid: currentAtom}, function (object) {
+            viewer.atom.loadObject({
+              nid: currentAtom,
+              type: 'atom'
+            }, function (object) {
 //            viewer.producer.objectLoaded(object);
 //            viewer.render();
               continueAnimation();

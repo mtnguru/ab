@@ -20,6 +20,12 @@ class AtomizerInit {
     $result = AzContentQuery::nodeQuery([
       'types' => 'element',
       'sort' => 'element',
+/*    'fields' => [
+        'nfpc' => ['field_pte_column_value'],
+        'nfpr' => ['field_pte_row_value'],
+        'nfsc' => ['field_sam_column_value'],
+        'nfsr' => ['field_sam_row_value'],
+      ], */
     ]);
     $nids = array_keys($result['results']);
     $elements = entity_load_multiple('node', $nids);
@@ -38,15 +44,20 @@ class AtomizerInit {
       }
 
       $objects[$nid] = [
-        'name' => $element->getTitle(),
-        'symbol' => $element->field_symbol->value,
-        'nid' => $nid,
-        'period' =>      ($element->field_period->isEmpty())        ? null : $element->field_period->value,
-        'defaultAtom' => $anid,
-        'group' =>       ($element->field_pt->isEmpty())            ? null : $element->field_pt->value,
+        'name'         => $element->getTitle(),
+        'symbol'       => $element->field_symbol->value,
+        'nid'          => $nid,
+        'period'       => ($element->field_period->isEmpty())  ? null : $element->field_period->value,
+        'defaultAtom'  => $anid,
+        'group'        => ($element->field_pt->isEmpty())      ? null : $element->field_pt->value,
         'atomicNumber' =>($element->field_atomic_number->isEmpty()) ? 999  : $element->field_atomic_number->value,
-        'numIsotopes' => 0,
-        'numIsobars' => 0,
+        'pte_row'      =>($element->field_pte_row->isEmpty()) ? 0     : $element->field_pte_row->value,
+        'pte_column'   =>($element->field_pte_column->isEmpty()) ? 0  : $element->field_pte_column->value,
+        'sam_row'      =>($element->field_sam_row->isEmpty()) ? 0     : $element->field_sam_row->value,
+        'sam_column'   =>($element->field_sam_column->isEmpty()) ? 0  : $element->field_sam_column->value,
+        'valence'      =>($element->field_valence->isEmpty()) ? ''    : $element->field_valence->value,
+        'numIsotopes'  => 0,
+        'numIsobars'   => 0,
       ];
       //    }
     }
@@ -154,7 +165,7 @@ class AtomizerInit {
       ];
     }
 
-    // Wrap in a container with a title, the select atom button, and list of elements.
+    // Wrap in a container with a title, the select pte buttons, and list of elements.
     return [
       '#type' => 'container',
       '#attributes' => [
@@ -166,7 +177,8 @@ class AtomizerInit {
         '#attributes' => [
           'class' => ['select-title'],
         ],
-        'pte_enable' => ['#markup' => '<i class="pte-enable fas fa-table"></i>'],
+        'pte_enable' => ['#markup' => '<i data-type="pte" id="#pte-enable" class="pte-enable fas fa-table"></i>'],
+        'sam_enable' => ['#markup' => '<i data-type="sam" id="#sam-enable" class="sam-enable fas fa-hat-wizard"></i>'],
         'title' => ['#markup' => '<h2>Select Atom</h2>'],
         'close' => [
           '#type' => 'container',
@@ -175,7 +187,6 @@ class AtomizerInit {
           ],
         ],
       ],
-//    'pte' => ['#markup' => '<div class="pte-container">Periodic Table</div>'],
       'element_list_wrapper' => [
         '#type' => 'container',
         '#attributes' => [
@@ -185,8 +196,9 @@ class AtomizerInit {
           '#type' => 'container',
           '#attributes' => [
             'class' => ['select-list'],
+            'id' => 'select-atom-list',
           ],
-          'elements' => $list,
+//        'elements' => $list,
         ],
       ],
     ];
@@ -230,6 +242,7 @@ class AtomizerInit {
         '#type' => 'container',
         '#attributes' => [
           'class' => ['select-list'],
+          'id' => 'select-molecule-list',
         ],
         'molecules' => $list,
       ],

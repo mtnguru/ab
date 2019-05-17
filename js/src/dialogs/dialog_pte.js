@@ -2,38 +2,17 @@
 
 (function ($) {
 
-  Drupal.atomizer.pteDialogC = function (_viewer) {
+  Drupal.atomizer.pteDialogC = function (_viewer, _elements) {
     let viewer = _viewer;
+    let elements = _elements;
     let dialog = Object.create(Drupal.atomizer.dialogs.baseC);
-    dialog.name('Periodic Table');
+    dialog.name('Periodic Table of Elements');
 
     dialog.onCreate = function () {
       let $content = this.$dialog.find('.content-pane');
 //    window.addEventListener('resize', dialog.onResize);
-      viewer.pte.create($content)
+      viewer.pte.create($content, elements);
     };
-
-    function update(e) {
-      /// correct mouse position so it's relative to canvas
-      let r = dialog.canvas.getBoundingClientRect(),
-        x = e.clientX - r.left,
-        y = e.clientY - r.top;
-
-      if (x < imageSpecs.left * dialog.img.width) x = imageSpecs.left * dialog.img.width;
-      if (x > dialog.img.width - imageSpecs.right * dialog.img.width) x = dialog.img.width - imageSpecs.right * dialog.img.width;
-
-      /// draw background image to clear previous line and text
-      ctx.drawImage(dialog.img, 0, 0, dialog.canvas.width, dialog.canvas.height);
-
-      /// update line object and draw it
-      dialog.line.x1 = x;
-      dialog.line.x2 = x;
-      dialog.line.draw();
-
-      // Update the particles opacity
-      updateOpacity(dialog.line.x1);
-    }
-
 
     dialog.onOpen = function () {
       return;
@@ -42,7 +21,6 @@
     dialog.onClose = function () {
       return;
     };
-
 
     dialog.onResize = function() {
       viewer.pte.onResize();
@@ -58,13 +36,12 @@
 
     let settings = {
       name: 'pte',
-      title: '<i class="fas fa-table"></i>Periodic Table',
+      title: '<i class="fas fa-table"></i>Periodic Table of Elements',
       id: `${dialog.name().replace(/ /g,'-')}-dialog-container`,
-      class: 'az-dialog',
+      class: ['az-dialog', 'az-pte-dialog'],
       containerSelector: '.az-wrapper',
-      content: '<div class="image-wrapper">Shit</div>',
+      content: '<div class="image-wrapper">Periodic Table goes here</div>',
       resizeable: {aspectRatio: 1.50},
-//    resizeable: {},
       closeButton: true,
       draggable: true,
       isLoaded: true,

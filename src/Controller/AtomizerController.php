@@ -2,6 +2,8 @@
 
 namespace Drupal\atomizer\Controller;
 
+use Drupal\atomizer\Ajax\LoadAtomListCommand;
+use Drupal\atomizer\AtomizerInit;
 use Drupal\atomizer\Dialogs\AtomizerDialogs;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -212,8 +214,8 @@ class AtomizerController extends ControllerBase {
       '#type' => 'link',
       '#title' => 'Isotopes',
       '#attributes' => [
-         'title' => t('Wikipedias Isotope page for this element'),
-         'target' => '_blank',
+        'title' => t('Wikipedias Isotope page for this element'),
+        'target' => '_blank',
       ],
       '#url' => Url::fromUri($isotopeUrl),
     ];
@@ -229,6 +231,79 @@ class AtomizerController extends ControllerBase {
     $data['atomConf'] = (empty($field)) ? 'Object not found' : Yaml::decode($field->value);
 
     $response->addCommand(new LoadAtomCommand($data));
+    return $response;
+  }
+
+  /**
+   * Load hierarchical list of elements and their isotopes.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
+  public function loadAtomList() {
+    $response = new AjaxResponse();
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    // Query for the elements and atoms.
+    $elements = AtomizerInit::queryElements();
+    $atoms = AtomizerInit::queryAtoms()['results'];
+
+    // Go through each atom and count number of isotopes per element
+    $isobars = [];
+    foreach ($atoms as $atom) {
+      $eid = $atom->field_element_target_id;
+      if (!empty($elements[$eid])) {
+        $elements[$eid]['isotopes'][] = $atom;
+        $isobars[$atom->field__protons_value][] = $atom;
+        if (empty($elements[$eid]['numIsotopes'])) {
+          $elements[$eid]['numIsotopes'] = 1;
+        } else {
+          $elements[$eid]['numIsotopes']++;
+        }
+      }
+    }
+
+    // Create render array of elements and their isotopes.
+    $list = [];
+    foreach ($elements as $element) {
+      $defaultAtom = null;
+
+//    if ($element['numIsotopes'] == 0) continue;
+      $defaultAtomNid = (!empty($element['defaultAtom'])) ? $element['defaultAtom'] : $element['isotopes'][0]->nid;
+      if ($defaultAtomNid) {
+        if (empty($atoms[$defaultAtomNid])) {
+          $defaultAtom = $atoms[$element['isotopes'][0]->nid];
+        } else {
+          $defaultAtom = $atoms[$defaultAtomNid];
+        }
+      }
+      else {
+//      print "build_select_atom_list - defaultAtom error\n";
+      }
+
+      $name = strtolower($element['name']);
+      $list[$name] = [
+        'symbol' => $element['symbol'],
+        'name' => $element['name'],
+        'defaultAtomName' => $defaultAtom->title,
+        'nid' => $element['nid'],
+        'default_atom_nid' => $defaultAtomNid,
+        'stability' => (!empty($defaultAtom->name)) ? $defaultAtom->name : 'Not Set',
+        'atomic_number' => $element['atomicNumber'],
+        'pte_row'    => $element['pte_row'],
+        'pte_column' => $element['pte_column'],
+        'sam_row'    => $element['sam_row'],
+        'sam_column' => $element['sam_column'],
+        'num_isotopes' => $element['numIsotopes'],
+        'num_isobars' => $element['numIsobars'],
+        'valence' => $element['valence'],
+        'isotopes' => ($element['numIsotopes']) ? $element['isotopes'] : null,
+        'isobars' => $isobars,
+      ];
+    }
+
+    $data['list'] = &$list;
+
+    $response->addCommand(new LoadAtomListCommand($data));
     return $response;
   }
 
