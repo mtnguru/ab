@@ -44,11 +44,13 @@
       let nid = $(event.target.parentNode).data('nid');
       switch (event.button) {
         case 0:     // Select element as new atom.
-          viewer.atom_select.setSelectedAtom(nid);
-          viewer.atom.loadObject({nid: nid});
-          if (elementPopup) {
-            let $popup = $(`.az-pte-dialog .element.nid-${nid} .element-popup`);
-            elementPopup.innerHTML = $popup.html();
+          if (nid) {
+            viewer.atom_select.setSelectedAtom(nid);
+            viewer.atom.loadObject({nid: nid});
+            if (elementPopup) {
+              let $popup = $(`.az-pte-dialog .element.nid-${nid} .element-popup-hidden`);
+              elementPopup.innerHTML = $popup.html();
+            }
           }
           break;
         case 1:     // Nothing?
@@ -63,31 +65,25 @@
               }
             });
             $('.az-wrapper').append($(elementPopup));
-
-            // If the user clicks anywhere else, hide the popup.
-            $(document).on('mousedown', function(event) {
-              event.preventDefault();
-
-              let $pte = $(event.target).parents('.az-pte-dialog');
-              let $eDialog = $(event.target).parents('.element-popup-dialog');
-              if ($pte.length || $eDialog.length) {
-                console.log(`Click is within the pte`);
-              } else {
-                $(elementPopup).hide();
-              }
-            })
           }
 
-
-          let $popup = $(event.target).siblings('.element-popup');
-
-          console.log(`clientX: ${event.clientX}  offsetX: ${event.offsetX}  pageX: ${event.pageX}`);
-          console.log(`clientY: ${event.clientY}  offsetY: ${event.offsetY}  pageY: ${event.pageY}`);
-          elementPopup.style.top = (event.pageY - 300) + "px";
-          elementPopup.style.left =  event.pageX + "px";
+          // Position the popup - if it's 'inmotion' then leave it alone.
+          if (!$(elementPopup).hasClass('inmotion')) {
+            elementPopup.style.top = (event.pageY - 300) + "px";
+            if (event.clientX + 250 > $(viewer.context).width()) {
+              elementPopup.style.left =  (event.pageX - 300) + "px";
+            } else {
+              elementPopup.style.left =  (event.pageX + 20) + "px";
+            }
+          }
           elementPopup.style.position = 'absolute';
+
+          // Copy the contents from the isotope to the popup dialog.
+          let $popup = $(event.target).siblings('.element-popup-hidden');
           elementPopup.innerHTML = $popup.html();
           $(elementPopup).show();
+
+          // When the user clicks on an isotope name - load it.
           $(elementPopup).find('.atom-name').click(function (event) {
             event.preventDefault();
             let nid = $(event.target).data('nid');
@@ -95,31 +91,23 @@
             viewer.atom.loadObject({nid: nid});
             return false;
           });
+
+          $(elementPopup).find('.close-button').click((event) => {
+            $(elementPopup).hide();
+          });
           break;
       }
     };
 
-    const createTable  = (type) => {
-
-    };
-
-
-    const create = ($_container, _elements) => {
-      if ($_container) $container = $_container;
-      if (_elements) elements = _elements;
-
-      camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
-      camera.position.z = 2380;
-
-      scene = new THREE.Scene();
-
+    const createElementsTable  = () => {
       for (let e in elements) {
         let element = elements[e];
         if (element.pte_column == 0) continue;
 
         let html = `
           <div class="symbol" title="${element.name} - ${element.atomic_number}">${element.symbol}</div>
-          <div class="element-popup">
+          <div class="element-popup-hidden">
+            <i class="close-button fas fa-times"></i>
             <h5 class="element-name">${element.symbol} - ${element.name}</h5> 
             <div class="element-atomic-number">Atomic Number: ${element.atomic_number}</div> 
             <div class="element-valence">Valence: ${element.valence}</div> 
@@ -128,19 +116,34 @@
         if (element.num_isotopes) {
           html += `
             <div class="isotopes">
-              <div class="isotopes-title">Isotopes</div>
-                <ul class="isotopes-list">
+              <table class="isotopes-list">
           `;
           for (let isotope of element.isotopes) {
+            let abundance = (isotope.field_abundance_value) ? isotope.field_abundance_value + '%' : '';
             html += `
-                  <li class="isotope">
-                    <a href="#" class="atom-name" data-nid="${isotope.nid}" data-stability="${isotope.name.toLowerCase()}">${isotope.title}</a>
-                  </li>
-          `;
+              <tr class="isotope">
+                <td><a 
+                  href="#" 
+                  class="atom-name stability-${isotope.name.toLowerCase()}" 
+                  data-nid="${isotope.nid}" 
+                  data-stability="${isotope.name.toLowerCase()}"
+                >
+                  ${isotope.title}
+                </a></td>
+                
+                <td><a 
+                  href="#" 
+                  class="atom-abundance" 
+                  data-nid="${isotope.nid}" 
+                  data-stability="${isotope.name.toLowerCase()}"
+                >
+                  ${abundance}
+                </a></td>
+              </tr>
+            `;
           }
           html += `
-                </ul>
-              </div>
+              </table>
             </div>`;
         }
 
@@ -173,8 +176,18 @@
         scene.add( cell );
         element.cell = cell;
         cells[element.name.toLowerCase()] = cell;
-
       }
+    };
+
+
+    const create = ($_container, _elements) => {
+      if ($_container) $container = $_container;
+      if (_elements) elements = _elements;
+
+      camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
+      camera.position.z = 2380;
+
+      scene = new THREE.Scene();
 
       renderer = new THREE.CSS3DRenderer();
 
@@ -182,19 +195,35 @@
       renderer.setSize( width, height);
       $container.html(renderer.domElement);
 
-      controls = new THREE.TrackballControls( camera, renderer.domElement );
-      controls.noRotate = true;
-      controls.minDistance = 500;
-      controls.maxDistance = 6000;
-      controls.addEventListener( 'change', render );
 
       $container[0].addEventListener( 'resize', onResize, false );
 
+      // Mouse enters the PTE table - change controls to the PTE
+      $container[0].addEventListener('mouseenter', (event) => {
+        viewer.controls.changeControlsMode('none');
+
+        controls = new THREE.TrackballControls( camera, renderer.domElement );
+        controls.noRotate = true;
+        controls.minDistance = 500;
+        controls.maxDistance = 6000;
+        controls.addEventListener( 'change', render );
+      });
+
+      // Mouse leaves the PTE - change controls back to the scene.
+      $container[0].addEventListener('mouseleave', (event) => {
+        controls.dispose();
+        delete controls;
+        viewer.controls.changeControlsMode('scene');
+      });
+
+      createElementsTable();
       render();
 
+      // Set mousedown event listener on all cells in table.
       $cells = $('#periodic-table-of-elements-dialog-container .element');
       $cells.mousedown(onMouseDown);
 
+      // Set colors on any cells preinitialized with a color.
       for (let elementName in displayedElements) {
         setElementColor(elementName, displayedElements[elementName]);
       }
