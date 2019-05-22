@@ -76,7 +76,7 @@
 
 //    saveMessage.innerHTML = '.... Loading Theme list';
 //    Drupal.atomizer.base.doAjax(
-//      '/ajax-ab/listDirectory',
+//      '/ajax/listDirectory',
 //      {
 //        directory: themeDirectory,
 //        component: 'theme'
@@ -133,7 +133,7 @@
       }
       // Verify they entered a name.  If not popup an alert. return
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/saveYml',
+        '/ajax/saveYml',
         { name: theme.name,
           component: 'theme',
           filepath: theme.filepath,
@@ -553,7 +553,7 @@
           var file = target.value;
           var directory = $(target).parents('fieldset').data('directory');
           Drupal.atomizer.base.doAjax(
-            '/ajax-ab/loadYml',
+            '/ajax/loadYml',
             { component: 'theme--select',
               filepath: 'config/themes/' + directory + '/' + file + '.yml',
               themeId: event.target.value
@@ -612,7 +612,7 @@
 
     // Load theme file
     Drupal.atomizer.base.doAjax(
-      '/ajax-ab/loadYml',
+      '/ajax/loadYml',
       { filepath: viewer.view.themePath,
         themeId: viewer.view.defaultTheme,
         directory: themeDirectory,

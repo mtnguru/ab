@@ -239,7 +239,7 @@
 
     const sceneLoad = function(conf) {
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/loadMolecule',
+        '/ajax/loadMolecule',
         { conf },
         sceneLoaded
       );

@@ -98,6 +98,7 @@ class AtomizerInit {
         'nfan' => ['field_atomic_number_value'],
         'nfp' => ['field__protons_value'],
         'nfe' => ['field_element_target_id'],
+        'nfm' => ['field_media_target_id'],
         'nfab' => ['field_abundance_value'],
         'ttfd' => ['name'],  // Stability - taxonomy term name
       ],
@@ -178,8 +179,8 @@ class AtomizerInit {
         '#attributes' => [
           'class' => ['select-title'],
         ],
-        'pte_enable' => ['#markup' => '<i data-type="pte" id="#pte-enable" class="pte-enable fas fa-table"></i>'],
-        'sam_enable' => ['#markup' => '<i data-type="sam" id="#sam-enable" class="sam-enable fas fa-hat-wizard"></i>'],
+        'pte_enable' => ['#markup' => '<i data-layout="pte" id="#pte-enable" class="pte-enable fas fa-table"></i>'],
+        'sam_enable' => ['#markup' => '<i data-layout="sam" id="#sam-enable" class="sam-enable fas fa-hat-wizard"></i>'],
         'title' => ['#markup' => '<h2>Select Atom</h2>'],
         'close' => [
           '#type' => 'container',
@@ -340,7 +341,7 @@ class AtomizerInit {
       $atomizer_config['atomizerId'] => [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['az-canvas-wrapper', $config['atomizerId'] . '-canvas-wrapper'],
+          'class' => ['az-canvas-wrapper', $config['atomizerId'] . '-container'],
         ],
         'canvas' => [
           '#markup' => '<canvas class="az-canvas"></canvas>',

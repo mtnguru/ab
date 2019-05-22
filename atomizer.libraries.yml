@@ -18,6 +18,7 @@ atomizer-base:
     js/src/az_nuclet.js: {}
     js/src/az_atom.js: {}
     js/src/az_atom_select.js: {}
+    js/src/az_atom_list.js: {}
     js/src/az_animation.js: {}
 # css:
 #   component:
@@ -44,6 +45,7 @@ atomizer-obfuscator:
     js/min/az_nuclet.js: {}
     js/min/az_atom.js: {}
     js/min/az_atom_select.js: {}
+    js/min/az_atom_list.js: {}
     js/min/az_animation.js: {}
 # css:
 #   component:

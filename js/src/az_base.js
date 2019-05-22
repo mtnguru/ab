@@ -31,6 +31,13 @@
       Drupal.atomizer[response.component].renderNode(response);
     };
 
+    /**
+     * Execute an AJAX command - fire callbacks on completion.
+     * @param url
+     * @param data
+     * @param successCallback
+     * @param errorCallback
+     */
     var doAjax = function doAjax (url, data, successCallback, errorCallback) {
       $.ajax({
         url: url,
@@ -61,6 +68,40 @@
             successCallback(response);
           }
         }
+      });
+    }
+
+    /**
+     * Execute an AJAX command - use a promise to return result.
+     *
+     * @param url
+     * @param data
+     * @param successCallback
+     * @param errorCallback
+     */
+    function promiseAjax(url, data) {
+      return new Promise(function(resolve, reject) {
+        $.ajax({
+          url: url,
+          type: 'POST',
+          data: JSON.stringify(data),
+          contentType: "application/json; charset=utf-8",
+          processData: false,
+          success: function (response) {
+            if (Array.isArray(response) && response.length > 0) {
+              if (response[0].data && response[0].data.message) {
+                alert(response[0].data.message);
+              }
+              resolve(response);
+            } else {
+              reject(response);
+            }
+          },
+          error: function (response) {
+            alert('atomizer_base doAjax: ' + response.responseText);
+            reject(response);
+          }
+        });
       });
     }
 
@@ -303,6 +344,7 @@
       toDegrees,
       toRadians,
       doAjax,
+      promiseAjax,
       alignObjectToAxis,
       initDraggable,
       makeObject,

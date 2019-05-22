@@ -195,6 +195,7 @@
 //        });
 
           viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
+          viewer.renderer.domElement.classList.add('css3d-renderer');
           viewer.canvasContainer.appendChild(viewer.renderer.domElement);
 
           // Create camera, and point it at the scene

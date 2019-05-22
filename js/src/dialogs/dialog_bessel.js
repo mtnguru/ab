@@ -142,7 +142,7 @@
       name: 'bessel',
       title: '<i class="fas fa-chart-line"></i> Bessel Function',
       id: `${dialog.name()}-dialog-container`,
-      class: 'az-dialog',
+      class: ['az-dialog'],
       containerSelector: '.az-wrapper',
       content: '<div class="image-wrapper"><img><canvas></canvas></div>',
 //    selectButtonId: 'open-bessel-dialog',

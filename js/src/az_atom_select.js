@@ -28,8 +28,9 @@
     let includeIsotopes = false;
 
     const createSelectList = (conf) => {
+
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/loadAtomList',
+        '/ajax/loadAtomList',
         { conf: conf },
         doCreateSelectList
       );
@@ -125,7 +126,7 @@
 
     // User clicked on PTE enable/disable button - popup or close the pte dialog.
     $pteEnable.click((event) => {
-      viewer.pte.setType($(event.target).data('type'));
+      viewer.pte.setLayout($(event.target).data('layout'));
       if (!viewer.pteDialog) {
         viewer.pteDialog = Drupal.atomizer.pteDialogC(viewer, elements);
       } else {

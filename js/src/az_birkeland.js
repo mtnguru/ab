@@ -92,7 +92,7 @@
     var loadObject = function loadObject (conf, callback) {
       loadCallback = callback;
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/load-node',
+        '/ajax/loadNode',
         {conf},
         doCreateBirkeland
       );

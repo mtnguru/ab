@@ -13,7 +13,7 @@
 
     let cells = {};
     let $cells;
-    let type = 'none';  // pte or sam
+    let layout = 'pte';  // pte or sam
 
     const setElementColor = (elementName, className) => {
       if (elementName) {
@@ -31,26 +31,61 @@
       }
     };
 
-    const setType = (_type) => {
-      if (type != _type) {
-        type = _type;
+    /**
+     * Change the layout of the table - Conventional or SAM.
+     *
+     * @param _layout
+     */
+    const setLayout = (_layout) => {
+      if (layout != _layout) {
+        layout = _layout;
         if ($container) {
           create();
         }
       }
     };
 
+    /**
+     * Set click event handler on isotopes in the element popup dialog.
+     */
+    function setElementPopupEventHandlers() {
+
+      // When the user clicks on an isotope name - load it.
+      $(elementPopup).find('.atom-name').click(function (event) {
+        event.preventDefault();
+        let nid = $(event.target).data('nid');
+        viewer.atom_select.setSelectedAtom(nid);
+        viewer.atom.loadObject({nid: nid});
+        return false;
+      });
+
+      // User clicks on close (X) in the element popup
+      $(elementPopup).find('.close-button').click((event) => {
+        $(elementPopup).hide();
+      });
+    }
+
+    /**
+     * User has clicked on a cell in the periodic table.
+     *
+     * @param event
+     */
     const onMouseDown = function (event) {
       let nid = $(event.target.parentNode).data('nid');
       switch (event.button) {
         case 0:     // Select element as new atom.
           if (nid) {
-            viewer.atom_select.setSelectedAtom(nid);
-            viewer.atom.loadObject({nid: nid});
+            if (viewer.atom_select) {
+              viewer.atom_select.setSelectedAtom(nid);
+            }
+            if (viewer.atom) {
+              viewer.atom.loadObject({nid: nid});
+            }
             if (elementPopup) {
-              let $popup = $(`.az-pte-dialog .element.nid-${nid} .element-popup-hidden`);
+              let $popup = $(`.pte-container .element.nid-${nid} .element-popup-hidden`);
               elementPopup.innerHTML = $popup.html();
             }
+            setElementPopupEventHandlers();
           }
           break;
         case 1:     // Nothing?
@@ -83,18 +118,7 @@
           elementPopup.innerHTML = $popup.html();
           $(elementPopup).show();
 
-          // When the user clicks on an isotope name - load it.
-          $(elementPopup).find('.atom-name').click(function (event) {
-            event.preventDefault();
-            let nid = $(event.target).data('nid');
-            viewer.atom_select.setSelectedAtom(nid);
-            viewer.atom.loadObject({nid: nid});
-            return false;
-          });
-
-          $(elementPopup).find('.close-button').click((event) => {
-            $(elementPopup).hide();
-          });
+          setElementPopupEventHandlers();
           break;
       }
     };
@@ -111,6 +135,9 @@
             <h5 class="element-name">${element.symbol} - ${element.name}</h5> 
             <div class="element-atomic-number">Atomic Number: ${element.atomic_number}</div> 
             <div class="element-valence">Valence: ${element.valence}</div> 
+            <div class="element-image">
+              <img src="${element.imageUrl}">
+            </div> 
         `;
 
         if (element.num_isotopes) {
@@ -162,7 +189,7 @@
 
         // Assign position in periodic table for this element
         let x, y;
-        if (type == 'pte') {
+        if (layout == 'pte') {
           x =   (element.pte_column * 142) - 1350;
           y = - (element.pte_row    * 142) + 790;
         } else {
@@ -217,16 +244,17 @@
       });
 
       createElementsTable();
-      render();
+      onResize();
 
       // Set mousedown event listener on all cells in table.
-      $cells = $('#periodic-table-of-elements-dialog-container .element');
+      $cells = $('.pte-container .element');
       $cells.mousedown(onMouseDown);
 
       // Set colors on any cells preinitialized with a color.
       for (let elementName in displayedElements) {
         setElementColor(elementName, displayedElements[elementName]);
       }
+
     };
 
     function findWindowSize() {
@@ -258,7 +286,7 @@
     return {
       create,
       setElementColor,
-      setType,
+      setLayout,
       onResize,
     }
   }

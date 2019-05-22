@@ -10,6 +10,7 @@
 
   Drupal.atomizer.prod_pteC = function (_viewer) {
     var viewer = _viewer;
+    let elements;
 
     /**
      * Return the objects which are active for hovering
@@ -82,16 +83,7 @@
     /**
      * Set Default values for any forms.
      */
-    function setDefaults() {
-/*    var userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');
-      if (userAtomFile && userAtomFile != 'undefined') {
-        var selectyml = $('.atom--selectyml', viewer.context)[0];
-        if (selectyml) {
-          select = selectyml.querySelector('select');
-          select.value = userAtomFile;
-        }
-      } */
-    }
+    function setDefaults() {}
 
     var objectLoaded = function objectLoaded(bc) {
       localStorage.setItem('atomizer_pte_nid', bc.az.nid);
@@ -104,60 +96,72 @@
     };
 
     /**
-     * Create the view - add any objects to scene.
+     * Load the Episode node that defines this PTE.
+     *
+     * @param nid
      */
-    var createView = function () {
-      // Start pteC and animationC
-      viewer.pte = Drupal.atomizer.pteC(viewer);
-      viewer.animation = Drupal.atomizer.animationC(viewer);
+//  Drupal.atomizer.base.promiseAjax('/ajax/loadAtomList',{}).then(function(response) {
+//    resolve(response[0].data.list);
+//  }, function(error) {
+//    reject(`getAtomList: ERROR - ${error}`);
+//  })
 
-      // Load and display the periodic table.
-      var objectNid = localStorage.getItem('atomizer_pte_nid');
-      objectNid = ((!objectNid || objectNid == 'undefined') ? 627 : objectNid);  // Loads a pte content type
-      viewer.pte.loadObject({nid: objectNid});
-
-      // Set the ID of the scene select radio buttons - scene--select--610  // TODO Do I need scenes for the table?  Not really
-      var $radios = $('#edit-scene-select .az-control-radios', viewer.context);
-      $radios.once('az-processed').each(function() {
-        var id = 'scene--select--' + $(this).val();
-        $(this).attr('id', id);
-        if ($(this).val() == objectNid) {
-          $(this).prop('checked', true);
-        }
+    const loadPte = (nid) => {
+      return new Promise(function (resolve, reject) {
+        Drupal.atomizer.base.promiseAjax(
+          '/ajax/loadNode', {
+            conf: {
+              nid: nid,
+              fields: {
+                field_scenes: 'raw',
+                body: 'raw',
+              }
+            }
+          }
+        ).then(function(response) {
+          for (let r = 0; r < response.length; r++) {
+            if (response[r].command == 'loadNodeCommand') {
+              resolve(response[r].data);
+            }
+          }
+//        reject('loadPte: Invalid ajax response');
+        }, function(error) {
+          reject(`loadPte: ERROR - ${error}`);
+        });
       });
-
-      // Click on the scene select radio button
-      $radios.click(function (event) {
-        if (event.target.tagName == 'INPUT') {
-          viewer.pte.loadObject({nid: event.target.value});
-//        loadPtable(scene, event.target.value);
-        }
-      });
-
-      // Enable the scene select label to accept a click also.
-      $radios.siblings('label').click(function (event) {
-        var input =$(this).siblings('input')[0];
-        $(input).prop('checked', true);
-        viewer.pte.loadObject({nid: event.target.value});
-//      loadPtable(scene, input.value);
-      });
-
-    };
-
-    var loadPtable = function loadPtable(filename) {
-      Drupal.atomizer.base.doAjax(
-        '/ajax-ab/loadYml',
-        { component: 'pte--select',
-          filepath: 'config/objects/pte/' + filename + '.yml',
-        },
-        pteLoaded
-      );
     };
 
     var pteLoaded = function pteLoaded(results) {
       var conf = results[0].ymlContents;
       viewer.pte.createScene(conf);
     };
+
+    /**
+     * Create the view - add any objects to scene.
+     */
+    var createView = function () {
+      // Initialize pteC and animationC
+      viewer.pte = Drupal.atomizer.pteC(viewer);
+      viewer.atom_list = Drupal.atomizer.atom_listC(viewer);
+      viewer.animation = Drupal.atomizer.animationC(viewer);
+
+//    let nid = localStorage.getItem('atomizer_pte_nid', 2344);
+      let nid = 2344;
+      viewer.atom_list.getAtomList().then(function(list) {
+        elements = list;
+        return loadPte(nid);
+      }).catch(function(msg) {
+        alert(`prod_pte.js::createView: Error calling getAtomList: ${msg}`);
+      }).then(function(node) {
+        // conf, information, nodeName, nodeTitle, properties, scenes[0].description w/format, script, type
+        $container = $('.css3d-renderer', viewer.context);
+        viewer.pte.create($container, elements);
+        viewer.render();
+        console.log(`createView: node is read in`) ;
+      });
+      return;
+    };
+
 
     // Initialize Event Handlers
 

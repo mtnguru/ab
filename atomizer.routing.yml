@@ -16,73 +16,73 @@
 #  requirements:
 #    _permission: 'access content'
 atomizer.renderNode:
-  path: '/ajax-ab/renderNode'
+  path: '/ajax/renderNode'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::renderNode'
   requirements:
     _permission: 'access content'
 atomizer.loadYml:
-  path: '/ajax-ab/loadYml'
+  path: '/ajax/loadYml'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadYml'
   requirements:
     _permission: 'access content'
 atomizer.saveYml:
-  path: '/ajax-ab/saveYml'
+  path: '/ajax/saveYml'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::saveYml'
   requirements:
     _permission: 'access content'
 atomizer.listDirectory:
-  path: '/ajax-ab/listDirectory'
+  path: '/ajax/listDirectory'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::listDirectory'
   requirements:
     _permission: 'access content'
 atomizer.loadAtomForm:
-  path: '/ajax-ab/loadAtomForm'
+  path: '/ajax/loadAtomForm'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadAtomForm'
   requirements:
     _permission: 'access content'
 atomizer.loadAtom:
-  path: '/ajax-ab/loadAtom'
+  path: '/ajax/loadAtom'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadAtom'
   requirements:
     _permission: 'access content'
 atomizer.loadMolecule:
-  path: '/ajax-ab/loadMolecule'
+  path: '/ajax/loadMolecule'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadMolecule'
   requirements:
     _permission: 'access content'
 atomizer.saveAtom:
-  path: '/ajax-ab/saveAtom'
+  path: '/ajax/saveAtom'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::saveAtom'
   requirements:
     _permission: 'access content'
 atomizer.saveImage:
-  path: '/ajax-ab/save-image'
+  path: '/ajax/saveImage'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::saveImage'
   requirements:
     _permission: 'access content'
 atomizer.loadNode:
-  path: '/ajax-ab/load-node'
+  path: '/ajax/loadNode'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadNode'
   requirements:
     _permission: 'access content'
 atomizer.loadDialog:
-  path: '/ajax-ab/load-dialog'
+  path: '/ajax/loadDialog'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadDialog'
   requirements:
     _permission: 'access content'
 atomizer.loadAtomList:
-  path: '/ajax-ab/loadAtomList'
+  path: '/ajax/loadAtomList'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadAtomList'
   requirements:

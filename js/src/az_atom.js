@@ -331,7 +331,7 @@
     let loadObject = function loadObject (conf, callback) {
       let loadCallback = callback;
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/loadAtom',
+        '/ajax/loadAtom',
         { conf: conf },
         doCreateAtom,
         loadObjectError
@@ -590,7 +590,7 @@
         // Save the binding energy to Drupal
         if (be_sam_nuclets != '0') {
           Drupal.atomizer.base.doAjax(
-              '/ajax-ab/saveAtom',
+              '/ajax/saveAtom',
               { nid: nid,
                 be_sam_nuclets: be_sam_nuclets,
                 be_sam_nuclets_perc: be_sam_nuclets_perc
@@ -640,7 +640,7 @@
       currentSet.name = controls.name;
       currentSet.filename = controls.filename;
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/saveYml',
+        '/ajax/saveYml',
         { name: controls.name,
           component: 'theme',
           filename: controls.filename,
@@ -657,7 +657,7 @@
     const overwriteYml = function (controls) {
       // Verify they entered a name.  If not popup an alert. return
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/saveYml',
+        '/ajax/saveYml',
         { name: currentSet.name,
           component: 'theme',
           filename: currentSet.filename,

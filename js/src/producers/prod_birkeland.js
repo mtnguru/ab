@@ -158,7 +158,16 @@
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
       objectNid = ((!objectNid || objectNid == 'undefined') ? 628 : objectNid);  // Loads a birkeland content type
-      viewer.birkeland.loadObject({nid: objectNid},null);
+      viewer.birkeland.loadObject(
+        {
+          nid: objectNid,
+          fields: {
+            information: 'teaser',
+            properties: 'atom_viewer',
+          },
+        },
+        null
+      );
 
       // Set the ID of the scene select radio buttons - scene--select--610
       var $radios = $('#edit-scene-select .az-control-radios', viewer.context);
@@ -197,7 +206,7 @@
     /*
     var loadBirkeland = function loadBirkeland(filename) {
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/loadYml',
+        '/ajax/loadYml',
         { component: 'birkeland--select',
           filepath: 'config/objects/birkeland/' + filename + '.yml',
         },
@@ -231,6 +240,7 @@
         viewer.birkeland.extrudeCylinders(bc, value);
         viewer.render();
       } else if (id == 'cylinders--radius') {     // Change radius of all cylinders
+        let cn = 0;
         for (var c in bc.cylinders) {
           if (bc.cylinders.hasOwnProperty(c)) {
             var cyl = bc.cylinders[c];

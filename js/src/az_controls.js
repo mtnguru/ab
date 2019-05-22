@@ -147,7 +147,7 @@
       var args = this.id.split("--");
       let directory = viewer[args[0]].getYmlDirectory();
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/loadYml',
+        '/ajax/loadYml',
         { component: args[0],
           directory: viewer[args[0]].getYmlDirectory(),
           filepath: viewer[args[0]].getYmlDirectory() + '/' + event.target.value,
@@ -271,7 +271,7 @@
       var viewMode = $(event.target, viewer.context).data('viewmode');
       var blockid = $(event.target, viewer.context).data('blockid');
       Drupal.atomizer.base.doAjax(
-        '/ajax-ab/renderNode',
+        '/ajax/renderNode',
         {
           nid: nid,
           viewMode: viewMode,
@@ -506,10 +506,10 @@
 
         // Make ajax call to save it
         Drupal.atomizer.base.doAjax(
-          '/ajax-ab/save-image',
+          '/ajax/saveImage',
           {
             sceneNid: viewer.scene.az.sceneNid,
-            action: 'save-image',
+            action: 'saveImage',
             filename: filename,
             directory: 'atoms',
             overwrite: false,

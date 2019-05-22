@@ -68,7 +68,7 @@
         // Check to see if file is loaded, load if necessary.
         animateFile = currentFile;
         Drupal.atomizer.base.doAjax(
-          '/ajax-ab/loadYml',
+          '/ajax/loadYml',
           {
             component: 'animation',
             directory: viewer.atomizer.animateDirectory,

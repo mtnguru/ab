@@ -252,6 +252,16 @@ class AtomizerController extends ControllerBase {
     foreach ($atoms as $atom) {
       $eid = $atom->field_element_target_id;
       if (!empty($elements[$eid])) {
+        // load media
+        $fid = $atom->field_media_target_id;
+        if ($fid) {
+          $file = \Drupal\file\Entity\File::load($fid);
+          $elements[$eid]['imageUrl'] = 'http://az/sites/default/files/styles/medium/public/atoms/Oxygen-16_21.jpg?itok=6MgR_1zL';
+        }
+
+        // if media exists then create the URL for the image.
+
+        // Count the number of isotopes
         $elements[$eid]['isotopes'][] = $atom;
         $isobars[$atom->field__protons_value][] = $atom;
         if (empty($elements[$eid]['numIsotopes'])) {
@@ -262,7 +272,7 @@ class AtomizerController extends ControllerBase {
       }
     }
 
-    // Create render array of elements and their isotopes.
+    // Create list of elements and their isotopes.
     $list = [];
     foreach ($elements as $element) {
       $defaultAtom = null;
@@ -474,7 +484,6 @@ class AtomizerController extends ControllerBase {
     // Save image, process through 'convert' command to reduce file size.
     $tmpPath = file_directory_temp() . '/' . $newfilename;
 
-//  $this->writeImage($newpath, $data['imgBase64']);
     $this->writeImage($tmpPath, $data['imgBase64']);
     $this->convertImage($tmpPath, $newpath);
 
@@ -568,6 +577,21 @@ class AtomizerController extends ControllerBase {
             $data['nodeConf'] = (empty($field)) ? 'Node not found' : Yaml::decode($field->value);
           }
         }
+        break;
+      case 'episode':
+        $scenes = [];
+        foreach ($node->field_scenes as $scene) {
+          $entity = $scene->entity;
+          $scenes[] = [
+            'title' => $entity->field_title->value,
+            'description' => $entity->field_description->value,
+            'description_format' => $entity->field_description->format,
+            'script' => $entity->field_script->value,
+            'type' => $entity->field_scene_type->target_id,
+//          'type' => $entity->field_scene_type->entity->label(),
+          ];
+        }
+        $data['scenes'] = $scenes;
         break;
     }
     $response->addCommand(new LoadNodeCommand($data));

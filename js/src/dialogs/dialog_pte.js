@@ -38,7 +38,7 @@
       name: 'pte',
       title: '<i class="fas fa-table"></i>Periodic Table of Elements',
       id: `${dialog.name().replace(/ /g,'-')}-dialog-container`,
-      class: ['az-dialog', 'az-pte-dialog'],
+      class: ['az-dialog', 'pte-container'],
       containerSelector: '.az-wrapper',
       content: '<div class="image-wrapper">Periodic Table goes here</div>',
       resizeable: {aspectRatio: 1.50},
