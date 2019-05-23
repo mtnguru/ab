@@ -228,12 +228,12 @@
 
       // Mouse enters the PTE table - change controls to the PTE
       $container[0].addEventListener('mouseenter', (event) => {
-        viewer.controls.changeControlsMode('az_pte::create mouseenter', 'scene', camera, renderer);
+        viewer.controls.changeControlsMode('az_pte::create mouseenter', 'scene', scene, camera, renderer);
       });
 
       // Mouse leaves the PTE - change controls back to the scene.
       $container[0].addEventListener('mouseleave', (event) => {
-//      viewer.controls.changeControlsMode('az_pte::create mouseleave', 'scene');
+        viewer.controls.changeControlsMode('az_pte::create mouseleave', 'scene');
       });
 //    viewer.controls.changeControlsMode('object', camera, renderer)
 

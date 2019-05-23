@@ -37,7 +37,7 @@
      *
      * @param newMode
      */
-    function changeControlsMode(source, newMode, object = viewer.camera, renderer = viewer.renderer)  {
+    function changeControlsMode(source, newMode, scene = viewer.scene, object = viewer.camera, renderer = viewer.renderer)  {
       switch (controlsMode) {
         case 'scene':
           trackballControls.dispose();
@@ -63,16 +63,16 @@
       controlsMode = newMode;
       switch (controlsMode) {
         case 'scene':
-          trackballControls = createCameraTrackballControls(object, renderer);
+          trackballControls = createCameraTrackballControls(scene, object, renderer);
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
           viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
           viewer.canvasContainer.addEventListener('mouseup',   onMouseUp, false);
           break;
         case 'camera':
-          trackballControls = createCameraTrackballControls(object, renderer);
+          trackballControls = createCameraTrackballControls(scene, object, renderer);
           break;
         case 'object':
-          trackballControls = createObjectTrackballControls(object.parent, renderer);
+          trackballControls = createObjectTrackballControls(scene, object.parent, renderer);
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
           viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
           viewer.canvasContainer.addEventListener('mouseup',   onMouseUp, false);
@@ -586,10 +586,8 @@
      *
      * @returns {THREE.TrackballControls}
      */
-    function createCameraTrackballControls(object, renderer) {
+    function createCameraTrackballControls(scene, object, renderer) {
 //    var controls = new THREE.TrackballControls(object, renderer.domElement);
-//    var controls = new THREE.TrackballControls(viewer.camera, viewer.renderer.domElement);
-//    var controls = new THREE.OrbitControls(viewer.camera, viewer.renderer.domElement);
       var controls = new THREE.OrbitControls(object, renderer.domElement);
 //    controls.rotateSpeed =   .45;
 //    controls.zoomSpeed =     .8;
@@ -600,7 +598,9 @@
 //    controls.dampingFactor=  .3;
 
       controls.keys = [65, 83, 68];
-//    controls.addEventListener('change', renderer.render());
+      controls.addEventListener('change', function (event) {
+        renderer.render(scene, object);
+      });
       return controls;
     }
 
@@ -609,9 +609,9 @@
      *
      * @returns {THREE.TrackballControls}
      */
-    function createObjectTrackballControls(object) {
+    function createObjectTrackballControls(scene, object, renderer) {
       function changeTrackball (event) {
-//      viewer.render();
+//      renderer.render(scene, );
       }
 
 //    var controls = new THREE.TrackballControls(object, viewer.renderer.domElement);
