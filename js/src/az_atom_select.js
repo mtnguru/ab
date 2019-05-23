@@ -124,7 +124,7 @@
       $(viewer.context).removeClass('select-atom-enabled');
     });
 
-    // User clicked on PTE enable/disable button - popup or close the pte dialog.
+    // User clicked on PTE enable/disabl button - popup or close the pte dialog.
     $pteEnable.click((event) => {
       viewer.pte.setLayout($(event.target).data('layout'));
       if (!viewer.pteDialog) {

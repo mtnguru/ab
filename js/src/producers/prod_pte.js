@@ -48,6 +48,35 @@
     };
 
     /**
+     * User clicked on a Checkbox button
+     *
+     * @param event
+     */
+    var buttonClicked = (event) => {
+      let args = event.target.id.split("--");
+      let checked = event.target.checked;
+      if (args[1] == 'cell') {
+        if (checked) {
+          $(`.element .${event.target.value}`).removeClass('az-hidden');
+        } else {
+          $(`.element .${event.target.value}`).addClass('az-hidden');
+        }
+      }
+    };
+
+    /**
+     * User clicked on a Radio button
+     *
+     * @param event
+     */
+    var radioClicked = (target) => {
+      let args = target.id.split("--");
+      if (args[1] == 'layout') {
+        viewer.pte.setLayout(args[2]);
+        viewer.pte.onResize();
+      }
+    };
+    /**
      * User has clicked somewhere in the scene with the mouse.
      *
      * If they right clicked on a proton, find the parent nuclet and popup the nuclet edit form.
@@ -179,12 +208,16 @@
     */
 
     return {
-      createView: createView,
-      setDefaults: setDefaults,
-      mouseUp: mouseUp,
-      mouseMove: mouseMove,
-      hoverObjects: hoverObjects,
-      objectLoaded: objectLoaded
+      createView,
+      setDefaults,
+
+      mouseUp,
+      mouseMove,
+      buttonClicked,
+      radioClicked,
+
+      hoverObjects,
+      objectLoaded,
     };
   };
 

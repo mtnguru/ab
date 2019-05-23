@@ -8,21 +8,8 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var notify = require('gulp-notify');
 var uglify = require('gulp-uglify');
-var imagemin = require('gulp-imagemin');
-var pngquant = require('imagemin-pngquant');
 var sassGlob = require('gulp-sass-glob');
 var obfuscator = require('gulp-javascript-obfuscator');
-
-gulp.task('imagemin', function () {
-    return gulp.src('images/*')
-        .pipe(imagemin({
-            progressive: true,
-            svgoPlugins: [{removeViewBox: false}],
-            use: [pngquant()]
-        }))
-        .pipe(gulp.dest('images'));
-});
-
 
 gulp.task('sass', function () {
   gulp.src('sass/**/*.scss')

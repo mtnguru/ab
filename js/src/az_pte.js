@@ -5,7 +5,7 @@
   Drupal.atomizer.pteC = function (_viewer) {
     let viewer = _viewer;
     let elements;
-    let camera, scene, renderer, controls;
+    let camera, scene, renderer;
 
     let $container;
     let elementPopup;
@@ -82,7 +82,7 @@
               viewer.atom.loadObject({nid: nid});
             }
             if (elementPopup) {
-              let $popup = $(`.pte-container .element.nid-${nid} .element-popup-hidden`);
+              let $popup = $(`.pte-container .element.nid-${nid} .popup`);
               elementPopup.innerHTML = $popup.html();
             }
             setElementPopupEventHandlers();
@@ -114,7 +114,7 @@
           elementPopup.style.position = 'absolute';
 
           // Copy the contents from the isotope to the popup dialog.
-          let $popup = $(event.target).siblings('.element-popup-hidden');
+          let $popup = $(event.target).siblings('.popup');
           elementPopup.innerHTML = $popup.html();
           $(elementPopup).show();
 
@@ -130,14 +130,15 @@
 
         let html = `
           <div class="symbol" title="${element.name} - ${element.atomic_number}">${element.symbol}</div>
-          <div class="element-popup-hidden">
+          <div class="symbol-small az-hidden" title="${element.name} - ${element.atomic_number}">${element.symbol}</div>
+          <div class="image-protons az-hidden">
+            <img src="${element.image_url}">
+          </div>
+          <div class="popup az-hidden">
             <i class="close-button fas fa-times"></i>
-            <h5 class="element-name">${element.symbol} - ${element.name}</h5> 
-            <div class="element-atomic-number">Atomic Number: ${element.atomic_number}</div> 
-            <div class="element-valence">Valence: ${element.valence}</div> 
-            <div class="element-image">
-              <img src="${element.imageUrl}">
-            </div> 
+            <h5 class="name">${element.symbol} - ${element.name}</h5> 
+            <div class="atomic-number">Atomic Number: ${element.atomic_number}</div> 
+            <div class="valence">Valence: ${element.valence}</div> 
         `;
 
         if (element.num_isotopes) {
@@ -223,25 +224,18 @@
       $container.html(renderer.domElement);
 
 
-      $container[0].addEventListener( 'resize', onResize, false );
+      window.addEventListener('resize', onResize, false);
 
       // Mouse enters the PTE table - change controls to the PTE
       $container[0].addEventListener('mouseenter', (event) => {
-        viewer.controls.changeControlsMode('none');
-
-        controls = new THREE.TrackballControls( camera, renderer.domElement );
-        controls.noRotate = true;
-        controls.minDistance = 500;
-        controls.maxDistance = 6000;
-        controls.addEventListener( 'change', render );
+        viewer.controls.changeControlsMode('az_pte::create mouseenter', 'scene', camera, renderer);
       });
 
       // Mouse leaves the PTE - change controls back to the scene.
       $container[0].addEventListener('mouseleave', (event) => {
-        controls.dispose();
-        delete controls;
-        viewer.controls.changeControlsMode('scene');
+//      viewer.controls.changeControlsMode('az_pte::create mouseleave', 'scene');
       });
+//    viewer.controls.changeControlsMode('object', camera, renderer)
 
       createElementsTable();
       onResize();

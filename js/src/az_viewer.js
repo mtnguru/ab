@@ -101,7 +101,6 @@
           viewer.canvasContainer.style.width = viewer.canvas.width + 'px';
           viewer.canvas.height = window.innerHeight - 40 - $toolbarHeight;
           viewer.canvasContainer.style.height = viewer.canvas.height + 'px';
-//        viewer.canvas.width = viewer.canvasContainer.clientWidth;
         }
         else {
           if (displayMode != 'desktop') {
@@ -123,9 +122,13 @@
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
         }
       }
-
+      if (viewer.css3dContainer) {
+        viewer.css3dContainer.height = viewer.canvas.height;
+        viewer.css3dContainer.width = viewer.canvas.width;
+      }
       if (viewer.renderer) {
         // Tell the renderer and camera about the new canvas size.
+
         viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
         if (viewer.renderer.setViewPort) {
           viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
@@ -186,7 +189,7 @@
         case 'css2d':
           break;
         case 'css3d':
-          viewer.renderer = new THREE.CSS3DRenderer({ });
+          viewer.renderer = new THREE.CSS3DRenderer();
 //        viewer.CSS2DRenderer({
 //          antialias: true,
 ////        canvas: viewer.canvas,
@@ -197,6 +200,7 @@
           viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
           viewer.renderer.domElement.classList.add('css3d-renderer');
           viewer.canvasContainer.appendChild(viewer.renderer.domElement);
+          viewer.css3dContainer = viewer.canvasContainer.getElementsByTagName('.css3d-renderer')[0];
 
           // Create camera, and point it at the scene
           viewer.camera = new THREE.PerspectiveCamera(
@@ -340,6 +344,7 @@
     viewer.view = atomizer.views[atomizer.defaultView];
 
     viewer.canvasContainer = $('.az-canvas-wrapper', viewer.context)[0];
+    viewer.css3dContainer = $('.css3d-renderer', viewer.context)[0];
     viewer.dataAttr = getDataAttr(viewer.canvasContainer);
 
     if (viewer.dataAttr['theme']) {

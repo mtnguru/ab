@@ -252,15 +252,6 @@ class AtomizerController extends ControllerBase {
     foreach ($atoms as $atom) {
       $eid = $atom->field_element_target_id;
       if (!empty($elements[$eid])) {
-        // load media
-        $fid = $atom->field_media_target_id;
-        if ($fid) {
-          $file = \Drupal\file\Entity\File::load($fid);
-          $elements[$eid]['imageUrl'] = 'http://az/sites/default/files/styles/medium/public/atoms/Oxygen-16_21.jpg?itok=6MgR_1zL';
-        }
-
-        // if media exists then create the URL for the image.
-
         // Count the number of isotopes
         $elements[$eid]['isotopes'][] = $atom;
         $isobars[$atom->field__protons_value][] = $atom;
@@ -276,8 +267,9 @@ class AtomizerController extends ControllerBase {
     $list = [];
     foreach ($elements as $element) {
       $defaultAtom = null;
+      $imageUrl = '';
 
-//    if ($element['numIsotopes'] == 0) continue;
+      if ($element['numIsotopes'] == 0) continue;
       $defaultAtomNid = (!empty($element['defaultAtom'])) ? $element['defaultAtom'] : $element['isotopes'][0]->nid;
       if ($defaultAtomNid) {
         if (empty($atoms[$defaultAtomNid])) {
@@ -285,10 +277,21 @@ class AtomizerController extends ControllerBase {
         } else {
           $defaultAtom = $atoms[$defaultAtomNid];
         }
+
+        // add image url
+        $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
+        $fid = $media->image->target_id;
+        if ($fid) {
+          $file = \Drupal\file\Entity\File::load($fid);
+          $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
+          $imageUrl = $style->buildUrl($file->getFileUri());
+        }
       }
       else {
-//      print "build_select_atom_list - defaultAtom error\n";
+        print "build_select_atom_list - defaultAtom error\n";
       }
+
+      // if media exists then create the URL for the image.
 
       $name = strtolower($element['name']);
       $list[$name] = [
@@ -299,6 +302,7 @@ class AtomizerController extends ControllerBase {
         'default_atom_nid' => $defaultAtomNid,
         'stability' => (!empty($defaultAtom->name)) ? $defaultAtom->name : 'Not Set',
         'atomic_number' => $element['atomicNumber'],
+        'image_url'  => $imageUrl,
         'pte_row'    => $element['pte_row'],
         'pte_column' => $element['pte_column'],
         'sam_row'    => $element['sam_row'],

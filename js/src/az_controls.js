@@ -37,7 +37,7 @@
      *
      * @param newMode
      */
-    function changeControlsMode(newMode, object) {
+    function changeControlsMode(source, newMode, object = viewer.camera, renderer = viewer.renderer)  {
       switch (controlsMode) {
         case 'scene':
           trackballControls.dispose();
@@ -59,20 +59,20 @@
           break;
       }
 
-      console.log(`changeControlsMode ${newMode}`);
+      console.log(`changeControlsMode ${source} - ${newMode}`);
       controlsMode = newMode;
       switch (controlsMode) {
         case 'scene':
-          trackballControls = createCameraTrackballControls();
+          trackballControls = createCameraTrackballControls(object, renderer);
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
           viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
           viewer.canvasContainer.addEventListener('mouseup',   onMouseUp, false);
           break;
         case 'camera':
-          trackballControls = createCameraTrackballControls();
+          trackballControls = createCameraTrackballControls(object, renderer);
           break;
         case 'object':
-          trackballControls = createObjectTrackballControls(object.parent);
+          trackballControls = createObjectTrackballControls(object.parent, renderer);
           viewer.canvasContainer.addEventListener('mousemove', onMouseMove, false);
           viewer.canvasContainer.addEventListener('mousedown', onMouseDown, false);
           viewer.canvasContainer.addEventListener('mouseup',   onMouseUp, false);
@@ -163,11 +163,12 @@
      * @returns {boolean}
      */
     function onButtonClicked(event) {
-      if (this.type != 'checkbox') {
+      if (this.type != 'checkbox' && this.type != 'fieldset') {
         event.preventDefault();
       }
 
-      var args = this.id.split("--");
+      let args = (this.type == 'fieldset') ? event.target.id.split("--") : this.id.split("--");
+
       switch (args[1]) {
         case 'selectyml':
           viewer[args[0]].overwriteYml();
@@ -215,7 +216,7 @@
           }
           break;
       }
-      return false;
+      return;
     }
 
     /**
@@ -413,6 +414,10 @@
               element.addEventListener("click", onButtonClicked);
               break;
 
+            case 'checkboxes':
+              $(element).find('input').click(onButtonClicked);
+              break;
+
             case 'radios':
               var $radios = $(element).find('input');
               $radios.click(onRadioClicked);
@@ -581,17 +586,21 @@
      *
      * @returns {THREE.TrackballControls}
      */
-    function createCameraTrackballControls() {
-      var controls = new THREE.OrbitControls(viewer.camera, viewer.renderer.domElement);
-      controls.rotateSpeed =   .45;
-      controls.zoomSpeed =     .8;
-      controls.panSpeed =      .5;
-      controls.enableZoom =    true;
-      controls.enablePan =     true;
-      controls.enableDamping = true;
-      controls.dampingFactor=  .3;
+    function createCameraTrackballControls(object, renderer) {
+//    var controls = new THREE.TrackballControls(object, renderer.domElement);
+//    var controls = new THREE.TrackballControls(viewer.camera, viewer.renderer.domElement);
+//    var controls = new THREE.OrbitControls(viewer.camera, viewer.renderer.domElement);
+      var controls = new THREE.OrbitControls(object, renderer.domElement);
+//    controls.rotateSpeed =   .45;
+//    controls.zoomSpeed =     .8;
+//    controls.panSpeed =      .5;
+//    controls.enableZoom =    true;
+//    controls.enablePan =     true;
+//    controls.enableDamping = true;
+//    controls.dampingFactor=  .3;
 
       controls.keys = [65, 83, 68];
+//    controls.addEventListener('change', renderer.render());
       return controls;
     }
 
@@ -732,7 +741,7 @@
       initializeControls();
 
       // Set the current camera mode - this could probably go away.
-      changeControlsMode('scene');
+      changeControlsMode('az_controls::init', 'scene');
 
       // Set any default values the producer may have.
       if (viewer.producer.setDefaults) viewer.producer.setDefaults();

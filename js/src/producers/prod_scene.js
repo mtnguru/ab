@@ -128,9 +128,9 @@
 
     const setControlsObject = (mode, object) => {
       if (object) {
-        viewer.controls.changeControlsMode('none');
+        viewer.controls.changeControlsMode('prod_scene::setControlsObject','none');
       } else {
-        viewer.controls.changeControlsMode('scene');
+        viewer.controls.changeControlsMode('prod_scene::setControlsObject','scene');
       }
     };
 

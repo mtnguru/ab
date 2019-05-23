@@ -252,6 +252,24 @@ class AtomizerControlBlock {
         $addValue = true;
         break;
 
+      case 'checkboxes':
+        $options = [];
+        $defaults = [];
+        foreach ($controlConf[2] as $key => $conf) {
+          $options[$key] = $conf[0];
+          if ($conf[1]) {
+            $defaults[] = $key;
+          }
+        };
+        $control = [
+          '#type' => 'checkboxes',
+          '#title' => $controlConf[0],
+          '#options' => $options,
+          '#default_value' => $defaults,
+        ];
+        $addValue = true;
+        break;
+
       case 'range':
         $control = AtomizerControlBlock::makeRangeControl(
           $id,

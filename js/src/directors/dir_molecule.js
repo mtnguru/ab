@@ -57,7 +57,7 @@
       if (atom) {
         var id = atom.az.conf.id;
         createAtomList();
-//      viewer.controls.changeControlsMode('object', atom);
+//      viewer.controls.changeControlsMode('dir_molecule::setEditAtom', 'object', atom);
 
         if (editAtom) {
           viewer.atom.highlight(editAtom, false);
@@ -123,7 +123,7 @@
               viewer.atom.highlight(editAtom, false);
               viewer.render();
             }
-//          viewer.controls.changeControlsMode('scene');
+//          viewer.controls.changeControlsMode('dir_molecule::setEditAtom', 'scene');
             $atomFormBlock.addClass('az-hidden');
           }
         });
