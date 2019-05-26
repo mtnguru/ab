@@ -74,6 +74,7 @@
       if (args[1] == 'layout') {
         viewer.pte.setLayout(args[2]);
         viewer.pte.onResize();
+        setCellContent();
       }
     };
     /**
@@ -124,6 +125,18 @@
       };
     };
 
+    const setCellContent = () => {
+      // Get current state of cell content checkboxes.
+      let $cells = $('#edit-producer-cell .producer--cell');
+      $cells.each(function (index, cell) {
+        if (cell.checked) {
+          $(`.element .${cell.value}`).removeClass('az-hidden');
+        } else {
+          $(`.element .${cell.value}`).addClass('az-hidden');
+        }
+      });
+    };
+
     /**
      * Load the Episode node that defines this PTE.
      *
@@ -172,6 +185,7 @@
       // Initialize pteC and animationC
       viewer.pte = Drupal.atomizer.pteC(viewer);
       viewer.atom_list = Drupal.atomizer.atom_listC(viewer);
+      viewer.snapshot = Drupal.atomizer.snapshotC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
 
 //    let nid = localStorage.getItem('atomizer_pte_nid', 2344);
@@ -185,27 +199,18 @@
         // conf, information, nodeName, nodeTitle, properties, scenes[0].description w/format, script, type
         $container = $('.css3d-renderer', viewer.context);
         viewer.pte.create($container, elements);
+        setCellContent();
         viewer.render();
         console.log(`createView: node is read in`) ;
       });
+      animate();
       return;
     };
 
-
-    // Initialize Event Handlers
-
-    /*
-    var $mouseBlock = $('#blocks--mouse-mode', viewer.context);
-    if ($mouseBlock.length) {
-      mouse.mode = $mouseBlock.find('input[name=mouse]:checked').val();
-      // Add event listeners to mouse mode form radio buttons
-      var $mouseRadios = $mouseBlock.find('#edit-mouse--wrapper input');
-      $mouseRadios.click(function (event) {
-        console.log('mode: ' + event.target.value);
-        mouse.mode = event.target.value;
-      });
+    function animate() {
+      requestAnimationFrame( animate );
+      viewer.controls.getControls().update();
     }
-    */
 
     return {
       createView,
@@ -218,6 +223,7 @@
 
       hoverObjects,
       objectLoaded,
+      setCellContent,
     };
   };
 

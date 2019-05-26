@@ -329,6 +329,7 @@
       viewer.sprites = Drupal.atomizer.spritesC(viewer);
       viewer.labels = Drupal.atomizer.labelsC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
+      viewer.snapshot  = Drupal.atomizer.snapshotC(viewer);
       viewer.dir_atom = Drupal.atomizer.dir_atomC(viewer);
       viewer.atom_select = Drupal.atomizer.atom_selectC(viewer, false);
       viewer.dir_molecule = Drupal.atomizer.dir_moleculeC(viewer);

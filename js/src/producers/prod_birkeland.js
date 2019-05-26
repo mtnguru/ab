@@ -153,6 +153,7 @@
       // Start birkelandC and animationC
       viewer.birkeland = Drupal.atomizer.birkelandC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
+      viewer.snapshot = Drupal.atomizer.snapshotC(viewer);
 //    viewer.animation = Drupal.atomizer.dialogC(viewer);
 
       // Load and display the initial birkeland current

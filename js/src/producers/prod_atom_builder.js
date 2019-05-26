@@ -97,6 +97,7 @@
       viewer.shapes = Drupal.atomizer.shapesC(viewer);
       viewer.sprites = Drupal.atomizer.spritesC(viewer);
       viewer.labels = Drupal.atomizer.labelsC(viewer);
+      viewer.snapshot = Drupal.atomizer.snapshotC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
       viewer.dir_atom = Drupal.atomizer.dir_atomC(viewer);
 
@@ -122,8 +123,8 @@
       atom.az.id = "A1";
 
       viewer.dir_atom.objectLoaded(atom);
-      viewer.pte.setElementColor();
-      viewer.pte.setElementColor(atom.az.element.toLowerCase(),'color-green');
+      viewer.pte.setElementColor(); // Clears currently highlighted elements
+      viewer.pte.setElementColor(atom.az.element.toLowerCase(),'color-green');  // Sets color of current element.
 
       if ($sceneName) {
         $sceneName.html(atom.az.title);

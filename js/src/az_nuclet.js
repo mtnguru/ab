@@ -971,10 +971,9 @@
         }
       }
 
-      // OBSOLETE - valence rings never existed
-//    if (shapeConf.valence) {
-//      createValenceRings(shapeConf, azNuclet);
-//    }
+      if (shapeConf.valence) {
+        createValenceRings(shapeConf, azNuclet);
+      }
 
       // OBSOLETE - electrons are positioned based on the octahedron
 //    if (shapeConf.electrons) {

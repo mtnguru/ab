@@ -71,7 +71,9 @@
      * @param event
      */
     const onMouseDown = function (event) {
-      let nid = $(event.target.parentNode).data('nid');
+      let $element = $(event.target).hasClass('element') ? $(event.target) : $(event.target).parents('.element');
+      let nid = $element.data('nid');
+      console.log(`onMouseDown - ${$element[0].className}`);
       switch (event.button) {
         case 0:     // Select element as new atom.
           if (nid) {
@@ -91,12 +93,13 @@
         case 1:     // Nothing?
           break;
         case 2:     // Display the elementPopup
+          // If it doesn't exist then create it.
           if (!elementPopup) {
             elementPopup = document.createElement('div');
             elementPopup.className = 'element-popup-dialog';
             $(elementPopup).draggable({
               drag: function(){
-                $(this).addClass("inmotion");
+                $(this).addClass('inmotion');
               }
             });
             $('.az-wrapper').append($(elementPopup));
@@ -114,7 +117,7 @@
           elementPopup.style.position = 'absolute';
 
           // Copy the contents from the isotope to the popup dialog.
-          let $popup = $(event.target).siblings('.popup');
+          let $popup = $element.find('.popup');
           elementPopup.innerHTML = $popup.html();
           $(elementPopup).show();
 
@@ -128,17 +131,43 @@
         let element = elements[e];
         if (element.pte_column == 0) continue;
 
+        let items = element.valence.split(/, */g);
+        let valence = '';
+        let valence_primary = '';
+        for (let item of items.reverse()) {
+//        if (valence) valence += ' ';
+          if (item.indexOf('*') > -1) {
+            valence         += `<span class="primary">${item.replace('*','')}</span>`;
+            valence_primary += `<span class="primary">${item.replace('*','')}</span>`;
+          } else {
+            valence += `<span class="secondary">${item}</span>`;
+          }
+        }
+        
         let html = `
-          <div class="symbol" title="${element.name} - ${element.atomic_number}">${element.symbol}</div>
-          <div class="symbol-small az-hidden" title="${element.name} - ${element.atomic_number}">${element.symbol}</div>
-          <div class="image-protons az-hidden">
-            <img src="${element.image_url}">
+          <div class="symbol-large az-hidden" title="${element.name} - ${element.atomic_number}">${element.symbol}</div>
+          <div class="symbol az-hidden">${element.symbol}</div>
+          <div class="atomic-number az-hidden">${element.atomic_number}</div>
+          <div class="valence-primary-lg az-hidden">${valence_primary}</div>
+          <div class="footer">
+            <div class="valence-primary az-hidden">${valence_primary}</div>
+            <div class="valence az-hidden">${valence}</div>
+            <div class="name az-hidden">${element.name}</div>
           </div>
+         `;
+        if (element.image_url) {
+          html += `
+            <div class="image-primary az-hidden">
+              <img src="${element.image_url}">
+            </div>
+          `;
+        }
+        html +=` 
           <div class="popup az-hidden">
             <i class="close-button fas fa-times"></i>
-            <h5 class="name">${element.symbol} - ${element.name}</h5> 
-            <div class="atomic-number">Atomic Number: ${element.atomic_number}</div> 
-            <div class="valence">Valence: ${element.valence}</div> 
+            <h5 class="popup-name">${element.symbol} - ${element.name}</h5> 
+            <div class="popup-atomic-number">Atomic Number: ${element.atomic_number}</div> 
+            <div class="popup-valence">Ox #: ${valence}</div> 
         `;
 
         if (element.num_isotopes) {
@@ -180,9 +209,15 @@
         var wrapper = document.createElement( 'div' );
         wrapper.className = `element nid-${element.default_atom_nid}`;
         wrapper.id = element.name.toLowerCase();
+
         if (element.default_atom_nid) {
           wrapper.setAttribute('data-nid', element.default_atom_nid);
         }
+
+        if (element.num_isotopes == 0) {
+          $(wrapper).addClass('no-isotopes')
+        }
+
         wrapper.innerHTML = html;
 
         // Create a 3D Object for this element.  Provides for positioning, rotation.
@@ -191,8 +226,9 @@
         // Assign position in periodic table for this element
         let x, y;
         if (layout == 'pte') {
+          let row = element.pte_row > 8 ? element.pte_row - .5 : element.pte_row;
           x =   (element.pte_column * 142) - 1350;
-          y = - (element.pte_row    * 142) + 790;
+          y = - (row                * 142) + 790;
         } else {
           x =   (element.sam_column * 142) - 1350;
           y = - (element.sam_row    * 142) + 790;
@@ -204,9 +240,11 @@
         scene.add( cell );
         element.cell = cell;
         cells[element.name.toLowerCase()] = cell;
+        if (viewer.producer.setCellContent) {
+          viewer.producer.setCellContent();
+        }
       }
     };
-
 
     const create = ($_container, _elements) => {
       if ($_container) $container = $_container;
@@ -216,26 +254,25 @@
       camera.position.z = 2380;
 
       scene = new THREE.Scene();
-
       renderer = new THREE.CSS3DRenderer();
 
       let {width, height} = findWindowSize();
       renderer.setSize( width, height);
       $container.html(renderer.domElement);
-
+//    $container[0].appendChild( renderer.domElement );
 
       window.addEventListener('resize', onResize, false);
 
       // Mouse enters the PTE table - change controls to the PTE
       $container[0].addEventListener('mouseenter', (event) => {
-        viewer.controls.changeControlsMode('az_pte::create mouseenter', 'scene', scene, camera, renderer);
+        viewer.controls.changeControlsMode('az_pte::create mouseenter', 'css3d', scene, camera, renderer);
       });
 
       // Mouse leaves the PTE - change controls back to the scene.
       $container[0].addEventListener('mouseleave', (event) => {
         viewer.controls.changeControlsMode('az_pte::create mouseleave', 'scene');
       });
-//    viewer.controls.changeControlsMode('object', camera, renderer)
+      viewer.controls.changeControlsMode('az_pte::initial', 'css3d', scene, camera, renderer);
 
       createElementsTable();
       onResize();

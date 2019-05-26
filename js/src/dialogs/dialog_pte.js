@@ -12,9 +12,11 @@
       let $content = this.$dialog.find('.content-pane');
 //    window.addEventListener('resize', dialog.onResize);
       viewer.pte.create($content, elements);
+      $('.element .symbol-large').removeClass('az-hidden');
     };
 
     dialog.onOpen = function () {
+      $('.element .symbol-large').removeClass('az-hidden');
       return;
     };
 

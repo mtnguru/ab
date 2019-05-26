@@ -14,6 +14,7 @@ atomizer-base:
     js/src/az.js: {}
     js/src/az_sprites.js: {}
     js/src/az_labels.js: {}
+    js/src/az_snapshot.js: {}
     js/src/az_shapes.js: {}
     js/src/az_nuclet.js: {}
     js/src/az_atom.js: {}
@@ -41,6 +42,7 @@ atomizer-obfuscator:
     js/min/az.js: {}
     js/min/az_sprites.js: {}
     js/min/az_labels.js: {}
+    js/min/az_snapshot.js: {}
     js/min/az_shapes.js: {}
     js/min/az_nuclet.js: {}
     js/min/az_atom.js: {}

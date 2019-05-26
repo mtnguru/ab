@@ -239,84 +239,87 @@ class AtomizerController extends ControllerBase {
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
    */
-  public function loadAtomList() {
-    $response = new AjaxResponse();
+  public function loadAtomList()
+  {
     $data = json_decode(file_get_contents("php://input"), true);
+    $list = NULL;
+    $cid = 'loadAtomList';
+    if ($cache = \Drupal::cache()->get($cid . '1')) {   // The . '1' prevents cache from working.
+      $list = $cache->data;
+    } else {
+      // Query for the elements and atoms.
+      $elements = AtomizerInit::queryElements();
+      $atoms = AtomizerInit::queryAtoms()['results'];
 
-    // Query for the elements and atoms.
-    $elements = AtomizerInit::queryElements();
-    $atoms = AtomizerInit::queryAtoms()['results'];
-
-    // Go through each atom and count number of isotopes per element
-    $isobars = [];
-    foreach ($atoms as $atom) {
-      $eid = $atom->field_element_target_id;
-      if (!empty($elements[$eid])) {
-        // Count the number of isotopes
-        $elements[$eid]['isotopes'][] = $atom;
-        $isobars[$atom->field__protons_value][] = $atom;
-        if (empty($elements[$eid]['numIsotopes'])) {
-          $elements[$eid]['numIsotopes'] = 1;
-        } else {
-          $elements[$eid]['numIsotopes']++;
+      // Go through each atom and count number of isotopes per element
+      $isobars = [];
+      foreach ($atoms as $atom) {
+        $eid = $atom->field_element_target_id;
+        if (!empty($elements[$eid])) {
+          // Count the number of isotopes
+          $elements[$eid]['isotopes'][] = $atom;
+          $isobars[$atom->field__protons_value][] = $atom;
+          if (empty($elements[$eid]['numIsotopes'])) {
+            $elements[$eid]['numIsotopes'] = 1;
+          } else {
+            $elements[$eid]['numIsotopes']++;
+          }
         }
       }
-    }
 
-    // Create list of elements and their isotopes.
-    $list = [];
-    foreach ($elements as $element) {
-      $defaultAtom = null;
-      $imageUrl = '';
+      // Create list of elements and their isotopes.
+      $list = [];
+      foreach ($elements as $element) {
+        $defaultAtom = null;
+        $imageUrl = '';
+        $title = '';
 
-      if ($element['numIsotopes'] == 0) continue;
-      $defaultAtomNid = (!empty($element['defaultAtom'])) ? $element['defaultAtom'] : $element['isotopes'][0]->nid;
-      if ($defaultAtomNid) {
-        if (empty($atoms[$defaultAtomNid])) {
-          $defaultAtom = $atoms[$element['isotopes'][0]->nid];
-        } else {
-          $defaultAtom = $atoms[$defaultAtomNid];
+        if ($element['numIsotopes'] > 0) {
+          $defaultAtomNid = (!empty($element['defaultAtom'])) ? $element['defaultAtom'] : $element['isotopes'][0]->nid;
+          if (empty($atoms[$defaultAtomNid])) {
+            $defaultAtom = $atoms[$element['isotopes'][0]->nid];
+          } else {
+            $defaultAtom = $atoms[$defaultAtomNid];
+          }
+          $title = $defaultAtom->title;
+
+          // add image url
+          $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
+          $fid = $media->image->target_id;
+          if ($fid) {
+            $file = \Drupal\file\Entity\File::load($fid);
+            $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
+            $imageUrl = $style->buildUrl($file->getFileUri());
+          }
         }
 
-        // add image url
-        $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
-        $fid = $media->image->target_id;
-        if ($fid) {
-          $file = \Drupal\file\Entity\File::load($fid);
-          $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
-          $imageUrl = $style->buildUrl($file->getFileUri());
-        }
-      }
-      else {
-        print "build_select_atom_list - defaultAtom error\n";
-      }
+        // if media exists then create the URL for the image.
 
-      // if media exists then create the URL for the image.
-
-      $name = strtolower($element['name']);
-      $list[$name] = [
-        'symbol' => $element['symbol'],
-        'name' => $element['name'],
-        'defaultAtomName' => $defaultAtom->title,
-        'nid' => $element['nid'],
-        'default_atom_nid' => $defaultAtomNid,
-        'stability' => (!empty($defaultAtom->name)) ? $defaultAtom->name : 'Not Set',
-        'atomic_number' => $element['atomicNumber'],
-        'image_url'  => $imageUrl,
-        'pte_row'    => $element['pte_row'],
-        'pte_column' => $element['pte_column'],
-        'sam_row'    => $element['sam_row'],
-        'sam_column' => $element['sam_column'],
-        'num_isotopes' => $element['numIsotopes'],
-        'num_isobars' => $element['numIsobars'],
-        'valence' => $element['valence'],
-        'isotopes' => ($element['numIsotopes']) ? $element['isotopes'] : null,
-        'isobars' => $isobars,
-      ];
+        $name = strtolower($element['name']);
+        $list[$name] = [
+          'symbol' => $element['symbol'],
+          'name' => $element['name'],
+          'defaultAtomName' => $title,
+          'nid' => $element['nid'],
+          'default_atom_nid' => $defaultAtomNid,
+          'stability' => (!empty($defaultAtom->name)) ? $defaultAtom->name : 'Not Set',
+          'atomic_number' => $element['atomicNumber'],
+          'image_url' => $imageUrl,
+          'pte_row' => $element['pte_row'],
+          'pte_column' => $element['pte_column'],
+          'sam_row' => $element['sam_row'],
+          'sam_column' => $element['sam_column'],
+          'num_isotopes' => $element['numIsotopes'],
+          'num_isobars' => $element['numIsobars'],
+          'valence' => $element['valence'],
+          'isotopes' => ($element['numIsotopes']) ? $element['isotopes'] : null,
+        ];
+      }
+      \Drupal::cache()->set($cid, $list);
     }
 
     $data['list'] = &$list;
-
+    $response = new AjaxResponse();
     $response->addCommand(new LoadAtomListCommand($data));
     return $response;
   }
@@ -410,7 +413,7 @@ class AtomizerController extends ControllerBase {
       system($cmd);
     }
 //  $cmd = "rm $spath";
-    system($cmd);
+//  system($cmd);
   }
 
   static private $dialogs = NULL;
