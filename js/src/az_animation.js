@@ -161,16 +161,18 @@
               type: 'atom'
             }, function (object) {
 //            viewer.producer.objectLoaded(object);
-//            viewer.render();
-              viewer.snapshot.takeSnapshot({
-                nid: object.az.nid,
-                width: 1240,
-                height: 1240,
-                filename: object.az.name,
-                overwrite: true,
-              });
+              viewer.render();
               setTimeout(function () {
-                continueAnimation();
+                viewer.snapshot.takeSnapshot({
+                  nid: object.az.nid,
+                  width: 1240,
+                  height: 1240,
+                  filename: object.az.name,
+                  overwrite: true,
+                });
+                setTimeout(function () {
+                  continueAnimation();
+                }, 2000);
               }, 2000);
             });
             break;
