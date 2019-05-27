@@ -1,7 +1,7 @@
 /**
  * @file - az_atom.js
  *
- * Manage atom's - load, save, create
+ * Display a list of atoms, keep track of which atom is selected, allow users to select an atom.
  */
 
 (function ($) {
@@ -27,8 +27,11 @@
     let selectedNid;
     let includeIsotopes = false;
 
+    /**
+     * Make Ajax call to load the element/isotope list.
+     * @param conf
+     */
     const createSelectList = (conf) => {
-
       Drupal.atomizer.base.doAjax(
         '/ajax/loadAtomList',
         { conf: conf },
@@ -36,6 +39,10 @@
       );
     };
 
+    /**
+     * The list is loaded, create the html and display it.
+     * @param results
+     */
     const doCreateSelectList = (results) => {
       let html = '';
       for (let i = 0; i < results.length; i++) {
@@ -135,7 +142,7 @@
     });
 
     /**
-     *
+     * Add event listeners to the # Isotopes element - open/close isotope section when clicked.
      */
     function addIsotopeEnableEventListeners () {
       $('.num-isotopes').click((event) => {
@@ -150,7 +157,7 @@
     }
 
     /**
-     * Add event listeners for when a user selects an atom.
+     * Add event listeners to the default atom
      */
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
@@ -162,7 +169,7 @@
         }
         let nid = $(event.target.parentNode).data('nid');
         nid = (nid) ? nid : $(event.target).data('nid');
-        viewer.atom_select.setSelectedAtom(nid);
+        viewer.atom_select.setSelectedAtom({nid: nid});
         let name = event.target.textContent;
         let id = viewer.producer.createUniqueObjectKey(name);
         viewer.atom.loadObject({
@@ -178,6 +185,7 @@
         }
       });
 
+      // User click on the "Select Atom" button
       $atomSelectEnable.click((event) => {
         event.preventDefault();
         if ($wrapper.hasClass('az-hidden')) {
@@ -188,11 +196,15 @@
         return false;
       });
 
+      // User click on 'X' close button
       $atomSelectClose.click(() => {
         $wrapper.addClass('az-hidden');
       });
     }
 
+    /**
+     * Create an array of atom nid's so we can cycle through the list in order.
+     */
     function buildList() {
       // If the list doesn't exist then build it.
       if (atomListSequence.length == 0) {
@@ -204,8 +216,16 @@
       }
     }
 
+    /**
+     * Return the currently selected atom.
+     * @returns {*}
+     */
     const getSelectedAtom = () => selectedNid;
 
+    /**
+     * Find the next atom in the atomListSequence.
+     * @returns {*}
+     */
     const getNextAtom = () => {
       if (atomListSequence.length == 0) {
         buildList();
@@ -214,6 +234,10 @@
       return selectedNid = atomListSequence[selectedIndex];
     };
 
+    /**
+     * Find the previous atom in the atomListSequence.
+     * @returns {*}
+     */
     const getPreviousAtom = () => {
       if (atomListSequence.length == 0) {
         buildList();
@@ -222,22 +246,27 @@
       return selectedNid = atomListSequence[selectedIndex];
     };
 
-    const setSelectedAtom = (atomNid) => {
+    /**
+     * Set the currently selected atom and highlight it in the atom list
+     * @param nid
+     */
+    const setSelectedAtom = (selection) => {
       if (atomListSequence.length == 0) {
         buildList();
       }
-      selectedNid = atomNid;
+      let nid = selection.nid ? selection.nid : atomListSequence[selection.index];
+      selectedNid = nid;
       selectedIndex = atomListSequence.indexOf(selectedNid);
 
       if ($atoms) {
         $atoms.removeClass('selected');
-        $atoms.find(`.nid-${atomNid}`).parents('.default-isotope').addClass('selected');
+        $atoms.find(`.nid-${nid}`).parents('.default-isotope').addClass('selected');
       }
       if ($isotopes) {
         $isotopes.removeClass('selected');
-        $isotopes.find(`.nid-${atomNid}`).parent('.isotope').addClass('selected');
+        $isotopes.find(`.nid-${nid}`).parent('.isotope').addClass('selected');
       }
-      console.log(`setSelectedAtom ${atomNid}`);
+      console.log(`setSelectedAtom ${nid}`);
     };
 
     createSelectList({});

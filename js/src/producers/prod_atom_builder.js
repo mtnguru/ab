@@ -112,7 +112,7 @@
         type: 'atom',
       });
 
-      viewer.atom_select.setSelectedAtom(nid);
+      viewer.atom_select.setSelectedAtom({nid: nid});
     };
 
     var objectLoaded = function (_atom) {

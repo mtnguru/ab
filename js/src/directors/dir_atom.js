@@ -806,6 +806,7 @@
         $nucletFormBlock.insertAfter($('.blocks--nuclet-list'), viewer.context);
 
         // Create a new list recursively
+        $nucletList.empty();
         $nucletList.html(addNucletToList('N0', 0));
 
         $nucletButtons = $nucletList.find('.nuclet');
@@ -827,6 +828,7 @@
           }
         });
       } else {
+        $nucletList.empty();
         $nucletList.html(addNucletToList('N0', 0));
       }
 

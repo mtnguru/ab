@@ -54,7 +54,7 @@
       $(elementPopup).find('.atom-name').click(function (event) {
         event.preventDefault();
         let nid = $(event.target).data('nid');
-        viewer.atom_select.setSelectedAtom(nid);
+        viewer.atom_select.setSelectedAtom({nid: nid});
         viewer.atom.loadObject({nid: nid});
         return false;
       });
@@ -76,23 +76,6 @@
       console.log(`onMouseDown - ${$element[0].className}`);
       switch (event.button) {
         case 0:     // Select element as new atom.
-          if (nid) {
-            if (viewer.atom_select) {
-              viewer.atom_select.setSelectedAtom(nid);
-            }
-            if (viewer.atom) {
-              viewer.atom.loadObject({nid: nid});
-            }
-            if (elementPopup) {
-              let $popup = $(`.pte-container .element.nid-${nid} .popup`);
-              elementPopup.innerHTML = $popup.html();
-            }
-            setElementPopupEventHandlers();
-          }
-          break;
-        case 1:     // Nothing?
-          break;
-        case 2:     // Display the elementPopup
           // If it doesn't exist then create it.
           if (!elementPopup) {
             elementPopup = document.createElement('div');
@@ -118,10 +101,28 @@
 
           // Copy the contents from the isotope to the popup dialog.
           let $popup = $element.find('.popup');
+          $(elementPopup).empty();
           elementPopup.innerHTML = $popup.html();
           $(elementPopup).show();
 
           setElementPopupEventHandlers();
+          break;
+        case 1:     // Nothing?
+          break;
+        case 2:     // Display the elementPopup
+          if (nid) {
+            if (viewer.atom_select) {
+              viewer.atom_select.setSelectedAtom({nid: nid});
+            }
+            if (viewer.atom) {
+              viewer.atom.loadObject({nid: nid});
+            }
+            if (elementPopup) {
+              let $popup = $(`.pte-container .element.nid-${nid} .popup`);
+              elementPopup.innerHTML = $popup.html();
+            }
+            setElementPopupEventHandlers();
+          }
           break;
       }
     };
@@ -227,8 +228,9 @@
         let x, y;
         if (layout == 'pte') {
           let row = element.pte_row > 8 ? element.pte_row - .5 : element.pte_row;
-          x =   (element.pte_column * 142) - 1350;
-          y = - (row                * 142) + 790;
+          let col = element.pte_row > 8 ? element.pte_column - 1 : element.pte_column;
+          x =   (col * 142) - 1350;
+          y = - (row * 142) + 790;
         } else {
           x =   (element.sam_column * 142) - 1350;
           y = - (element.sam_row    * 142) + 790;
@@ -250,7 +252,8 @@
       if ($_container) $container = $_container;
       if (_elements) elements = _elements;
 
-      camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
+//    camera = new THREE.OrthographicCamera(window.innerWidth / window.innerHeight, 1, 10000);
+      camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000);
       camera.position.z = 2380;
 
       scene = new THREE.Scene();
@@ -285,7 +288,6 @@
       for (let elementName in displayedElements) {
         setElementColor(elementName, displayedElements[elementName]);
       }
-
     };
 
     function findWindowSize() {

@@ -520,6 +520,7 @@
         Drupal.atomizer.base.doAjax(
           '/ajax/saveImage',
           {
+            type: 'atom',
             sceneNid: viewer.scene.az.sceneNid,
             action: 'saveImage',
             filename: filename,
@@ -603,6 +604,10 @@
 
       controls.keys = [65, 83, 68];
       controls.addEventListener('change', function (event) {
+        console.log ('az_controls moveMouse: ' +
+          viewer.camera.position.x + ' ' +
+          viewer.camera.position.y + ' ' +
+          viewer.camera.position.z);
         renderer.render(scene, object);
       });
       return controls;
@@ -615,8 +620,8 @@
      */
     function createCss3dTrackballControls(scene, object, renderer) {
       let controls = new THREE.TrackballControls(object, renderer.domElement);
-      controls.minDistance = 500;
-      controls.maxDistance = 6000;
+      controls.minDistance = 100;
+      controls.maxDistance = 8000;
       controls.noRotate =   true;
 
       controls.keys = [65, 83, 68];

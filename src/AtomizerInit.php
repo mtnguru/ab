@@ -99,6 +99,7 @@ class AtomizerInit {
         'nfp' => ['field__protons_value'],
         'nfe' => ['field_element_target_id'],
         'nfm' => ['field_media_target_id'],
+        'nfi' => ['field_image_target_id'],
         'nfab' => ['field_abundance_value'],
         'ttfd' => ['name'],  // Stability - taxonomy term name
       ],

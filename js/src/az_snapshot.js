@@ -43,17 +43,18 @@
       viewer.render();
 
       let filename = settings.filename || viewer.scene.az.name;
-      filename = filename.replace(/ /g, "-");
+      filename = filename.replace(/ /g, "-").toLowerCase();
 
       Drupal.atomizer.base.doAjax(
         '/ajax/saveImage',
         {
+          type: 'atom',
           sceneNid: viewer.scene.az.sceneNid,
           action: 'saveImage',
           filename: filename,
           directory: 'atoms',
           overwrite: settings.overwrite || false,
-          sceneName: viewer.scene.az.atomName,
+          sceneName: viewer.scene.az.name,
           imgBase64: img
         },
         imageSaved
@@ -71,26 +72,39 @@
     }
 
     function buttonClicked(event) {
-      if (event.target.id == 'snapshot--save') {
-        if (snapshotType == 'single') {
+      switch (event.target.id) {
+        case 'snapshot--shutter':
           takeSnapshot({
+            nid: viewer.scene.az.sceneNid,
             width: 1240,
             height: 1240,
-            filename: `${viewer.scene.az.atomName}`,
+            filename: viewer.scene.az.name,
             overwrite: true,
           });
-        } else {
-          let cycle = $('.snapshot-cycle', viewer.context).is(':checked');
-          if (cycle) {
-          } else {
+          break;
+        case 'snapshot--save':
+          if (snapshotType == 'single') {
             takeSnapshot({
+              nid: viewer.scene.az.sceneNid,
               width: 1240,
               height: 1240,
-              filename: `${viewer.scene.az.atomName}--${snapsnotType}`,
+              filename: viewer.scene.az.name,
               overwrite: true,
             });
+          } else {
+            let cycle = $('.snapshot-cycle', viewer.context).is(':checked');
+            if (cycle) {
+            } else {
+              takeSnapshot({
+                nid: viewer.scene.az.sceneNid,
+                width: 1240,
+                height: 1240,
+                filename: `${viewer.scene.az.name}--${snapsnotType}`,
+                overwrite: true,
+              });
+            }
           }
-        }
+          break;
       }
     }
 

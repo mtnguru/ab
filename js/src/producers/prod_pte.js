@@ -203,6 +203,12 @@
         viewer.render();
         console.log(`createView: node is read in`) ;
       });
+
+      // Implement 'change' event listener to reset rotation to 0
+//    viewer.controls.addEventListener('change', function (event) {
+//      return;
+//     });
+
       animate();
       return;
     };

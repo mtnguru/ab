@@ -12,27 +12,29 @@
     const FORWARD = 1;
     const REVERSE = -1;
 
-    var viewer = _viewer;
-    var state = 'stopped';
-    var pausing = false;
-    var direction = FORWARD;
-    var animateFile;
-    var animateConf;
-    var $selectAnimation = $('.animation--selectyml select');
-    var timeouts = {};
-    var loop;
-    var loopStep;
-    var loopIndex = 0;
-    var loopStepIndex = 0;
-    var loopTimeout;
-    var loopValues;
-    var currentAtom = 0;
-    var increment = false;
+    let viewer = _viewer;
+    let state = 'stopped';
+    let pausing = false;
+    let direction = FORWARD;
+    let animateFile;
+    let animateConf;
+    let cameraStart;
+    let atomCounter;
+    let $selectAnimation = $('.animation--selectyml select');
+    let timeouts = {};
+    let loop;
+    let loopStep;
+    let loopIndex = 0;
+    let loopStepIndex = 0;
+    let loopTimeout;
+    let loopValues;
+    let currentAtom = 0;
+    let increment = false;
 
-    var $wrapper = $('.blocks--animation--wrapper');
-    var $buttons = $wrapper.find('.az-button');
+    let $wrapper = $('.blocks--animation--wrapper');
+    let $buttons = $wrapper.find('.az-button');
 
-    var loadYml = function (results) {
+    let loadYml = function (results) {
       animateFile = results[0].data.filename;
       animateConf = results[0].ymlContents;
       localStorage.setItem('atomizer_animation_file', animateFile);
@@ -48,9 +50,9 @@
      */
     function advanceOrbitals() {
 
-      var rotSpeed = viewer.theme.get('animation--speed') / 1000;
+      let rotSpeed = viewer.theme.get('animation--speed') / 1000;
 
-      var x = viewer.camera.position.x,
+      let x = viewer.camera.position.x,
         y = viewer.camera.position.y,
         z = viewer.camera.position.z;
 
@@ -63,7 +65,7 @@
 
     function play(_direction) {
       direction = _direction;
-      var currentFile = $selectAnimation.val();
+      let currentFile = $selectAnimation.val();
       if (animateFile != currentFile) {
         // Check to see if file is loaded, load if necessary.
         animateFile = currentFile;
@@ -92,7 +94,7 @@
     }
 
     function stopTimers() {
-      for (var timeout in animateConf.timers) {
+      for (let timeout in animateConf.timers) {
         clearTimeout(timeouts[timeout]);
       }
       timeouts = {};
@@ -103,9 +105,19 @@
     }
 
     function startTimers() {
-      for (var timerName in animateConf.timers) {
-        var timerConf = animateConf.timers[timerName];
-        var speed = viewer.theme.get('animation--speed');
+      cameraStart = viewer.camera.position;
+      // Capture the current zoom - camera position.  Assume that is 1
+      // Set the starting atom.
+      // First get the snapshot working
+      atomCounter = 0;
+      viewer.atom_select.setSelectedAtom({index: atomCounter});
+      continueTimers();
+    }
+
+    function continueTimers() {
+      for (let timerName in animateConf.timers) {
+        let timerConf = animateConf.timers[timerName];
+        let speed = viewer.theme.get('animation--speed');
         timeouts[timerName] = setTimeout(() => {
           applyTimer(timerName, timerConf);
           increment = true;
@@ -117,14 +129,17 @@
 
       function applyTimer(name, conf) {
         switch (name) {
+          case 'cycleimageatoms':
           case 'cycleatoms':
             if (increment) {
               if (direction == FORWARD) {
                 console.log(`applyTimer::getNextAtom ${currentAtom}`);
                 currentAtom = viewer.atom_select.getNextAtom();
+                atomCounter++;
               } else {
                 console.log(`applyTimer::getNextAtom ${currentAtom}`);
                 currentAtom = viewer.atom_select.getPreviousAtom();
+                atomCounter--;
               }
             }
             else {
@@ -132,16 +147,31 @@
               currentAtom = viewer.atom_select.getSelectedAtom();
             }
 
+            if (conf.zoom && conf.zoom[atomCounter]) {
+              viewer.camera.position.x = cameraStart.x * conf.zoom[atomCounter];
+              viewer.camera.position.y = cameraStart.y * conf.zoom[atomCounter];
+              viewer.camera.position.z = cameraStart.z * conf.zoom[atomCounter];
+            }
+
             console.log(`applyTimer: ${currentAtom}`);
             pauseAnimation();
-            viewer.atom_select.setSelectedAtom(currentAtom);
+            viewer.atom_select.setSelectedAtom({nid: currentAtom});
             viewer.atom.loadObject({
               nid: currentAtom,
               type: 'atom'
             }, function (object) {
 //            viewer.producer.objectLoaded(object);
 //            viewer.render();
-              continueAnimation();
+              viewer.snapshot.takeSnapshot({
+                nid: object.az.nid,
+                width: 1240,
+                height: 1240,
+                filename: object.az.name,
+                overwrite: true,
+              });
+              setTimeout(function () {
+                continueAnimation();
+              }, 2000);
             });
             break;
 
@@ -152,8 +182,8 @@
             loopStepIndex = 0;
             loopStep = loop[loopIndex];
             if (loopStep.parms) {
-              for (var parm in loopStep.parms) {
-                var vals = loopStep.parms[parm];
+              for (let parm in loopStep.parms) {
+                let vals = loopStep.parms[parm];
                 vals[2] = (vals[0] - vals[1]) / loopStep.steps;
                 vals[3] = vals[0];
                 viewer.theme.applyControl(parm, vals[3]);
@@ -180,7 +210,7 @@
         state = 'paused';
 
       } else {
-        startTimers();
+        continueTimers();
         state = 'running';
         animate();
       }
@@ -199,16 +229,16 @@
         loopIndex = (loopIndex + 1 == loop.length) ? 0 : loopIndex + 1;
         loopStep = loop[loopIndex];
         loopStepIndex = 0;
-        for (var parm in loopStep.parms) {
-          var vals = loopStep.parms[parm];
+        for (let parm in loopStep.parms) {
+          let vals = loopStep.parms[parm];
           vals[2] = (vals[0] - vals[1]) / loopStep.steps,
           vals[3] = vals[0];
         }
       }
 
       if (loopStep.parms) {
-        for (var parm in loopStep.parms) {
-          var vals = loopStep.parms[parm];
+        for (let parm in loopStep.parms) {
+          let vals = loopStep.parms[parm];
           vals[3] -= vals[2];
           viewer.theme.applyControl(parm, vals[3]);
         }
@@ -224,7 +254,7 @@
       loopStepIndex = 0;
       loopStep = animateConf.loop[loopIndex]
       if (loopStep.parms) {
-        for (var parm in loopStep.parms) {
+        for (let parm in loopStep.parms) {
           loopValues[parm] = loopStep.parms[parm];
           viewer.theme.applyControl(parm, loopValues[parm]);
         }
@@ -236,7 +266,7 @@
     } */
 
     function startAnimation() {
-      var key;
+      let key;
       if (animateConf.timers) {
         startTimers();
       }
@@ -264,7 +294,7 @@
             }
             break;
           case 'birkeland':
-            var speed = viewer.theme.get('animation--speed');
+            let speed = viewer.theme.get('animation--speed');
 //          setTimeout(function() {
               requestAnimationFrame(animate);
 //          }, (100 - viewer.theme.get('animation--speed')));
@@ -277,14 +307,14 @@
       }
     }
 
-    var stopAnimation = function() {
+    const stopAnimation = function() {
       state = 'stopped';
       stopTimers();
       $buttons.removeClass('az-selected');
       $(button).addClass('az-selected');
-    }
+    };
 
-    var buttonClicked = function buttonClicked(event) {
+    const buttonClicked = function buttonClicked(event) {
       switch (event.target.id) {
         case 'animation--reverse':
           play(REVERSE);

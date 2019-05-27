@@ -245,6 +245,7 @@ class AtomizerController extends ControllerBase {
     $list = NULL;
     $cid = 'loadAtomList';
     if ($cache = \Drupal::cache()->get($cid . '1')) {   // The . '1' prevents cache from working.
+//  if ($cache = \Drupal::cache()->get($cid)) {   // The . '1' prevents cache from working.
       $list = $cache->data;
     } else {
       // Query for the elements and atoms.
@@ -285,12 +286,22 @@ class AtomizerController extends ControllerBase {
 
           // add image url
           $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
+          if ($defaultAtom->field_image_target_id) {
+            $fid = $defaultAtom->field_image_target_id;
+            $file = \Drupal\file\Entity\File::load($fid);
+            $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
+            $imageUrl = $style->buildUrl($file->getFileUri());
+          }
+          /*
+          // add image url
+          $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
           $fid = $media->image->target_id;
           if ($fid) {
             $file = \Drupal\file\Entity\File::load($fid);
             $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
             $imageUrl = $style->buildUrl($file->getFileUri());
           }
+          */
         }
 
         // if media exists then create the URL for the image.
@@ -450,6 +461,9 @@ class AtomizerController extends ControllerBase {
     $fp = fopen($path, 'w');
     fwrite($fp, base64_decode($filtered_data[1]));
     fclose($fp);
+    $fp = fopen('/home/az/tmp/shit', 'w');
+    fwrite($fp, 'shit');
+    fclose($fp);
   }
 
   /**
@@ -472,6 +486,42 @@ class AtomizerController extends ControllerBase {
     return new AjaxResponse();
   }
 
+  public function _saveAtomImage($data) {
+
+    $atom = $this->entityTypeManager->getStorage('node')->load($data['sceneNid']);
+    $filename = $data['filename'] . '.png';
+//  $tmpPath = file_directory_temp() . '/' . $filename;
+    $tmpPath = '/home/az/tmp/' . $filename;
+    $finalpath = DRUPAL_ROOT . '/sites/default/files/atoms_primary/' . $filename;
+
+    // The atom does not have a image file, create a new one
+    if (!$atom->hasField('field_image') || $atom->field_image->isEmpty()) {
+      $file = File::create(['uri' => 'public://atoms_primary/' . $filename]);
+      $file->save();
+
+      // Set the image
+      $image = $atom->field_image->getValue();
+      $image[0]['target_id'] = $file->id();
+      $atom->field_image->setValue(($image));
+
+      $atom->save();
+    } else {
+      $file = $atom->field_image->entity;
+      $file->setFileUri('public://atoms_primary/' . $filename);
+      $file->save;
+    }
+
+    // Clear the styles directory for all atoms.
+    system('rm -r ' . DRUPAL_ROOT . '/sites/default/files/styles/*/*/atoms_primary/*');
+
+    $this->writeImage($tmpPath, $data['imgBase64']);
+    $this->convertImage($tmpPath, $finalpath);
+
+    // @TODO - return confirmation message.
+    $response = new AjaxResponse();
+    return $response;
+  }
+
   /**
    * Save an edited image into a new media entity.
    *
@@ -480,6 +530,9 @@ class AtomizerController extends ControllerBase {
    */
   public function saveImage() {
     $data = json_decode(file_get_contents("php://input"), TRUE);
+    if ($data['type'] == 'atom') {
+      return self::_saveAtomImage($data);
+    }
 
     $n = 0;
     $filename = $data['filename'];
@@ -490,7 +543,6 @@ class AtomizerController extends ControllerBase {
 
     // Save image, process through 'convert' command to reduce file size.
     $tmpPath = file_directory_temp() . '/' . $newfilename;
-
     $this->writeImage($tmpPath, $data['imgBase64']);
     $this->convertImage($tmpPath, $newpath);
 
