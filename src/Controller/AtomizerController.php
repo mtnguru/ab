@@ -485,15 +485,15 @@ class AtomizerController extends ControllerBase {
 
   public function _saveAtomImage($data) {
 
-    error_log("_saveAtomImage\n");
+    error_log("_saveAtomImage - enter");
     $atom = $this->entityTypeManager->getStorage('node')->load($data['sceneNid']);
     $filename = $data['filename'] . '.png';
-    $tmpPath = file_directory_temp() . $filename;
+    $tmpPath = file_directory_temp() . '/' . $filename;
     $finalpath = DRUPAL_ROOT . '/sites/default/files/atoms_primary/' . $filename;
 
     // The atom does not have a image file, create a new one
     if (!$atom->hasField('field_image') || $atom->field_image->isEmpty()) {
-      error_log("_saveAtomImage create new\n");
+      error_log("_saveAtomImage - create new");
       $file = File::create(['uri' => 'public://atoms_primary/' . $filename]);
       $file->save();
 
@@ -504,7 +504,7 @@ class AtomizerController extends ControllerBase {
 
       $atom->save();
     } else {
-      error_log("_saveAtomImage overwrite\n");
+      error_log("_saveAtomImage - overwrite");
       $file = $atom->field_image->entity;
       $file->setFileUri('public://atoms_primary/' . $filename);
       $file->save;
@@ -513,9 +513,9 @@ class AtomizerController extends ControllerBase {
     // Clear the styles directory for all atoms.
     system('rm -r ' . DRUPAL_ROOT . '/sites/default/files/styles/*/*/atoms_primary/*');
 
-    error_log("_saveAtomImage writeImage " . $tmpPath);
+    error_log("_saveAtomImage - writeImage " . $tmpPath);
     $this->writeImage($tmpPath, $data['imgBase64']);
-    error_log("_saveAtomImage convertImage " . $finalPath);
+    error_log("_saveAtomImage - convertImage " . $finalpath);
     $this->convertImage($tmpPath, $finalpath);
 
     // @TODO - return confirmation message.
