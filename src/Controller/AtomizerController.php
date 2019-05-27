@@ -461,9 +461,6 @@ class AtomizerController extends ControllerBase {
     $fp = fopen($path, 'w');
     fwrite($fp, base64_decode($filtered_data[1]));
     fclose($fp);
-    $fp = fopen('/home/az/tmp/shit', 'w');
-    fwrite($fp, 'shit');
-    fclose($fp);
   }
 
   /**
@@ -491,7 +488,7 @@ class AtomizerController extends ControllerBase {
     $atom = $this->entityTypeManager->getStorage('node')->load($data['sceneNid']);
     $filename = $data['filename'] . '.png';
 //  $tmpPath = file_directory_temp() . '/' . $filename;
-    $tmpPath = '/home/az/tmp/' . $filename;
+    $tmpPath = file_directory_temp() . $filename;
     $finalpath = DRUPAL_ROOT . '/sites/default/files/atoms_primary/' . $filename;
 
     // The atom does not have a image file, create a new one
