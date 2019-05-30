@@ -141,7 +141,11 @@ function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
     }
   }
 
-  $form_state->setValue(['field_an_isotope',0,'value'], sprintf ("%3s:%3s\n", $element['atomicNumber'], $protons));
+  if ($form_state->hasValue('field_element', 0, 'target_id')) {
+    $eid = $form_state->getValue('field_element')[0]['target_id'];
+    $element = Node::load($eid);
+    $form_state->setValue(['field_an_isotope',0,'value'], sprintf ("%3s:%3s\n", $element->field_atomic_number->value, $protons));
+  }
 
   // Normalize the actual mass using hydrogen instead of carbon.
   if ($form_state->hasValue(['field_mass_actual', 0, 'value'])) {
