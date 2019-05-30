@@ -82,7 +82,7 @@ class AtomizerInit {
   }
 
   static function queryAtoms() {
-    $perm = ['public'];
+    $perm = ['public','stats'];
     if (\Drupal::currentUser()->hasPermission('atomizer atoms development')) { $perm[] = 'development'; }
     if (\Drupal::currentUser()->hasPermission('atomizer atoms members'))     { $perm[] = 'members'; }
     if (\Drupal::currentUser()->hasPermission('atomizer atoms trusted'))     { $perm[] = 'trusted'; }
@@ -97,6 +97,7 @@ class AtomizerInit {
         'nfd' => ['nid', 'title'],
         'nfan' => ['field_atomic_number_value'],
         'nfp' => ['field__protons_value'],
+        'nfap' => ['field_approval_value'],
         'nfe' => ['field_element_target_id'],
         'nfm' => ['field_media_target_id'],
         'nfi' => ['field_image_target_id'],

@@ -77,13 +77,14 @@
             // Add the isotope list
             for (let i = 0; i < element.isotopes.length; i++) {
               let isotope = element.isotopes[i];
+              let abundance = (isotope.field_abundance_value) ? isotope.field_abundance_value + '%' : '';
               html += `
                 <li class="isotope not-default">
                   <a href="#" class="atom-name nid-${isotope.nid}"
                      data-nid="${isotope.nid}"
                      data-stability="${isotope.name.toLowerCase()}"
                   >
-                    ${isotope.title}
+                    ${isotope.title} ${abundance}
                   </a>
                 </li>
               `;

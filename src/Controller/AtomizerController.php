@@ -244,8 +244,8 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), true);
     $list = NULL;
     $cid = 'loadAtomList';
-    if ($cache = \Drupal::cache()->get($cid . '1')) {   // The . '1' prevents cache from working.
-//  if ($cache = \Drupal::cache()->get($cid)) {   // The . '1' prevents cache from working.
+//  if ($cache = \Drupal::cache()->get($cid . '1')) {   // The . '1' prevents cache from working.
+    if ($cache = \Drupal::cache()->get($cid)) {   // The . '1' prevents cache from working.
       $list = $cache->data;
     } else {
       // Query for the elements and atoms.
