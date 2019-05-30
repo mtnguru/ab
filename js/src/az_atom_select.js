@@ -59,7 +59,7 @@
               <div class="default-isotope stability-${element.stability.toLowerCase()}">
                 <span class="atomic-number">${element.atomic_number}</span>
                 <span class="atom-title ${element.stability.toLowerCase()}">
-                  <a href="#" class="atom-name select-item-name nid-${element.default_atom_nid}"
+                  <a href="#" class="atom-name enabled select-item-name nid-${element.default_atom_nid}"
                     data-nid="${element.default_atom_nid}"
                     data-stability="${element.stability.toLowerCase()}"
                   >
@@ -77,10 +77,11 @@
             // Add the isotope list
             for (let i = 0; i < element.isotopes.length; i++) {
               let isotope = element.isotopes[i];
+              let approvalClass = (isotope.field_approval_value == 'stats') ? 'disabled' : 'enabled';
               let abundance = (isotope.field_abundance_value) ? isotope.field_abundance_value + '%' : '';
               html += `
                 <li class="isotope not-default">
-                  <a href="#" class="atom-name nid-${isotope.nid}"
+                  <a href="#" class="atom-name nid-${isotope.nid} ${approvalClass}"
                      data-nid="${isotope.nid}"
                      data-stability="${isotope.name.toLowerCase()}"
                   >
@@ -162,7 +163,7 @@
      */
     function addSelectAtomEventListeners() {
       // Add Event listeners to atoms to select.
-      let $satoms = $('.atom-name, .atomic-number', viewer.context);
+      let $satoms = $('.atom-name.enabled, .atomic-number', viewer.context);
       $satoms.click((event) => {
         event.preventDefault();
         if (!showDialog) {

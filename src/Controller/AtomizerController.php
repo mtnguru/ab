@@ -244,8 +244,8 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), true);
     $list = NULL;
     $cid = 'loadAtomList';
-//  if ($cache = \Drupal::cache()->get($cid . '1')) {   // The . '1' prevents cache from working.
-    if ($cache = \Drupal::cache()->get($cid)) {   // The . '1' prevents cache from working.
+    if ($cache = \Drupal::cache()->get($cid . '1')) {   // The . '1' prevents cache from working.
+//  if ($cache = \Drupal::cache()->get($cid)) {   // The . '1' prevents cache from working.
       $list = $cache->data;
     } else {
       // Query for the elements and atoms.
@@ -285,23 +285,13 @@ class AtomizerController extends ControllerBase {
           $title = $defaultAtom->title;
 
           // add image url
-          $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
+//        $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
           if ($defaultAtom->field_image_target_id) {
             $fid = $defaultAtom->field_image_target_id;
             $file = \Drupal\file\Entity\File::load($fid);
             $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
             $imageUrl = $style->buildUrl($file->getFileUri());
           }
-          /*
-          // add image url
-          $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
-          $fid = $media->image->target_id;
-          if ($fid) {
-            $file = \Drupal\file\Entity\File::load($fid);
-            $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
-            $imageUrl = $style->buildUrl($file->getFileUri());
-          }
-          */
         }
 
         // if media exists then create the URL for the image.

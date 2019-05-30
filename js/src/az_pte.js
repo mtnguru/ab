@@ -144,7 +144,7 @@
             valence += `<span class="secondary">${item}</span>`;
           }
         }
-        
+
         let html = `
           <div class="symbol-large az-hidden" title="${element.name} - ${element.atomic_number}">${element.symbol}</div>
           <div class="symbol az-hidden">${element.symbol}</div>
@@ -178,8 +178,9 @@
           `;
           for (let isotope of element.isotopes) {
             let abundance = (isotope.field_abundance_value) ? isotope.field_abundance_value + '%' : '';
+            let approvalClass = (isotope.field_approval_value == 'stats') ? 'disabled' : 'enabled';
             html += `
-              <tr class="isotope">
+              <tr class="isotope ${approvalClass}">
                 <td><a 
                   href="#" 
                   class="atom-name stability-${isotope.name.toLowerCase()}" 
