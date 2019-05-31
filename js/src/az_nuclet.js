@@ -1427,24 +1427,64 @@
       }
     }
 
+    /**
+     * Show the number of protons and electrons
+     */
+    function countParticles(nuclet) {
+      let particles = {
+        numProtons: 0,
+        numElectrons: 0,
+        numUnclassified: 0,
+      };
+
+      // Add protons
+      for (let p in nuclet.az.protons) {
+        let proton = nuclet.az.protons[p];
+        if (!proton.az) {
+          particles.numUnclassified++;
+        }
+        else if (proton.az.visible) {
+          particles.numProtons++;
+        }
+      }
+
+      // Add neutrons
+      for (let p in nuclet.az.neutrons) {
+        if (nuclet.az.neutrons.hasOwnProperty(p)) {
+          let neutron = nuclet.az.neutrons[p];
+          if (neutron.az.visible) {
+            particles.numProtons++;
+          }
+        }
+      }
+
+      // Add NElectrons
+      for (let p in nuclet.az.nelectrons) {
+        particles.numElectrons++;
+      }
+
+      return particles;
+    }
+
 
     // Return references to class functions - makes this into a pseudo-class.
     return {
-      makeProton: makeProton,
-      createNElectron: createNElectron,
-      getProtonName: getProtonName,
-      showProtons: showProtons,
-      createNuclet: createNuclet,
-      deleteNuclet: deleteNuclet,
-      createGeometry: createGeometry,
-      createGeometryWireframe: createGeometryWireframe,
-      createGeometryFaces: createGeometryFaces,
-      createTetrahedronLines: createTetrahedronLines,
-      highlight: highlight,
-      protonRadius: protonRadius,
-      setProtonColor: setProtonColor,
-      setElectronColor: setElectronColor,
-      getConstants: function () { return constants; }
+      makeProton,
+      createNElectron,
+      getProtonName,
+      showProtons,
+      createNuclet,
+      deleteNuclet,
+      createGeometry,
+      createGeometryWireframe,
+      createGeometryFaces,
+      createTetrahedronLines,
+      highlight,
+      protonRadius,
+      setProtonColor,
+      setElectronColor,
+      countParticles,
+      getConstants: function () { return constants; },
     };
   };
 

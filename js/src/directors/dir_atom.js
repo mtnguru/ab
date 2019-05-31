@@ -740,43 +740,63 @@
     }
 
     /**
-     * Create a list of nuclets for the nuclet edit form.
+     * Create a list of nuclets for the nuclet edit form - recursive.
+     *
+     * @param atom
      */
     function createNucletList(atom) {
-      var totalBE = 0; // total Binding Energy for this atom.
-      var actualBE = parseFloat($('.field--name-field-be-actual .field__item').html());
+      let totalBE = 0; // total Binding Energy for this atom.
+      let actualBE = parseFloat($('.field--name-field-be-actual .field__item').html());
+      let showBindingEnergy = $('#atom--be-button').hasClass('az-selected') ? '' : 'az-hidden';
       /**
        * Recursive function to extract a nuclets information.
        *
        * @param id
-       * @param spacing
+       * @param shell
        * @returns {string}
        */
       function addNucletToList(id, shell) {
-        var showBindingEnergy = $('#atom--be-button').hasClass('az-selected') ? '' : 'az-hidden';
-        var nuclet = atom.az.nuclets[id];
-        var numProtons = 0;
-        var numNeutral = 0;
-        for (var p in nuclet.az.protons) {
-          var proton = nuclet.az.protons[p];
-          if (proton.az && proton.az.visible) {
-            if (proton.az.type == 'neutral') {
-              numNeutral++;
-            }
-            else {
-              numProtons++;
-            }
+        let nuclet = atom.az.nuclets[id];
+
+        let totalProtons = 0;
+        let particles;
+        particles = viewer.nuclet.countParticles(nuclet);
+
+        // Recursively add the children nuclets.
+        let grow0 = atom.az.nuclets[id + '0'];
+        let grow1 = atom.az.nuclets[id + '1'];
+        let children = '';
+        let n;
+        if (grow0 || grow1) {
+          if (grow0) {
+            n = addNucletToList(id + '0', shell + 1);
+            children += n.out;
+            totalProtons += n.totalProtons
+          }
+          if (grow1) {
+            n = addNucletToList(id + '1', shell + 1);
+            children += n.out;
+            totalProtons += n.totalProtons
           }
         }
 
-        var out = '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">';
-        out += `<div class="header" data-nuclet-id="${id}" data-atom-id="${atom.az.id}">${id} ${nuclet.az.state} - ${numProtons}</div>`;
+        totalProtons += particles.numProtons;
+
+        let out = '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">';
+        out += `<div 
+          class="header" 
+          data-nuclet-id="${id}" 
+          data-atom-id="${atom.az.id}"
+        >
+           ${id} ${nuclet.az.state} - ${particles.numProtons} ${totalProtons != particles.numProtons ? ' - ' + totalProtons : ''}
+        </div>`;
+
         // Add the binding energy
-        var beList = findBindingEnergy(nuclet.az);
+        let beList = findBindingEnergy(nuclet.az);
         if (beList.length > 0) {
           out += `<div class="binding-energy-wrapper ${showBindingEnergy}">\n`;
-          for (var b = 0; b < beList.length; b++) {
-            var en = beList[b];
+          for (let b = 0; b < beList.length; b++) {
+            let en = beList[b];
             out += '  <div class="binding-energy">\n';
             out += '    <span class="title">' + en + '</span>\n';
             out += '    <span class="value">' + bindingEnergies[en] + '</span>\n';
@@ -787,18 +807,9 @@
         }
         out += '</div>\n';
 
-        // Recursively add the children nuclets.
-        var grow0 = atom.az.nuclets[id + '0'];
-        var grow1 = atom.az.nuclets[id + '1'];
-        if (grow0 || grow1) {
-          if (grow0) {
-            out += addNucletToList(id + '0', shell + 1);
-          }
-          if (grow1) {
-            out += addNucletToList(id + '1', shell + 1);
-          }
-        }
-        return out;
+        out += children;
+
+        return {out, totalProtons};
       } // end function  addNucletToList
 
       if ($nucletFormBlock.length) {
@@ -806,15 +817,17 @@
         $nucletFormBlock.insertAfter($('.blocks--nuclet-list'), viewer.context);
 
         // Create a new list recursively
+        let branchProtons = 0;
         $nucletList.empty();
-        $nucletList.html(addNucletToList('N0', 0));
+        let n = addNucletToList('N0', 0);
+        $nucletList.html(n.out);
 
         $nucletButtons = $nucletList.find('.nuclet');
         $nucletButtons.click((e) => {
           let nucletId = $(e.target).data('nuclet-id');
           let atomId = $(e.target).data('atom-id');
           let atom = viewer.producer.getObject(atomId);
-          var nuclet = viewer.atom.getNuclet(atom, nucletId);
+          let nuclet = viewer.atom.getNuclet(atom, nucletId);
           if ($nucletFormBlock.hasClass('az-hidden') || nuclet !== editNuclet) {
             setEditNuclet(nuclet);
             $nucletFormBlock.removeClass('az-hidden');
@@ -834,7 +847,7 @@
 
       $('.atom--be-sam-nuclets--value').html(totalBE.toString().substring(0,6));
       if (actualBE) {
-        var perc = ((totalBE > actualBE) ? actualBE / totalBE : -totalBE / actualBE) * 100;
+        let perc = ((totalBE > actualBE) ? actualBE / totalBE : -totalBE / actualBE) * 100;
         $('.atom--be-actual--value').html(actualBE.toString().substring(0,7));
         $('.atom--be-sam-nuclets-perc--value').html(perc.toString().substring(0,5) + '%');
       }
@@ -848,9 +861,9 @@
      * Set Default values for forms.
      */
     function setDefaults() {
-      var userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');
+      let userAtomFile = localStorage.getItem('atomizer_builder_atom_nid');
       if (userAtomFile && userAtomFile != 'undefined') {
-        var selectyml = $('.atom--selectyml', viewer.context)[0];
+        let selectyml = $('.atom--selectyml', viewer.context)[0];
         if (selectyml) {
           select = selectyml.querySelector('select');
           select.value = userAtomFile;
@@ -858,7 +871,7 @@
       }
     }
 
-    var objectLoaded = function objectLoaded(atom) {
+    const objectLoaded = function objectLoaded(atom) {
       localStorage.setItem('atomizer_builder_atom_nid', atom.az.nid);
       createIntersectLists(atom);
       if (viewer.items.icosaFaces) {
@@ -871,7 +884,7 @@
     };
 
     function changeNuclet(editNuclet, id) {
-      var nuclet = viewer.atom.changeNucletState(editNuclet, id);
+      let nuclet = viewer.atom.changeNucletState(editNuclet, id);
       createIntersectLists(nuclet.az.atom);
       setEditNuclet(nuclet);
       viewer.render();
@@ -885,7 +898,7 @@
       nucletDelete.addEventListener('click', onNucletDelete);
 
       // Add event listeners to the nuclet edit form state radio buttons
-      var $radios = $('#edit-nuclet-state .az-control-radios', viewer.context);
+      let $radios = $('#edit-nuclet-state .az-control-radios', viewer.context);
       $radios.once('az-processed').each(function() {
         $(this).attr('id', 'nuclet--state--' + $(this).val());
       });
@@ -898,7 +911,7 @@
       });
 
       $radios.siblings('label').click(function (event) {
-        var input =$(this).siblings('input')[0];
+        let input =$(this).siblings('input')[0];
         $(input).prop('checked', true);
         changeNuclet(editNuclet, input.value);
       });
@@ -906,13 +919,13 @@
 
     function applyControl (id, value) {
       if (id == 'electron1-orbital--scale') {
-        var volume = 4.0 / 3.0 *  Math.PI * Math.pow(value, 3);
-        var normalizedVolume = Math.round(volume / 4.1887902047863905 * 1000) / 1000;
+        let volume = 4.0 / 3.0 *  Math.PI * Math.pow(value, 3);
+        let normalizedVolume = Math.round(volume / 4.1887902047863905 * 1000) / 1000;
         $('#electron1-orbital--volume').html('<span class="az-name">Volume: &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="az-value">' + normalizedVolume + '</span>');
       }
       if (id == 'nuclet-volume--scale') {
-        var volume = 4.0 / 3.0 *  Math.PI * Math.pow(value, 3);
-        var normalizedVolume = Math.round(volume / 4.1887902047863905 * 1000) / 1000;
+        let volume = 4.0 / 3.0 *  Math.PI * Math.pow(value, 3);
+        let normalizedVolume = Math.round(volume / 4.1887902047863905 * 1000) / 1000;
         $('#nuclet-volume--volume').html('<span class="az-name">Volume: &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="az-value">' + normalizedVolume + '</span>');
       }
     }
