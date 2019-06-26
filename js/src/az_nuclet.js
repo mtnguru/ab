@@ -1063,9 +1063,9 @@
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
 //    }
 
-      if (shapeConf.particleids) {
-        nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
-      }
+//    if (shapeConf.particleids) {
+//      nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
+//    }
       return geometry;
     }
 

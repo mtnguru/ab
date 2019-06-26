@@ -14,8 +14,10 @@
 
     function takeSnapshot(settings) {
       // Play the click sound
-      audio.volume = .2;
-      audio.play();
+      if (audio) {
+        audio.volume = .2;
+        audio.play();
+      }
 
       // Save the current size of the canvas
       let width = viewer.canvas.width;
