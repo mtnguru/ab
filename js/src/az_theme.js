@@ -478,7 +478,9 @@
      * @param type
      */
     var set = function set(value, id) {
-      currentSet.settings[id].setting = value;
+      if (currentSet.settings[id]) {
+        currentSet.settings[id].setting = value;
+      }
     };
 
     var setInit = function setInit(value, id, type) {

@@ -77,35 +77,51 @@
       switch (event.button) {
         case 0:     // Select element as new atom.
           // If it doesn't exist then create it.
-          if (!elementPopup) {
-            elementPopup = document.createElement('div');
-            elementPopup.className = 'element-popup-dialog';
-            $(elementPopup).draggable({
-              drag: function(){
-                $(this).addClass('inmotion');
-              }
-            });
-            $('.az-wrapper').append($(elementPopup));
-          }
-
-          // Position the popup - if it's 'inmotion' then leave it alone.
-          if (!$(elementPopup).hasClass('inmotion')) {
-            elementPopup.style.top = (event.pageY - 300) + "px";
-            if (event.clientX + 250 > $(viewer.context).width()) {
-              elementPopup.style.left =  (event.pageX - 300) + "px";
+          if (event.shiftKey) {   // highlight the cell
+            if ($element.hasClass('dark-red')) {
+              $element.removeClass('dark-red').addClass('dark-blue');
+            } else if ($element.hasClass('dark-blue')) {
+              $element.removeClass('dark-blue').addClass('dark-purple');
+            } else if ($element.hasClass('dark-purple')) {
+              $element.removeClass('dark-purple').addClass('dark-green');
+            } else if ($element.hasClass('dark-green')) {
+              $element.removeClass('dark-green').addClass('dark-grey');
+            } else if ($element.hasClass('dark-grey')) {
+              $element.removeClass('dark-grey');
             } else {
-              elementPopup.style.left =  (event.pageX + 20) + "px";
+              $element.addClass('dark-red')
             }
+          } else {                // popup an information dialog
+            if (!elementPopup) {
+              elementPopup = document.createElement('div');
+              elementPopup.className = 'element-popup-dialog';
+              $(elementPopup).draggable({
+                drag: function () {
+                  $(this).addClass('inmotion');
+                }
+              });
+              $('.az-wrapper').append($(elementPopup));
+            }
+
+            // Position the popup - if it's 'inmotion' then leave it alone.
+            if (!$(elementPopup).hasClass('inmotion')) {
+              elementPopup.style.top = (event.pageY - 300) + "px";
+              if (event.clientX + 250 > $(viewer.context).width()) {
+                elementPopup.style.left = (event.pageX - 300) + "px";
+              } else {
+                elementPopup.style.left = (event.pageX + 20) + "px";
+              }
+            }
+            elementPopup.style.position = 'absolute';
+
+            // Copy the contents from the isotope to the popup dialog.
+            let $popup = $element.find('.popup');
+            $(elementPopup).empty();
+            elementPopup.innerHTML = $popup.html();
+            $(elementPopup).show();
+
+            setElementPopupEventHandlers();
           }
-          elementPopup.style.position = 'absolute';
-
-          // Copy the contents from the isotope to the popup dialog.
-          let $popup = $element.find('.popup');
-          $(elementPopup).empty();
-          elementPopup.innerHTML = $popup.html();
-          $(elementPopup).show();
-
-          setElementPopupEventHandlers();
           break;
         case 1:     // Nothing?
           break;
@@ -149,6 +165,7 @@
           <div class="symbol-large az-hidden" title="${element.name} - ${element.atomic_number}">${element.symbol}</div>
           <div class="symbol az-hidden">${element.symbol}</div>
           <div class="atomic-number az-hidden">${element.atomic_number}</div>
+          <div class="valence-primary-xlg az-hidden">${valence_primary}</div>
           <div class="valence-primary-lg az-hidden">${valence_primary}</div>
           <div class="footer">
             <div class="valence-primary az-hidden">${valence_primary}</div>

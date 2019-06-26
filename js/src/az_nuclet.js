@@ -324,58 +324,66 @@
       var colorType = viewer.theme.get('proton--color-style');
       if (!colorType) { colorType = 'nuclet'; }
 
-      name = 'proton-default';
-      switch (conf.type) {
-        case 'grey':
-          name = 'proton-default';
-          break;
-        case 'ghost':
-          name = 'proton-ghost';
-          break;
-        case 'neutral':
-          name = 'neutral';
-          break;
-        case 'neutron':
-          name = 'proton-neutron';
-          break;
-        case 'proton':
-          switch (colorType) {
-            case 'default':
-              break;
-            case 'pairs':
-              name = 'proton-' + conf.pairs;
-              break;
-            case 'rings':
-              name = 'proton-' + conf.rings;
-              break;
-            case 'alpha3':
-              name = 'proton-' + conf.alpha3;
-              break;
-            case 'nuclet':
-              if (conf.nuclet) {
-                var state = conf.nuclet.state;
-                // If hydrogen or helium return the default color.
-                if (state === 'hydrogen' || state === 'helium') {
-                  name = 'proton-default';
-                } else if (conf.pairs === 'neutral') {
-                  name = 'proton-neutral';
-                } else if (conf.pairs === 'neutron') {
-                  name = 'proton-neutron';
-                } else if (conf.nuclet.state === 'initial') {
-                  name = (conf.id.replace('P', '') < 12) ? 'proton-initial' : 'proton-neutral';
-                } else {
-                  name = 'proton-' + state;
-                }
-              } else {
-                name = 'proton-default';
-              }
-              break;
+      let name = 'proton-default';
 
-            default:
-              name = 'proton-default';
-              break;
-          }
-          break;
+      let nucletColors = viewer.theme.get('proton--nuclet-colors');
+
+      if (!nucletColors) {    // Name the proton as carbon - @TODO should be 'default'
+//      name = 'proton-carbon';
+        name = 'proton-default';
+      } else {                // Name the proton with the nuclet type
+        switch (conf.type) {
+          case 'grey':
+            name = 'proton-default';
+            break;
+          case 'ghost':
+            name = 'proton-ghost';
+            break;
+          case 'neutral':
+            name = 'neutral';
+            break;
+          case 'neutron':
+            name = 'proton-neutron';
+            break;
+          case 'proton':
+            switch (colorType) {
+              case 'default':
+                break;
+              case 'pairs':
+                name = 'proton-' + conf.pairs;
+                break;
+              case 'rings':
+                name = 'proton-' + conf.rings;
+                break;
+              case 'alpha3':
+                name = 'proton-' + conf.alpha3;
+                break;
+              case 'nuclet':
+                if (conf.nuclet) {
+                  var state = conf.nuclet.state;
+                  // If hydrogen or helium return the default color.
+                  if (state === 'hydrogen' || state === 'helium') {
+                    name = 'proton-default';
+                  } else if (conf.pairs === 'neutral') {
+                    name = 'proton-neutral';
+                  } else if (conf.pairs === 'neutron') {
+                    name = 'proton-neutron';
+                  } else if (conf.nuclet.state === 'initial') {
+                    name = (conf.id.replace('P', '') < 12) ? 'proton-initial' : 'proton-neutral';
+                  } else {
+                    name = 'proton-' + state;
+                  }
+                } else {
+                  name = 'proton-default';
+                }
+                break;
+
+              default:
+                name = 'proton-default';
+                break;
+            }
+            break;
+        }
       }
       return name;
     }
@@ -1055,9 +1063,9 @@
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
 //    }
 
-//    if (shapeConf.particleids) {
-//      nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
-//    }
+      if (shapeConf.particleids) {
+        nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
+      }
       return geometry;
     }
 
@@ -1361,9 +1369,9 @@
     }
 
     function setProtonColor(proton, name) {
-      var color;
+      let protonColors = viewer.theme.get('proton--proton-colors');
       highlight = (proton.az.nuclet.highlight) ? proton.az.nuclet.highlight : false;
-      if (name) {
+      if (protonColors && name) {
         if (name == 'original') {
           proton.material.color = viewer.theme.getColor(proton.name + '--color', highlight);
           if (proton.az.tmpColor) {
@@ -1376,6 +1384,7 @@
         }
         proton.az.tmpColor = viewer.theme.getColor('proton-' + name + '--color', highlight);
       }
+
       if (proton.az.selected) {
         proton.material.color = viewer.theme.getColor('proton-ghost--color', highlight);
       } else if (proton.az.tmpColor) {

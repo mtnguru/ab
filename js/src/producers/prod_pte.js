@@ -9,7 +9,8 @@
 (function ($) {
 
   Drupal.atomizer.prod_pteC = function (_viewer) {
-    var viewer = _viewer;
+    let viewer = _viewer;
+    let scenes;
     let elements;
 
     /**
@@ -81,7 +82,7 @@
      * User has clicked somewhere in the scene with the mouse.
      *
      * If they right clicked on a proton, find the parent nuclet and popup the nuclet edit form.
-     * If they right clicked anywhere else, pop down the nuclet edit form.
+     * If they right clicked anywhere else, pop down the nuclet edit form
      *
      * @param event
      * @returns {boolean}
@@ -137,18 +138,32 @@
       });
     };
 
+    const applyScene = (scene) => {
+      for (let c in scene.script.classification) {
+        if (scene.script.classification.hasOwnProperty(c)) {
+          let group = scene.script.classification[c];
+          let className = group.className;
+
+          // Cycle through the elements in this group
+          for (let e in group.elements) {
+            if (group.elements.hasOwnProperty(e)) {
+              // Assign the className to the element.
+              let elementName  = group.elements[e];
+              let fart = $(`.element#${group.elements[e].toLowerCase()}`, viewer.context);
+              let farting = `.element#${group.elements[e].toLowerCase()}`;
+              $(`.element#${group.elements[e].toLowerCase()}`, viewer.context).addClass(className);
+            }
+          }
+        }
+      }
+    };
+
     /**
      * Load the Episode node that defines this PTE.
      *
      * @param nid
      */
-//  Drupal.atomizer.base.promiseAjax('/ajax/loadAtomList',{}).then(function(response) {
-//    resolve(response[0].data.list);
-//  }, function(error) {
-//    reject(`getAtomList: ERROR - ${error}`);
-//  })
-
-    const loadPte = (nid) => {
+    const loadEpisode = (nid) => {
       return new Promise(function (resolve, reject) {
         Drupal.atomizer.base.promiseAjax(
           '/ajax/loadNode', {
@@ -166,9 +181,9 @@
               resolve(response[r].data);
             }
           }
-//        reject('loadPte: Invalid ajax response');
+//        reject('loadEpisode: Invalid ajax response');
         }, function(error) {
-          reject(`loadPte: ERROR - ${error}`);
+          reject(`loadEpisode: ERROR - ${error}`);
         });
       });
     };
@@ -189,17 +204,20 @@
       viewer.animation = Drupal.atomizer.animationC(viewer);
 
 //    let nid = localStorage.getItem('atomizer_pte_nid', 2344);
-      let nid = 2344;
+      let nid = 2552;
       viewer.atom_list.getAtomList().then(function(list) {
         elements = list;
-        return loadPte(nid);
+        return loadEpisode(nid);
       }).catch(function(msg) {
         alert(`prod_pte.js::createView: Error calling getAtomList: ${msg}`);
       }).then(function(node) {
         // conf, information, nodeName, nodeTitle, properties, scenes[0].description w/format, script, type
         $container = $('.css3d-renderer', viewer.context);
         viewer.pte.create($container, elements);
+        viewer.scene.az = { nid: nid};
         setCellContent();
+        scenes = node.scenes
+        applyScene(node.scenes[0]);
         viewer.render();
         console.log(`createView: node is read in`) ;
       });

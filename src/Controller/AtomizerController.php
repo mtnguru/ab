@@ -521,7 +521,7 @@ class AtomizerController extends ControllerBase {
    */
   public function saveImage() {
     $data = json_decode(file_get_contents("php://input"), TRUE);
-    if ($data['type'] == 'atom') {
+    if ($data['type'] == 'atom' && $data['imageType'] == 'primary') {
       return self::_saveAtomImage($data);
     }
 
@@ -630,16 +630,18 @@ class AtomizerController extends ControllerBase {
         break;
       case 'episode':
         $scenes = [];
-        foreach ($node->field_scenes as $scene) {
-          $entity = $scene->entity;
-          $scenes[] = [
-            'title' => $entity->field_title->value,
-            'description' => $entity->field_description->value,
-            'description_format' => $entity->field_description->format,
-            'script' => $entity->field_script->value,
-            'type' => $entity->field_scene_type->target_id,
-//          'type' => $entity->field_scene_type->entity->label(),
-          ];
+        if (!$node->field_scenes->isEmpty()) {
+          foreach($node->field_scenes->getValue() as $scene) {
+            $pid = $scene['target_id']; // get scene id;
+            $scene = \Drupal::entityTypeManager()->getStorage('paragraph')->load($pid);
+            $scenes[] = [
+              'title' => $scene->field_title->value,
+              'type' => $scene->field_scene_type->target_id,
+              'script' => Yaml::decode($scene->field_script->value),
+              'description' => $scene->field_description->value,
+              'description_format' => $scene->field_description->format,
+            ];
+          }
         }
         $data['scenes'] = $scenes;
         break;

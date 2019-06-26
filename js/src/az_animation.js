@@ -165,10 +165,11 @@
               setTimeout(function () {
                 viewer.snapshot.takeSnapshot({
                   nid: object.az.nid,
-                  width: 1240,
-                  height: 1240,
+                  width: 480,
+                  height: 480,
                   filename: object.az.name,
                   overwrite: true,
+                  imageType: 'primary',
                 });
                 setTimeout(function () {
                   continueAnimation();

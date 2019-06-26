@@ -217,6 +217,9 @@
             viewer.buttonClicked(event);
           }
           else {
+            if (this.type == 'checkbox') {
+              viewer.theme.set(event.target.checked, event.target.id);
+            }
             if (viewer[args[0]] && viewer[args[0]].buttonClicked) {
               viewer[args[0]].buttonClicked(event);
             }

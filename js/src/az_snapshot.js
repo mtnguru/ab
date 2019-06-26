@@ -10,7 +10,7 @@
 
     let viewer = _viewer;
     let snapshotType = 'single';
-    let audio = $('#blocks--snapshot audio', viewer.context)[0];
+    let audio = $('#snapshot--shutter audio', viewer.context)[0];
 
     function takeSnapshot(settings) {
       // Play the click sound
@@ -55,7 +55,8 @@
           directory: 'atoms',
           overwrite: settings.overwrite || false,
           sceneName: viewer.scene.az.name,
-          imgBase64: img
+          imgBase64: img,
+          imageType: settings.imageType,
         },
         imageSaved
       );
@@ -80,6 +81,7 @@
             height: 1240,
             filename: viewer.scene.az.name,
             overwrite: true,
+            imageType: 'snapshot',
           });
           break;
         case 'snapshot--save':
@@ -90,6 +92,7 @@
               height: 1240,
               filename: viewer.scene.az.name,
               overwrite: true,
+              imageType: 'snapshot',
             });
           } else {
             let cycle = $('.snapshot-cycle', viewer.context).is(':checked');
@@ -101,6 +104,7 @@
                 height: 1240,
                 filename: `${viewer.scene.az.name}--${snapsnotType}`,
                 overwrite: true,
+                imageType: 'snapshot',
               });
             }
           }
