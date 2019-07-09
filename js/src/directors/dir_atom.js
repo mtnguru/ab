@@ -22,6 +22,7 @@
       var nucletAngle = $('.nuclet--attachAngle', viewer.context)[0];
       var nucletAngleSlider = $('.nuclet--attachAngle--az-slider', viewer.context)[0]
       var nucletAngleValue = $('.nuclet--attachAngle--az-value', viewer.context)[0];
+      var nucletFizzer = $('.nuclet--fizzer', viewer.context)[0];
       var nucletDelete = $('.nuclet--delete', viewer.context)[0];
 
       var nucletAttach0 = $('#edit-nuclet-grow-0', viewer.context)[0];
@@ -49,6 +50,11 @@
      */
     function onAngleChanged(event) {
       viewer.atom.changeNucletAngle(editNuclet, event.target.value);
+      viewer.render();
+    }
+
+    function onFizzerChanged(event) {
+      viewer.atom.changeNucletFizzer(editNuclet, event.target.value);
       viewer.render();
     }
 
@@ -555,9 +561,11 @@
       if (id == 'N0') {
         nucletDelete.classList.add('az-hidden');
         nucletAngle.classList.add('az-hidden');
+        nucletFizzer.classList.add('az-hidden');
       } else {
         nucletDelete.classList.remove('az-hidden');
         nucletAngle.classList.remove('az-hidden');
+        nucletFizzer.classList.remove('az-hidden');
       }
 
       if (nuclet.az.conf.state != 'initial' &&
@@ -895,6 +903,7 @@
     if ($nucletFormBlock.length) {
       // Add Event Listener to attachAngle slider
       nucletAngleSlider.addEventListener('input', onAngleChanged);
+      nucletFizzer.addEventListener('input', onFizzerChanged);
       nucletDelete.addEventListener('click', onNucletDelete);
 
       // Add event listeners to the nuclet edit form state radio buttons

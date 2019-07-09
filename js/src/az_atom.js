@@ -51,6 +51,7 @@
       let id = nuclet.az.id;
       let atom = nuclet.az.atom;
       let attachAngle = nuclet.az.attachAngle;
+      let fizzer = nuclet.az.fizzer;
       let parent = nuclet.parent.parent.parent;
       viewer.nuclet.deleteNuclet(nuclet);
 
@@ -155,6 +156,7 @@
       conf = {
         state: 'lithium',
         attachAngle: 3,
+        fizzer: 1,
         protons: {P10: null, P1: null, P4: null, P5: null, P3: null, P11: null, P9: null},
       };
 
@@ -199,6 +201,14 @@
       nuclet.az.conf.attachAngle = angle;
     }
 
+    function changeNucletFizzer(nuclet, scale) {
+      nuclet.parent.parent.position.set(
+        nuclet.az.attachPt.x * scale,
+        nuclet.az.attachPt.y * scale,
+        nuclet.az.attachPt.z * scale
+      );
+    }
+
     /**
      * Create a nuclet and rotate it into position.
      *
@@ -210,6 +220,7 @@
       let nucletInnerShell = nucletOuterShell.children[0];
       let nuclet = nucletOuterShell.children[0].children[0];
       nuclet.az.attachAngle = nucletConf.attachAngle;
+      nuclet.az.fizzer = nucletConf.fizzer;
       nuclet.az.atom = atom;
       parent.add(nucletOuterShell);
 
@@ -471,13 +482,17 @@
       for (let n in atom.az.nuclets) {
         let nuclet = atom.az.nuclets[n];
         if (nuclet.az.id !== 'N0') {
-          nuclet.parent.parent.position.set(
-            nuclet.az.attachPt.x * scale,
-            nuclet.az.attachPt.y * scale,
-            nuclet.az.attachPt.z * scale
-          );
+          explodeNuclet(nuclet, scale);
         }
       }
+    };
+
+    const explodeNuclet = function explodeAtom(nuclet, scale) {
+      nuclet.parent.parent.position.set(
+        nuclet.az.attachPt.x * scale,
+        nuclet.az.attachPt.y * scale,
+        nuclet.az.attachPt.z * scale
+      );
     };
 
     function highlight(atom, highlight) {
@@ -830,6 +845,7 @@
       buttonClicked,
       changeNucletState,
       changeNucletAngle,
+      changeNucletFizzer,
       createAtom,
       deleteNuclet,
       explodeAtom,
