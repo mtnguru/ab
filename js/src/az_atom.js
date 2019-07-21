@@ -732,8 +732,8 @@
         }
 
         // Add the protons.
+        let nl = 0;
         if (nuclet.az.protons) {
-          let nl = 0;
           for (let p in nuclet.az.protons) {
             if (nuclet.az.protons.hasOwnProperty(p)) {
               let proton = nuclet.az.protons[p];
@@ -795,6 +795,7 @@
       }
 
       // Start with the N0 nuclet, build yml text recursively.
+      console.log('extractStructure - addNucletToStructure(N0)');
       return addNucletToStructure('N0', '');
     }
 
@@ -811,10 +812,12 @@
     Drupal.behaviors.atomizer_atom = {
       attach: function (context, settings) {
 
+ //     console.log('Attach Behaviors');
         // If this is the node-atom-form being opened then automatcially fill in:
         // Atomic Structure field, #protons, #electrons, be-sam-nuclets, be-sam-nuclets-perc
         let $nodeForm = $('.node-atom-form, .node-atom-edit-form');
         if ($(context).hasClass('node-atom-edit-form') || $(context).hasClass('node-atom-form')) {
+          console.log('Seriously, do it');
 
           let $textarea = $nodeForm.find('.field--name-field-atomic-structure textarea');
           let atom = viewer.producer.getObject("A1");
