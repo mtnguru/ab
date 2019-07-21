@@ -192,12 +192,12 @@ class AtomizerControlBlock {
               'class' => ['use-ajax'],
               'data-dialog-type' => $controlConf[2],
               'data-dialog-options' => Json::encode([
-                'dialogClass' => 'az-dialog',
+                'dialogClass' => 'az-dialog az-atom-form',
                 'width' => '700px',
                 'draggable' => TRUE,
                 'autoResize' => FALSE,
                 'position' => [
-                  'my' => 'center top',
+                  'my' => 'center top-20',
                   'at' => 'center top'
                 ],
               ]),

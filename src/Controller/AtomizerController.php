@@ -183,7 +183,7 @@ class AtomizerController extends ControllerBase {
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
           'dialogClass' => 'az-dialog az-atom-form',
-          'width' => '600px',
+          'width' => '700px',
           'draggable' => true,
           'autoResize' => false,
           'position' => [
@@ -343,7 +343,7 @@ class AtomizerController extends ControllerBase {
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
           'dialogClass' => 'az-dialog az-molecule-form',
-          'width' => '600px',
+          'width' => '700px',
           'draggable' => true,
           'autoResize' => false,
           'position' => [
