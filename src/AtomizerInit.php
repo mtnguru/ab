@@ -81,11 +81,17 @@ class AtomizerInit {
     return $objects;
   }
 
-  static function queryAtoms() {
+  static function queryAtoms($access) {
     $perm = ['public','stats'];
-    if (\Drupal::currentUser()->hasPermission('atomizer atoms development')) { $perm[] = 'development'; }
-    if (\Drupal::currentUser()->hasPermission('atomizer atoms members'))     { $perm[] = 'members'; }
-    if (\Drupal::currentUser()->hasPermission('atomizer atoms trusted'))     { $perm[] = 'trusted'; }
+    if ($access == 'full') {
+//    $perm[] = 'trusted';
+      $perm[] = 'members';
+      $perm[] = 'development';
+    } else if ($access == 'permissions') {
+      if (\Drupal::currentUser()->hasPermission('atomizer atoms development')) { $perm[] = 'development'; }
+      if (\Drupal::currentUser()->hasPermission('atomizer atoms members'))     { $perm[] = 'members'; }
+      if (\Drupal::currentUser()->hasPermission('atomizer atoms trusted'))     { $perm[] = 'trusted'; }
+    }
 
     $result = AzContentQuery::nodeQuery([
       'type' => 'entity-table',
@@ -114,7 +120,7 @@ class AtomizerInit {
 
   static function build_select_atom_list() {
     $elements = self::queryElements();
-    $atoms = self::queryAtoms()['results'];
+    $atoms = self::queryAtoms('permissions')['results'];
 
     // Go through each atom and count number of atoms per element
     $isobars = [];
@@ -432,7 +438,7 @@ class AtomizerInit {
     if (!$js_loaded) {
 //    $js_loaded = true;
       // Load raw JavaScript files if on host az or user has permission.
-      if ('az1' == \Drupal::service('request_stack')->getCurrentRequest()->server->get('SERVER_NAME') ||
+      if ('az' == \Drupal::service('request_stack')->getCurrentRequest()->server->get('SERVER_NAME') ||
         \Drupal::currentUser()->hasPermission('atomizer load raw js')) {
         if (!empty($atomizer_config['librariesDev'])) {
           $build['#attached']['library'] = $atomizer_config['librariesDev'];

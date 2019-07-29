@@ -205,7 +205,7 @@
 
 //    let nid = localStorage.getItem('atomizer_pte_nid', 2344);
       let nid = 2552;
-      viewer.atom_list.getAtomList().then(function(list) {
+      viewer.atom_list.getAtomList('full').then(function(list) {
         elements = list;
         return loadEpisode(nid);
       }).catch(function(msg) {

@@ -244,13 +244,14 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), true);
     $list = NULL;
     $cid = 'loadAtomList';
+    $access = ($data['access']) ? $data['access'] : 'permissions';
     if ($cache = \Drupal::cache()->get($cid . '1')) {   // The . '1' prevents cache from working.
 //  if ($cache = \Drupal::cache()->get($cid)) {   // The . '1' prevents cache from working.
       $list = $cache->data;
     } else {
       // Query for the elements and atoms.
       $elements = AtomizerInit::queryElements();
-      $atoms = AtomizerInit::queryAtoms()['results'];
+      $atoms = AtomizerInit::queryAtoms($access)['results'];
 
       // Go through each atom and count number of isotopes per element
       $isobars = [];

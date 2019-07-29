@@ -14,9 +14,9 @@
     let atomListSequence = [];   // List of atoms so we can step through them
     let includeIsotopes = false;
 
-    const getAtomList = () => {
+    const getAtomList = ($access = 'permissions') => {
       return new Promise(function(resolve, reject) {
-        Drupal.atomizer.base.promiseAjax('/ajax/loadAtomList',{}).then(function(response) {
+        Drupal.atomizer.base.promiseAjax('/ajax/loadAtomList',{access: $access}).then(function(response) {
           resolve(response[0].data.list);
         }, function(error) {
           reject(`getAtomList: ERROR - ${error}`);
