@@ -980,7 +980,7 @@
       }
 
       if (shapeConf.valence) {
-        createValenceRings(shapeConf, azNuclet);
+//      createValenceRings(shapeConf, azNuclet);
       }
 
       // OBSOLETE - electrons are positioned based on the octahedron
@@ -994,7 +994,7 @@
 //    }
 
       if (shapeConf.axes) {
-        nucletGroup.add(createAxis(groupName, shapeConf.axes, geometry));
+//      nucletGroup.add(createAxis(groupName, shapeConf.axes, geometry));
       }
 
       if (shapeConf.tetrahedrons) {
@@ -1012,7 +1012,7 @@
       }
 
       // Create volume sphere.
-      if (shapeConf.volume) {
+/*    if (shapeConf.volume) {
         var volumeOpacity = viewer.theme.get('nuclet-volume--opacity') || 0;
         var volume = Drupal.atomizer.base.makeObject(
             'proton',
@@ -1033,7 +1033,7 @@
         );
         volume.name = 'nuclet-volume';
         nucletGroup.add(volume);
-      }
+      } */
 
       // Create faces for the structure
       if (shapeConf.faces) {
@@ -1169,7 +1169,7 @@
       }
 
       // Create nuclet helper axes.
-      nuclet.add(createHelperAxis('nucletAxis', protonRadius * 6, 1));
+//    nuclet.add(createHelperAxis('nucletAxis', protonRadius * 6, 1));
 
       //// Set the nuclet rotation
       if (nuclet.az.conf.rotation) {
@@ -1189,7 +1189,7 @@
       innerShell.add(nuclet);
 
       // Create inner shell helper axis
-      innerShell.add(createHelperAxis('nucletInnerAxis', protonRadius * 5, 3));
+//    innerShell.add(createHelperAxis('nucletInnerAxis', protonRadius * 5, 3));
 
       //// Create outer shell
       var outerShell = new THREE.Object3D();
@@ -1197,7 +1197,7 @@
       outerShell.add(innerShell);
 
       // Create outer shell helper axis
-      outerShell.add(createHelperAxis('nucletOuterAxis', protonRadius * 4, 5));
+//    outerShell.add(createHelperAxis('nucletOuterAxis', protonRadius * 4, 5));
 
       //// Set the nucletShell position
       if (nuclet.az.conf.position) {

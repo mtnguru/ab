@@ -110,7 +110,7 @@
       // Set the starting atom.
       // First get the snapshot working
       atomCounter = 0;
-      viewer.atom_select.setSelectedAtom({index: atomCounter});
+//    viewer.atom_select.setSelectedAtom({index: atomCounter});
       continueTimers();
     }
 

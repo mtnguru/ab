@@ -96,7 +96,6 @@ class AtomizerInit {
     $result = AzContentQuery::nodeQuery([
       'type' => 'entity-table',
       'types' => 'atom',
-//    'sort' => 'changed',
       'sort' => 'select-atom',
 
       'fields' => [
