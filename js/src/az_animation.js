@@ -162,19 +162,25 @@
             }, function (object) {
 //            viewer.producer.objectLoaded(object);
               viewer.render();
-              setTimeout(function () {
-                viewer.snapshot.takeSnapshot({
-                  nid: object.az.nid,
-                  width: 480,
-                  height: 480,
-                  filename: object.az.name,
-                  overwrite: true,
-                  imageType: 'primary',
-                });
+              if (name == 'cycleimageatoms') {
+                setTimeout(function () {
+                  viewer.snapshot.takeSnapshot({
+                    nid: object.az.nid,
+                    width: 480,
+                    height: 480,
+                    filename: object.az.name,
+                    overwrite: true,
+                    imageType: 'primary',
+                  });
+                  setTimeout(function () {
+                    continueAnimation();
+                  }, 1000);
+                }, 0);
+              } else {
                 setTimeout(function () {
                   continueAnimation();
                 }, 2000);
-              }, 2000);
+              };
             });
             break;
 
