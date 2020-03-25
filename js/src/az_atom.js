@@ -654,14 +654,6 @@
       // Verify they entered a name.  If not popup an alert. return
       currentSet.name = controls.name;
       currentSet.filename = controls.filename;
-      Drupal.atomizer.base.doAjax(
-        '/ajax/saveYml',
-        { name: controls.name,
-          component: 'theme',
-          filename: controls.filename,
-          ymlContents: currentSet },
-        savedYml
-      );
     };
 
     /**
@@ -706,6 +698,165 @@
         event.preventDefault();
         calculateAllBindingEnergies(event);
       }
+    };
+
+    function deleteAtomImages () {
+      Drupal.atomizer.base.doAjax(
+        '/ajax/deleteAtomImages',
+        { command: 'deleteAtomImages' },
+        null  // TODO: Put in useful error codes and have them be displayed.
+      );
+    }
+
+    function saveWorldCoordinates (atom) {
+      let objects = [];
+      let position = new THREE.Vector3();
+      let world = new THREE.Vector3();
+
+      /**
+       * Recursive function to extract particle 3d coordinates
+       *
+       * @param id
+       * @returns {string}
+       */
+      function addNucletToCoordinates(id) {
+        let nuclet = atom.az.nuclets[id];
+        position.set(nuclet.position.x, nuclet.position.y, nuclet.position.z);
+        world = nuclet.localToWorld(position);
+        objects.push([
+          atom.az.name,
+          'nuclet',
+          id,
+          nuclet.az.state,
+          id,
+          world.x,
+          world.y,
+          world.z,
+          nuclet.position.x,
+          nuclet.position.y,
+          nuclet.position.z,
+        ]);
+
+        // Add the protons.
+        if (nuclet.az.protons) {
+          for (let p in nuclet.az.protons) {
+            if (nuclet.az.protons.hasOwnProperty(p)) {
+              let proton = nuclet.az.protons[p];
+              position.set(proton.position.x, proton.position.y, proton.position.z);
+              world = proton.localToWorld(position);
+              if (proton.az.active && proton.az.visible) {
+                objects.push([
+                  atom.az.name,
+                  'proton',
+                  id,
+                  nuclet.az.state,
+                  p,
+                  world.x,
+                  world.y,
+                  world.z,
+                  proton.position.x,
+                  proton.position.y,
+                  proton.position.z,
+                ]);
+              }
+            }
+          }
+        }
+
+        // Add the neutrons.
+        if (nuclet.az.neutrons) {
+          for (let n in nuclet.az.neutrons) {
+            if (nuclet.az.neutrons.hasOwnProperty(n) && nuclet.az.neutrons[n].az.visible) {
+              let neutron = nuclet.az.neutrons[n];
+              position.set(neutron.position.x, neutron.position.y, neutron.position.z);
+              world = neutron.localToWorld(position);
+              objects.push([
+                atom.az.name,
+                'neutron',
+                id,
+                nuclet.az.state,
+                n,
+                world.x,
+                world.y,
+                world.z,
+                neutron.position.x,
+                neutron.position.y,
+                neutron.position.z,
+              ]);
+            }
+          }
+        }
+
+        // Add the nelectrons.
+        if (nuclet.az.nelectrons) {
+          for (let e in nuclet.az.nelectrons) {
+            if (nuclet.az.nelectrons.hasOwnProperty(e)) {
+              let electron = nuclet.az.nelectrons[e];
+              position.set(
+                electron.children[0].position.x,
+                electron.children[0].position.y,
+                electron.children[0].position.z
+              );
+              world = electron.children[0].localToWorld(position);
+              objects.push([
+                atom.az.name,
+                'electron',
+                id,
+                nuclet.az.state,
+                e,
+                world.x,
+                world.y,
+                world.z,
+                electron.children[0].position.x,
+                electron.children[0].position.y,
+                electron.children[0].position.z,
+              ]);
+            }
+          }
+        }
+
+        // Recursively add the children nuclets.
+        let grow0 = atom.az.nuclets[id + '0'];
+        let grow1 = atom.az.nuclets[id + '1'];
+        if (grow0 || grow1) {
+          if (grow0) { addNucletToCoordinates(id + '0'); }
+          if (grow1) { addNucletToCoordinates(id + '1'); }
+        }
+      }
+
+      // Start with the N0 nuclet, build yml text recursively.
+      console.log('calculateWorldCoordinates - addNucletToCoordinates(N0)');
+
+      objects.push([
+        'Element',
+        'Type',
+        'Nuclet ID',
+        'Nuclet Type',
+        'Particle ID',
+        'X',
+        'Y',
+        'Z',
+        'Xn',
+        'Yn',
+        'Zn',
+      ]);
+
+      addNucletToCoordinates('N0', '');
+
+      Drupal.atomizer.base.doAjax(
+        '/ajax/saveCoordinates',
+        {
+          name: atom.az.name,
+          component: 'atom',
+          coordinates: objects },
+        savedCoordinates
+      );
+      return objects;
+    }
+
+    let savedCoordinates = function (response) {
+//    let select = $('.theme--selectyml', viewer.context)[0].querySelector('select');
+      // Remove current options
     };
 
     /**
@@ -860,6 +1011,8 @@
       saveYml,
       updateValenceRings,
       updateParticleCount,
+      deleteAtomImages,
+      saveWorldCoordinates,
     };
   };
 

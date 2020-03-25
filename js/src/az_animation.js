@@ -106,6 +106,13 @@
 
     function startTimers() {
       cameraStart = viewer.camera.position;
+      for (let timerName in animateConf.timers) {
+        switch (timerName) {
+          case 'cycleimageatoms':
+//          viewer.atom.deleteAtomImages();  // Changed to delete single files upon saving.
+            break;
+        }
+      }
       // Capture the current zoom - camera position.  Assume that is 1
       // Set the starting atom.
       // First get the snapshot working
@@ -129,6 +136,7 @@
 
       function applyTimer(name, conf) {
         switch (name) {
+          case 'cycleworldatoms':
           case 'cycleimageatoms':
           case 'cycleatoms':
             if (increment) {
@@ -162,6 +170,9 @@
             }, function (object) {
 //            viewer.producer.objectLoaded(object);
               viewer.render();
+              if (name == 'cycleworldatoms') {
+                viewer.atom.saveWorldCoordinates(object);
+              }
               if (name == 'cycleimageatoms') {
                 setTimeout(function () {
                   viewer.snapshot.takeSnapshot({

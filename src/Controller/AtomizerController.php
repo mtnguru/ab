@@ -2,6 +2,7 @@
 
 namespace Drupal\atomizer\Controller;
 
+use Drupal\atomizer\Ajax\GenCommand;
 use Drupal\atomizer\Ajax\LoadAtomListCommand;
 use Drupal\atomizer\AtomizerInit;
 use Drupal\atomizer\Dialogs\AtomizerDialogs;
@@ -501,12 +502,10 @@ class AtomizerController extends ControllerBase {
       $file->save;
     }
 
-    // Clear the styles directory for all atoms.
-    system('rm -r ' . DRUPAL_ROOT . '/sites/default/files/styles/*/*/atoms_primary/*');
-
     error_log("_saveAtomImage - writeImage " . $tmpPath);
     $this->writeImage($tmpPath, $data['imgBase64']);
     error_log("_saveAtomImage - convertImage " . $finalpath);
+    system('rm  ' . DRUPAL_ROOT . $finalpath);
     $this->convertImage($tmpPath, $finalpath);
 
     // @TODO - return confirmation message.
@@ -584,6 +583,39 @@ class AtomizerController extends ControllerBase {
     $response = new AjaxResponse();
     return $response;
   }
+
+  public function deleteAtomImages()
+  {
+    $data = json_decode(file_get_contents("php://input"), true);
+    // Clear the styles directory for all atoms.
+    system('rm -r ' . DRUPAL_ROOT . '/sites/default/files/styles/*/*/atoms_primary/*');
+    system('rm ' . DRUPAL_ROOT . '/sites/default/files/atoms_primary/*');
+
+    $response = new AjaxResponse();
+    $response->addCommand(new GenCommand($data));
+    return $response;
+  }
+
+  /**
+   * Save a CSV file of coordinates of protons, electrons, etc.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
+  public function saveCoordinates() {
+    $data = json_decode(file_get_contents("php://input"), true);
+    $path = drupal_get_path('module', 'atomizer') .
+              '/config/coordinates/' .
+              str_replace(' ', '-',$data['name']) . '.csv';
+    $f = fopen($path, 'w');
+    foreach($data['coordinates'] as $row) {
+      fputcsv($f, $row);
+    }
+    fclose($f);
+
+    $response = new AjaxResponse();
+    $response->addCommand(new GenCommand($data));
+    return $response;
+  }
+
 
   /**
    * Load a Birkland current definition file.

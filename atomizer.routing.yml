@@ -57,6 +57,12 @@ atomizer.loadMolecule:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadMolecule'
   requirements:
     _permission: 'access content'
+atomizer.deleteAtomImages:
+  path: '/ajax/deleteAtomImages'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::deleteAtomImages'
+  requirements:
+    _permission: 'access content'
 atomizer.saveAtom:
   path: '/ajax/saveAtom'
   defaults:
@@ -79,6 +85,12 @@ atomizer.loadDialog:
   path: '/ajax/loadDialog'
   defaults:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::loadDialog'
+  requirements:
+    _permission: 'access content'
+atomizer.saveCoordinates:
+  path: '/ajax/saveCoordinates'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::saveCoordinates'
   requirements:
     _permission: 'access content'
 atomizer.loadAtomList:
