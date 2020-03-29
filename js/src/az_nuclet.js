@@ -1012,7 +1012,7 @@
       }
 
       // Create volume sphere.
-/*    if (shapeConf.volume) {
+      if (shapeConf.volume) {
         var volumeOpacity = viewer.theme.get('nuclet-volume--opacity') || 0;
         var volume = Drupal.atomizer.base.makeObject(
             'proton',
@@ -1033,7 +1033,7 @@
         );
         volume.name = 'nuclet-volume';
         nucletGroup.add(volume);
-      } */
+      }
 
       // Create faces for the structure
       if (shapeConf.faces) {
