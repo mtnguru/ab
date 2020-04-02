@@ -358,7 +358,7 @@ class AtomizerInit {
           '#markup' => '<div class="az-canvas-labels">Title Overlay</div>',
         ],
         'copyright' => [
-          '#markup' => '<div title="Copyright 2018 by Ethereal Matters, LLC" class="az-fa-copyright copyright"></div>'
+          '#markup' => '<div title="Copyright 2020 by Ethereal Matters, LLC" class="az-fa-copyright copyright"></div>'
         ],
       ],
       '#attached' => [
