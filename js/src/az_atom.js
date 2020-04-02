@@ -712,6 +712,7 @@
       let objects = [];
       let position = new THREE.Vector3();
       let world = new THREE.Vector3();
+      let world1 = new THREE.Vector3();
 
       /**
        * Recursive function to extract particle 3d coordinates
@@ -722,7 +723,8 @@
       function addNucletToCoordinates(id) {
         let nuclet = atom.az.nuclets[id];
         position.set(nuclet.position.x, nuclet.position.y, nuclet.position.z);
-        world = nuclet.localToWorld(position);
+        world1 = nuclet.localToWorld(position);
+        world = nuclet.getWorldPosition();
         objects.push([
           atom.az.name,
           'nuclet',
@@ -743,7 +745,8 @@
             if (nuclet.az.protons.hasOwnProperty(p)) {
               let proton = nuclet.az.protons[p];
               position.set(proton.position.x, proton.position.y, proton.position.z);
-              world = proton.localToWorld(position);
+              world1 = proton.localToWorld(position);
+              world = proton.getWorldPosition();
               if (proton.az.active && proton.az.visible) {
                 objects.push([
                   atom.az.name,
@@ -769,7 +772,8 @@
             if (nuclet.az.neutrons.hasOwnProperty(n) && nuclet.az.neutrons[n].az.visible) {
               let neutron = nuclet.az.neutrons[n];
               position.set(neutron.position.x, neutron.position.y, neutron.position.z);
-              world = neutron.localToWorld(position);
+              world1 = neutron.localToWorld(position);
+              world = neutron.getWorldPosition();
               objects.push([
                 atom.az.name,
                 'neutron',
@@ -798,6 +802,7 @@
                 electron.children[0].position.z
               );
               world = electron.children[0].localToWorld(position);
+              world = electron.children[0].getWorldPosition();
               objects.push([
                 atom.az.name,
                 'electron',
@@ -840,6 +845,8 @@
         'Yn',
         'Zn',
       ]);
+
+      atom.updateMatrixWorld();
 
       addNucletToCoordinates('N0', '');
 
