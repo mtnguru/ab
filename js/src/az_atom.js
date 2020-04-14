@@ -386,6 +386,7 @@
             atom.az.id = result.data.conf.id;
             atom.az.name = result.data.atomName;
             atom.az.element = result.data.element;
+            atom.az.atomicNumber = result.data.atomicNumber;
             atom.az.title = result.data.atomTitle;
             atom.az.link = result.data.link;
             atom.az.conf = result.data.conf;
@@ -854,6 +855,7 @@
         '/ajax/saveCoordinates',
         {
           name: atom.az.name,
+          atomicNumber: atom.az.atomicNumber,
           component: 'atom',
           coordinates: objects },
         savedCoordinates

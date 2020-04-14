@@ -184,6 +184,13 @@
               viewer.canvas.width / viewer.canvas.height,
               .1, 10000
           );
+          zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
+          viewer.camera.position.set(
+            zoom * viewer.theme.get('camera--position', 'x'),
+            zoom * viewer.theme.get('camera--position', 'y'),
+            zoom * viewer.theme.get('camera--position', 'z')
+          );
+          viewer.camera.lookAt(viewer.scene.position);
           break;
 
         case 'css2d':
@@ -210,20 +217,7 @@
           );
           break;
       }
-//    viewer.renderer.shadowEnabled = true;
-
-
-      // add the output of the renderer to the html element
-
       window.addEventListener('resize', setSize);
-
-      zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
-      viewer.camera.position.set(
-        zoom * viewer.theme.get('camera--position', 'x'),
-        zoom * viewer.theme.get('camera--position', 'y'),
-        zoom * viewer.theme.get('camera--position', 'z')
-      );
-      viewer.camera.lookAt(viewer.scene.position);
 
       // Add the trackball and page controls
       viewer.controls.init();

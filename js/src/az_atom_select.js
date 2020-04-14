@@ -213,7 +213,17 @@
         // Extract the list of atoms from the html
         for (let e in elements) {
           let element = elements[e];
-          atomListSequence.push(element.default_atom_nid);
+          if (includeIsotopes) {
+            for (let i in element.isotopes) {
+              if (element.isotopes.hasOwnProperty(i)) {
+                if (element.isotopes[i].field_approval_value != 'stats') {
+                  atomListSequence.push(element.isotopes[i].nid);
+                }
+              }
+            }
+          } else {
+            atomListSequence.push(element.default_atom_nid);
+          }
         }
       }
     }
@@ -262,7 +272,10 @@
 
       if ($atoms) {
         $atoms.removeClass('selected');
-        $atoms.find(`.nid-${nid}`).parents('.default-isotope').addClass('selected');
+        let $selected = $atoms.find(`.nid-${nid}`);
+        if ($selected) {
+          $selected.parents('.default-isotope').addClass('selected');
+        }
       }
       if ($isotopes) {
         $isotopes.removeClass('selected');
@@ -285,6 +298,7 @@
       setSelectedAtom,
       setIncludeIsotopes: (include) => {
         includeIsotopes = include;
+        atomListSequence = [];   // Clear any current list
         buildList();
       }
     };

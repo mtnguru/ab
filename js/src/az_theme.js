@@ -598,6 +598,9 @@
           break;
         case 'theme--cameraReset':
           var zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
+          let x = viewer.theme.get('camera--position', 'x');
+          let y = viewer.theme.get('camera--position', 'y');
+          let z = viewer.theme.get('camera--position', 'z');
           viewer.camera.position.set(
             zoom * viewer.theme.get('camera--position', 'x'),
             zoom * viewer.theme.get('camera--position', 'y'),
@@ -605,6 +608,8 @@
           );
           viewer.camera.lookAt(viewer.scene.position);
           viewer.render();
+          break;
+        case 'theme--pteReset':
           break;
       }
     };

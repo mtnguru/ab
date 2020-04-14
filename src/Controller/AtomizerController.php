@@ -200,6 +200,7 @@ class AtomizerController extends ControllerBase {
 
     $node = Node::load($data['conf']['nid']);
     $data['element'] = $node->field_element->entity->label();
+    $data['atomicNumber'] = $node->field_element->entity->field_atomic_number->value;
 
     // Render the node/atom using teaser atom_viewer mode.
     $data['atomName'] = $node->label();
@@ -602,9 +603,10 @@ class AtomizerController extends ControllerBase {
    */
   public function saveCoordinates() {
     $data = json_decode(file_get_contents("php://input"), true);
+    $atomicNumber = (($data['atomicNumber'] < 10) ? '0' : '') . $data['atomicNumber'];
     $path = drupal_get_path('module', 'atomizer') .
               '/config/coordinates/' .
-              str_replace(' ', '-',$data['name']) . '.csv';
+              $atomicNumber . '-' . str_replace(' ', '-',$data['name']) . '.csv';
     $f = fopen($path, 'w');
     foreach($data['coordinates'] as $row) {
       fputcsv($f, $row);
