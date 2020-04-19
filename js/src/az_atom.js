@@ -724,8 +724,7 @@
        */
       function addNucletToCoordinates(id) {
         let nuclet = atom.az.nuclets[id];
-        position.set(nuclet.position.x, nuclet.position.y, nuclet.position.z);
-        world = nuclet.localToWorld(position);
+        world = nuclet.getWorldPosition();
         objects.push([
           atom.az.name,
 //        'atomic number',
@@ -748,7 +747,7 @@
             if (nuclet.az.protons.hasOwnProperty(p)) {
               let proton = nuclet.az.protons[p];
               position.set(proton.position.x, proton.position.y, proton.position.z);
-              world = proton.localToWorld(position);
+              world = proton.getWorldPosition();
               if (proton.az.active && proton.az.visible) {
                 numProtons++;
                 objects.push([
@@ -777,8 +776,7 @@
             if (nuclet.az.neutrons.hasOwnProperty(n) && nuclet.az.neutrons[n].az.visible) {
               let neutron = nuclet.az.neutrons[n];
               numProtons++;
-              position.set(neutron.position.x, neutron.position.y, neutron.position.z);
-              world = neutron.localToWorld(position);
+              world = neutron.getWorldPosition();
               objects.push([
                 atom.az.name,
 //              'atomic number',
