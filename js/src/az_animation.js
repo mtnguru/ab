@@ -20,6 +20,7 @@
     let animateConf;
     let cameraStart;
     let atomicWeight;
+    let atomCounter;
     let $selectAnimation = $('.animation--selectyml select');
     let timeouts = {};
     let loop;
@@ -121,7 +122,8 @@
       // Capture the current zoom - camera position.  Assume that is 1
       // Set the starting atom.
       // First get the snapshot working
-//    viewer.atom_select.setSelectedAtom({index: atomicWeight});
+      atomCounter = 0;
+//    viewer.atom_select.setSelectedAtom({index: atomCounter});
       continueTimers();
     }
 
@@ -147,19 +149,22 @@
               if (direction == FORWARD) {
                 console.log(`applyTimer::getNextAtom ${currentAtom}`);
                 currentAtom = viewer.atom_select.getNextAtom();
+                atomCounter++;
               } else {
                 console.log(`applyTimer::getNextAtom ${currentAtom}`);
                 currentAtom = viewer.atom_select.getPreviousAtom();
+                atomCounter--;
               }
-            } else {
+            }
+            else {
               console.log(`applyTimer::getSelectedAtom ${currentAtom}`);
               currentAtom = viewer.atom_select.getSelectedAtom();
             }
 
-            if (conf.zoom && conf.zoom[atomicWeight]) {
-              viewer.camera.position.x = cameraStart.x * conf.zoom[atomicWeight];
-              viewer.camera.position.y = cameraStart.y * conf.zoom[atomicWeight];
-              viewer.camera.position.z = cameraStart.z * conf.zoom[atomicWeight];
+            if (conf.zoom && conf.zoom[atomCounter]) {
+              viewer.camera.position.x = cameraStart.x * conf.zoom[atomCounter];
+              viewer.camera.position.y = cameraStart.y * conf.zoom[atomCounter];
+              viewer.camera.position.z = cameraStart.z * conf.zoom[atomCounter];
             }
 
             console.log(`applyTimer: next atom ${currentAtom}`);

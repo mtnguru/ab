@@ -387,6 +387,7 @@
             atom.az.name = result.data.atomName;
             atom.az.element = result.data.element;
             atom.az.atomicNumber = result.data.atomicNumber;
+            atom.az.defaultAtom = result.data.defaultAtom;
             atom.az.title = result.data.atomTitle;
             atom.az.link = result.data.link;
             atom.az.conf = result.data.conf;
@@ -713,7 +714,7 @@
       let objects = [];
       let position = new THREE.Vector3();
       let world = new THREE.Vector3();
-      let world1 = new THREE.Vector3();
+      let numProtons = 0;
 
       /**
        * Recursive function to extract particle 3d coordinates
@@ -724,10 +725,11 @@
       function addNucletToCoordinates(id) {
         let nuclet = atom.az.nuclets[id];
         position.set(nuclet.position.x, nuclet.position.y, nuclet.position.z);
-        world1 = nuclet.localToWorld(position);
-        world = nuclet.getWorldPosition();
+        world = nuclet.localToWorld(position);
         objects.push([
           atom.az.name,
+//        'atomic number',
+//        'number protons',
           'nuclet',
           id,
           nuclet.az.state,
@@ -746,11 +748,13 @@
             if (nuclet.az.protons.hasOwnProperty(p)) {
               let proton = nuclet.az.protons[p];
               position.set(proton.position.x, proton.position.y, proton.position.z);
-              world1 = proton.localToWorld(position);
-              world = proton.getWorldPosition();
+              world = proton.localToWorld(position);
               if (proton.az.active && proton.az.visible) {
+                numProtons++;
                 objects.push([
                   atom.az.name,
+//                'atomic number',
+//                'number protons',
                   'proton',
                   id,
                   nuclet.az.state,
@@ -772,11 +776,13 @@
           for (let n in nuclet.az.neutrons) {
             if (nuclet.az.neutrons.hasOwnProperty(n) && nuclet.az.neutrons[n].az.visible) {
               let neutron = nuclet.az.neutrons[n];
+              numProtons++;
               position.set(neutron.position.x, neutron.position.y, neutron.position.z);
-              world1 = neutron.localToWorld(position);
-              world = neutron.getWorldPosition();
+              world = neutron.localToWorld(position);
               objects.push([
                 atom.az.name,
+//              'atomic number',
+//              'number protons',
                 'neutron',
                 id,
                 nuclet.az.state,
@@ -802,10 +808,11 @@
                 electron.children[0].position.y,
                 electron.children[0].position.z
               );
-              world = electron.children[0].localToWorld(position);
               world = electron.children[0].getWorldPosition();
               objects.push([
                 atom.az.name,
+//              'atomic number',
+//              'number protons',
                 'electron',
                 id,
                 nuclet.az.state,
@@ -835,6 +842,8 @@
 
       objects.push([
         'Element',
+        // 'Atomic Number',
+        // '# Protons',
         'Type',
         'Nuclet ID',
         'Nuclet Type',
@@ -855,7 +864,10 @@
         '/ajax/saveCoordinates',
         {
           name: atom.az.name,
+          nid: atom.az.conf.nid,
           atomicNumber: atom.az.atomicNumber,
+          numProtons: numProtons,
+          defaultAtom: atom.az.defaultAtom,
           component: 'atom',
           coordinates: objects },
         savedCoordinates

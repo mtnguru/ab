@@ -199,8 +199,12 @@ class AtomizerController extends ControllerBase {
     $data['link'] = render($link);
 
     $node = Node::load($data['conf']['nid']);
-    $data['element'] = $node->field_element->entity->label();
-    $data['atomicNumber'] = $node->field_element->entity->field_atomic_number->value;
+    $element = $node->field_element->entity;
+    $data['element'] = $element->label();
+    $data['atomicNumber'] = $element->field_atomic_number->value;
+    $enid = $element->field_default_atom->target_id;
+    $anid = $node->id();
+    $data['defaultAtom'] = ($node->id() == $element->field_default_atom->target_id) ? '1' : '0';
 
     // Render the node/atom using teaser atom_viewer mode.
     $data['atomName'] = $node->label();
@@ -606,7 +610,12 @@ class AtomizerController extends ControllerBase {
     $atomicNumber = (($data['atomicNumber'] < 10) ? '0' : '') . $data['atomicNumber'];
     $path = drupal_get_path('module', 'atomizer') .
               '/config/coordinates/' .
-              $atomicNumber . '-' . str_replace(' ', '-',$data['name']) . '.csv';
+              $atomicNumber . '.' .
+              str_replace(' ', '-',$data['name']) . '.' .
+              $data['numProtons'] . '.' .
+              $data['defaultAtom'] . '.' .
+              $data['nid'] .
+              '.csv';
     $f = fopen($path, 'w');
     foreach($data['coordinates'] as $row) {
       fputcsv($f, $row);
