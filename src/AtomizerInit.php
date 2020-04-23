@@ -439,7 +439,7 @@ class AtomizerInit {
       // Load raw JavaScript files if on host az or user has permission.
       if ('az' == \Drupal::service('request_stack')->getCurrentRequest()->server->get('SERVER_NAME') ||
         \Drupal::currentUser()->hasPermission('atomizer load raw js')) {
-        if (!empty($atomizer_config['librariesDev'])) {
+        if (!empty($atomizer_config['librariesDeve'])) {
           $build['#attached']['library'] = $atomizer_config['librariesDev'];
         } else {
           if (!empty($atomizer_config['libraries'])) {
