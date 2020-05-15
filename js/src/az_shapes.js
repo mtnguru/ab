@@ -154,7 +154,8 @@ Drupal.atomizer.shapesC = function (_viewer) {
          -1.8155, 1.8155,-1.8155,
          -2.9375,      0,-1.1220,
          -2.9375,      0, 1.1220,
-         -1.8155, 1.8155, 1.8155
+         -1.8155, 1.8155, 1.8155,
+
         ]);
         break;
     }
@@ -483,9 +484,41 @@ Drupal.atomizer.shapesC = function (_viewer) {
     return geom;
   }
 
+  function findTetrahedron4thVertex(vertices) {
+    let center = {
+      x: (vertices[0].x + vertices[1].x + vertices[2].x) / 3,
+      y: (vertices[0].y + vertices[1].y + vertices[2].y) / 3,
+      z: (vertices[0].z + vertices[1].z + vertices[2].z) / 3,
+    };
+    let normal = {
+      x: (vertices[0].x - vertices[1].x) * (vertices[1].x - vertices[2].x),
+      y: (vertices[0].y - vertices[1].y) * (vertices[1].y - vertices[2].y),
+      z: (vertices[0].z - vertices[1].z) * (vertices[1].z - vertices[2].z),
+    };
+    let scale = Math.sqrt(2/3);
+    let scaled_normal = {
+      x: normal.x / Math.abs(normal.x) * scale,
+      y: normal.y / Math.abs(normal.y) * scale,
+      z: normal.x / Math.abs(normal.z) * scale,
+    };
+    return pts = [
+      {
+        x: center.x + scaled_normal.x,
+        y: center.y + scaled_normal.y,
+        z: center.z + scaled_normal.z,
+      },
+      {
+        x: center.x - scaled_normal.x,
+        y: center.y - scaled_normal.y,
+        z: center.z - scaled_normal.z,
+      }
+    ];
+  }
+
   return {
     createPyramid: createPyramid,
     createBiPyramid: createBiPyramid,
     getGeometry: getGeometry,
+    findTetrahedron4thVertex: findTetrahedron4thVertex,
   };
 };

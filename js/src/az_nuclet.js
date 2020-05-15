@@ -31,9 +31,6 @@
     var protonRadius = viewer.theme.get('proton--radius');
     var electronRadius = viewer.theme.get('electron--radius');
 
-    var protonGeometry = null;
-    var electronGeometry = null;
-
     /**
      * Create the axis lines for a nuclet.
      *
@@ -440,10 +437,10 @@
           y: pos.y,
           z: pos.z
         },
-        protonGeometry
+        Drupal.atomizer.constants.protonGeometry,
       );
-      if (!protonGeometry) {
-        protonGeometry = proton.geometry;
+      if (!Drupal.atomizer.constants.protonGeometry) {
+        Drupal.atomizer.constants.protonGeometry;
       }
 
       proton.name = name;
@@ -520,7 +517,6 @@
     function createProtons(geometry, shapeConf, azNuclet) {
       var p;
       switch (azNuclet.state) {
-
         case 'neutral':
           geometry.vertices[9].set(
             0,
@@ -552,6 +548,7 @@
           }
         }
       }
+
       return azNuclet.protons;
     }
 
@@ -668,14 +665,16 @@
       for (var v in shapeConf.valence) {
         var ringConf = shapeConf.valence[v];
 
-        var torusGeometry = new THREE.TorusGeometry(radius, diameter, 10, 40);
+        if (!Drupal.atomizer.constants.torusGeometry) {
+          torusGeometry = new THREE.TorusGeometry(radius, diameter, 10, 40);
+        }
         var material = new THREE.MeshPhongMaterial({
           color: color,
           opacity: opacity,
           transparent: (opacity < constants.transparentThresh),
           visible: (opacity > constants.visibleThresh)
         });
-        var ring = new THREE.Mesh(torusGeometry, material);
+        var ring = new THREE.Mesh(Drupal.atomizer.constants.torusGeometry, material);
         ring.name = 'valence-active';
         ring.az = ringConf;
         azNuclet.rings[v] = ring;
@@ -795,10 +794,10 @@
           radius: electronRadius
         },
         pos,
-        electronGeometry
+        Drupal.atomizer.constants.electronGeometry
       );
-      if (!electronGeometry) {
-        electronGeometry = core.geometry;
+      if (!Drupal.atomizer.constants.electronGeometry) {
+        Drupal.atomizer.constants.electronGeometry = core.geometry;
       }
       core.name = name + '-core';
       electronGroup.add(core);
@@ -820,10 +819,10 @@
           radius: protonRadius
         },
         pos,
-        protonGeometry
+        Drupal.atomizer.constants.protonGeometry
       );
-      if (!protonGeometry) {
-        protonGeometry = electronGroup.geometry;
+      if (!Drupal.atomizer.constants.protonGeometry) {
+        Drupal.atomizer.constants.protonGeometry = electronGroup.geometry;
       }
       field.name = name + '-field';
       electronGroup.add(field);
@@ -845,10 +844,10 @@
           radius: protonRadius
         },
         pos,
-        protonGeometry
+        Drupal.atomizer.constants.protonGeometry
       );
-      if (!protonGeometry) {
-        protonGeometry = electronGroup.geometry;
+      if (!Drupal.atomizer.constants.protonGeometry) {
+        Drupal.atomizer.constants.protonGeometry = electronGroup.geometry;
       }
       orbital.name = name + '-orbital';
       electronGroup.add(orbital);
@@ -883,7 +882,8 @@
           }
         }
         pos.divideScalar(protons.length);
-        var nelectron = createNElectron('electron1', pos);
+        var nelectron = createNElectron('electronSpherical', pos);
+
         nelectron.az.vertices = protons;
         nelectron.az.id = e;
         nelectrons[e] = nelectron;
@@ -1011,8 +1011,8 @@
         }
       }
 
-      // Create volume sphere.
-      if (shapeConf.volume) {
+      // Create nuclet volume spheres.
+      if (shapeConf.volumeNuclet) {
         var volumeOpacity = viewer.theme.get('nuclet-volume--opacity') || 0;
         var volume = Drupal.atomizer.base.makeObject(
             'proton',
@@ -1029,7 +1029,7 @@
               radius: protonRadius
             },
             new THREE.Vector3(),
-            protonGeometry
+            Drupal.atomizer.constants.protonGeometry
         );
         volume.name = 'nuclet-volume';
         nucletGroup.add(volume);
@@ -1055,17 +1055,17 @@
   //    viewer.items['selectFace'] = [faces];
       }
 
-//    if (shapeConf.vertexids) {
-//      nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
-//    }
+      if (shapeConf.vertexids) {
+        nucletGroup.add(viewer.sprites.createVerticeIds(groupName, geometry));
+      }
 
 //    if (shapeConf.faceids) {
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
 //    }
 
-//    if (shapeConf.particleids) {
-//      nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
-//    }
+      if (shapeConf.particleids) {
+        nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
+      }
       return geometry;
     }
 

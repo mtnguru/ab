@@ -313,7 +313,7 @@
                   break;
 
                 case 'scale':
-                  if (args[0] == 'protonVertexid') {
+                  if (args[0] == 'protonsVertexid') {
                     if (!node.initScale) {
                       node.initScale = node.scale.clone();
                     }

@@ -9,6 +9,7 @@
   Drupal.atomizer.atomC = function (_viewer) {
 
     let viewer = _viewer;
+    var constants = Drupal.atomizer.base.constants;
 
     /**
      * Align an object to an internal axis (x, y or z) and then align that axis
@@ -401,6 +402,32 @@
               hoverOuterFaces: [],
               optionalProtons: [],
             };
+
+            if (result.data.boundingSphere) {
+              let bs = result.data.boundingSphere;
+              var opacity = viewer.theme.get('atom-spherical--opacity') || 0;
+              var volume = Drupal.atomizer.base.makeObject(
+                'proton',
+                {
+                  phong: {
+                    color: viewer.theme.get('atom-spherical--color'),
+                    opacity: opacity,
+                    transparent: (opacity < constants.transparentThresh),
+                    visible: (opacity > constants.visibleThresh)
+                  }
+                },
+                {
+//                scale: viewer.theme.get('nuclet-volume--scale'),
+                  radius: bs.radius,
+                },
+                new THREE.Vector3(),
+                Drupal.atomizer.constants.protonGeometry
+              );
+              volume.position.set(bs.x, bs.y, bs.z);
+              volume.name = 'atom-spherical';
+              atom.add(volume);
+            }
+
 
             // Move atom position
             if (viewer.dataAttr['atom--position--x']) {

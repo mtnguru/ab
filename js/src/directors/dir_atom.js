@@ -413,7 +413,7 @@
                       }
                     }
                     pos.divideScalar(len);
-                    var nelectron = viewer.nuclet.createNElectron('electron1', pos);
+                    var nelectron = viewer.nuclet.createNElectron('electronSpherical', pos);
                     nelectron.az.vertices = vertices;
                     var id = 'N' + nElectronsId++;
                     nelectron.az.id = id;
@@ -927,10 +927,10 @@
     }
 
     function applyControl (id, value) {
-      if (id == 'electron1-orbital--scale') {
+      if (id == 'electron-orbital--scale') {
         let volume = 4.0 / 3.0 *  Math.PI * Math.pow(value, 3);
         let normalizedVolume = Math.round(volume / 4.1887902047863905 * 1000) / 1000;
-        $('#electron1-orbital--volume').html('<span class="az-name">Volume: &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="az-value">' + normalizedVolume + '</span>');
+        $('#electron-orbital--volume').html('<span class="az-name">Volume: &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="az-value">' + normalizedVolume + '</span>');
       }
       if (id == 'nuclet-volume--scale') {
         let volume = 4.0 / 3.0 *  Math.PI * Math.pow(value, 3);

@@ -206,6 +206,18 @@ class AtomizerController extends ControllerBase {
     $anid = $node->id();
     $data['defaultAtom'] = ($node->id() == $element->field_default_atom->target_id) ? '1' : '0';
 
+    $boundingSphere = $node->field_bounding_sphere->entity;
+    if ($boundingSphere) {
+      $data['boundingSphere'] = [
+        'x' => $boundingSphere->field_center_x->value,
+        'y' => $boundingSphere->field_center_y->value,
+        'z' => $boundingSphere->field_center_z->value,
+        'radius' => $boundingSphere->field_radius->value,
+        'ratio' => $boundingSphere->field_ratio->value,
+        'volume' => $boundingSphere->field_volume->value,
+      ];
+    }
+
     // Render the node/atom using teaser atom_viewer mode.
     $data['atomName'] = $node->label();
     $data['atomTitle'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';

@@ -16,6 +16,11 @@
   Drupal.atomizer = {};
 
   Drupal.atomizer.logit = false;
+  Drupal.atomizer.constants = {
+    protonGeometry: null,
+    electronGeometry: null,
+    torusGeometry: null,
+  };
 
   Drupal.atomizer.baseC = function () {
 
