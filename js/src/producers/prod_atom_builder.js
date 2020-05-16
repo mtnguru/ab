@@ -1,7 +1,7 @@
 /**
  * @file - prod_atom_builder.js
  *
- * This 'producer' creates the view with a single atom for editing 
+ * This 'producer' creates the view with a single atom for editing
  * with the atom_builder.
  */
 
@@ -100,6 +100,8 @@
       viewer.snapshot = Drupal.atomizer.snapshotC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
       viewer.dir_atom = Drupal.atomizer.dir_atomC(viewer);
+
+      Drupal.atomizer.base.setViewer(viewer);
 
       // Load and display the default atom
       var userAtomNid = localStorage.getItem('atomizer_builder_atom_nid');

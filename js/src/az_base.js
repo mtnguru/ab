@@ -24,6 +24,8 @@
 
   Drupal.atomizer.baseC = function () {
 
+    let viewer;
+
     Drupal.AjaxCommands.prototype.loadYmlCommand = function(ajax, response, status) {
       Drupal.atomizer[response.component].loadYml(response);
     };
@@ -356,7 +358,8 @@
       constants: {
         visibleThresh: .01,
         transparentThresh: .99
-      }
+      },
+      setViewer: function (_viewer) { viewer = _viewer; },
     };
 
   };
