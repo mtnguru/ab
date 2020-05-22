@@ -64,7 +64,7 @@
         case 'none':
           return null;
         case 'electronsAdd':
-          if (!atom.az.intersect.visibleParticles) {
+          if (atom && !atom.az.intersect.visibleParticles) {
             console.log(`hoverObjects - atom.az.intersect.visibleProtons`)
           }
           return atom.az.intersect.visibleParticles;

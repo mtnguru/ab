@@ -31,6 +31,9 @@
     var protonRadius = viewer.theme.get('proton--radius');
     var electronRadius = viewer.theme.get('electron--radius');
 
+    var protonGeometry = null;
+    var electronGeometry = null;
+
     /**
      * Create the axis lines for a nuclet.
      *
@@ -437,10 +440,10 @@
           y: pos.y,
           z: pos.z
         },
-        Drupal.atomizer.constants.protonGeometry,
+        protonGeometry,
       );
-      if (!Drupal.atomizer.constants.protonGeometry) {
-        Drupal.atomizer.constants.protonGeometry;
+      if (!protonGeometry) {
+        protonGeometry = proton.geometry;
       }
 
       proton.name = name;
@@ -819,10 +822,10 @@
           radius: protonRadius
         },
         pos,
-        Drupal.atomizer.constants.protonGeometry
+        protonGeometry
       );
-      if (!Drupal.atomizer.constants.protonGeometry) {
-        Drupal.atomizer.constants.protonGeometry = electronGroup.geometry;
+      if (!protonGeometry) {
+        protonGeometry = electronGroup.geometry;
       }
       field.name = name + '-field';
       electronGroup.add(field);
@@ -844,10 +847,10 @@
           radius: protonRadius
         },
         pos,
-        Drupal.atomizer.constants.protonGeometry
+        protonGeometry
       );
-      if (!Drupal.atomizer.constants.protonGeometry) {
-        Drupal.atomizer.constants.protonGeometry = electronGroup.geometry;
+      if (!protonGeometry) {
+        protonGeometry = electronGroup.geometry;
       }
       orbital.name = name + '-orbital';
       electronGroup.add(orbital);
@@ -1029,7 +1032,7 @@
               radius: protonRadius
             },
             new THREE.Vector3(),
-            Drupal.atomizer.constants.protonGeometry
+            protonGeometry
         );
         volume.name = 'nuclet-volume';
         nucletGroup.add(volume);
@@ -1063,9 +1066,9 @@
 //      nucletGroup.add(viewer.sprites.createFaceIds(groupName, geometry));
 //    }
 
-//    if (shapeConf.particleids) {
-//      nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
-//    }
+      if (shapeConf.particleids) {
+        nucletGroup.add(viewer.sprites.createVerticeIds(shapeConf.particleids, geometry));
+      }
       return geometry;
     }
 
@@ -1490,6 +1493,7 @@
       createTetrahedronLines,
       highlight,
       protonRadius,
+      protonGeometry,
       setProtonColor,
       setElectronColor,
       countParticles,
