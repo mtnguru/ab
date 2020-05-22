@@ -66,8 +66,8 @@
         case 'electronsAdd':
           if (atom && !atom.az.intersect.visibleParticles) {
             console.log(`hoverObjects - atom.az.intersect.visibleProtons`)
+            return atom.az.intersect.visibleParticles;
           }
-          return atom.az.intersect.visibleParticles;
         case 'protonsAdd':
           return atom.az.intersect.optionalProtons;
         case 'protonsColor':
