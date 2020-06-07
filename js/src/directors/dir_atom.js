@@ -311,6 +311,7 @@
                       viewer.atom.updateValenceRings(atom);
                       createIntersectLists(atom);
                       viewer.atom.updateParticleCount(atom);
+                      viewer.atom.updateSamLines(atom);
                     }
                     break;
                   case 3:       // Right click - deselect
@@ -437,6 +438,7 @@
                 }
                 createIntersectLists(atom);
                 viewer.atom.updateParticleCount(atom);
+                viewer.atom.updateSamLines(atom);
                 viewer.render();
               }
               break;   // electronsAdd
@@ -600,29 +602,41 @@
 
       switch (np) {
         case 1:
-          bes =['extra_neutron'];
+          bes =['PEP'];
           break;
 
         case 2:
-          bes = ['deuterium_on_carbon'];
+          bes = ['Deuteron'];
           break;
 
         case 3:
-          bes = ['deuterium_on_carbon', 'extra_neutron'];
+          bes = ['Deuteron', 'PEP'];
           break;
 
         case 4:
           var uid = 'U' + id + '0';
           if (az.neutrons[uid].az.visible) {
-            bes = ['neutral_ending_5'];
+            bes = ['Five ending'];
           } else {
-            bes = ['neutral_ending_4'];
+            bes = ['Four ending'];
           }
           break;
       }
       // check the protons on this grow point and categorize it
       return bes;
     }
+
+    let samLines = {
+      'Carbon prime': 41,
+      'Deuteron': 8,
+      'Four ending': 16,
+      'Five ending': 21,
+      'Lithium': 24,
+      'Beryllium': 32,
+      'Boron': 40,
+      'Carbon': 45,
+      'PEP': 3,
+    };
 
     function findExtraNeutrons(az) {
       var bes = [];
@@ -632,14 +646,14 @@
               (u == 'U00' || u == 'U10')) continue;
           var neutron = az.neutrons[u];
           if (neutron.az.visible) {
-            bes.push('extra_neutron');
+            bes.push('PEP');
           }
         }
       }
       return bes;
     }
 
-    function findBindingEnergy(az) {
+    function findSamLines(az) {
       var be = [];
       var extra = [];
       var grow0 = az.id + '0';
@@ -649,26 +663,26 @@
 
           case 'lithium':
             if (az.protons.P5.az.active) {
-              be.push('lithium_7');
+              be.push('Lithium');
             } else {
-              be.push('lithium_6');
+              be.push('Lithium');
             }
             break;
 
           case 'beryllium':
-            be.push('beryllium_9');
+            be.push('Beryllium');
             break;
 
           case 'boron10':
-            be.push('boron_10');
+            be.push('Boron');
             break;
 
           case 'boron11':
-            be.push('boron_11');
+            be.push('Boron');
             break;
 
           case 'carbon':
-            be.push('carbon_12');
+            be.push('Carbon prime');
             break;
 
           case 'initial':
@@ -676,19 +690,19 @@
             if (az.conf.nuclets) {
               // if it has 2 nuclets attached
               if (az.conf.nuclets[grow0] && az.conf.nuclets[grow1]) {
-                be.push('carbon_12');
+                be.push('Carbon prime');
               } // if only the 0 nuclet is attached
               else if (az.conf.nuclets[grow0]) {
-                be.push('carbon_12');
+                be.push('Carbon prime');
                 be.push.apply(be, findNeutralEnding(az, 1));
               } // if only the 1 nuclet is attached
               else if (az.conf.nuclets[grow1]) {
-                be.push('carbon_12');
+                be.push('Carbon prime');
                 be.push.apply(be, findNeutralEnding(az, 0));
               } // no nuclets are attached
             }
             else {
-              be.push('carbon_12');
+              be.push('Carbon prime');
               be.push.apply(be, findNeutralEnding(az, 0));
               be.push.apply(be, findNeutralEnding(az, 1));
             }
@@ -698,42 +712,42 @@
         switch (az.state) {
 
           case 'lithium':
-            be.push('lithium_on_carbon');
+            be.push('Lithium');
             break;
 
           case 'beryllium':
-            be.push('beryllium_on_carbon');
+            be.push('Beryllium');
             break;
 
           case 'boron10':
-            be.push('boron_on_carbon');
+            be.push('Boron');
             break;
 
           case 'boron11':
-            be.push('boron_on_carbon');
+            be.push('Boron');
             break;
 
           case 'carbon':
-            be.push('carbon_on_carbon');
+            be.push('Carbon');
             break;
 
           case 'initial':
           case 'final':
             if (az.conf.nuclets) {
               if (az.conf.nuclets[grow0] && az.conf.nuclets[grow1]) {
-                be.push('carbon_on_carbon');
+                be.push('Carbon');
               } // if only the 0 nuclet is attached
               else if (az.conf.nuclets[grow0]) {
-                be.push('carbon_on_carbon');
+                be.push('Carbon');
                 be.push.apply(be, findNeutralEnding(az, 1));
               } // if only the 1 nuclet is attached
               else if (az.conf.nuclets[grow1]) {
-                be.push('carbon_on_carbon');
+                be.push('Carbon');
                 be.push.apply(be, findNeutralEnding(az, 0));
               } // no nuclets are attached
             }
             else {
-              be.push('carbon_on_carbon');
+              be.push('Carbon');
               be.push.apply(be, findNeutralEnding(az, 0));
               be.push.apply(be, findNeutralEnding(az, 1));
             }
@@ -753,9 +767,9 @@
      * @param atom
      */
     function createNucletList(atom) {
-      let totalBE = 0; // total Binding Energy for this atom.
+      let totalLines = 0; // total Binding Energy for this atom.
       let actualBE = parseFloat($('.field--name-field-be-actual .field__item').html());
-      let showBindingEnergy = $('#atom--be-button').hasClass('az-selected') ? '' : 'az-hidden';
+      let showSamLines = $('#atom--sam-lines-button').hasClass('az-selected') ? '' : 'az-hidden';
       /**
        * Recursive function to extract a nuclets information.
        *
@@ -800,16 +814,16 @@
         </div>`;
 
         // Add the binding energy
-        let beList = findBindingEnergy(nuclet.az);
+        let beList = findSamLines(nuclet.az);
         if (beList.length > 0) {
-          out += `<div class="binding-energy-wrapper ${showBindingEnergy}">\n`;
+          out += `<div class="sam-lines-wrapper ${showSamLines}">\n`;
           for (let b = 0; b < beList.length; b++) {
             let en = beList[b];
-            out += '  <div class="binding-energy">\n';
+            out += '  <div class="sam-lines">\n';
             out += '    <span class="title">' + en + '</span>\n';
-            out += '    <span class="value">' + bindingEnergies[en] + '</span>\n';
+            out += '    <span class="value">' + samLines[en] + '</span>\n';
             out += '  </div>\n';
-            totalBE += parseFloat(bindingEnergies[en]);
+            totalLines += parseFloat(samLines[en]);
           }
           out += '</div>\n';
         }
@@ -853,15 +867,18 @@
         $nucletList.html(addNucletToList('N0', 0));
       }
 
-      $('.atom--be-sam-nuclets--value').html(totalBE.toString().substring(0,6));
+      $('.atom--sam-lines--value').html(totalLines.toString().substring(0,6));
       if (actualBE) {
+        let totalBE = totalLines * 2.225;
         let perc = ((totalBE > actualBE) ? actualBE / totalBE : -totalBE / actualBE) * 100;
         $('.atom--be-actual--value').html(actualBE.toString().substring(0,7));
-        $('.atom--be-sam-nuclets-perc--value').html(perc.toString().substring(0,5) + '%');
+        $('.atom--be-sam-lines--value').html(totalBE.toString().substring(0,5));
+        $('.atom--be-sam-lines-perc--value').html(perc.toString().substring(0,5) + '%');
       }
       else {
         $('.atom--be-actual--value').html('');
-        $('.atom--be-sam-nuclets-perc--value').html('');
+        $('.atom--be-sam-lines--value').html('');
+        $('.atom--be-sam-lines-perc--value').html('');
       }
     }
 

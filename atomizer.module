@@ -124,8 +124,6 @@ function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
     $be_actual = $be_nucleon * $protons / 1000;
     $form_state->setValue(['field_be_actual', 0, 'value'], $be_actual);
 
-    $shit = 'damn';
-
     // Calculate the binding energy accuracy using SAM nuclet calculation.
     if ($form_state->hasValue(['field_be_sam_nuclets', 0, 'value'])) {
       $be_sam_nuclets = $form_state->getValue('field_be_sam_nuclets')[0]['value'];

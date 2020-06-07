@@ -65,6 +65,7 @@
       nuclet = nucletOuterShell.children[0].children[0];
       updateValenceRings(atom);
       updateParticleCount(atom);
+      updateSamLines(atom);
 
       return nuclet;
     }
@@ -171,6 +172,7 @@
       let nucletOuterShell = createNuclet(atom, id, conf, parent);
       updateValenceRings(atom);
       updateParticleCount(atom);
+      updateSamLines(atom);
       return nucletOuterShell.children[0].children[0];
     }
 
@@ -190,6 +192,7 @@
       activateNeutralParticles(id.charAt(id.length-1), parentNuclet, true, false);
       updateValenceRings(atom);
       updateParticleCount(atom);
+      updateSamLines(atom);
     }
 
     /**
@@ -403,6 +406,10 @@
               optionalProtons: [],
             };
 
+            updateValenceRings(atom);
+            updateParticleCount(atom);
+            updateSamLines(atom);
+
             if (result.data.boundingSphere) {
               let bs = result.data.boundingSphere;
               var opacity = viewer.theme.get('atom-spherical--opacity') || 0;
@@ -485,8 +492,6 @@
       atom.name = 'atom';
       atom.az = {nuclets: {}};
       createNuclet(atom, 'N0', atomConf, atom);
-      updateValenceRings(atom);
-      updateParticleCount(atom);
 
       let explode = viewer.theme.get('attachLines--scale');
       if (explode > 1) {
@@ -606,11 +611,28 @@
       $('.atom--num-electrons .text-value', viewer.context).html(numElectrons);
     }
 
+    function updateSamLines(atom) {
+      let lines = calculateSamLines(atom);
+      Drupal.atomizer.base.doAjax(
+        '/ajax/saveBindingEnergy',
+        {
+          name: atom.az.name,
+          nid: atom.az.conf.nid,
+          lines: lines,
+        },
+        null // No callback function
+      );
+    }
+
+
     /**
      * Cycle through all atoms, calculate their BE, save it to Drupal.
      */
     let running = false;
     function calculateAllBindingEnergies(event) {
+      let lastIsotope;
+      let isotope = 0;
+      let $isotopes = $('.isotope', viewer.context);
       if (running) {
         running = false;
         $(event.target).removeClass('az-selected');
@@ -618,10 +640,9 @@
         running = true;
         $(event.target).addClass('az-selected');
         let $isotopes = $('.isotope', viewer.context);
-        let lastIsotope = $isotopes.length;
-        let isotope = 0;
+        lastIsotope = $isotopes.length;
 
-        let $isotope = $($isotopes[isotope]);
+        $isotope = $($isotopes[isotope]);
         let nid = $isotope.find('.atom-name').data('nid');
         loadObject ({nid: nid}, displayAtom);
       }
@@ -711,8 +732,8 @@
     const buttonClicked = function buttonClicked(event) {
 
       // User pressed button to view binding energies
-      if (event.target.id == 'atom--be-button') {
-        let $bindingEnergy = $('.binding-energy-wrapper', viewer.context);
+      if (event.target.id == 'atom--sam-lines-button') {
+        let $bindingEnergy = $('.sam-lines-wrapper', viewer.context);
         if ($(event.target).hasClass('az-selected')) {
           $(event.target).removeClass('az-selected');
           $bindingEnergy.addClass('az-hidden');
@@ -900,6 +921,100 @@
       return objects;
     }
 
+    function calculateSamLines (atom) {
+      let lines = 0;
+
+      /**
+       * Recursive function to extract particle 3d coordinates
+       *
+       * @param id
+       * @returns {string}
+       */
+      function addNucletSamLines(id) {
+        let nuclet = atom.az.nuclets[id];
+        let nucletLines = 0;
+        let neutrons = 0;
+        let protons = 0;
+
+        // Add the protons.
+        if (nuclet.az.protons) {
+          for (let p in nuclet.az.protons) {
+            if (nuclet.az.protons.hasOwnProperty(p)) {
+              let proton = nuclet.az.protons[p];
+              if (proton.az.visible) {
+                protons++;
+              }
+            }
+          }
+        }
+
+        // Add the neutrons.
+        if (nuclet.az.neutrons) {
+          for (let n in nuclet.az.neutrons) {
+            if (nuclet.az.neutrons.hasOwnProperty(n) ) {
+              let neutron = nuclet.az.neutrons[n];
+              if (neutron.az.visible) {
+                let neutron = nuclet.az.neutrons[n];
+                neutrons++;
+              }
+            }
+          }
+        }
+
+        switch (nuclet.az.state) {
+          case 'lithium':
+            nucletLines += 24;
+            break;
+          case 'beryllium':
+            nucletLines += 32;
+            break;
+          case 'boron10':
+            nucletLines += 40;
+            break;
+          case 'boron11':
+            nucletLines += 40;
+            break;
+          case 'carbon':
+            nucletLines += 41;
+            break;
+          case 'initial':
+            if (id == 'N0') {
+              nucletLines += 41;
+            } else {
+              nucletLines += 45;
+            }
+            break;
+          case 'final':
+            if (id == 'N0') {
+              nucletLines += 41;
+            } else {
+              nucletLines += 45;
+            }
+            break;
+          default:
+            break;
+        }
+
+        lines += nucletLines;
+
+
+        // Recursively add the children nuclets.
+        let grow0 = atom.az.nuclets[id + '0'];
+        let grow1 = atom.az.nuclets[id + '1'];
+        if (grow0 || grow1) {
+          if (grow0) { addNucletSamLines(id + '0'); }
+          if (grow1) { addNucletSamLines(id + '1'); }
+        }
+      }
+
+      // Start with the N0 nuclet, build yml text recursively.
+      console.log('calculateSamLines - addNucletSamLines(N0)');
+
+      addNucletSamLines('N0', '');
+
+      return lines;
+    }
+
     let savedCoordinates = function (response) {
 //    let select = $('.theme--selectyml', viewer.context)[0].querySelector('select');
       // Remove current options
@@ -1057,8 +1172,10 @@
       saveYml,
       updateValenceRings,
       updateParticleCount,
+      updateSamLines,
       deleteAtomImages,
       saveWorldCoordinates,
+      calculateSamLines,
     };
   };
 

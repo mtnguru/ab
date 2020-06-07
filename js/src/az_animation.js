@@ -115,6 +115,7 @@
             viewer.atom_select.setIncludeIsotopes(false);
             break;
           case 'cycleworldatoms':
+          case 'calculateSamLines':
             viewer.atom_select.setIncludeIsotopes(true);
             break;
         }
@@ -142,6 +143,7 @@
 
       function applyTimer(name, conf) {
         switch (name) {
+          case 'calculateSamLines':
           case 'cycleworldatoms':
           case 'cycleimageatoms':
           case 'cycleatoms':
@@ -176,28 +178,37 @@
             }, function (object) {
 //            viewer.producer.objectLoaded(object);
               viewer.render();
-              if (name == 'cycleworldatoms') {
-                viewer.atom.saveWorldCoordinates(object);
-              }
-              if (name == 'cycleimageatoms') {
-                setTimeout(function () {
-                  viewer.snapshot.takeSnapshot({
-                    nid: object.az.nid,
-                    width: 480,
-                    height: 480,
-                    filename: object.az.name,
-                    overwrite: true,
-                    imageType: 'primary',
-                  });
+
+              switch (name) {
+                case 'cycleworldatoms':
+                  viewer.atom.saveWorldCoordinates(object);
+                  continueAnimation();
+                  break;
+                case 'calculateSamLines':
+                  viewer.atom.calculateSamLines(object);
+                  continueAnimation();
+                  break;
+                case 'cycleimageatoms':
+                  setTimeout(function () {
+                    viewer.snapshot.takeSnapshot({
+                      nid: object.az.nid,
+                      width: 480,
+                      height: 480,
+                      filename: object.az.name,
+                      overwrite: true,
+                      imageType: 'primary',
+                    });
+                    setTimeout(function () {
+                      continueAnimation();
+                    }, 1000);
+                  }, 1000);
+                  break;
+                default:
                   setTimeout(function () {
                     continueAnimation();
-                  }, 1000);
-                }, 0);
-              } else {
-                setTimeout(function () {
-                  continueAnimation();
-                }, 2000);
-              };
+                  }, 2000);
+                  break;
+              }
             });
             break;
 

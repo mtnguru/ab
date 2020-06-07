@@ -64,10 +64,11 @@
         case 'none':
           return null;
         case 'electronsAdd':
-          if (atom && !atom.az.intersect.visibleParticles) {
+          if (atom && atom.az.intersect.visibleParticles) {
             console.log(`hoverObjects - atom.az.intersect.visibleProtons`)
             return atom.az.intersect.visibleParticles;
           }
+          return [];
         case 'protonsAdd':
           return atom.az.intersect.optionalProtons;
         case 'protonsColor':
@@ -124,7 +125,6 @@
       localStorage.setItem('atomizer_builder_atom_nid', atom.az.nid);
       atom.az.id = "A1";
 
-      viewer.dir_atom.objectLoaded(atom);
       viewer.pte.setElementColor(); // Clears currently highlighted elements
       viewer.pte.setElementColor(atom.az.element.toLowerCase(),'color-green');  // Sets color of current element.
 
@@ -137,6 +137,8 @@
       if ($atomProperties) {
         $atomProperties.html(atom.az.properties);
       }
+
+      viewer.dir_atom.objectLoaded(atom);
 
       viewer.scene.az = {
         title: atom.az.title, // Use atom title as scene title

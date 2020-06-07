@@ -473,6 +473,27 @@ class AtomizerController extends ControllerBase {
   }
 
   /**
+   * Save Binding Energy for an atom
+   */
+  public function saveBindingEnergy() {
+    $data = json_decode(file_get_contents("php://input"), TRUE);
+    $atom = Node::load($data['nid']);
+    if (!empty($data['lines'] != '0')) {
+      $samBE = $data['lines'] * 2.225;
+      $atom->set('field_sam_lines', $samBE);
+      if (!$atom->field_actual_be->isEmpty()) {
+        $actualBE = $atom->field_actual_be->value;
+        $perc = (($samBE > $actualBE) ? $actualBE / $samBE : -$samBE / $actualBE) * 100;
+        $atom->set('field_be_sam_lines', $samBE);
+        $atom->set('field_be_sam_lines_', $perc);
+      }
+    }
+    $atom->setNewRevision(TRUE);
+    $retcode = $atom->save();
+    return new AjaxResponse();
+  }
+
+  /**
    * Save data for an atom - currently just saving binding energy.
    */
   public function saveAtom() {

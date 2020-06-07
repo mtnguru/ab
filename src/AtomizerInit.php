@@ -50,12 +50,12 @@ class AtomizerInit {
         'period'       => ($element->field_period->isEmpty())  ? null : $element->field_period->value,
         'defaultAtom'  => $anid,
         'group'        => ($element->field_pt->isEmpty())      ? null : $element->field_pt->value,
-        'atomicNumber' =>($element->field_atomic_number->isEmpty()) ? 999  : $element->field_atomic_number->value,
-        'pte_row'      =>($element->field_pte_row->isEmpty()) ? 0     : $element->field_pte_row->value,
-        'pte_column'   =>($element->field_pte_column->isEmpty()) ? 0  : $element->field_pte_column->value,
-        'sam_row'      =>($element->field_sam_row->isEmpty()) ? 0     : $element->field_sam_row->value,
-        'sam_column'   =>($element->field_sam_column->isEmpty()) ? 0  : $element->field_sam_column->value,
-        'valence'      =>($element->field_valence->isEmpty()) ? ''    : $element->field_valence->value,
+        'atomicNumber' => ($element->field_atomic_number->isEmpty()) ? 999  : $element->field_atomic_number->value,
+        'pte_row'      => ($element->field_pte_row->isEmpty()) ? 0     : $element->field_pte_row->value,
+        'pte_column'   => ($element->field_pte_column->isEmpty()) ? 0  : $element->field_pte_column->value,
+        'sam_row'      => ($element->field_sam_row->isEmpty()) ? 0     : $element->field_sam_row->value,
+        'sam_column'   => ($element->field_sam_column->isEmpty()) ? 0  : $element->field_sam_column->value,
+        'valence'      => ($element->field_valence->isEmpty()) ? ''    : $element->field_valence->value,
         'numIsotopes'  => 0,
         'numIsobars'   => 0,
       ];
@@ -373,6 +373,7 @@ class AtomizerInit {
       ],
     ];
 
+    /* This has been deprecated.  These values are now hardcoded into the JavaScript in directors/dir_atom.js
     // Load Binding Energies for the nuclets
     if (isset($atomizer_config['bindingEnergies'])) {
       $node = Node::load($atomizer_config['bindingEnergies']);
@@ -384,7 +385,7 @@ class AtomizerInit {
         }
       }
       $build['content']['atomizer']['#attached']['drupalSettings']['atomizer_bindingEnergies'] = $bindingEnergies;
-    }
+    } */
 
     // Build the controls
     if (isset($config['controlFile'])) {

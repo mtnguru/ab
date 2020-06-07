@@ -69,6 +69,12 @@ atomizer.saveAtom:
     _controller: '\Drupal\atomizer\Controller\AtomizerController::saveAtom'
   requirements:
     _permission: 'access content'
+atomizer.saveBindingEnergy:
+  path: '/ajax/saveBindingEnergy'
+  defaults:
+    _controller: '\Drupal\atomizer\Controller\AtomizerController::saveBindingEnergy'
+  requirements:
+    _permission: 'access content'
 atomizer.saveImage:
   path: '/ajax/saveImage'
   defaults:
