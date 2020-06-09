@@ -520,9 +520,27 @@ class AtomizerController extends ControllerBase {
     $filename = $data['filename'] . '.png';
     $tmpPath = file_directory_temp() . '/' . $filename;
     $finalpath = DRUPAL_ROOT . '/sites/default/files/atoms_primary/' . $filename;
+    $stylepath = DRUPAL_ROOT . '/sites/default/files/styles/*/public/atoms_primary/' . $filename;
 
+    if ($atom->hasField('field_image') && !$atom->field_image->isEmpty()) {
+      $file = $atom->field_image->entity;
+      $file->delete();
+    }
+
+    error_log("_saveAtomImage - create new");
+    $file = File::create(['uri' => 'public://atoms_primary/' . $filename]);
+    $file->save();
+
+    // Set the image
+    $image = $atom->field_image->getValue();
+    $image[0]['target_id'] = $file->id();
+    $atom->field_image->setValue(($image));
+
+    $atom->save();
+    /*
     // The atom does not have a image file, create a new one
     if (!$atom->hasField('field_image') || $atom->field_image->isEmpty()) {
+
       error_log("_saveAtomImage - create new");
       $file = File::create(['uri' => 'public://atoms_primary/' . $filename]);
       $file->save();
@@ -537,13 +555,16 @@ class AtomizerController extends ControllerBase {
       error_log("_saveAtomImage - overwrite");
       $file = $atom->field_image->entity;
       $file->setFileUri('public://atoms_primary/' . $filename);
+      $file->setFilename($filename);
       $file->save;
     }
+    */
 
     error_log("_saveAtomImage - writeImage " . $tmpPath);
     $this->writeImage($tmpPath, $data['imgBase64']);
     error_log("_saveAtomImage - convertImage " . $finalpath);
-    system('rm  ' . DRUPAL_ROOT . $finalpath);
+    system('rm  ' . $finalpath);
+    system('rm  ' . $stylepath);
     $this->convertImage($tmpPath, $finalpath);
 
     // @TODO - return confirmation message.
