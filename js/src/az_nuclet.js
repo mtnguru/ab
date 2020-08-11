@@ -1398,8 +1398,50 @@
     }
 
     function setElectronColor(electron, doHighlight, doProtons) {
-      var nuclet = electron.az.nuclet;
       var proton;
+      var nuclet = electron.az.nuclet;
+      if (electron.az.selected || doHighlight) {
+        electron.children[0].material.color = viewer.theme.getColor(electron.name + '-core--color-highlight');
+        electron.children[1].material.color = viewer.theme.getColor(electron.name + '-field--color-highlight');
+        electron.children[2].material.color = viewer.theme.getColor(electron.name + '-orbital--color-highlight');
+        if (doProtons) {
+          for (var v in electron.az.vertices) {
+            if (!electron.az.vertices.hasOwnProperty(v)) continue;
+            var vertice = electron.az.vertices[v];
+            if (typeof(vertice) == 'string' && vertice.includes('U')) {
+              proton = nuclet.neutrons[vertice];
+            } else {
+              proton = nuclet.protons[vertice];
+            }
+            proton.az.selected = true;
+            viewer.nuclet.setProtonColor(proton, null);
+          }
+        }
+      } else {
+        electron.children[0].material.color = viewer.theme.getColor(electron.name + '-core--color');
+        electron.children[1].material.color = viewer.theme.getColor(electron.name + '-field--color');
+        electron.children[2].material.color = viewer.theme.getColor(electron.name + '-orbital--color');
+        if (doProtons) {
+          for (var v in electron.az.vertices) {
+            if (!electron.az.vertices.hasOwnProperty(v)) continue;
+            var vertice = electron.az.vertices[v];
+            if (typeof(vertice) == 'string' && vertice.includes('U')) {
+              proton = nuclet.neutrons[vertice];
+            } else {
+              proton = nuclet.protons[vertice];
+            }
+
+            proton.az.selected = false;
+            viewer.nuclet.setProtonColor(proton, null);
+          }
+
+        }
+      }
+    }
+
+    function setPElectronColor(electron, doHighlight, doProtons) {
+      var proton;
+      var nuclet = electron.az.nuclet;
       if (electron.az.selected || doHighlight) {
         electron.children[0].material.color = viewer.theme.getColor(electron.name + '-core--color-highlight');
         electron.children[1].material.color = viewer.theme.getColor(electron.name + '-field--color-highlight');

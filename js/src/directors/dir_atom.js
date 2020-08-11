@@ -233,7 +233,10 @@
       }
 
       event.preventDefault();
-      var proton;
+
+      let proton;
+      let atom;
+      let nuclet;
       switch (event.which) {
         case 1:   // Select/Unselect protons to add an electron to.
           switch (mouse.mode) {
@@ -393,37 +396,70 @@
           switch (mouse.mode) {
             case 'electronsAdd':
               var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleParticles);
+              var nprotons = Object.keys(selectedProtons).length;
               if (objects.length) {          // Object found
                 // PROTON
-                let atom;
-                if (objects[0].object.az) {
-                  var proton = objects[0].object;
-                  var nuclet = proton.az.nuclet;
+                if (objects[0].object.az) {    // Only protons have this record, electrons do not
+                  nuclet = objects[0].object.az.nuclet;
                   atom = nuclet.atom;
-                  var pid = proton.az.nuclet.id + '-' + proton.az.id;
-                  var arr = Object.keys(selectedProtons);
-                  var len = Object.keys(selectedProtons).length;
-                  if (len >= 2 && len <= 6) {
-                    var pos = new THREE.Vector3();
-                    var vertices = [];
-                    for (var p in selectedProtons) {
-                      if (selectedProtons.hasOwnProperty(p)) {
-                        pos.add(selectedProtons[p].position);
-                        vertices.push(selectedProtons[p].az.id);
-                        var dude = selectedProtons[p].az.id;
+                  let p;
+                  let isPelectron = false;
+                  // Check to see if all protons are all in the same nuclet.
+                  let nucletId = '';
+                  for (p in selectedProtons) {
+                    if (selectedProtons.hasOwnProperty(p)) {
+                      proton = selectedProtons[p];
+                      if (nucletId == '') {
+                         nucletId = proton.az.nuclet.id;
+                      } else if (nucletId != proton.az.nuclet.id) {
+                        isPelectron = true;
                       }
                     }
-                    pos.divideScalar(len);
-                    var nelectron = viewer.nuclet.createNElectron('electronSpherical', pos);
-                    nelectron.az.vertices = vertices;
-                    var id = 'N' + nElectronsId++;
-                    nelectron.az.id = id;
-                    nelectron.az.nuclet = nuclet;
-                    nuclet.nelectrons[id] = nelectron;
-                    // Use any proton (P1) to find the nucletGroup
-                    nuclet.protons['P1'].az.nucletGroup.add(nelectron);
-                    viewer.nuclet.setElectronColor(nelectron, false, true);
-                    selectedProtons = [];
+                  }
+
+                  if (isPelectron) {
+                    if (nprotons >= 2 && nprotons <= 6) {
+                      var pos = new THREE.Vector3();
+                      var protons = {};
+                      for (p in selectedProtons) {
+                        if (selectedProtons.hasOwnProperty(p)) {
+                          protons.push = selectedProtons[p];
+                          pos.add(selectedProtons[p].getWorldPosition());
+                        }
+                      }
+                      pos.divideScalar(nprotons);
+
+                      var id = 'S' + nElectronsId++;
+                      var pelectron = viewer.nuclet.createNElectron('electronSpherical', pos);
+                      pelectron.az.protons = protons;
+                      pelectron.az.id = id;
+                      atom.add(pelectron);   // add the pelectron to the atom
+                      viewer.nuclet.setPElectronColor(pelectron, false, true);
+                      selectedProtons = [];
+                    }
+                  } else {
+                    if (nprotons >= 2 && nprotons <= 6) {
+                      var pos = new THREE.Vector3();
+                      var vertices = [];
+                      for (p in selectedProtons) {
+                        if (selectedProtons.hasOwnProperty(p)) {
+                          proton = selectedProtons[p];
+                          pos.add(selectedProtons[p].position);
+                          vertices.push(selectedProtons[p].az.id);
+                        }
+                      }
+                      pos.divideScalar(nprotons);
+                      var nelectron = viewer.nuclet.createNElectron('electronSpherical', pos);
+                      nelectron.az.vertices = vertices;
+                      var id = 'N' + nElectronsId++;
+                      nelectron.az.id = id;
+                      nelectron.az.nuclet = nuclet;
+                      nuclet.nelectrons[id] = nelectron;
+                      // Use any proton (P1) to find the nucletGroup
+                      nuclet.protons['P1'].az.nucletGroup.add(nelectron);
+                      viewer.nuclet.setElectronColor(nelectron, false, true);
+                      selectedProtons = [];
+                    }
                   }
 
                   // ELECTRON

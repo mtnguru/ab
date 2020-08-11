@@ -490,7 +490,8 @@
       // Create the atom group - create first nuclet, remaining nuclets are created recursively.
       let atom = new THREE.Object3D();
       atom.name = 'atom';
-      atom.az = {nuclets: {}};
+      atom.az = {nuclets: {},
+                 pelectrons: {}};
       createNuclet(atom, 'N0', atomConf, atom);
 
       let explode = viewer.theme.get('attachLines--scale');

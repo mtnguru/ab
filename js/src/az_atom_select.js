@@ -52,8 +52,15 @@
             let element = elements[e];
             if (element.num_isotopes == 0) continue;
 
-            html += '<div class="select-item-wrapper">\n';
+            let numNucleons = 0;
+            for (let i = 0; i < element.isotopes.length; i++) {
+              let isotope = element.isotopes[i];
+              if (isotope.nid == element.default_atom_nid) {
+                numNucleons = isotope.field__protons_value;
+              }
+            }
 
+            html += '<div class="select-item-wrapper">\n';
             // Create the element div
             html += `
               <div class="default-isotope stability-${element.stability.toLowerCase()}">
@@ -65,6 +72,7 @@
                   >
                     <span class="symbol">${element.symbol}</span>
                     <span class="title">${element.name}</span>
+                    <span class="nucleons">${numNucleons}</span>
                   </a>
                 </span>
                 <span class="num-isotopes az-closed expand">${element.num_isotopes}</span>
