@@ -1538,6 +1538,7 @@
       protonGeometry,
       setProtonColor,
       setElectronColor,
+      setPElectronColor,
       countParticles,
       getConstants: function () { return constants; },
     };
