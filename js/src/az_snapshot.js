@@ -38,7 +38,7 @@
 //    window.location.download = 'atom.jpg';
 
       var link = document.createElement('a');
-      link.setAttribute('download', 'atom.png');
+      link.setAttribute('download', viewer.scene.az.name + '.png');
       link.setAttribute('href', dataurl);
       link.click();
 
