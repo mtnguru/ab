@@ -79,8 +79,8 @@
         case 'snapshot--shutter':
           takeSnapshot({
             nid: viewer.scene.az.sceneNid,
-            width: 1240,
-            height: 1240,
+            width: 1200,
+            height: 1200,
             filename: viewer.scene.az.name,
             overwrite: true,
             imageType: 'snapshot',
@@ -90,8 +90,8 @@
           if (snapshotType == 'single') {
             takeSnapshot({
               nid: viewer.scene.az.sceneNid,
-              width: 1240,
-              height: 1240,
+              width: 1200,
+              height: 1200,
               filename: viewer.scene.az.name,
               overwrite: true,
               imageType: 'snapshot',
@@ -102,8 +102,8 @@
             } else {
               takeSnapshot({
                 nid: viewer.scene.az.sceneNid,
-                width: 1240,
-                height: 1240,
+                width: 1200,
+                height: 1200,
                 filename: `${viewer.scene.az.name}--${snapsnotType}`,
                 overwrite: true,
                 imageType: 'snapshot',
