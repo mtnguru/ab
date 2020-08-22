@@ -33,7 +33,14 @@
       viewer.render();
 
       // Create image from canvas
-      img = viewer.canvas.toDataURL('image/jpeg');
+      let dataurl = viewer.canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
+//    window.location.href = dataurl;
+//    window.location.download = 'atom.jpg';
+
+      var link = document.createElement('a');
+      link.setAttribute('download', 'atom.png');
+      link.setAttribute('href', dataurl);
+      link.click();
 
       // Put canvas back to original size.
       viewer.canvas.width = width;
@@ -57,7 +64,7 @@
           directory: 'atoms',
           overwrite: settings.overwrite || false,
           sceneName: viewer.scene.az.name,
-          imgBase64: img,
+          imgBase64: dataurl,
           imageType: settings.imageType,
         },
         imageSaved
