@@ -34,8 +34,6 @@
 
       // Create image from canvas
       let dataurl = viewer.canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
-//    window.location.href = dataurl;
-//    window.location.download = 'atom.jpg';
 
       var link = document.createElement('a');
       link.setAttribute('download', viewer.scene.az.name + '.png');
