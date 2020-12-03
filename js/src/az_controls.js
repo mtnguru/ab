@@ -146,6 +146,18 @@
       }
     }
 
+    function changeSlider(id, value) {
+      $('#' + id + '--az-slider', viewer.context)[0].value = value;
+      $('#' + id + '--az-value', viewer.context)[0].value = value;
+      viewer.theme.set(value, id);
+    }
+
+    function setCameraSliders(x,y,z) {
+      changeSlider('camera--position--x', x);
+      changeSlider('camera--position--y', y);
+      changeSlider('camera--position--z', z);
+    }
+
     /**
      * A control to select a new yml file has changed - execute the AJAX call to load a new one.
      * @param event
@@ -607,10 +619,14 @@
 
       controls.keys = [65, 83, 68];
       controls.addEventListener('change', function (event) {
-        console.log ('az_controls moveMouse: ' +
+        console.log ('az_controls move Camera: ' +
           viewer.camera.position.x + ' ' +
           viewer.camera.position.y + ' ' +
           viewer.camera.position.z);
+        setCameraSliders(
+          parseInt(viewer.camera.position.x),
+          parseInt(viewer.camera.position.y),
+          parseInt(viewer.camera.position.z));
         renderer.render(scene, object);
       });
       return controls;
@@ -791,6 +807,7 @@
       findIntersects,
       changeControlsMode,
       changeControlsSettings,
+      changeSlider,
       mouse: mouse,
       mouseMode: (mode) => mouse.mode = mode,
       getControls: () => trackballControls,

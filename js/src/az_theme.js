@@ -42,6 +42,14 @@
           reset(true, true);
         }
 
+        let x = defaultSet.settings['camera--position--x'];
+        let y = defaultSet.settings['camera--position--x'].setting;
+        setCameraPosition(
+          defaultSet.settings['camera--position--x'].setting,
+          defaultSet.settings['camera--position--y'].setting,
+          defaultSet.settings['camera--position--z'].setting
+        );
+
         // This is a hack, the callback is only run the first time the theme file is loaded.
         if (callback) {
           callback();
@@ -597,22 +605,31 @@
           reset();
           break;
         case 'theme--cameraReset':
-          var zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
-          let x = viewer.theme.get('camera--position', 'x');
-          let y = viewer.theme.get('camera--position', 'y');
-          let z = viewer.theme.get('camera--position', 'z');
-          viewer.camera.position.set(
-            zoom * viewer.theme.get('camera--position', 'x'),
-            zoom * viewer.theme.get('camera--position', 'y'),
-            zoom * viewer.theme.get('camera--position', 'z')
-          );
-          viewer.camera.lookAt(viewer.scene.position);
-          viewer.render();
+          setCameraPosition(
+            viewer.theme.get('camera--position', 'x'),
+            viewer.theme.get('camera--position', 'y'),
+            viewer.theme.get('camera--position', 'z'));
           break;
         case 'theme--pteReset':
           break;
       }
     };
+
+    function setCameraPosition(x,y,z) {
+      if (!viewer.camera) return;
+      var zoom = (viewer.dataAttr['zoom']) ? viewer.dataAttr['zoom'] : 1;
+      viewer.camera.position.set(
+        zoom * x,
+        zoom * y,
+        zoom * z,
+      );
+      viewer.theme.setInit('camera--position--x', 'x', x);
+      viewer.theme.setInit('camera--position--y', 'y', y);
+      viewer.theme.setInit('camera--position--z', 'z', z);
+
+      viewer.camera.lookAt(viewer.scene.position);
+      viewer.render();
+    }
 
     var themeId = viewer.view.defaultTheme;
     viewer.view.themePath = viewer.atomizer.themeDirectory + '/' + themeId + '.yml' ;

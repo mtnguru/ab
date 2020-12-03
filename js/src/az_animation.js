@@ -54,8 +54,8 @@
       let rotSpeed = viewer.theme.get('animation--speed') / 1000;
 
       let x = viewer.camera.position.x,
-        y = viewer.camera.position.y,
-        z = viewer.camera.position.z;
+          y = viewer.camera.position.y,
+          z = viewer.camera.position.z;
 
       viewer.camera.position.x = x * Math.cos(rotSpeed) + z * Math.sin(rotSpeed);
       viewer.camera.position.y = y * Math.cos(rotSpeed) - x * Math.sin(rotSpeed);

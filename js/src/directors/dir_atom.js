@@ -908,7 +908,7 @@
         let totalBE = totalLines * 2.225;
         let perc = ((totalBE > actualBE) ? actualBE / totalBE : -totalBE / actualBE) * 100;
         $('.atom--be-actual--value').html(actualBE.toString().substring(0,7));
-        $('.atom--be-sam-lines--value').html(totalBE.toString().substring(0,5));
+        $('.atom--be-sam-lines--value').html(Math.round(totalBE *100) / 100);
         $('.atom--be-sam-lines-perc--value').html(perc.toString().substring(0,5) + '%');
       }
       else {
