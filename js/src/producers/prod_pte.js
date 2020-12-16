@@ -13,6 +13,12 @@
     let scenes;
     let elements;
 
+    let $snapshotName = $('.snapshot--name', viewer.context);
+    if ($snapshotName) {
+      let name = 'pte';
+      $snapshotName.val(name.replace(' ', '-'));
+    }
+
     /**
      * Return the objects which are active for hovering
      *
@@ -124,6 +130,7 @@
         name: bc.az.name,  // Use object name as the scene name
         objectNid: bc.az.nid
       };
+
     };
 
     const setCellContent = () => {
@@ -148,9 +155,6 @@
           for (let e in group.elements) {
             if (group.elements.hasOwnProperty(e)) {
               // Assign the className to the element.
-              let elementName  = group.elements[e];
-              let fart = $(`.element#${group.elements[e].toLowerCase()}`, viewer.context);
-              let farting = `.element#${group.elements[e].toLowerCase()}`;
               $(`.element#${group.elements[e].toLowerCase()}`, viewer.context).addClass(className);
             }
           }

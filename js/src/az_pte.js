@@ -248,7 +248,7 @@
           let row = element.pte_row > 8 ? element.pte_row - .5 : element.pte_row;
           let col = element.pte_row > 8 ? element.pte_column - 1 : element.pte_column;
           x =   (col * 142) - 1350;
-          y = - (row * 142) + 790;
+          y = - (row * 142) + 750;
         } else {
           x =   (element.sam_column * 142) - 1350;
           y = - (element.sam_row    * 142) + 790;
@@ -272,13 +272,16 @@
 
 //    camera = new THREE.OrthographicCamera(window.innerWidth / window.innerHeight, 1, 10000);
       camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000);
-      camera.position.z = 2380;
+      camera.position.z = 2230;
 
       scene = new THREE.Scene();
       renderer = new THREE.CSS3DRenderer();
+      renderer.name = 'CSS3D';
 
       let {width, height} = findWindowSize();
+      height = width / 1.86;
       renderer.setSize( width, height);
+
       $container.html(renderer.domElement);
 //    $container[0].appendChild( renderer.domElement );
 
@@ -310,18 +313,18 @@
 
     function findWindowSize() {
       let width, height;
-      let aspect = 2.10;
       $container.css({
         'width': 'auto',
         'height': 'auto',
       });
       width = $container.width();
-      height = width / aspect + 36;
+      height = width / 1.86;
       return {width, height};
     }
 
     function onResize() {
       let {width, height} = findWindowSize();
+
       console.log(`onResize: ${width} ${height}`);
       renderer.setSize(width, height);
       camera.aspect = width / height;

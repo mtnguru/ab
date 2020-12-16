@@ -11,6 +11,7 @@
     let viewer = _viewer;
     let snapshotType = 'single';
     let audio = $('#snapshot--shutter audio', viewer.context)[0];
+    let downloadLink = document.createElement('a');
 
     function takeSnapshot(settings) {
       // Play the click sound
@@ -23,34 +24,60 @@
       let width = viewer.canvas.width;
       let height = viewer.canvas.height;
 
+      let $snapshotWidth = $('#snapshot--width--az-slider', viewer.context);
+      let $snapshotHeight = $('#snapshot--height--az-slider', viewer.context);
+
+      let nwidth  = 2560;
+      let nheight = 2560;
+      if (settings['width']) {
+        nwidth  = settings['width'];
+        nheight = settings['height'];
+      } else if ($snapshotWidth) {
+        nwidth = $snapshotWidth.val();
+        nheight = $snapshotHeight.val();
+      }
+
       // Change canvas size to 2560x2560 pixels
-      viewer.canvas.width  = settings['width'] || 2560;
-      viewer.canvas.height = settings['height'] || 2560;
+      viewer.canvas.width  = nwidth;
+      viewer.canvas.height = nheight;
       viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
-      viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+      if (viewer.render.setViewport) {
+        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+      }
       viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
       viewer.camera.updateProjectionMatrix();
       viewer.render();
 
-      // Create image from canvas
-      let dataurl = viewer.canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
+      let $snapshotName = $('.snapshot--name', viewer.context);
+      let filename = viewer.scene.az.name;
+      if (settings.filename) {
+        filename  = settings['width'];
+      } else if ($snapshotName) {
+        filename = $snapshotName.val();
+      }
+      filename = filename.replace(/ /g, "-").toLowerCase();
 
-      var link = document.createElement('a');
-      link.setAttribute('download', viewer.scene.az.name + '.png');
-      link.setAttribute('href', dataurl);
-      link.click();
+      // Create image from canvas
+      let dataurl;
+      if (viewer.renderer.name == 'WebGL') {
+        dataurl = viewer.canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
+        downloadLink.setAttribute('download', filename + '.png');
+        downloadLink.setAttribute('href', dataurl);
+        downloadLink.click();
+      } else if (viewer.renderer.name == 'CSS3D') {
+        window.open(viewer.renderer.domElement.toDataURL('image/png'), 'screenshot');
+      }
 
       // Put canvas back to original size.
       viewer.canvas.width = width;
       viewer.canvas.height = height;
       viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
-      viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+      if (viewer.render.setViewport) {
+        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
+      }
       viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
       viewer.camera.updateProjectionMatrix();
       viewer.render();
-
-      let filename = settings.filename || viewer.scene.az.name;
-      filename = filename.replace(/ /g, "-").toLowerCase();
 
       Drupal.atomizer.base.doAjax(
         '/ajax/saveImage',
@@ -84,9 +111,6 @@
         case 'snapshot--shutter':
           takeSnapshot({
             nid: viewer.scene.az.sceneNid,
-            width: 1200,
-            height: 1200,
-            filename: viewer.scene.az.name,
             overwrite: true,
             imageType: 'snapshot',
           });
@@ -95,9 +119,6 @@
           if (snapshotType == 'single') {
             takeSnapshot({
               nid: viewer.scene.az.sceneNid,
-              width: 1200,
-              height: 1200,
-              filename: viewer.scene.az.name,
               overwrite: true,
               imageType: 'snapshot',
             });
@@ -107,9 +128,7 @@
             } else {
               takeSnapshot({
                 nid: viewer.scene.az.sceneNid,
-                width: 1200,
-                height: 1200,
-                filename: `${viewer.scene.az.name}--${snapsnotType}`,
+//              filename: `${viewer.scene.az.name}--${snapsnotType}`,
                 overwrite: true,
                 imageType: 'snapshot',
               });

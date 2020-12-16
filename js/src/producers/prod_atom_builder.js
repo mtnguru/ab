@@ -10,7 +10,8 @@
   Drupal.atomizer.prod_atom_builderC = function (_viewer) {
     let viewer = _viewer;
     let atom;
-    let $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels', viewer.context);
+    let $sceneName = $('.scene--name, .az-scene-name, .az-canvas-labels, .snapshot--name', viewer.context);
+    let $snapshotName = $('.snapshot--name', viewer.context);
     let $atomInformation = $('.atom--information', viewer.context);
     let $atomProperties = $('.atom--properties', viewer.context);
 
@@ -130,6 +131,9 @@
 
       if ($sceneName) {
         $sceneName.html(atom.az.title);
+      }
+      if ($snapshotName) {
+        $snapshotName.val(atom.az.name.replace(' ', '-'));
       }
       if ($atomInformation) {
         $atomInformation.html(atom.az.information);

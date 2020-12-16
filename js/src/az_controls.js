@@ -135,6 +135,9 @@
       if (this.className.indexOf('az-slider') > -1) {
         id = id.replace('--az-slider', '');
         $('#' + id + '--az-value', viewer.context)[0].value = event.target.value;
+      } else if (this.className.indexOf('az-value') > -1) {
+        id = id.replace('--az-value', '');
+        $('#' + id + '--az-slider', viewer.context)[0].value = event.target.value;
       } else if (this.className.indexOf('az-control-range') > -1) {
         $('#' + id + '--az-value', viewer.context)[0].value = event.target.value;
       } else if (this.className.indexOf('az-button') > -1) {
@@ -399,6 +402,8 @@
               sid = id + '--az-slider';
               $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
               viewer.theme.setInit(control.setting, id, control.type);
+              sid = id + '--az-value';
+              $('.' + sid, viewer.context)[0].addEventListener("input", onControlChanged);
               break;
 
             case 'opacity':

@@ -176,6 +176,7 @@
             preserveDrawingBuffer: true,
             shadowEnabled: true
           });
+          viewer.renderer.name = 'WebGL';
           viewer.renderer.setClearColor(viewer.theme.get('renderer--color'), 1.0);
           viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
           // Create camera, and point it at the scene
@@ -197,6 +198,7 @@
           break;
         case 'css3d':
           viewer.renderer = new THREE.CSS3DRenderer();
+          viewer.renderer.name = 'CSS3D';
 //        viewer.CSS2DRenderer({
 //          antialias: true,
 ////        canvas: viewer.canvas,

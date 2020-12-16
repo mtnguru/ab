@@ -88,7 +88,7 @@
               let approvalClass = (isotope.field_approval_value == 'stats') ? 'disabled' : 'enabled';
               let abundance = (isotope.field_abundance_value) ? isotope.field_abundance_value + '%' : '';
               html += `
-                <li class="isotope not-default">
+                <li class="isotope not-default stability-${isotope.name.toLowerCase()}">
                   <a href="#" class="atom-name nid-${isotope.nid} ${approvalClass}"
                      data-nid="${isotope.nid}"
                      data-stability="${isotope.name.toLowerCase()}"

@@ -6,6 +6,7 @@ atomizer-base:
     js/threejs/renderers/Projector.js: {}
     js/threejs/controls/OrbitControls.js: {}
     js/threejs/controls/TrackballControls.js: {}
+    js/FileSaver.js/src/FileSaver.js: {}
     js/libs/screenfull.js: {}
     js/src/az_base.js: {}
     js/src/az_viewer.js: {}
