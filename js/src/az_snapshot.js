@@ -51,7 +51,8 @@
       let $snapshotName = $('.snapshot--name', viewer.context);
       let filename = viewer.scene.az.name;
       if (settings.filename) {
-        filename  = settings['width'];
+//      filename  = settings.width;
+        filename  = settings.filename;
       } else if ($snapshotName) {
         filename = $snapshotName.val();
       }
