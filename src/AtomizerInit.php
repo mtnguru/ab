@@ -107,6 +107,7 @@ class AtomizerInit {
         'nfm' => ['field_media_target_id'],
         'nfi' => ['field_image_target_id'],
         'nfab' => ['field_abundance_value'],
+        'nfhl' => ['field_half_life_value'],
         'ttfd' => ['name'],  // Stability - taxonomy term name
       ],
       'more' => 'none',

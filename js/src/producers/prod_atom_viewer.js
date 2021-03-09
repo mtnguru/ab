@@ -16,6 +16,8 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
   viewer.shapes = Drupal.atomizer.shapesC(viewer);
   viewer.atom = Drupal.atomizer.atomC(viewer);
 
+  Drupal.atomizer.base.setViewer(viewer);
+
   viewer.objects = [];
   const addObject = (object) => {
     let numObjects = Object.keys(viewer.objects).length;
