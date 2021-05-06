@@ -94,6 +94,13 @@
         wireframeLinewidth: viewer.theme.get(id + '--linewidth')
       }));
 
+      if (id === 'tetraWireframe') {
+        scale=scale + .015;
+      } else if (id === 'octaWireframe') {
+        scale=scale + .008;
+      } else if (id === 'icosaWireframe') {
+        scale=scale - .002;
+      }
       wireframe.scale.set(scale, scale, scale);
       wireframe.name = id;
       if (rotation) {
@@ -144,6 +151,12 @@
       var vertex;
       var lines = new THREE.Group();
       lines.name = id;
+
+      if (id === 'hexaWireframe') {
+        scale=scale + .018;
+      } else if (id === 'dodecaWireframe') {
+        scale=scale + .012;
+      }
 
       if (geometry.azfaces) { // dodecahedron - maybe more?
         for (var f = 0; f < geometry.azfaces.length; f++) {
