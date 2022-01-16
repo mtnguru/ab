@@ -194,7 +194,9 @@
         $(input).prop('checked', true);
         viewer.birkeland.loadObject({nid: event.target.value});
       });
-      Drupal.atomizer.dialogs.initDialog(viewer,'bessel');
+      if (viewer.atomizer.showBessel) {
+        Drupal.atomizer.dialogs.initDialog(viewer,'bessel');
+      }
 //    viewer.besselDialog = Drupal.atomizer.dialogs.besselC(viewer);
 
       if (viewer.atomizer.startAnimation == true) {

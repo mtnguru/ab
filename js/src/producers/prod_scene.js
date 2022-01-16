@@ -416,6 +416,7 @@
           intersect.visibleProtons =    intersect.visibleProtons.concat(object.az.intersect.visibleProtons);
           intersect.visibleNElectrons = intersect.visibleNElectrons.concat(object.az.intersect.visibleNElectrons);
           intersect.optionalProtons =   intersect.optionalProtons.concat(object.az.intersect.optionalProtons);
+          intersect.hoverOuterFaces =   intersect.hoverOuterFaces.concat(object.az.intersect.hoverOuterFaces);
         }
       }
     };

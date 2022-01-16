@@ -31,6 +31,8 @@
     var protonRadius = viewer.theme.get('proton--radius');
     var electronRadius = viewer.theme.get('electron--radius');
 
+    var outerMaterials = [];
+
     var protonGeometry = null;
     var electronGeometry = null;
 
@@ -208,6 +210,26 @@
       return lines;
     }
 
+    function createOuterMaterials(id) {
+      let opacity = viewer.theme.get(id + '--opacity');
+      let colors = [
+        viewer.theme.get(id + '--color'),
+        viewer.theme.get(id + 'Hover--color'),
+        viewer.theme.get(id + 'Selected--color'),
+      ];
+      for (var c = 0; c < colors.length; c++) {
+        outerMaterials.push(new THREE.MeshStandardMaterial({
+          color: colors[c],
+          opacity: opacity,
+          transparent: (opacity < constants.transparentThresh),
+          visible: (opacity > constants.visibleThresh),
+          roughness: 0.5,
+          metalness: 0,
+          vertexColors: THREE.VertexColors
+        }));
+      }
+    }
+
     /**
      * Create the faces for a geometry.
      *
@@ -217,10 +239,16 @@
      * @param rotation
      * @returns {THREE.Mesh|*}
      */
-    function createGeometryFaces(id, scale, geometry, rotation, reactiveState) {
+    function createGeometryFaces(id, scale, geometry, rotation, selectedFaces, reactiveState) {
       var faces;
+
+      // Create the materials one time only
+      if (outerMaterials.length == 0) {
+        createOuterMaterials(id);
+      }
+
       if (reactiveState) {
-        geometry.dynamic = true;
+/*      geometry.dynamic = true;
         // add one random mesh to each scene
         var opaqueMaterial = new THREE.MeshLambertMaterial({
           color: viewer.theme.get(id + '--color'),
@@ -241,19 +269,28 @@
         );
         for (var i = 0; i < reactiveState.length; i++) {
           geometry.faces[reactiveState[i]].materialIndex = 1;
-        }
+        } */
       } else {
-        var opacity = viewer.theme.get(id + '--opacity');
-        var material = new THREE.MeshStandardMaterial({
-          color: viewer.theme.get(id + '--color'),
-          opacity: opacity,
-          transparent: (opacity < constants.transparentThresh),
-          visible: (opacity > constants.visibleThresh),
-          roughness: 0.5,
-          metalness: 0,
-          vertexColors: THREE.FaceColors
-        });
-        faces = new THREE.Mesh(geometry, material);
+        faces = new THREE.Mesh(geometry, outerMaterials);
+        faces.az = {materials: outerMaterials}
+
+        for (var f = 0; f < faces.geometry.faces.length; f++) {
+          let face = faces.geometry.faces[f];
+
+          if (f < 10) {
+            name = 'F0' + f;
+          } else {
+            name = 'F' + f;
+          }
+
+          if (selectedFaces.includes(name)) {
+            face.selected = true;
+            face.materialIndex = 2;
+          } else {
+            face.selected = false;
+            face.materialIndex = 0;
+          }
+        }
       }
 
       faces.scale.set(scale, scale, scale);
@@ -962,6 +999,27 @@
         }
       }
 
+      // Create faces for the structure
+      if (shapeConf.faces) {
+        var reactiveState;
+        if (shapeConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
+          var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
+          geometry.reactiveState = azNuclet.reactiveState = reactiveState;
+          geometry.shapeConf = shapeConf;
+        }
+
+        var faces = createGeometryFaces(
+          groupName + 'Faces',
+          shapeConf.scale,
+          geometry,
+          shapeConf.rotation || null,
+          azNuclet.conf.outerIcosaFaces || [],
+          azNuclet.reactiveState
+        );
+        nucletGroup.add(faces);
+        //    viewer.items['selectFace'] = [faces];
+      }
+
       if (shapeConf.protons) {
         var protons = createProtons(geometry, shapeConf, azNuclet);
         for (var p in protons) {
@@ -1010,7 +1068,7 @@
 //    }
 
       if (shapeConf.axes) {
-//      nucletGroup.add(createAxis(groupName, shapeConf.axes, geometry));
+        nucletGroup.add(createAxis(groupName, shapeConf.axes, geometry));
       }
 
       if (shapeConf.tetrahedrons) {
@@ -1049,26 +1107,6 @@
         );
         volume.name = 'nuclet-volume';
         nucletGroup.add(volume);
-      }
-
-      // Create faces for the structure
-      if (shapeConf.faces) {
-        var reactiveState;
-        if (shapeConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
-          var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
-          geometry.reactiveState = azNuclet.reactiveState = reactiveState;
-          geometry.shapeConf = shapeConf;
-        }
-
-        var faces = createGeometryFaces(
-          groupName + 'Faces',
-          shapeConf.scale,
-          geometry,
-          shapeConf.rotation || null,
-          azNuclet.reactiveState
-        );
-        nucletGroup.add(faces);
-  //    viewer.items['selectFace'] = [faces];
       }
 
 //    if (shapeConf.vertexids) {

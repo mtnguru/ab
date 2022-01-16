@@ -77,7 +77,7 @@
         case 'inner-faces':
           return atom.az.intersect.hoverInnerFaces;
         case 'outer-faces':
-          return atom.az.ntersect.hoverOuterFaces;
+          return atom.az.intersect.hoverOuterFaces;
       }
     };
 

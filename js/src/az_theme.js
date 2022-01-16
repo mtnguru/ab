@@ -365,7 +365,7 @@
                     if (node.name == 'dodecaWireframe' ||
                         node.name == 'dodecaOutWireframe' ||
                         node.name == 'icosaWireframe' ||
-                        node.name == 'icosaOutWireframe' ||
+//                      node.name == 'icosaOutWireframe' ||
                         node.name == 'lithiumWireframe' ||
                         node.name == 'berylliumWireframe' ||
                         node.name == 'boron11Wireframe' ||
@@ -406,7 +406,7 @@
                     if (node.name == 'dodecaWireframe' ||
                         node.name == 'dodecaOutWireframe' ||
                         node.name == 'icosaWireframe' ||
-                        node.name == 'icosaOutWireframe' ||
+//                      node.name == 'icosaOutWireframe' ||
                         node.name == 'lithiumWireframe' ||
                         node.name == 'berylliumWireframe' ||
                         node.name == 'boron11Wireframe' ||
@@ -440,7 +440,7 @@
                         if (node.name == 'dodecaWireframe' ||
                           node.name == 'dodecaOutWireframe' ||
                           node.name == 'icosaWireframe' ||
-                          node.name == 'icosaOutWireframe' ||
+//                        node.name == 'icosaOutWireframe' ||
                           node.name == 'lithiumWireframe' ||
                           node.name == 'berylliumWireframe' ||
                           node.name == 'boron11Wireframe' ||

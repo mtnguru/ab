@@ -41,6 +41,8 @@
     var highlightedIcosa;
     var highlightedOuterFace;
 
+    var outerFaces = null;
+
     var nElectronsId = 0;
 
     /**
@@ -183,15 +185,22 @@
           // If there is already a highlighted proton
           if (highlightedOuterFace) {
             if (mouse.intersected.length && highlightedOuterFace == mouse.intersected[0]) return;
-            highlightedOuterFace.color.setHex(parseInt("0xff00ff"));
+            if (highlightedFace.selected) {
+              highlightedOuterFace.materialIndex = 2;
+            } else {
+              highlightedOuterFace.materialIndex = 0;
+            }
             highlightedOuterFace = null;
+            outerFaces.geometry.elementsNeedUpdate = true;
           }
 
           if (mouse.intersected.length) {
             highlightedOuterFace = mouse.intersected[0].face;
-            highlightedOuterFace.color.setHex(parseInt("0xffff00"));
+            highlightedOuterFace.materialIndex = 1;
+            outerFaces = mouse.intersected[0].object;
+            outerFaces.geometry.elementsNeedUpdate = true;
           }
-          mouse.intersected[0].object.geometry.colorsNeedUpdate = true;
+          viewer.render();
           break;
       }
     };
@@ -367,6 +376,22 @@
                 viewer.render();
               }
               break;
+            case 'outer-faces':
+              var objects = viewer.controls.findIntersects(viewer.producer.intersect().hoverOuterFaces);
+              if (objects.length) {
+                highlightedOuterFace = mouse.intersected[0].face;
+                if (highlightedOuterFace.selected) {
+                  highlightedOuterFace.selected = false;
+                  highlightedOuterFace.materialIndex = 0;
+                } else {
+                  highlightedOuterFace.selected = true;
+                  highlightedOuterFace.materialIndex = 2;
+                }
+                outerFaces = mouse.intersected[0].object;
+                outerFaces.geometry.elementsNeedUpdate = true;
+                viewer.render();
+              }
+              break;
           }
           break;
 
@@ -507,7 +532,7 @@
             }
           }
 
-          // Add neutrons - the purple ones
+          // Add neutrons
           var neutrons = nuclets[id].az.neutrons;
           if (neutrons) {
             for (var p in neutrons) {
@@ -530,6 +555,19 @@
               }
             }
           }
+
+          // Add Outer Icosahedron Faces
+          var temp = viewer.items['icosaOutFaces'][0];
+          atom.az.intersect.hoverOuterFaces.push(temp);
+          /*
+          var faces = viewer.items['icosaOutFaces'][0].geometry.faces;
+          if (faces) {
+            for (var f in faces) {
+              if (faces.hasOwnProperty(f)) {
+                atom.az.intersect.hoverOuterFaces.push(faces[f]);
+              }
+            }
+          } */
         }
       }
       atom.az.intersect.visibleParticles = atom.az.intersect.visibleProtons.concat();

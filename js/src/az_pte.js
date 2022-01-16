@@ -75,7 +75,24 @@
       let nid = $element.data('nid');
       console.log(`onMouseDown - ${$element[0].className}`);
       switch (event.button) {
-        case 0:     // Select element as new atom.
+        case 0:     // Display the elementPopup
+          if (nid) {
+            if (viewer.atom_select) {
+              viewer.atom_select.setSelectedAtom({nid: nid});
+            }
+            if (viewer.atom) {
+              viewer.atom.loadObject({nid: nid});
+            }
+            if (elementPopup) {
+              let $popup = $(`.pte-container .element.nid-${nid} .popup`);
+              elementPopup.innerHTML = $popup.html();
+            }
+            setElementPopupEventHandlers();
+          }
+          break;
+        case 1:     // Nothing?
+          break;
+        case 2:     // Select element as new atom.
           // If it doesn't exist then create it.
           if (event.shiftKey) {   // highlight the cell
             if ($element.hasClass('dark-red')) {
@@ -120,23 +137,6 @@
             elementPopup.innerHTML = $popup.html();
             $(elementPopup).show();
 
-            setElementPopupEventHandlers();
-          }
-          break;
-        case 1:     // Nothing?
-          break;
-        case 2:     // Display the elementPopup
-          if (nid) {
-            if (viewer.atom_select) {
-              viewer.atom_select.setSelectedAtom({nid: nid});
-            }
-            if (viewer.atom) {
-              viewer.atom.loadObject({nid: nid});
-            }
-            if (elementPopup) {
-              let $popup = $(`.pte-container .element.nid-${nid} .popup`);
-              elementPopup.innerHTML = $popup.html();
-            }
             setElementPopupEventHandlers();
           }
           break;

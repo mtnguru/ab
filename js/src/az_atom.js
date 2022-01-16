@@ -1096,6 +1096,22 @@
           }
         }
 
+        // Add the outerIcosaFaces.
+        if (nuclet.az.conf.outerIcosaFaces && nuclet.az.conf.outerIcosaFaces.length) {
+          out += spacing + 'outerIcosaFaces: [';
+          nl = 0;
+          for (let f in nuclet.az.conf.outerIcosaFaces) {
+            if (nuclet.az.conf.outerIcosaFaces.hasOwnProperty(f)) {
+              if (nl >= 1) {
+                out += ',';
+              }
+              out += nuclet.az.conf.outerIcosaFaces[f];
+              nl++;
+            }
+          }
+          out += ']\n';
+        }
+
         // Recursively add the children nuclets.
         let grow0 = atom.az.nuclets[id + '0'];
         let grow1 = atom.az.nuclets[id + '1'];
