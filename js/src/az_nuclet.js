@@ -283,7 +283,7 @@
             name = 'F' + f;
           }
 
-          if (selectedFaces.includes(name)) {
+          if (selectedFaces && selectedFaces.includes(name)) {
             face.selected = true;
             face.materialIndex = 2;
           } else {
