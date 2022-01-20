@@ -557,8 +557,11 @@
           }
 
           // Add Outer Icosahedron Faces
-          var temp = viewer.items['icosaOutFaces'][0];
-          atom.az.intersect.hoverOuterFaces.push(temp);
+          if (viewer.items.icosaOutFaces) {
+             var temp = viewer.items.icosaOutFaces[0];
+             atom.az.intersect.hoverOuterFaces.push(temp);
+          }
+
           /*
           var faces = viewer.items['icosaOutFaces'][0].geometry.faces;
           if (faces) {
