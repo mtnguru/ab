@@ -1097,15 +1097,17 @@
         }
 
         // Add the outerIcosaFaces.
-        if (nuclet.az.conf.outerIcosaFaces && nuclet.az.conf.outerIcosaFaces.length) {
+        if (nuclet.az.outerIcosaFaces) {
+          let faces = nuclet.az.outerIcosaFaces;
           out += spacing + 'outerIcosaFaces: [';
           nl = 0;
-          for (let f in nuclet.az.conf.outerIcosaFaces) {
-            if (nuclet.az.conf.outerIcosaFaces.hasOwnProperty(f)) {
+          for (let f in faces) {
+            if (faces[f].selected) {
               if (nl >= 1) {
                 out += ',';
               }
-              out += nuclet.az.conf.outerIcosaFaces[f];
+              let fn = ((f > 9) ? 'F' : 'F0') + f;
+              out += ((f > 9) ? 'F' : 'F0') + f;
               nl++;
             }
           }

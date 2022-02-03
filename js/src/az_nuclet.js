@@ -211,21 +211,26 @@
     }
 
     function createOuterMaterials(id) {
-      let opacity = viewer.theme.get(id + '--opacity');
       let colors = [
         viewer.theme.get(id + '--color'),
         viewer.theme.get(id + 'Hover--color'),
         viewer.theme.get(id + 'Selected--color'),
       ];
+      let opacity = [
+        viewer.theme.get(id + '--opacity'),
+        viewer.theme.get(id + 'Hover--opacity'),
+        viewer.theme.get(id + 'Selected--opacity'),
+      ];
       for (var c = 0; c < colors.length; c++) {
         outerMaterials.push(new THREE.MeshStandardMaterial({
           color: colors[c],
-          opacity: opacity,
-          transparent: (opacity < constants.transparentThresh),
-          visible: (opacity > constants.visibleThresh),
+          opacity: opacity[c],
+          transparent: (opacity[c] < constants.transparentThresh),
+          visible: (opacity[c] > constants.visibleThresh),
           roughness: 0.5,
           metalness: 0,
-          vertexColors: THREE.VertexColors
+          vertexColors: THREE.VertexColors,
+          side: THREE.DoubleSide,
         }));
       }
     }
@@ -243,7 +248,7 @@
       var faces;
 
       // Create the materials one time only
-      if (outerMaterials.length == 0) {
+      if (id == 'icosaOutFaces' && outerMaterials.length == 0) {
         createOuterMaterials(id);
       }
 
@@ -277,6 +282,7 @@
         for (var f = 0; f < faces.geometry.faces.length; f++) {
           let face = faces.geometry.faces[f];
 
+          let name;
           if (f < 10) {
             name = 'F0' + f;
           } else {
@@ -1000,13 +1006,13 @@
       }
 
       // Create faces for the structure
-      if (shapeConf.faces) {
+      if (groupName == "icosaOut" && shapeConf.faces) {
         var reactiveState;
-        if (shapeConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
-          var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
-          geometry.reactiveState = azNuclet.reactiveState = reactiveState;
-          geometry.shapeConf = shapeConf;
-        }
+//      if (shapeConf.assignFaceOpacity && azNuclet.conf.reactiveState) {
+//        var reactiveState = (azNuclet.conf.reactiveState[groupName]) ? azNuclet.conf.reactiveState[groupName].slice() : [];
+//        geometry.reactiveState = azNuclet.reactiveState = reactiveState;
+//        geometry.shapeConf = shapeConf;
+//      }
 
         var faces = createGeometryFaces(
           groupName + 'Faces',
@@ -1016,8 +1022,8 @@
           azNuclet.conf.outerIcosaFaces || [],
           azNuclet.reactiveState
         );
+        azNuclet.outerIcosaFaces = faces.geometry.faces;
         nucletGroup.add(faces);
-        //    viewer.items['selectFace'] = [faces];
       }
 
       if (shapeConf.protons) {

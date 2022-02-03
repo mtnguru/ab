@@ -120,10 +120,7 @@
             } else {
               viewer.nuclet.setProtonColor(highlightedProton, null);
             }
-//            highlightedProton.material.color = highlightedProton.az.tmpColor;
-//          } else {
-//            highlightedProton.material.color = viewer.theme.getColor(highlightedProton.name + '--color');
-//          }
+
             highlightedProton.material.visible = highlightedProton.az.visible;
             highlightedProton = null;
           }
@@ -376,6 +373,7 @@
                 viewer.render();
               }
               break;
+
             case 'outer-faces':
               var objects = viewer.controls.findIntersects(viewer.producer.intersect().hoverOuterFaces);
               if (objects.length) {
