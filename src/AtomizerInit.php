@@ -197,6 +197,16 @@ class AtomizerInit {
           ],
         ],
       ],
+      'search' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['search-wrapper'],
+        ],
+        'search_field' => [
+          '#type' => 'textfield',
+
+        ],
+      ],
       'element_list_wrapper' => [
         '#type' => 'container',
         '#attributes' => [

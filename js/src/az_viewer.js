@@ -2,8 +2,6 @@
  * @file - az_viewer.js
  */
 
-
-
 (function ($) {
 
   // Initialize namespace for viewer classes in js/directors directory
