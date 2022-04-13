@@ -112,9 +112,9 @@
         case 'none':
           return null;
         case 'atomsMove':
-          return intersect.visibleParticles;
+          return intersect.visibleProtonsElectrons;
         case 'electronsAdd':
-          return intersect.visibleParticles;
+          return intersect.visibleProtonsElectrons;
         case 'protonsAdd':
           return intersect.optionalProtons;
         case 'protonsColor':
@@ -182,7 +182,7 @@
           return null;
 
         case 'atomsMove':
-          let object = findObjectFromIntersects(viewer.controls.findIntersects(intersect.visibleParticles));
+          let object = findObjectFromIntersects(viewer.controls.findIntersects(intersect.visibleProtonsElectrons));
           switch (event.which) {
             case 1:   // Left button clicked -  Look at intersects and set either object or camera controls mode
               break;
@@ -220,7 +220,7 @@
             return null;
           case 'atomsMove':
             if (!mousePressed) {
-//            let object = findObjectFromIntersects(viewer.controls.findIntersects(intersect.visibleParticles));
+//            let object = findObjectFromIntersects(viewer.controls.findIntersects(intersect.visibleProtonsElectrons));
 //            setControlsObject('object', object);
             }
             viewer.dir_atom.mouseMove(event, mouse);
@@ -398,12 +398,14 @@
 
     const clearIntersectLists = () => {
       intersect = {
-        visibleParticles: [],
+        visibleProtonsElectrons: [],
+        visibleProtonsOrbitals: [],
         visibleProtons: [],
-        visibleNElectrons: [],
+        visibleElectrons: [],
         hoverInnerFaces: [],
         hoverOuterFaces: [],
         optionalProtons: [],
+        electronOrbitals: [],
       };
     };
 
@@ -412,11 +414,12 @@
       for (let key in viewer.objects) {
         let object = viewer.objects[key];
         if (object.az.conf.type == 'atom') {
-          intersect.visibleParticles =  intersect.visibleParticles.concat(object.az.intersect.visibleParticles);
+          intersect.visibleProtonsElectrons =  intersect.visibleProtonsElectrons.concat(object.az.intersect.visibleProtonsElectrons);
           intersect.visibleProtons =    intersect.visibleProtons.concat(object.az.intersect.visibleProtons);
-          intersect.visibleNElectrons = intersect.visibleNElectrons.concat(object.az.intersect.visibleNElectrons);
+          intersect.visibleElectrons = intersect.visibleElectrons.concat(object.az.intersect.visibleElectrons);
           intersect.optionalProtons =   intersect.optionalProtons.concat(object.az.intersect.optionalProtons);
           intersect.hoverOuterFaces =   intersect.hoverOuterFaces.concat(object.az.intersect.hoverOuterFaces);
+          intersect.electronOrbitals =   intersect.electronOrbitals.concat(object.az.intersect.electronOrbitals);
         }
       }
     };

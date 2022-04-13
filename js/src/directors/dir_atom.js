@@ -32,11 +32,12 @@
     // @TODO These all have to be added to the atoms themselves - on demand
     var optionalProtons = [];
     var selectedProtons = [];
-    var selectedNElectron = null;
-    var visibleNElectrons = [];
+    var selectedElectron = null;
+    var visibleElectrons = [];
+    var visibleOrbitals = [];
 
     var highlightedProton;
-    var highlightedNElectron;
+    var highlightedElectron;
     var highlightedFace;
     var highlightedIcosa;
     var highlightedOuterFace;
@@ -107,6 +108,7 @@
         case 'electronsAdd':
         case 'protonsColor':
         case 'protonsAdd':
+        case 'orbitals':
 
           // If there is already a highlighted proton then set it back to original color
           if (highlightedProton) {
@@ -126,14 +128,14 @@
           }
 
           // If there is already a highlighted electron then set it back to original color
-          if (highlightedNElectron) {
+          if (highlightedElectron) {
             // Return if the proton is already highlighted
-            if (mouse.intersected.length && highlightedNElectron == mouse.intersected[0].object.parent) return;
+            if (mouse.intersected.length && highlightedElectron == mouse.intersected[0].object.parent) return;
 
             // 1 is the field - 0 is the core.
 
-            viewer.nuclet.setElectronColor(highlightedNElectron, false, false);
-            highlightedNElectron = null;
+            viewer.nuclet.setElectronColor(highlightedElectron, false, false);
+            highlightedElectron = null;
           }
 
           if (mouse.intersected.length) {
@@ -145,14 +147,17 @@
                 if (!mouse.intersected[0].object.az.optional) return;
               }
 
+              // if Mouse mode == orbitals and we already have 2 selected
+              if (mouse.mode == 'orbitals' && Object.keys(selectedProtons).length == 2) return;
+
               // Highlight the proton
               highlightedProton = mouse.intersected[0].object;
               highlightedProton.material.visible = true;
               highlightedProton.material.color = viewer.theme.getColor('proton-ghost--color');
             } else {                     // ELECTRON
               // Highlight the electron
-              highlightedNElectron = mouse.intersected[0].object.parent;
-              viewer.nuclet.setElectronColor(highlightedNElectron, true, false);
+              highlightedElectron = mouse.intersected[0].object.parent;
+              viewer.nuclet.setElectronColor(highlightedElectron, true, false);
             }
           }
           viewer.render();
@@ -179,10 +184,11 @@
           break;
 
         case 'outer-faces':
+          break;
           // If there is already a highlighted proton
           if (highlightedOuterFace) {
             if (mouse.intersected.length && highlightedOuterFace == mouse.intersected[0]) return;
-            if (highlightedFace.selected) {
+            if (highlightedOuterFace.selected) {
               highlightedOuterFace.materialIndex = 2;
             } else {
               highlightedOuterFace.materialIndex = 0;
@@ -201,6 +207,10 @@
           break;
       }
     };
+
+    function drawOrbital(protons) {
+
+    }
 
     /**
      * User has clicked somewhere in the scene with the mouse.
@@ -232,10 +242,10 @@
       /**
        * Deselect an Electron
        */
-      function deselectNElectron() {
-        selectedNElectron.az.selected = false;
-        viewer.nuclet.setElectronColor(selectedNElectron, false, true);
-        selectedNElectron = null;
+      function deselectElectron() {
+        selectedElectron.az.selected = false;
+        viewer.nuclet.setElectronColor(selectedElectron, false, true);
+        selectedElectron = null;
       }
 
       event.preventDefault();
@@ -247,46 +257,76 @@
         case 1:   // Select/Unselect protons to add an electron to.
           switch (mouse.mode) {
             case 'electronsAdd':
-
-              var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleParticles);
+            case 'orbitals':
+              var particles;
+              if (mouse.mode == 'electronsAdd') {
+                particles = viewer.producer.intersect().visibleProtonsElectrons;
+              }
+              if (mouse.mode == 'orbitals') {
+                particles = viewer.producer.intersect().visibleProtonsOrbitals;
+              }
+              var objects = viewer.controls.findIntersects(particles);
               if (objects.length) {          // Object found
 
-                // PROTON
+                // A proton has been intersected
                 if (objects[0].object.az) {
+
+                  // The selected proton is not active, return;
                   if (!objects[0].object.az.active) return;
-                  // An electron is selected - unselect it.
-                  if (selectedNElectron) {
-                    deselectNElectron();
+
+                  // If an electron is selected - unselect it.
+                  if (selectedElectron) {
+                    deselectElectron();
                   }
 
-                  // Set the proton color
+                  // Toggle the proton highlight color
                   if (!objects[0].object.az.active) return;
                   proton = objects[0].object;
                   var pid = proton.az.nuclet.id + '-' + proton.az.id;
                   if (proton.az.selected) {
+                    let np = Object.keys(selectedProtons) .length;
+                    // If there are two protons selected, then delete the orbital
+                    if (mouse.mode == 'orbitals') {
+                      if (np == 2) {
+                        deleteOrbital(selectedProtons);
+                      }
+                    }
                     proton.az.selected = false;
                     delete selectedProtons[pid];
                   } else {
-                    proton.az.selected = true;
-                    selectedProtons[pid] = proton;
+                    if (mouse.mode == 'orbitals') {
+                      let np = Object.keys(selectedProtons) .length;
+                      // Ignore if attempting to select more than 2 protons
+                      if (np == 2) return;
+                      // Select the proton
+                      proton.az.selected = true;
+                      selectedProtons[pid] = proton;
+                      // If there are two protons selected, draw the orbital
+                      if (Object.keys(selectedProtons) .length == 2) {
+                         createOrbital(selectedProtons);
+                      }
+                    } else if (mouse.mode == 'electronsAdd') {
+                      proton.az.selected = true;
+                      selectedProtons[pid] = proton;
+                    }
                   }
                   viewer.nuclet.setProtonColor(proton);
 
-                  // ELECTRON
+                // ELECTRON
                 } else {
                   deselectProtons();
 
                   var electron = objects[0].object.parent;
 
                   var pid = electron.az.nuclet.id + '-' + electron.az.id;
-                  if (selectedNElectron == electron) {  // Electron already selected, unselect it.
-                    deselectNElectron();
+                  if (selectedElectron == electron) {  // Electron already selected, unselect it.
+                    deselectElectron();
                   } else {
-                    if (selectedNElectron) {  // Set selected electron back to normal.
-                      deselectNElectron();
+                    if (selectedElectron) {  // Set selected electron back to normal.
+                      deselectElectron();
                     }
                     electron.az.selected = true;
-                    selectedNElectron = electron;
+                    selectedElectron = electron;
                     viewer.nuclet.setElectronColor(electron, true, true);
                   }
                 }
@@ -294,9 +334,8 @@
                 // No objects intersected - clear everything.
               } else {                      // No object found
                 deselectProtons();
-
-                if (selectedNElectron) {
-                  deselectNElectron(selectedNElectron);
+                if (selectedElectron) {
+                  deselectElectron(selectedElectron);
                 }
               }
               viewer.render();
@@ -418,7 +457,7 @@
         case 3:
           switch (mouse.mode) {
             case 'electronsAdd':
-              var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleParticles);
+              var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtonsElectrons);
               var nprotons = Object.keys(selectedProtons).length;
               if (objects.length) {          // Object found
                 // PROTON
@@ -433,7 +472,7 @@
                     if (selectedProtons.hasOwnProperty(p)) {
                       proton = selectedProtons[p];
                       if (nucletId == '') {
-                         nucletId = proton.az.nuclet.id;
+                        nucletId = proton.az.nuclet.id;
                       } else if (nucletId != proton.az.nuclet.id) {
                         isPelectron = true;
                       }
@@ -453,7 +492,7 @@
                       pos.divideScalar(nprotons);
 
                       var id = 'S' + nElectronsId++;
-                      var pelectron = viewer.nuclet.createNElectron('electronSpherical', pos);
+                      var pelectron = viewer.nuclet.createElectron('electronSpherical', pos);
                       pelectron.az.protons = protons;
                       pelectron.az.id = id;
                       atom.add(pelectron);   // add the pelectron to the atom
@@ -472,7 +511,7 @@
                         }
                       }
                       pos.divideScalar(nprotons);
-                      var nelectron = viewer.nuclet.createNElectron('electronSpherical', pos);
+                      var nelectron = viewer.nuclet.createElectron('electronSpherical', pos);
                       nelectron.az.vertices = vertices;
                       var id = 'N' + nElectronsId++;
                       nelectron.az.id = id;
@@ -489,10 +528,95 @@
                 } else {
                   electron = objects[0].object.parent;
 
-                  if (electron == selectedNElectron) {
-                    viewer.atom.deleteNElectron(selectedNElectron);
+                  if (electron == selectedElectron) {
+                    viewer.atom.deleteElectron(selectedElectron);
                     atom = electron.az.nuclet.atom;
-                    selectedNElectron = null;
+                    selectedElectron = null;
+                  }
+                }
+                createIntersectLists(atom);
+                viewer.atom.updateParticleCount(atom);
+                viewer.atom.updateSamLines(atom);
+                viewer.render();
+              }
+              break;   // electronsAdd
+
+            case 'orbitals':
+              var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtonsElectrons);
+              var nprotons = Object.keys(selectedProtons).length;
+              if (objects.length) {          // Object found
+                // PROTON
+                if (objects[0].object.az) {    // Only protons have this record, electrons do not
+                  nuclet = objects[0].object.az.nuclet;
+                  atom = nuclet.atom;
+                  let p;
+                  let isPelectron = false;
+                  // Check to see if all protons are all in the same nuclet.
+                  let nucletId = '';
+                  for (p in selectedProtons) {
+                    if (selectedProtons.hasOwnProperty(p)) {
+                      proton = selectedProtons[p];
+                      if (nucletId == '') {
+                        nucletId = proton.az.nuclet.id;
+                      } else if (nucletId != proton.az.nuclet.id) {
+                        isPelectron = true;
+                      }
+                    }
+                  }
+
+                  if (isPelectron) {
+                    if (nprotons >= 2 && nprotons <= 6) {
+                      var pos = new THREE.Vector3();
+                      var protons = {};
+                      for (p in selectedProtons) {
+                        if (selectedProtons.hasOwnProperty(p)) {
+                          protons.push = selectedProtons[p];
+                          pos.add(selectedProtons[p].getWorldPosition());
+                        }
+                      }
+                      pos.divideScalar(nprotons);
+
+                      var id = 'S' + nElectronsId++;
+                      var pelectron = viewer.nuclet.createElectron('electronSpherical', pos);
+                      pelectron.az.protons = protons;
+                      pelectron.az.id = id;
+                      atom.add(pelectron);   // add the pelectron to the atom
+                      viewer.nuclet.setPElectronColor(pelectron, false, true);
+                      selectedProtons = [];
+                    }
+                  } else {
+                    if (nprotons >= 2 && nprotons <= 6) {
+                      var pos = new THREE.Vector3();
+                      var vertices = [];
+                      for (p in selectedProtons) {
+                        if (selectedProtons.hasOwnProperty(p)) {
+                          proton = selectedProtons[p];
+                          pos.add(selectedProtons[p].position);
+                          vertices.push(selectedProtons[p].az.id);
+                        }
+                      }
+                      pos.divideScalar(nprotons);
+                      var nelectron = viewer.nuclet.createElectron('electronSpherical', pos);
+                      nelectron.az.vertices = vertices;
+                      var id = 'N' + nElectronsId++;
+                      nelectron.az.id = id;
+                      nelectron.az.nuclet = nuclet;
+                      nuclet.nelectrons[id] = nelectron;
+                      // Use any proton (P1) to find the nucletGroup
+                      nuclet.protons['P1'].az.nucletGroup.add(nelectron);
+                      viewer.nuclet.setElectronColor(nelectron, false, true);
+                      selectedProtons = [];
+                    }
+                  }
+
+                  // ELECTRON
+                } else {
+                  electron = objects[0].object.parent;
+
+                  if (electron == selectedElectron) {
+                    viewer.atom.deleteElectron(selectedElectron);
+                    atom = electron.az.nuclet.atom;
+                    selectedElectron = null;
                   }
                 }
                 createIntersectLists(atom);
@@ -508,11 +632,15 @@
     }
 
     /**
-     * Create the visibleProtons and optionalProtons lists.
+     * createIntersectLists
+     *
+     * foreach nuclet
+     *    Add to intersect Create lists of protons, neutrons, Create the visibleProtons and optionalProtons lists.
      */
     function createIntersectLists(atom) {
       var nuclets = atom.az.nuclets;
-      visibleNElectrons = [];
+      visibleElectrons = [];
+      visibleOrbitals = [];
       for (var id in nuclets) {
         if (nuclets.hasOwnProperty(id)) {
 
@@ -549,7 +677,7 @@
           if (nelectrons) {
             for (var e in nelectrons) {
               if (nelectrons.hasOwnProperty(e)) {
-                visibleNElectrons.push(nelectrons[e].children[1]);  // 0 is the core, 1 is the field
+                visibleElectrons.push(nelectrons[e].children[1]);  // 0 is the core, 1 is the field
               }
             }
           }
@@ -571,10 +699,20 @@
           } */
         }
       }
-      atom.az.intersect.visibleParticles = atom.az.intersect.visibleProtons.concat();
-      for (var e in visibleNElectrons) {
-        if (visibleNElectrons.hasOwnProperty(e)) {
-          atom.az.intersect.visibleParticles.push(visibleNElectrons[e]);
+
+      // Combine protons and electrons
+      atom.az.intersect.visibleProtonsElectrons = atom.az.intersect.visibleProtons.concat();
+      for (var e in visibleElectrons) {
+        if (visibleElectrons.hasOwnProperty(e)) {
+          atom.az.intersect.visibleProtonsElectrons.push(visibleElectrons[e]);
+        }
+      }
+
+      // Combine protons and orbitals
+      atom.az.intersect.visibleProtonsOrbitals = atom.az.intersect.visibleProtons.concat();
+      for (var o in visibleOrbitals) {
+        if (visibleOrbitals.hasOwnProperty(e)) {
+          atom.az.intersect.visibleProtonsOrbitals.push(visibleOrbitals[e]);
         }
       }
 

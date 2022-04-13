@@ -33,7 +33,7 @@
         defaultSet = results[0].ymlContents;
 
         if (currentSet.name) {
-          reset(false, false);
+          reset(false, false);   // copies defaultSet into currentSet
           currentSet.name = defaultSet.name;
           currentSet.description = defaultSet.description;
           currentSet.filepath = defaultSet.filepath;
@@ -527,6 +527,27 @@
       }
     };
 
+    /**
+     * Get the theme for an element
+     *
+     * @param id
+     * @param index
+     * @returns {*}
+     */
+    var getDefault = function get(id, index) {
+      var idArgs = id.split('--');
+      var sid = id;
+      if (index) {
+        sid += '--' + index;
+      }
+      if (defaultSet.settings[sid]) {
+        return defaultSet.settings[sid].setting;
+      } else
+      {
+        return viewer.controls.getDefault(sid, index);
+      }
+    };
+
     function getColor(_name, highlight) {
       var name = (highlight) ? _name + '-' + highlight : _name;
       if (!loadedColors[name]) {
@@ -606,9 +627,9 @@
           break;
         case 'theme--cameraReset':
           setCameraPosition(
-            viewer.theme.get('camera--position', 'x'),
-            viewer.theme.get('camera--position', 'y'),
-            viewer.theme.get('camera--position', 'z'));
+            viewer.theme.getDefault('camera--position', 'x'),
+            viewer.theme.getDefault('camera--position', 'y'),
+            viewer.theme.getDefault('camera--position', 'z'));
           break;
         case 'theme--pteReset':
           break;
@@ -655,6 +676,7 @@
       setInit: setInit,
       set: set,
       get: get,
+      getDefault: getDefault,
       getColor: getColor,
 //    getCurrentControls: function() { return currentSet.settings; },
       getYmlDirectory:    function () { return themeDirectory; }

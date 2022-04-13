@@ -152,7 +152,7 @@
     function changeSlider(id, value) {
       $('#' + id + '--az-slider', viewer.context)[0].value = value;
       $('#' + id + '--az-value', viewer.context)[0].value = value;
-      viewer.theme.set(value, id);
+      viewer.theme.set(value, id);    // Update camera position any time the camera moves
     }
 
     function setCameraSliders(x,y,z) {

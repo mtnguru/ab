@@ -398,12 +398,14 @@
             atom.az.information = result.data.information;
             atom.az.properties = result.data.properties;
             atom.az.intersect = {
-              visibleParticles: [],
+              visibleProtonsElectrons: [],
+              visibleProtonsOrbitals: [],
               visibleProtons: [],
               visibleNElectrons: [],
               hoverInnerFaces: [],
               hoverOuterFaces: [],
               optionalProtons: [],
+              electronOrbitals: [],
             };
 
             updateValenceRings(atom);

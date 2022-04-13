@@ -1229,7 +1229,7 @@
       }
 
       // Create nuclet helper axes.
-//    nuclet.add(createHelperAxis('nucletAxis', protonRadius * 6, 1));
+      nuclet.add(createHelperAxis('nucletAxis', protonRadius * 6, 1));
 
       //// Set the nuclet rotation
       if (nuclet.az.conf.rotation) {
@@ -1249,7 +1249,7 @@
       innerShell.add(nuclet);
 
       // Create inner shell helper axis
-//    innerShell.add(createHelperAxis('nucletInnerAxis', protonRadius * 5, 3));
+      innerShell.add(createHelperAxis('nucletInnerAxis', protonRadius * 5, 3));
 
       //// Create outer shell
       var outerShell = new THREE.Object3D();
@@ -1257,7 +1257,7 @@
       outerShell.add(innerShell);
 
       // Create outer shell helper axis
-//    outerShell.add(createHelperAxis('nucletOuterAxis', protonRadius * 4, 5));
+      outerShell.add(createHelperAxis('nucletOuterAxis', protonRadius * 4, 5));
 
       //// Set the nucletShell position
       if (nuclet.az.conf.position) {

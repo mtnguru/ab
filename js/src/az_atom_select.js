@@ -87,13 +87,15 @@
               let isotope = element.isotopes[i];
               let approvalClass = (isotope.field_approval_value == 'stats') ? 'disabled' : 'enabled';
               let abundance = (isotope.field_abundance_value) ? isotope.field_abundance_value + '%' : '';
+              let halflife = (isotope.field_half_life_value) ? isotope.field_half_life_value : '';
+              let str = (abundance === "" || abundance == "0%") ? halflife : abundance;
               html += `
                 <li class="isotope not-default stability-${isotope.name.toLowerCase()}">
                   <a href="#" class="atom-name nid-${isotope.nid} ${approvalClass}"
                      data-nid="${isotope.nid}"
                      data-stability="${isotope.name.toLowerCase()}"
                   >
-                    ${isotope.title} ${abundance}
+                    ${isotope.title} ${str}
                   </a>
                 </li>
               `;

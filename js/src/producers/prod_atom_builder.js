@@ -65,11 +65,13 @@
         case 'none':
           return null;
         case 'electronsAdd':
-          if (atom && atom.az.intersect.visibleParticles) {
+          if (atom && atom.az.intersect.visibleProtonsElectrons) {
             console.log(`hoverObjects - atom.az.intersect.visibleProtons`)
-            return atom.az.intersect.visibleParticles;
+            return atom.az.intersect.visibleProtonsElectrons;
           }
           return [];
+        case 'orbitals':
+          return atom.az.intersect.visibleProtons;
         case 'protonsAdd':
           return atom.az.intersect.optionalProtons;
         case 'protonsColor':
