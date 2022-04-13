@@ -150,8 +150,11 @@
     }
 
     function changeSlider(id, value) {
-      $('#' + id + '--az-slider', viewer.context)[0].value = value;
-      $('#' + id + '--az-value', viewer.context)[0].value = value;
+      let $slider = $('#' + id + '--az-slider', viewer.context);
+      if ($slider.length > 0) {
+        $slider[0].value = value;
+        $('#' + id + '--az-value', viewer.context)[0].value = value;
+      }
       viewer.theme.set(value, id);    // Update camera position any time the camera moves
     }
 
