@@ -459,7 +459,9 @@
                             node.material.materials[i].color.setHex(parseInt(value.replace(/#/, "0x")), 16);
                           }
                         }
-                        else {
+                        else if (Array.isArray(node.material)) {
+                          node.material[0].color.setHex(parseInt(value.replace(/#/, "0x")), 16);
+                        } else {
                           node.material.color.setHex(parseInt(value.replace(/#/, "0x")), 16);
                         }
                       }
