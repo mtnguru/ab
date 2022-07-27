@@ -51,7 +51,7 @@ class AtomizerViewer extends BlockBase {
    */
   public function build() {
     $config = $this->getConfiguration();
-    $build = AtomizerInit::start($config);
+    $build = AtomizerInit::build($config);
     return $build;
   }
 
