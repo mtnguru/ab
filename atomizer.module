@@ -317,7 +317,7 @@ function atomizer_preprocess_node(&$variables) {
       // Read in configuration yml file
       if (!empty($node->field_configuration_file)) {
         \Drupal::logger('atomizer')->notice('atomizer_preprocess_node:  has field_configuration_file');
-        $atomizer_block = \Drupal::entityManager()->getStorage('block')->load('atom_builder');
+        $atomizer_block = \Drupal::entityTypeManager()->getStorage('block')->load('atom_builder');
 
         if (!empty($atomizer_block)) {
           // Read in the configuration file and save it back into the block for use later.
