@@ -62,7 +62,7 @@ class AtomizerController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager')
+      $container->get('entity_type.manager')
     );
   }
 
@@ -128,7 +128,7 @@ class AtomizerController extends ControllerBase {
   public function listDirectory() {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $files = file_scan_directory(drupal_get_path('module', 'atomizer') . '/' . $data['directory'], '/\.yml/');
+    $files = \Drupal::service('file_system')->scanDirectory(drupal_get_path('module', 'atomizer') . '/' . $data['directory'], '/\.yml/');
     foreach ($files as $file) {
       $filelist[$file->filename] = $file->name;
     }
@@ -304,7 +304,7 @@ class AtomizerController extends ControllerBase {
           $title = $defaultAtom->title;
 
           // add image url
-//        $media = \Drupal::entityManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
+          $media = \Drupal::entityTypeManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
           if ($defaultAtom->field_image_target_id) {
             $fid = $defaultAtom->field_image_target_id;
             $file = \Drupal\file\Entity\File::load($fid);
@@ -631,7 +631,7 @@ class AtomizerController extends ControllerBase {
     $media->save();
 
     // Re-read the media to get the newly assigned mid.
-    $media = $this->entityTypeManager->loadEntityByUuid('media', $media->uuid->value);
+//  $media = $this->entityTypeManager->loadEntityByUuid('media', $media->uuid->value);
 
     // Read in the Atom, assign the media entity and save.
     $atom = $this->entityTypeManager->getStorage('node')->load($data['sceneNid']);
@@ -698,18 +698,18 @@ class AtomizerController extends ControllerBase {
     $data['nodeName'] = $node->label();
     $data['nodeTitle'] = '<h3 class="scene-name"><a href="/node/' . $node->id() . '">' . $node->label() . '</a></h3>';
 
-    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
-    $data['properties'] = render($build);
-
-    // Render the node/atom using teaser view mode.
-    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
-    $data['information'] = render($build);
-
     // Get the atomic structure field.
     $type = $node->getType();
     $field = null;
     switch ($type) {
       case 'atom':
+        $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
+        $data['properties'] = render($build);
+
+        // Render the node/atom using teaser view mode.
+        $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
+        $data['information'] = render($build);
+
         $field = $node->field_atomic_structure;
         if ($field) {
           $data['nodeConf'] = (empty($field)) ? 'Node not found' : Yaml::decode($field->value);

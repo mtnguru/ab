@@ -28,7 +28,7 @@ class AtomizerBlock extends BlockBase {
       '#default_value' => isset($this->configuration['atomizerId']) ? $this->configuration['atomizerId'] : 'Atomizer',
     ];
 
-    $control_files = file_scan_directory(drupal_get_path('module','atomizer') . '/config/controls', '/\.yml/');
+    $control_files = \Drupal::service('file_system')->scanDirectory(drupal_get_path('module','atomizer') . '/config/controls', '/\.yml/');
     $control_options = [];
     foreach ($control_files as $file) {
       $control_options[$file->filename] = $file->name;

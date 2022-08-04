@@ -1,12 +1,13 @@
 var gulp = require('gulp');
-//var livereload = require('livereload')
-var uglify = require('gulp-uglify');
+var gutil = require('gulp-util');
 var sass = require('gulp-sass')(require('sass'));
+// var watch = require('gulp-watch');
+// var livereload = require('livereload')
+var notify = require('gulp-notify');
 var autoprefixer = require('gulp-autoprefixer');
 var sourcemaps = require('gulp-sourcemaps');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
-var notify = require('gulp-notify');
 var uglify = require('gulp-uglify');
 var sassGlob = require('gulp-sass-glob');
 var obfuscator = require('gulp-javascript-obfuscator');
@@ -46,7 +47,6 @@ gulp.task('uglify', function() {
  * This task minifies javascript in the js/js-src folder and places them in the js directory.
  */
 gulp.task('compress', function() {
-  return gulp.src(['./js/src/**/*.js'])
 //return gulp.src([
 //    './js/src/az_base.js',
 //    './js/src/az_viewer.js',
@@ -59,6 +59,8 @@ gulp.task('compress', function() {
 //    './js/src/az_atom.js',
 //    './js/src/az_animation.js'
 //  ])
+
+  return gulp.src(['./js/src/**/*.js'])
     .pipe(obfuscator())
     .pipe(gulp.dest('./js/min/'))
     .pipe(concat('az_obfuscate.js'))

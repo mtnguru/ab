@@ -294,7 +294,7 @@ class AtomizerInit {
     if (!empty($atomizer_config)) {
       if (!empty($atomizer_config['objects'])) {
         foreach ($atomizer_config['objects'] as $object) {
-          $files = file_scan_directory(drupal_get_path('module', 'atomizer') . '/config/objects/' . $object, '/\.yml/');
+          $files = \Drupal::service('file_system')->scanDirectory(drupal_get_path('module', 'atomizer') . '/config/objects/' . $object, '/\.yml/');
           foreach ($files as $file) {
             $objects[str_replace('nuclet_', '', $file->name)] = Yaml::decode(
               file_get_contents(drupal_get_path('module', 'atomizer') . '/config/objects/' . $object . '/' . $file->filename)
