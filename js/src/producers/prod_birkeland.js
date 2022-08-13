@@ -154,11 +154,11 @@
       viewer.birkeland = Drupal.atomizer.birkelandC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
       viewer.snapshot = Drupal.atomizer.snapshotC(viewer);
-//    viewer.animation = Drupal.atomizer.dialogC(viewer);
+//    viewer.animation = Drupal.atomizer.(viewer);
 
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
-      objectNid = ((!objectNid || objectNid == 'undefined') ? 628 : objectNid);  // Loads a birkeland content type
+      objectNid = ((!objectNid || objectNid == 'undefined') ? 17 : objectNid);  // Loads a birkeland content type
       viewer.birkeland.loadObject(
         {
           nid: objectNid,
@@ -206,7 +206,6 @@
       }
     };
 
-    /*
     var loadBirkeland = function loadBirkeland(filename) {
       Drupal.atomizer.base.doAjax(
         '/ajax/loadYml',
@@ -222,7 +221,6 @@
       var bc = viewer.birkeland.createScene(conf);
       objectLoaded(bc);
     };
-    */
 
     // Initialize Event Handlers
 

@@ -112,7 +112,7 @@
       if (atom) {
         viewer.atom.deleteObject(atom);
       }
-      nid = (!userAtomNid || userAtomNid == 'undefined') ? 249 : userAtomNid;
+      nid = (!userAtomNid || userAtomNid == 'undefined') ? 530 : userAtomNid;
       viewer.atom.loadObject({
         nid: nid,
         type: 'atom',
