@@ -454,8 +454,8 @@ class AtomizerInit {
       $server = \Drupal::service('request_stack')->getCurrentRequest()->server->get('SERVER_NAME');
       if ($server == 'az' || $server == 's.a' || \Drupal::currentUser()->hasPermission('atomizer load raw js')) {
         if (!empty($atomizer_config['librariesDev'])) {
-          $build['#attached']['library'] = $atomizer_config['librariesDev'];
-//        $build['#attached']['library'] = $atomizer_config['libraries'];
+//        $build['#attached']['library'] = $atomizer_config['librariesDev'];
+          $build['#attached']['library'] = $atomizer_config['libraries'];
         } else {
           if (!empty($atomizer_config['libraries'])) {
             $build['#attached']['library'] = $atomizer_config['libraries'];
