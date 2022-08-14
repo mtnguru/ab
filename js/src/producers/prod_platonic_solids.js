@@ -11,6 +11,7 @@ Drupal.atomizer.prod_platonic_solidsC = function (_viewer) {
   viewer.labels = Drupal.atomizer.labelsC(viewer);
   viewer.shapes = Drupal.atomizer.shapesC(viewer);
   viewer.atom = Drupal.atomizer.atomC(viewer);
+  viewer.animate = Drupal.atomizer.animateC(viewer);
 
   viewer.objects = [];
   const addObject = (object) => {
