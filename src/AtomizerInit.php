@@ -455,16 +455,16 @@ class AtomizerInit {
       if ($server == 'az' || $server == 's.a' || \Drupal::currentUser()->hasPermission('atomizer load raw js')) {
         if (!empty($atomizer_config['librariesDev'])) {
 //        $build['#attached']['library'] = $atomizer_config['librariesDev'];
-          $build['#attached']['library'] = $atomizer_config['libraries'];
+          $build['#attached']['library'] = $atomizer_config['librariesDev'];
         } else {
           if (!empty($atomizer_config['libraries'])) {
-            $build['#attached']['library'] = $atomizer_config['libraries'];
+            $build['#attached']['library'] = $atomizer_config['librariesDev'];
           }
         }
       }
       else { // else load the obfuscated JavaScript files
         if (!empty($atomizer_config['libraries'])) {
-          $build['#attached']['library'] = $atomizer_config['libraries'];
+          $build['#attached']['library'] = $atomizer_config['librariesDev'];
         }
       }
     }

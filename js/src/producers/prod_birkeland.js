@@ -158,7 +158,9 @@
 
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
-      objectNid = ((!objectNid || objectNid == 'undefined') ? 17 : objectNid);  // Loads a birkeland content type
+      objectNid = ((!objectNid || objectNid == 'undefined') ? 628 : objectNid);  // Loads a birkeland content type
+//    IAE or EM
+//    objectNid = ((!objectNid || objectNid == 'undefined') ? 17 : objectNid);  // Loads a birkeland content type
       viewer.birkeland.loadObject(
         {
           nid: objectNid,
