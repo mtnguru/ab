@@ -1,9 +1,0 @@
-name: Calculate SAM Lines
-type: atoms
-   
-timers:
-  calculateSamLines:
-    download: true
-    time: 1
-    source: select-atom
-

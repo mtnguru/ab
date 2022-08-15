@@ -1,7 +1,0 @@
-Element,Type,"Nuclet ID","Nuclet Type","Particle ID",X,Y,Z,Xn,Yn,Zn
-"Hydrogen 3",nuclet,N0,hydrogen,N0,0,0,0,0,0,0
-"Hydrogen 3",proton,N0,hydrogen,P0,100,0,0,100,0,0
-"Hydrogen 3",proton,N0,hydrogen,P1,0,0,0,0,0,0
-"Hydrogen 3",proton,N0,hydrogen,P2,-100,0,0,-100,0,0
-"Hydrogen 3",electron,N0,hydrogen,E01,50,0,0,50,0,0
-"Hydrogen 3",electron,N0,hydrogen,E02,-50,0,0,-50,0,0
