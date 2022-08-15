@@ -1,0 +1,31 @@
+name: Create images of all elements 
+type: atoms
+#animations:
+# rotation:
+#   name: orbitals
+#   speed: .07
+timers:
+  cycleimageatoms:
+    time: 1
+    snapshot: primary
+    source: select-atom
+    zoom:
+      1:  1.0
+      3:  1.2
+      11: 1.35
+      19: 1.40
+      31: 1.42
+
+form:
+  snapshot--set:
+    - Image set
+    - radios
+    - single
+    -
+      primary: Primary Image
+      structure: Structure
+      electrons: Electrons
+  snapshot--save:        ['Take Picture', 'button', {sound-file: snapshot.wav}]
+
+  pte-content:
+

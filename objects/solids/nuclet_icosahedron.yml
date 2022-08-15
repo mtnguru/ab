@@ -1,0 +1,124 @@
+name: Icosahedron
+weight: 6
+geoGroups:
+  protons:
+    components:
+      framework:
+        shape: icosahedron
+        particleids: proton
+        scale: 2
+        protons:
+          0:
+            pairs: grow
+            alpha3: valence
+            rings: valence
+          1:
+            pairs: grow
+            alpha3: valence
+            rings: polar
+          2:
+            pairs: grow
+            alpha3: polar
+            rings: polar
+          3:
+            pairs: grow
+            alpha3: polar
+            rings: grow
+          4:
+            pairs: valence
+            alpha3: grow
+            rings: valence
+          5:
+            pairs: valence
+            alpha3: grow
+            rings: grow
+          6:
+            pairs: valence
+            alpha3: polar
+            rings: grow
+          7:
+            pairs: valence
+            alpha3: valence
+            rings: valence
+          8:
+            pairs: polar
+            alpha3: grow
+            rings: grow
+          9:
+            pairs: polar
+            alpha3: polar
+            rings: grow
+          10:
+            pairs: polar
+            alpha3: grow
+            rings: valence
+          11:
+            pairs: polar
+            alpha3: valence
+            rings: valence
+  icosa:
+    components:
+      solid:
+        shape: icosahedron
+        scale: 1
+        wireframe: true
+        faces:
+          0:
+            type: valence
+          1:
+            type: isotope
+          2:
+            type: isotope
+          3:
+            type: valence
+          4:
+            type: valence
+          5:
+            type: valence
+          6:
+            type: valence
+          7:
+            type: valence
+          8:
+            type: valence
+          9:
+            type: valence
+          10:
+            type: valence
+          11:
+            type: isotope
+          12:
+            type: isotope
+          13:
+            type: valence
+          14:
+            type: valence
+          15:
+            type: valence
+          16:
+            type: valence
+          17:
+            type: valence
+          18:
+            type: valence
+          19:
+            type: valence
+      axes:
+        shape: icosahedron
+        axes:
+          scale: 3
+          vertices:
+            - [0, 11]
+            - [1,  8]
+            - [2,  9]
+            - [3, 10]
+            - [4,  6]
+            - [5,  7]
+#     vertexids:
+#       shape: icosahedron
+#       scale: 1.55
+#       vertexids: true
+#     faceids:
+#       shape: icosahedron
+#       scale: 1.3
+#       faceids: true

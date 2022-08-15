@@ -1,0 +1,55 @@
+object:
+  rotation: {z: 90}
+cylinders:
+  defaults:
+    radius:  120
+    length: 1800
+    color: 0xff00ff
+    opacity: .15
+    markerSize: 3
+    markerType: arrows
+  Cylinder01:
+    radius:   25
+    color:  0xff00ff
+    numArrows: 40
+    numArrowPaths: 10
+  Cylinder02:
+    radius:   65
+    color:  0x00cccc
+    numArrows: 35
+    numArrowPaths: 12
+  Cylinder03:
+    radius:  105
+    color:  0x0000ff
+    numArrows: 30
+    numArrowPaths: 14
+  Cylinder04:
+    radius:  145
+    color:  0xcc00cc
+    numArrows: 25
+    numArrowPaths: 16
+  Cylinder05:
+    radius:  185
+    color:  0xff0000
+    numArrows: 20
+    numArrowPaths: 18
+  Cylinder06:
+    radius:  225
+    color:  0xff7c00
+    numArrows: 15
+    numArrowPaths: 20
+  Cylinder07:
+    radius:  265
+    color:  0xcccc00
+    numArrows: 10
+    numArrowPaths: 22
+  Cylinder08:
+    radius:  305
+    color:  0x00ff00
+    numArrows: 5
+    numArrowPaths: 24
+  Cylinder09:
+    radius:  345
+    color:  0x0000ff
+    numArrows: 5
+    numArrowPaths: 26

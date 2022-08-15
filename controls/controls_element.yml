@@ -1,0 +1,166 @@
+name: Element
+mouse:
+styler:
+  atom:
+    title:               Atom
+    controls:
+      atom--loadlabel:      ['Select atom',   'header']
+      atom--selectyml:      [ null,              'selectyml', 'carbon.yml', 'atom', 'config/atom',       'atomizer.ajax_yml_load']
+      hr1:                     [ null,              'hr']
+      atom--savelabel:      ['Save new atom', 'header']
+      atom--saveyml:        [ null,              'saveyml',   'carbon.yml', 'atom', 'config/atom',       'atomizer.ajax_yml_save']
+      hr2:                     [ null,              'hr']
+      atom--position:       ['Position',         'position', [0, 0, 0], [-1000, 1000, 1]]
+  build:
+    title:               Build Atom
+    controls:
+      text:                    ['Display nuclets here, plus other controls needed to build atoms', 'label']
+  theme:
+    title:               Themes
+    controls:
+      theme--reset:            ['Reset Theme',      'button']
+      hr1:                     [ null,              'hr']
+      theme--loadlabel:        ['Current Theme',    'header']
+      theme--selectyml:        [ null,              'selectyml', 'Default.yml',   'theme',   'config/themes/builder', 'atomizer.ajax_yml_load']
+      hr2:                     [ null,              'hr']
+      theme--savelabel:        ['Create New Theme', 'header']
+      theme--saveyml:          [ null,              'saveyml',   '',           'theme',   'config/themes/builder', 'atomizer.ajax_yml_save']
+  proton:
+    title:               Protons
+    controls:
+      proton-default--color:   ['Default',      'color',    '#6666dd']
+      proton-top--color:       ['Top',          'color',    '#d4af37']
+      proton-bottom--color:    ['Bottom',       'color',    '#dd66dd']
+      proton-marker--color:    ['Marker',       'color',    '#55dddd']
+      proton--opacity:         ['Opacity',      'range',    .9, [0, 1, .01]]
+      proton--scale:           ['Scale',        'range',     1, [0, 2, .01]]
+      hr1:                     [ null, 'hr']
+      protonid--color:         ['IDs',          'color',    '#aaddff']
+      protonid--opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
+      protonid--scale:         ['Scale',        'range',    1, [0, 2, .01]]
+
+  electron:
+    title:               Electrons
+    controls:
+      nelectrons--color:       ['Nuclear',      'color',    '#eeffaa']
+      nelectrons--opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      nelectrons--scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+      hr1:                     [ null, 'hr']
+      oelectrons--color:       ['Outer',        'color',    '#ddbbaa']
+      oelectrons--opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      oelectrons--scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+
+  geometry:
+
+    title:               Geometry
+    controls:
+
+      awireframe--color:       ['Wireframe',    'color',    '#aaffcc']
+      awireframe--opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      awireframe--scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+      awireframe--linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr1:                     [ null, 'hr']
+      avertexid--color:        ['Vertex IDs',   'color',    '#ccaaff']
+      avertexid--opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
+      avertexid--scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                     [ null, 'hr']
+      aface--color:            ['Faces',        'color',    '#88cccc']
+      aface--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+
+      hr3:                     [ null, 'hr']
+      afaceid--color:          ['Face IDs',     'color',    '#aaffee']
+      afaceid--opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
+      afaceid--scale:          ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr4:                     [ null, 'hr']
+      aaxis--color:            ['Axis',         'color',    '#ffbbcc']
+      aaxis--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      aaxis--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+
+  dualGeometry:
+
+    title:               Dual Geometry
+    controls:
+      bwireframe--color:       ['Wireframe',    'color',    '#ffdd33']
+      bwireframe--opacity:     ['Opacity',      'range',    .3, [0, 1, .01]]
+      bwireframe--scale:       ['Scale',        'range',    1,  [0, 2, .01]]
+      bwireframe--linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr1:                     [ null, 'hr']
+      bvertexid--color:        ['Vertex IDs',   'color',    '#ffccee']
+      bvertexid--opacity:      ['Opacity',      'range',    .3, [0, 1, .01]]
+      bvertexid--scale:        ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr2:                     [ null, 'hr']
+      bface--color:            ['Faces',        'color',    '#88cccc']
+      bface--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+
+      hr3:                     [ null, 'hr']
+      bfaceid--color:          ['Face IDs',     'color',    '#ffcc33']
+      bfaceid--opacity:        ['Opacity',      'range',    .3, [0, 1, .01]]
+      bfaceid--scale:          ['Scale',        'range',    1,  [0, 2, .01]]
+
+      hr4:                     [ null, 'hr']
+      baxis--color:            ['Axis',         'color',    '#aabb99']
+      baxis--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      baxis--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  attachments :
+
+    title:               Attach Points
+    controls:
+      valence---olor:          ['Valence',       'color',    '#ff00ff']
+      valence--opacity:        ['Valence',       'range',    .3, [0, 1, .01]]
+      hr1:                     [ null, 'hr']
+      isotope--color:          ['Isotope',       'color',    '#0000ff']
+      isotope--opacity:        ['Isotope',       'range',    .3, [0, 1, .01]]
+
+  scene:
+    title:               Scene
+    controls:
+      header---amera:          ['Camera',        'header']
+      camera--perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
+      camera--position:        ['Position',      'position', [0, 1400, -1400], [-2000, 2000, 1]]
+
+      hr1:                     [ null, 'hr']
+      renderer--color:         ['Background',    'color',    '#fcf3ff']
+
+      hr2:                     [ null, 'hr']
+      plane--color:            ['Plane',         'color',    '#cccccc']
+      plane--opacity:          ['Opacity',       'range',    1, [0, 1, .01]]
+      plane--width:            ['Width',         'range',    850, [1, 1500, 1]]
+      plane--depth:            ['Depth',         'range',    850, [1, 1500, 1]]
+      plane--position:         ['Position',      'position', [0, 0, 0], [-1000, 1000, 1]]
+      plane--rotation:         ['Rotation',      'rotation', [0, -180, 1], [-360, 360, 1]]
+  lighting:
+    title:               Lighting
+    controls:
+      ambient--color:          ['Ambient',       'color',    '#777777']
+      hr1:                     [ null, 'hr']
+      spotlight-1--color:      ['Spotlight 1',   'color',    '#664466']
+      spotlight-1--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
+      hr2:                     [ null, 'hr']
+      spotlight-2--color:      ['Spotlight 2',   'color',    '#446644']
+      spotlight-2--position:   ['Position',      'position', [ 800, 800, -200], [-1000, 1000, 1]]
+      hr3:                     [ null, 'hr']
+      spotlight-3--color:      ['Spotlight 3',   'color',    '#000000']
+      spotlight-3--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
+  mouse:
+    title: Mouse
+    controls:
+      mouse--mode:
+        - Mouse mode
+        - radios
+        - camera
+        -
+          camera:      Move Camera
+          atom:        Move Atom
+          attach:      Attach Nuclets
+          spotlight-1: Move Spotlight 1
+          spotlight-2: Move Spotlight 2
+          spotlight-3: Move Spotlight 3
+          none:        None
+

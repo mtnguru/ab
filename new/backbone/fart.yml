@@ -1,0 +1,278 @@
+name: fart
+protonRadius: 50
+protons:
+  p0:
+    position:
+      x: 1.5425983561874
+      'y': -0.95086776219312
+      z: 0
+    attachments:
+      - t0
+      - t1
+      - t3
+  p1:
+    position:
+      x: 2.8555615478674
+      'y': 0.17282948323074
+      z: -0.99775880481776
+    attachments:
+      - t0
+      - t3
+      - t4
+  p2:
+    position:
+      x: 1.3584752137243
+      'y': 1.0361372789803
+      z: 0
+    attachments:
+      - t0
+      - t1
+      - t2
+      - t3
+      - t4
+      - t5
+      - t6
+  p3:
+    position:
+      x: 2.8555615478674
+      'y': 0.17282948323074
+      z: 0.99775880481776
+    attachments:
+      - t0
+      - t1
+      - t2
+  p4:
+    position:
+      x: 0.99043524980164
+      'y': 0
+      z: 1.6512282239033
+    attachments:
+      - t1
+      - t2
+      - t5
+  p5:
+    position:
+      x: 1.9197063907443
+      'y': 1.7431021759466
+      z: 1.7651180413022
+    attachments:
+      - t2
+      - t5
+  p6:
+    position:
+      x: 0.99043524980164
+      'y': 0
+      z: -1.6512282239033
+    attachments:
+      - t3
+      - t4
+      - t6
+  p7:
+    position:
+      x: 1.9197063907443
+      'y': 1.7431021759466
+      z: -1.7651180413022
+    attachments:
+      - t4
+      - t6
+  p8:
+    position:
+      x: 0
+      'y': 1.6749956538651
+      z: 1.2913717329017
+    attachments:
+      - t5
+      - t13
+  p9:
+    position:
+      x: 0
+      'y': 1.6749956538651
+      z: -1.2913717329017
+    attachments:
+      - t6
+      - t12
+  p10:
+    position:
+      x: -1.5425983561874
+      'y': -0.95086776219312
+      z: 0
+    attachments:
+      - t7
+      - t8
+      - t10
+  p11:
+    position:
+      x: -2.8555615478674
+      'y': 0.17282948323074
+      z: 0.99775880481776
+    attachments:
+      - t7
+      - t10
+      - t11
+  p12:
+    position:
+      x: -1.3584752137243
+      'y': 1.0361372789803
+      z: 0
+    attachments:
+      - t7
+      - t8
+      - t9
+      - t10
+      - t11
+      - t12
+      - t13
+  p13:
+    position:
+      x: -2.8555615478674
+      'y': 0.17282948323074
+      z: -0.99775880481776
+    attachments:
+      - t7
+      - t8
+      - t9
+  p14:
+    position:
+      x: -0.99043524980164
+      'y': 0
+      z: -1.6512282239033
+    attachments:
+      - t8
+      - t9
+      - t12
+  p15:
+    position:
+      x: -1.9197063907443
+      'y': 1.7431021759466
+      z: -1.7651180413022
+    attachments:
+      - t9
+      - t12
+  p16:
+    position:
+      x: -0.99043524980164
+      'y': 0
+      z: 1.6512282239033
+    attachments:
+      - t10
+      - t11
+      - t13
+  p17:
+    position:
+      x: -1.9197063907443
+      'y': 1.7431021759466
+      z: 1.7651180413022
+    attachments:
+      - t11
+      - t13
+  p18:
+    position:
+      x: 0
+      'y': -1.605
+      z: 1
+    attachments: {  }
+  p19:
+    position:
+      x: 0
+      'y': -1.605
+      z: -1
+    attachments: {  }
+geometries:
+  t0:
+    geometry: tetrahedron
+    protons:
+      - p0
+      - p1
+      - p2
+      - p3
+  t1:
+    geometry: tetrahedron
+    protons:
+      - p3
+      - p2
+      - p0
+      - p4
+  t2:
+    geometry: tetrahedron
+    protons:
+      - p4
+      - p3
+      - p2
+      - p5
+  t3:
+    geometry: tetrahedron
+    protons:
+      - p1
+      - p0
+      - p2
+      - p6
+  t4:
+    geometry: tetrahedron
+    protons:
+      - p6
+      - p2
+      - p1
+      - p7
+  t5:
+    geometry: tetrahedron
+    protons:
+      - p5
+      - p2
+      - p4
+      - p8
+  t6:
+    geometry: tetrahedron
+    protons:
+      - p7
+      - p6
+      - p2
+      - p9
+  t7:
+    geometry: tetrahedron
+    protons:
+      - p10
+      - p11
+      - p12
+      - p13
+  t8:
+    geometry: tetrahedron
+    protons:
+      - p13
+      - p12
+      - p10
+      - p14
+  t9:
+    geometry: tetrahedron
+    protons:
+      - p14
+      - p13
+      - p12
+      - p15
+  t10:
+    geometry: tetrahedron
+    protons:
+      - p11
+      - p10
+      - p12
+      - p16
+  t11:
+    geometry: tetrahedron
+    protons:
+      - p16
+      - p12
+      - p11
+      - p17
+  t12:
+    geometry: tetrahedron
+    protons:
+      - p15
+      - p12
+      - p14
+      - p9
+  t13:
+    geometry: tetrahedron
+    protons:
+      - p17
+      - p16
+      - p12
+      - p8

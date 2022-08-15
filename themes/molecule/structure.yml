@@ -1,0 +1,643 @@
+name: Structure
+description: 'Show structure of atom'
+filepath: config/themes/atom_viewer/structure.yml
+settings:
+  ambient--color:
+    setting: '#c9c9c9'
+    type: color
+  animation--speed:
+    setting: '10'
+    type: range
+  attachLines--color:
+    setting: '#f433ff'
+    type: color
+  attachLines--linewidth:
+    setting: 1
+    type: range
+  attachLines--opacity:
+    setting: '0'
+    type: range
+  attachLines--scale:
+    setting: '1'
+    type: range
+  beryllium--scale:
+    setting: 1
+    type: range
+  berylliumFaces--color:
+    setting: '#88cccc'
+    type: color
+  berylliumFaces--opacity:
+    setting: 0
+    type: range
+  berylliumWireframe--color:
+    setting: '#ff8a00'
+    type: color
+  berylliumWireframe--linewidth:
+    setting: '2'
+    type: range
+  berylliumWireframe--opacity:
+    setting: '1'
+    type: range
+  boron10--scale:
+    setting: 1
+    type: range
+  boron10Faces--color:
+    setting: '#88cccc'
+    type: color
+  boron10Faces--opacity:
+    setting: 0
+    type: range
+  boron10Wireframe--color:
+    setting: '#fff600'
+    type: color
+  boron10Wireframe--linewidth:
+    setting: '2'
+    type: range
+  boron10Wireframe--opacity:
+    setting: '1'
+    type: range
+  boron11--scale:
+    setting: 1
+    type: range
+  boron11Faces--color:
+    setting: '#88cccc'
+    type: color
+  boron11Faces--opacity:
+    setting: 0
+    type: range
+  boron11Wireframe--color:
+    setting: '#fff600'
+    type: color
+  boron11Wireframe--linewidth:
+    setting: '2'
+    type: range
+  boron11Wireframe--opacity:
+    setting: '1'
+    type: range
+  camera--perspective:
+    setting: 30
+    type: range
+  camera--position--x:
+    setting: 0
+    type: position
+  camera--position--y:
+    setting: 2000
+    type: position
+  camera--position--z:
+    setting: -200
+    type: position
+  carbon--scale:
+    setting: 1
+    type: range
+  carbonFaces--color:
+    setting: '#88cccc'
+    type: color
+  carbonFaces--opacity:
+    setting: '0'
+    type: range
+  carbonWireframe--color:
+    setting: '#0043ff'
+    type: color
+  carbonWireframe--linewidth:
+    setting: '2'
+    type: range
+  carbonWireframe--opacity:
+    setting: '1'
+    type: range
+  dodeca--scale:
+    setting: '1'
+    type: range
+  dodecaAxis--color:
+    setting: '#aabb99'
+    type: color
+  dodecaAxis--linewidth:
+    setting: 1
+    type: range
+  dodecaAxis--opacity:
+    setting: 0
+    type: range
+  dodecaFaceid--opacity:
+    setting: 0
+    type: range
+  dodecaFaceids--scale:
+    setting: 1
+    type: range
+  dodecaFaces--color:
+    setting: '#9900a1'
+    type: color
+  dodecaFaces--opacity:
+    setting: '0'
+    type: range
+  dodecaOut--scale:
+    setting: 1
+    type: range
+  dodecaOutFaceid--opacity:
+    setting: 0
+    type: range
+  dodecaOutFaces--color:
+    setting: '#88cccc'
+    type: color
+  dodecaOutFaces--opacity:
+    setting: '0.02'
+    type: range
+  dodecaOutVertexid--opacity:
+    setting: 0
+    type: range
+  dodecaOutWireframe--color:
+    setting: '#00ffff'
+    type: color
+  dodecaOutWireframe--linewidth:
+    setting: 3
+    type: range
+  dodecaOutWireframe--opacity:
+    setting: '0'
+    type: range
+  dodecaVertexid--opacity:
+    setting: 0
+    type: range
+  dodecaVertexids--scale:
+    setting: 1
+    type: range
+  dodecaWireframe--color:
+    setting: '#bb00ff'
+    type: color
+  dodecaWireframe--linewidth:
+    setting: '2'
+    type: range
+  dodecaWireframe--opacity:
+    setting: '0'
+    type: range
+  dodecaWireframe--scale:
+    setting: 1
+    type: range
+  electron--radius:
+    type: range
+    setting: 5
+  electron1-core--color:
+    setting: '#ffff00'
+    type: color
+  electron1-core--color-highlight:
+    setting: '#ffff00'
+    type: color
+  electron1-core--opacity:
+    setting: '0'
+    type: range
+  electron1-core--scale:
+    setting: '0.3'
+    type: range
+  electron1-field--color:
+    setting: '#ffff00'
+    type: color
+  electron1-field--color-highlight:
+    setting: '#aa00ff'
+    type: color
+  electron1-field--opacity:
+    setting: '0'
+    type: range
+  electron1-field--scale:
+    setting: '1'
+    type: range
+  electron1-ghost--color:
+    setting: '#ff6030'
+    type: color
+  electron1-orbital--color:
+    setting: '#ba7b00'
+    type: color
+  electron1-orbital--color-highlight:
+    setting: '#ff6030'
+    type: color
+  electron1-orbital--opacity:
+    setting: '0'
+    type: range
+  electron1-orbital--scale:
+    setting: '1'
+    type: range
+  electron2-core--color:
+    setting: '#ffff33'
+    type: color
+  electron2-core--opacity:
+    setting: '0'
+    type: range
+  electron2-core--scale:
+    setting: '0.5'
+    type: range
+  electron2-field--color:
+    setting: '#ffff33'
+    type: color
+  electron2-field--opacity:
+    setting: '0'
+    type: range
+  electron2-field--scale:
+    setting: '1'
+    type: range
+  faces--opacity:
+    setting: '1'
+    type: range
+  faces-negative--color:
+    setting: '#fffd73'
+    type: color
+  faces-neutral--color:
+    setting: '#74ff74'
+    type: color
+  faces-positive--color:
+    setting: '#74fdff'
+    type: color
+  hexaAxis--color:
+    setting: '#ffbbcc'
+    type: color
+  hexaAxis--linewidth:
+    setting: 1
+    type: range
+  hexaAxis--opacity:
+    setting: 0
+    type: range
+  hexaFace--color:
+    setting: '#88cccc'
+    type: color
+  hexaFace--opacity:
+    setting: 0
+    type: range
+  hexaFaceid--opacity:
+    setting: 0
+    type: range
+  hexaFaceids--scale:
+    setting: 1
+    type: range
+  hexaVertexid--opacity:
+    setting: 0
+    type: range
+  hexaVertexids--scale:
+    setting: 1
+    type: range
+  hexaWcireframe--color:
+    setting: '#55ff55'
+    type: color
+  hexaWcireframe--linewidth:
+    setting: 1
+    type: range
+  hexaWcireframe--opacity:
+    setting: 1
+    type: range
+  hexaWireframe--color:
+    setting: '#55ff55'
+    type: color
+  hexaWireframe--linewidth:
+    setting: 1
+    type: range
+  hexaWireframe--opacity:
+    setting: 1
+    type: range
+  hexaWireframe--scale:
+    setting: 1
+    type: range
+  icosa--scale:
+    setting: '1'
+    type: range
+  icosaAxis--color:
+    setting: '#ffbbcc'
+    type: color
+  icosaAxis--linewidth:
+    setting: 1
+    type: range
+  icosaAxis--opacity:
+    setting: 0
+    type: range
+  icosaFaceid--opacity:
+    setting: 0
+    type: range
+  icosaFaceids--scale:
+    setting: 1
+    type: range
+  icosaFaces--color:
+    setting: '#015e9e'
+    type: color
+  icosaFaces--opacity:
+    setting: '0'
+    type: range
+  icosaOut--scale:
+    setting: '0.16'
+    type: range
+  icosaOutFaceid--opacity:
+    setting: 0
+    type: range
+  icosaOutFaces--color:
+    setting: '#ccca88'
+    type: color
+  icosaOutFaces--opacity:
+    setting: '0'
+    type: range
+  icosaOutVertexid--opacity:
+    setting: 0
+    type: range
+  icosaOutWireframe--color:
+    setting: '#4fd5ce'
+    type: color
+  icosaOutWireframe--linewidth:
+    setting: '2'
+    type: range
+  icosaOutWireframe--opacity:
+    setting: '0'
+    type: range
+  icosaVertexid--opacity:
+    setting: 0
+    type: range
+  icosaVertexids--scale:
+    setting: 1
+    type: range
+  icosaWireframe--color:
+    setting: '#00c5ff'
+    type: color
+  icosaWireframe--linewidth:
+    setting: '2'
+    type: range
+  icosaWireframe--opacity:
+    setting: '1'
+    type: range
+  icosaWireframe--scale:
+    setting: 1
+    type: range
+  lithium--scale:
+    setting: 1
+    type: range
+  lithiumFaceid--opacity:
+    setting: 0
+    type: range
+  lithiumFaceids--scale:
+    setting: 1
+    type: range
+  lithiumFaces--color:
+    setting: '#88cccc'
+    type: color
+  lithiumFaces--opacity:
+    setting: 0
+    type: range
+  lithiumVertexid--opacity:
+    setting: 0
+    type: range
+  lithiumVertexids--scale:
+    setting: 1
+    type: range
+  lithiumWireframe--color:
+    setting: '#ff0064'
+    type: color
+  lithiumWireframe--linewidth:
+    setting: '2'
+    type: range
+  lithiumWireframe--opacity:
+    setting: 1
+    type: range
+  nuclet--attachAngle:
+    setting: '5'
+    type: range
+  octa--rotation--x:
+    setting: '0'
+    type: rotation
+  octa--rotation--y:
+    setting: '0'
+    type: rotation
+  octa--rotation--z:
+    setting: 0
+    type: rotation
+  octa--scale:
+    setting: '1'
+    type: range
+  octaAxis--color:
+    setting: '#ffbbcc'
+    type: color
+  octaVertexid--opacity:
+    setting: 0
+    type: range
+  octaVertexids--scale:
+    setting: 1
+    type: range
+  octaWireframe--color:
+    setting: '#ffff00'
+    type: color
+  octaWireframe--linewidth:
+    setting: '2'
+    type: range
+  octaWireframe--opacity:
+    setting: '0'
+    type: range
+  octaWireframe--scale:
+    setting: 1
+    type: range
+  plane--color:
+    setting: '#1d1324'
+    type: color
+  plane--depth:
+    setting: 1200
+    type: range
+  plane--opacity:
+    setting: 1
+    type: range
+  plane--position--x:
+    setting: 0
+    type: position
+  plane--position--y:
+    setting: -400
+    type: position
+  plane--position--z:
+    setting: 0
+    type: position
+  plane--rotation--x:
+    setting: 0
+    type: rotation
+  plane--rotation--y:
+    setting: -180
+    type: rotation
+  plane--rotation--z:
+    setting: 1
+    type: rotation
+  plane--width:
+    setting: 1800
+    type: range
+  proton--nuclet-colors:
+    setting: true
+    type: checkbox
+  proton--opacity:
+    setting: '0.9'
+    type: range
+  proton--proton-colors:
+    setting: true
+    type: checkbox
+  proton--radius:
+    type: range
+    setting: 50
+  proton--scale:
+    setting: '0.25'
+    type: range
+  proton-beryllium--color:
+    setting: '#9e5e43'
+    type: color
+  proton-boron--color:
+    setting: '#76763b'
+    type: color
+  proton-boron10--color:
+    setting: '#76763b'
+    type: color
+  proton-boron11--color:
+    setting: '#76763b'
+    type: color
+  proton-capped--color:
+    setting: '#697881'
+    type: color
+  proton-carbon--color:
+    setting: '#346e7f'
+    type: color
+  proton-default--color:
+    setting: '#767676'
+    type: color
+  proton-final--color:
+    setting: '#838383'
+    type: color
+  proton-ghost--color:
+    setting: '#ac58ac'
+    type: color
+  proton-grow--color:
+    setting: '#3d5744'
+    type: color
+  proton-initial--color:
+    setting: '#608089'
+    type: color
+  proton-lithium--color:
+    setting: '#914747'
+    type: color
+  proton-neutral--color:
+    setting: '#337c44'
+    type: color
+  proton-neutron--color:
+    setting: '#6d8400'
+    type: color
+  proton-polar--color:
+    setting: '#454b5b'
+    type: color
+  proton-proton--color:
+    setting: '#835d08'
+    type: color
+  proton-valence--color:
+    setting: '#534444'
+    type: color
+  protonVertexid--color:
+    setting: '#fffab0'
+    type: color
+  protonVertexid--opacity:
+    setting: '0'
+    type: range
+  protonVertexid--scale:
+    setting: 1
+    type: range
+  protons--scale:
+    setting: 1
+    type: range
+  renderer--color:
+    setting: '#0d1732'
+    type: color
+  spotlight-1--color:
+    setting: '#978d97'
+    type: color
+  spotlight-1--position--x:
+    setting: -500
+    type: position
+  spotlight-1--position--y:
+    setting: 700
+    type: position
+  spotlight-1--position--z:
+    setting: -300
+    type: position
+  spotlight-2--color:
+    setting: '#caf6f6'
+    type: color
+  spotlight-2--position--x:
+    setting: 500
+    type: position
+  spotlight-2--position--y:
+    setting: 700
+    type: position
+  spotlight-2--position--z:
+    setting: 300
+    type: position
+  spotlight-3--color:
+    setting: '#c5c5a9'
+    type: color
+  spotlight-3--position--x:
+    setting: 0
+    type: position
+  spotlight-3--position--y:
+    setting: -700
+    type: position
+  spotlight-3--position--z:
+    setting: -300
+    type: position
+  tetra--scale:
+    setting: 1
+    type: range
+  tetraAxis--color:
+    setting: '#ffbbcc'
+    type: color
+  tetraAxis--linewidth:
+    setting: 1
+    type: range
+  tetraAxis--opacity:
+    setting: 0
+    type: range
+  tetraFaceid--opacity:
+    setting: 0
+    type: range
+  tetraFaceids--scale:
+    setting: '1.33'
+    type: range
+  tetraFaces--color:
+    setting: '#1a8800'
+    type: color
+  tetraFaces--opacity:
+    setting: '0'
+    type: range
+  tetraLines--scale:
+    setting: 1
+    type: range
+  tetraLinesWireframe--color:
+    setting: '#d2fe00'
+    type: color
+  tetraLinesWireframe--linewidth:
+    setting: '2'
+    type: range
+  tetraLinesWireframe--opacity:
+    setting: '1'
+    type: range
+  tetraLinesWireframe--scale:
+    setting: 1
+    type: range
+  tetraVertexid--opacity:
+    setting: 0
+    type: range
+  tetraVertexids--scale:
+    setting: 1
+    type: range
+  tetraWireframe--color:
+    setting: '#29ff00'
+    type: color
+  tetraWireframe--linewidth:
+    setting: '2'
+    type: range
+  tetraWireframe--opacity:
+    setting: '1'
+    type: range
+  tetraWireframe--scale:
+    setting: 1
+    type: range
+  valence--diameter:
+    setting: 0.12
+    type: range
+  valence--opacity:
+    setting: '0'
+    type: range
+  valence--scale:
+    setting: '1'
+    type: range
+  valence-active--color:
+    setting: '#85223C'
+    type: color
+  valence-inactive--color:
+    setting: '#666666'
+    type: color

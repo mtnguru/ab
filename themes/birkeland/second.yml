@@ -1,0 +1,191 @@
+name: Second
+type: birkeland
+description: 'Testing code'
+filepath: config/themes/birkeland/second.yml
+settings:
+  ambient--color:
+    setting: '#c9c9c9'
+    type: color
+  animation--speed:
+    setting: '75'
+    type: range
+  camera--perspective:
+    setting: 30
+    type: range
+  camera--position--x:
+    setting: 1200
+    type: position
+  camera--position--y:
+    setting: 500
+    type: position
+  camera--position--z:
+    setting: '-1500'
+    type: position
+  cylinders--extrude:
+    setting: '200'
+    type: range
+  cylinders-Cylinder01--opacity:
+    button: 'transparent'
+    slider: '.10'
+    type: opacity
+  cylinders-Cylinder02--opacity:
+    button: 'invisible'
+    slider: '0.10'
+    type: opacity
+  cylinders-Cylinder03--opacity:
+    button: 'transparent'
+    slider: '0.10'
+    type: opacity
+  cylinders-Cylinder04--opacity:
+    button: 'opaque'
+    slider: '0.10'
+    type: opacity
+  cylinders-Cylinder05--opacity:
+    button: 'transparent'
+    slider: '0.10'
+    type: opacity
+  cylinders-Cylinder06--opacity:
+    button: 'transparent'
+    slider: '0.10'
+    type: opacity
+  cylinders-Cylinder07--opacity:
+    button: 'transparent'
+    slider: '0.10'
+    type: opacity
+  cylinders-Cylinder08--opacity:
+    button: 'transparent'
+    slider: '0.10'
+    type: opacity
+  cylinders-Cylinder09--opacity:
+    button: 'transparent'
+    slider: '0.10'
+    type: opacity
+  cylinders-Cylinder10--opacity:
+    button: 'transparent'
+    slider: '0.10'
+    type: opacity
+  cylinders-master--opacity:
+    button: '0.36'
+    slider: '0.20'
+    type: opacityMaster
+  particles--random:
+    setting: true
+    type: checkbox
+  particles-Cylinder01--opacity:
+    button: 'opaque'
+    slider: '1.00'
+    type: opacity
+  particles-Cylinder02--opacity:
+    button: 'opaque'
+    slider: '1.00'
+    type: opacity
+  particles-Cylinder03--opacity:
+    button: 'invisible'
+    slider: '1.00'
+    type: opacity
+  particles-Cylinder04--opacity:
+    button: 'transparent'
+    slider: '1.00'
+    type: opacity
+  particles-Cylinder05--opacity:
+    button: 'opaque'
+    slider: '1.00'
+    type: opacity
+  particles-Cylinder06--opacity:
+    button: 'invisible'
+    slider: '1.00'
+    type: opacity
+  particles-Cylinder07--opacity:
+    button: 'transparent'
+    slider: '1.00'
+    type: opacity
+  particles-Cylinder08--opacity:
+    button: 'opaque'
+    slider: '1.00'
+    type: opacity
+  particles-Cylinder09--opacity:
+    button: 'invisible'
+    slider: '0.95'
+    type: opacity
+  particles-Cylinder10--opacity:
+    button: 'transparent'
+    slider: '1.00'
+    type: opacity
+  particles-master--opacity:
+    button: 'transparent'
+    slider: '0.95'
+    type: opacityMaster
+  plane--color:
+    setting: '#1d1324'
+    type: color
+  plane--depth:
+    setting: 1200
+    type: range
+  plane--opacity:
+    button: 'transparent'
+    slider: 1
+    type: opacity
+  plane--position--x:
+    setting: 0
+    type: position
+  plane--position--y:
+    setting: -400
+    type: position
+  plane--position--z:
+    setting: 0
+    type: position
+  plane--rotation--x:
+    setting: 0
+    type: rotation
+  plane--rotation--y:
+    setting: -180
+    type: rotation
+  plane--rotation--z:
+    setting: 1
+    type: rotation
+  plane--width:
+    setting: 1800
+    type: range
+  renderer--color:
+    setting: '#0d1732'
+    type: color
+  spotlight-1--color:
+    setting: '#978d97'
+    type: color
+  spotlight-1--position--x:
+    setting: -500
+    type: position
+  spotlight-1--position--y:
+    setting: 700
+    type: position
+  spotlight-1--position--z:
+    setting: -300
+    type: position
+  spotlight-2--color:
+    setting: '#caf6f6'
+    type: color
+  spotlight-2--position--x:
+    setting: 500
+    type: position
+  spotlight-2--position--y:
+    setting: 700
+    type: position
+  spotlight-2--position--z:
+    setting: 300
+    type: position
+  spotlight-3--color:
+    setting: '#c5c5a9'
+    type: color
+  spotlight-3--position--x:
+    setting: 0
+    type: position
+  spotlight-3--position--y:
+    setting: -700
+    type: position
+  spotlight-3--position--z:
+    setting: -300
+    type: position
+  viewer--fullScreen:
+    setting:
+      font-awesome: fa-arrows-alt
+    type: toggle

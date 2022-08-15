@@ -1,0 +1,102 @@
+name: Milestones x 3
+object:
+  rotation: {z: 90}
+cylinders:
+  defaults:
+    radiusZoom: 36
+    length: 1800
+    color: 0xff44ff
+    opacity: .15
+    markerType: arrows
+    markerSize: 3
+    markerPts: 200
+    markerSegments: 20
+    markerLength: 800
+    arrowLength: 5
+  Cylinder01:
+    name: 1 Pt1
+    radius:   .1
+    color:  0xffffff
+    numArrows: 24
+    numArrowPaths: 4
+    markerPts: 100
+    markerLength: 200
+  Cylinder02:
+    name: 2
+    radius:   .8
+    color:  0xff7cd0
+    numArrows: 22
+    numArrowPaths: 6
+    markerPts: 150
+    markerLength: 300
+  Cylinder03:
+    name: 3
+    radius: 1.6
+    color:  0xff2222
+    numArrows: 20
+    numArrowPaths: 8
+    markerPts: 150
+    markerLength: 400
+  Cylinder04:
+    name: 4 Pt2
+    radius:  2.4
+    color:  0xff9933
+    numArrows: 10
+    numArrowPaths: 15
+    markerLength: 500
+  Cylinder05:
+    name: 5
+    radius:  2.8
+    color:  0xffff00
+    numArrows: 16
+    numArrowPaths: 12
+    markerLength: 600
+  Cylinder06:
+    name: 6
+    radius:  3.4
+    color:  0x11dd11
+    numArrows: 14
+    numArrowPaths: 14
+  Cylinder07:
+    name: 7 Pt3
+    radius:  3.8
+    color:  0x11ffff
+    numArrows: 12
+    numArrowPaths: 16
+  Cylinder08:
+    name: 8
+    radius:  4.2
+    color:  0x7777ff
+    numArrows: 11
+    numArrowPaths: 18
+  Cylinder09:
+    name: 9
+    radius:  5.0
+    color:  0xaa55ff
+    numArrows: 10
+    numArrowPaths: 20
+  Cylinder10:
+    name: 10 Pt4
+    radius:  5.6
+    color:  0xff00bb
+    numArrows: 8
+    numArrowPaths: 24
+  Cylinder11:
+    name: 11
+    radius:   6
+    color:  0x888888
+    numArrows: 8
+    numArrowPaths: 24
+  Cylinder12:
+    name: 12
+    radius:  6.6
+    color:  0x956b33
+    numArrows: 8
+    numArrowPaths: 22
+  Cylinder13:
+    name: 13 Pt5
+    radius:    7
+    color:  0xffffff
+    numArrows: 8
+    numArrowPaths: 22
+

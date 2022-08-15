@@ -1,0 +1,153 @@
+name: backbone2
+protonRadius: 50
+protons:
+  p0:
+    position:
+      x: -77.129917809368
+      'y': -47.543388109656
+      z: 2.4000612420794E-14
+    attachments:
+      - t0
+      - t1
+      - t3
+  p1:
+    position:
+      x: -142.77807739337
+      'y': 8.6414741615371
+      z: 49.887940240888
+    attachments:
+      - t0
+      - t3
+      - t4
+  p2:
+    position:
+      x: -67.923760686217
+      'y': 51.806863949014
+      z: 1.1833715072075E-14
+    attachments:
+      - t0
+      - t1
+      - t2
+      - t3
+      - t4
+      - t5
+      - t6
+  p3:
+    position:
+      x: -142.77807739337
+      'y': 8.6414741615371
+      z: -49.887940240888
+    attachments:
+      - t0
+      - t1
+      - t2
+  p4:
+    position:
+      x: -49.521762490082
+      'y': 3.5065988441829E-6
+      z: -82.561411195164
+    attachments:
+      - t1
+      - t2
+      - t5
+  p5:
+    position:
+      x: -95.985319537216
+      'y': 87.155108797328
+      z: -88.25590206511
+    attachments:
+      - t2
+      - t5
+  p6:
+    position:
+      x: -49.521762490082
+      'y': 3.5065988726046E-6
+      z: 82.561411195164
+    attachments:
+      - t3
+      - t4
+      - t6
+  p7:
+    position:
+      x: -95.985319537216
+      'y': 87.155108797328
+      z: 88.25590206511
+    attachments:
+      - t4
+      - t6
+  p8:
+    position:
+      x: -4.6798772317912E-9
+      'y': 83.749782693255
+      z: -64.568586645086
+    attachments:
+      - t5
+  p9:
+    position:
+      x: -4.6798614845112E-9
+      'y': 83.749782693255
+      z: 64.568586645086
+    attachments:
+      - t6
+  p18:
+    position:
+      x: 0
+      'y': -80.5
+      z: 50
+    attachments: {  }
+  p19:
+    position:
+      x: 0
+      'y': -80.5
+      z: -50
+    attachments: {  }
+geometries:
+  t0:
+    geometry: tetrahedron
+    protons:
+      - p0
+      - p1
+      - p2
+      - p3
+  t1:
+    geometry: tetrahedron
+    protons:
+      - p3
+      - p2
+      - p0
+      - p4
+  t2:
+    geometry: tetrahedron
+    protons:
+      - p4
+      - p3
+      - p2
+      - p5
+  t3:
+    geometry: tetrahedron
+    protons:
+      - p1
+      - p0
+      - p2
+      - p6
+  t4:
+    geometry: tetrahedron
+    protons:
+      - p6
+      - p2
+      - p1
+      - p7
+  t5:
+    geometry: tetrahedron
+    protons:
+      - p5
+      - p2
+      - p4
+      - p8
+  t6:
+    geometry: tetrahedron
+    protons:
+      - p7
+      - p6
+      - p2
+      - p9

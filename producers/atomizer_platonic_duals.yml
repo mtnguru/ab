@@ -1,0 +1,18 @@
+name: Platonic Solids Duals
+defaultView: solids
+themeDirectory: config/themes/platonic_solids_duals
+animateDirectory: config/animations/platonic_solids
+controlFile: controls_platonic_duals.yml
+atomizerId: platonic-solids-duals
+classes: [az-overlay-controls]
+objects: [solids]
+canvasRatio: .50
+libraries: [atomizer/atomizer-obfuscator, atomizer/atomizer-platonic-duals-obfuscator]
+librariesDev: [atomizer/atomizer-base, atomizer/atomizer-platonic-duals]
+renderer: webgl
+views:
+  solids:
+    name: Platonic solids
+    producer: prod_platonic_duals
+    defaultTheme: default
+

@@ -1,0 +1,17 @@
+name: Periodic Table Viewer
+defaultView: default
+themeDirectory: config/themes/pte
+animateDirectory: config/animations/pte
+controlFile: controls_pte_viewer.yml
+atomizerId: pte
+classes: [az-float-controls]
+libraries: [atomizer/atomizer-obfuscator, atomizer/atomizer-pte-obfuscator]
+librariesDev: [atomizer/atomizer-base, atomizer/atomizer-pte]
+objects: [nuclets]
+canvasRatio: window
+renderer: css3d
+views:
+  default:
+    name: Periodic Table
+    producer: prod_pte
+    defaultTheme: default

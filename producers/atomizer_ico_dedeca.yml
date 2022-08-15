@@ -1,0 +1,18 @@
+name: Icosahedron - Dodecahedron
+defaultView: duals
+themeDirectory: config/themes/platonic_solids
+animateDirectory: config/animations/platonic_solids
+controlFile: controls_ico_dodeca.yml
+atomizerId: icosahedron - dodecahedron
+classes: [az-overlay-controls]
+objects: [solids]
+canvasRatio: .50
+libraries: [atomizer/atomizer-obfuscator, atomizer/atomizer-ico-dodeca-obfuscator]
+librariesDev: [atomizer/atomizer-base, atomizer/atomizer-ico-dodeca]
+renderer: webgl
+views:
+  duals:
+    name: Icosahedron - Dodecahedron
+    producer: prod_ico_dodeca
+    defaultTheme: spheres
+

@@ -1,0 +1,75 @@
+name: Lithium
+weight: 3
+boundingSphere: true
+geoGroups:
+  protons:
+#   rotation:
+#     y: 90
+    components:
+      framework:
+        scale: 1
+        shape: lithium
+        particleids: proton
+        nelectrons: true
+        protons:
+          P1:
+            pairs: grow
+          P3:
+            pairs: grow
+          P4:
+            pairs: valence
+          P5:
+            pairs: valence
+          P9:
+            pairs: polar
+          P10:
+            pairs: polar
+          P11:
+            pairs: polar
+#         P12:
+#           pairs: neutron
+#           optional: true
+#         P13:
+#           pairs: neutron
+#           optional: true
+#         P14:
+#           pairs: neutron
+#           optional: true
+#         P15:
+#           pairs: neutron
+#           optional: true
+#         P16:
+#           pairs: neutron
+#           optional: true
+
+        neutrons:
+          U00: [[P4, P9, P5]]
+          U01: [[P5, P9, P3]]
+          U02: [[P3, P9, P11]]
+          U03: [[P11, P9, P1]]
+          U04: [[P1, P9, P4]]
+
+  lithium:
+    components:
+      solid:
+        volumeNuclet: true
+        shape: lithium
+        scale: 1
+        wireframe: true
+#       faces: true
+
+#     axes:
+#       shape: lithium
+#       axes:
+#         scale: 3
+#         vertices:
+#           - [0, 1]
+#     vertexids:
+#       shape: lithium
+#       scale: 1.55
+#       vertexids: true
+#     faceids:
+#       shape: lithium
+#       scale: 1.3
+#       faceids: true
+

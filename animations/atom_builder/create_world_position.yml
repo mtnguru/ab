@@ -1,0 +1,15 @@
+name: Create World Position for all elements
+type: atoms
+#animations:
+# rotation:
+#   name: orbitals
+#   speed: .07
+output:
+  file: /tmp/out.csv
+   
+timers:
+  cycleworldatoms:
+    download: true
+    time: 1
+    source: select-atom
+

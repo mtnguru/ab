@@ -1,0 +1,22 @@
+Element,Type,"Nuclet ID","Nuclet Type","Particle ID",X,Y,Z,Xn,Yn,Zn
+"Backbone Initial",nuclet,N0,initial,N0,0,0,0,0,0,0
+"Backbone Initial",proton,N0,initial,P0,67.9,51.8,0,67.9,51.8,0
+"Backbone Initial",proton,N0,initial,P1,77.1,-47.5,0,77.1,-47.5,0
+"Backbone Initial",proton,N0,initial,P2,-67.9,51.8,0,-67.9,51.8,0
+"Backbone Initial",proton,N0,initial,P3,-77.1,-47.5,0,-77.1,-47.5,0
+"Backbone Initial",proton,N0,initial,P4,49.5,0,-82.55,49.5,0,-82.55
+"Backbone Initial",proton,N0,initial,P5,-49.5,0,-82.55,-49.5,0,-82.55
+"Backbone Initial",proton,N0,initial,P6,-49.5,0,82.55,-49.5,0,82.55
+"Backbone Initial",proton,N0,initial,P7,49.5,0,82.55,49.5,0,82.55
+"Backbone Initial",proton,N0,initial,P8,0,83.7,-64.55,0,83.7,-64.55
+"Backbone Initial",proton,N0,initial,P9,0,83.7,64.55,0,83.7,64.55
+"Backbone Initial",proton,N0,initial,P10,0,-80.25,-50,0,-80.25,-50
+"Backbone Initial",proton,N0,initial,P11,0,-80.25,50,0,-80.25,50
+"Backbone Initial",proton,N0,initial,P12,95.95,87.15,88.25,95.95,87.15,88.25
+"Backbone Initial",proton,N0,initial,P13,142.75,8.6,49.85,142.75,8.6,49.85
+"Backbone Initial",proton,N0,initial,P14,142.75,8.6,-49.85,142.75,8.6,-49.85
+"Backbone Initial",proton,N0,initial,P15,95.95,87.15,-88.25,95.95,87.15,-88.25
+"Backbone Initial",proton,N0,initial,P16,-95.95,87.15,-88.25,-95.95,87.15,-88.25
+"Backbone Initial",proton,N0,initial,P17,-142.75,8.6,-49.85,-142.75,8.6,-49.85
+"Backbone Initial",proton,N0,initial,P18,-142.75,8.6,49.85,-142.75,8.6,49.85
+"Backbone Initial",proton,N0,initial,P19,-95.95,87.15,88.25,-95.95,87.15,88.25

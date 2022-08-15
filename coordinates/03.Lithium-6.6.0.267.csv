@@ -1,0 +1,11 @@
+Element,Type,"Nuclet ID","Nuclet Type","Particle ID",X,Y,Z,Xn,Yn,Zn
+"Lithium 6",nuclet,N0,lithium,N0,0,0,0,0,0,0
+"Lithium 6",proton,N0,lithium,P1,80.901699437495,-50,0,80.901699437495,-50,0
+"Lithium 6",proton,N0,lithium,P3,-80.901699437495,-50,0,-80.901699437495,-50,0
+"Lithium 6",proton,N0,lithium,P4,50,0,-80.901699437495,50,0,-80.901699437495
+"Lithium 6",proton,N0,lithium,P9,0,8.08,4.9945,0,8.08,4.9945
+"Lithium 6",proton,N0,lithium,P10,0,-80.901699437495,-50,0,-80.901699437495,-50
+"Lithium 6",proton,N0,lithium,P11,0,-80.901699437495,50,0,-80.901699437495,50
+"Lithium 6",electron,N0,lithium,E01,65.450849718747,-25,-40.450849718747,65.450849718747,-25,-40.450849718747
+"Lithium 6",electron,N0,lithium,E02,0,-36.410849718747,27.49725,0,-36.410849718747,27.49725
+"Lithium 6",electron,N0,lithium,E03,-40.450849718747,-65.450849718747,-25,-40.450849718747,-65.450849718747,-25

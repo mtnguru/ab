@@ -1,0 +1,347 @@
+name: Mode
+
+  nuclet:
+    title:               Nuclet Hidden
+    controls:
+      nuclet--id:                 ['Id',               'container']
+      nuclet--state:
+        - 'State:'
+        - radios
+        - initial
+        -
+          lithium: 6 Lithium
+          beryllium: 8 Beryllium
+          boron: 10 Boron
+          carbon: 11 Carbon
+          initial: Initial Backbone
+          final: Final Backbone
+      nuclet--attachAngle:        ['Angle',            'range',   1,  [1, 5, 1]]
+      nuclet--attachProton:       ['Attach Pt',        'radios',  10, {10: '10', 11: '11'}]
+      nuclet--grow-label:         ['Grow Points',      'label']
+      nuclet--grow-0:             ['&nbsp;&nbsp;0',    'html',    '--']
+      nuclet--grow-1:             ['&nbsp;&nbsp;1',    'html',    '--']
+      nuclet--delete:             ['Delete',           'button']
+
+styler:
+
+  atom:
+    title:               Atom
+    controls:
+      hr1:                        [ null,              'hr']
+      atom--information:          [ null,              'container']
+      hr3:                        [ null,              'hr']
+      atom--select:               ['Select Atom',      'button']
+#     atom--select:               ['Select Atom',      'link',    'dialog',  view.atoms.select_atom]
+#     atom--save:                 ['Save',             'link',    'modal',   'node.edit',    {node_type: atom}]
+      atom--saveNew:              ['Create New',       'link',    'modal',   'node.add',    {node_type: atom}]
+#     atom--edit:                 ['Edit',             'link',    'node/48/edit']
+#     atom--reset:                ['Reset',            'button']
+
+  theme:
+    title:               Themes
+    controls:
+      hr1:                        [ null,              'hr']
+      theme--loadlabel:           ['Select Theme',     'header']
+      theme--selectyml:           [ null,              'selectyml', 'Default.yml',   'theme',   'config/themes/atom_builder', 'atomizer.ajax_yml_load']
+      theme--reset:               ['Reset Theme',      'button']
+      theme--saveButton:          ['Save Changes',     'button']
+      theme--saveMessage:         [ null,              'container']
+      hr2:                        [ null,              'hr']
+      theme--saveNew:             ['Create New Theme', 'header']
+      theme--saveNewName:         ['Name',             'textfield', '', 20]
+      theme--saveNewButton:       ['Save New',         'button',    'config/themes/atom_builder', 'atomizer.ajax_yml_save']
+      theme--saveNewMessage:      [ null,              'container']
+
+  particles:
+    title:               Protons, Electrons
+    controls:
+      proton--label:              ['Protons', 'header']
+      proton--opacity:            ['Opacity',      'range',     1, [0, 1, .01]]
+      proton--scale:              ['Scale',        'range',     1, [0, 3, .01]]
+      proton-default--color:      ['Default',      'color',    '#777777']
+      proton-grow--color:         ['Grow',         'color',    '#559999']
+      proton-valence--color:      ['Valence',      'color',    '#995599']
+      proton-polar--color:        ['Polar',        'color',    '#999955']
+      proton-neutral--color:      ['Neutral',      'color',    '#995555']
+      proton-ghost--color:        ['ghost',        'color',    '#aa55aa']
+
+      hr1:                        [ null,          'hr']
+      protonVertexid--color:      ['Proton IDs',   'color',    '#ff00ff']
+      protonVertexid--opacity:    ['Opacity',      'range',    1, [0, 1, .01]]
+      protonVertexid--scale:      ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr2:                        [ null,          'hr']
+      electron--color:            ['Electrons',    'color',    '#ffff33']
+      electron--opacity:          ['Opacity',      'range',     1, [0, 1, .01]]
+      electron--scale:            ['Scale',        'range',     1, [0, 3, .01]]
+
+  valence:
+    title:               Valence Rings & Faces
+    controls:
+      valence--label:             ['Rings',        'header']
+      valence--opacity:           ['Opacity',      'range',     1, [0, 1, .01]]
+      valence--scale:             ['Scale',        'range',     1, [0, 3, .01]]
+      valence--diameter:          ['Diameter',     'range',     .12, [0, 10, .01]]
+
+      valence-active--color:      ['Active',       'color',    '#85223C']
+      valence-inactive--color:    ['Inactive',     'color',    '#666666']
+
+      hr1:                        [ null,          'hr']
+      faces--label:               ['Faces',        'header']
+      faces--opacity:             ['Opacity',      'range', 1, [0, 1, .01]]
+      faces-neutral--color:       ['Neutral',      'color',    '#74ff74']
+      faces-positive--color:      ['Positive',     'color',    '#74fdff']
+      faces-negative--color:      ['negative',     'color',    '#fffd73']
+
+  axes:
+    title:               Axes
+    controls:
+      hr0:                        [ null,              'hr']
+      attachLines--label:         ['Attach Axes',      'header']
+      attachLines--opacity:       ['Opacity',          'range',    0, [0, 1, .01]]
+      attachLines--scale:         ['Scale',            'range',    3, [0, 6, .01]]
+      attachLines--linewidth:     ['Linewidth',    'range',        1, [0, 5, .1]]
+      hr1:                        [ null,              'hr']
+      nuclet--label:              ['Nuclet',           'header']
+      nucletAxes--opacity:        ['Opacity',          'range',    0, [0, 1, .01]]
+      nucletAxes--scale:          ['Scale',            'range',    4, [0, 6, .01]]
+      nucletAxes--linewidth:      ['Linewidth',    'range',        1, [0, 5, .1]]
+      hr2:                        [ null,              'hr']
+      nucletInnerAxes--label:     ['Inner Nuclet Shell',     'header']
+      nucletInnerAxes--opacity:   ['Opacity',          'range',    0, [0, 1, .01]]
+      nucletInnerAxes--scale:     ['Scale',            'range',    3, [0, 6, .01]]
+      nucletInnerAxes--linewidth: ['Linewidth',    'range',        3, [0, 5, .1]]
+      hr3:                        [ null,              'hr']
+      nucletOuterAxes--label:     ['Outer Nuclet Shell',     'header']
+      nucletOuterAxes--opacity:   ['Opacity',          'range',    0, [0, 1, .01]]
+      nucletOuterAxes--scale:     ['Scale',            'range',    2, [0, 6, .01]]
+      nucletOuterAxes--linewidth: ['Linewidth',    'range',        5, [0, 5, .1]]
+
+  icosa:
+    title:               Icosahedron - Inner
+    controls:
+      icosa--scale:               ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr1:                        [ null, 'hr']
+      icosaWireframe--color:      ['Wireframe',    'color',    '#ff33ff']
+      icosaWireframe--opacity:    ['Opacity',      'range',     1, [0, 1, .01]]
+      icosaWireframe--linewidth:  ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      icosaVertexid--label:       ['IDs',          'label']
+      icosaVertexid--opacity:     ['Opacity',      'range',     0,  [0, 1, .01]]
+#     icosaVertexids--scale:      ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                        [ null, 'hr']
+      icosaFaces--color:          ['Faces',        'color',    '#88cccc']
+      icosaFaces--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+
+      icosaFaceid--label:         ['IDs',          'label']
+      icosaFaceid--opacity:       ['Opacity',      'range',     0,  [0, 1, .01]]
+#     icosaFaceids--scale:        ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr4:                        [ null, 'hr']
+      icosaAxes--color:           ['Axis',         'color',    '#ffbbcc']
+      icosaAxes--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+      icosaAxes--scale:           ['Scale',        'range',     2, [0, 5, .01]]
+      icosaAxes--linewidth:       ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  icosaOut:
+    title:               Icosahedron - Outer
+    controls:
+      icosaOut--scale:              ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr1:                          [ null, 'hr']
+      icosaOutWireframe--color:     ['Wireframe',    'color',    '#ff33ff']
+      icosaOutWireframe--opacity:   ['Opacity',      'range',     1, [0, 1, .01]]
+      icosaOutWireframe--linewidth: ['Linewidth',    'range',     3, [0, 5, .1]]
+
+      icosaOutVertexid--label:      ['IDs',          'label']
+      icosaOutVertexid--opacity:    ['Opacity',      'range',     0,  [0, 1, .01]]
+#     icosaOutVertexids--scale:     ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                          [ null, 'hr']
+      icosaOutFaces--color:         ['Faces',        'color',    '#88cccc']
+      icosaOutFaces--opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
+
+      icosaOutFaceid--label:        ['IDs',          'label']
+      icosaOutFaceid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
+#     icosaOutFaceids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr4:                          [ null, 'hr']
+      icosaOutAxes--color:          ['Axis',         'color',    '#ffbbcc']
+      icosaOutAxes--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+      icosaOutAxes--scale:          ['Scale',        'range',     2, [0, 5, .01]]
+      icosaOutAxes--linewidth:      ['Linewidth',    'range',     1, [0, 5, .1]]
+
+
+  deca:
+    title:               Decahedron
+    controls:
+      deca--scale:                  ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr1:                          [ null, 'hr']
+      decaWireframe--color:         ['Wireframe',    'color',    '#00ffff']
+      decaWireframe--opacity:       ['Opacity',      'range',     1, [0, 1, .01]]
+      decaWireframe--linewidth:     ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      decaVertexid--label:          ['IDs',          'label']
+      decaVertexid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+#     decaVertexids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                          [ null, 'hr']
+      decaFaces--color:             ['Faces',        'color',    '#88cccc']
+      decaFaces--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
+
+      decaFaceid--label:            ['IDs',          'label']
+      decaFaceid--opacity:          ['Opacity',      'range',     0,  [0, 1, .01]]
+#     decaFaceids--scale:           ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr4:                          [ null, 'hr']
+      decaAxes--color:              ['Axis',         'color',    '#aabb99']
+      decaAxes--opacity:            ['Opacity',      'range',     0, [0, 1, .01]]
+      decaAxes--scale:              ['Scale',        'range',     2, [0, 5, .01]]
+      decaAxes--linewidth:          ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr5:                          [null, 'hr']
+      decahedron--position:         ['Position',      'position', [0, 0, 0], [-360, 360, 1]]
+      decahedron--rotation:         ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+
+  dodeca:
+    title:               Dodecahedron inner
+    controls:
+      dodeca--scale:                ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr1:                          [ null, 'hr']
+      dodecaWireframe--color:       ['Wireframe',    'color',    '#00ffff']
+      dodecaWireframe--opacity:     ['Opacity',      'range',     1, [0, 1, .01]]
+      dodecaWireframe--linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      dodecaVertexid--label:        ['IDs',          'label']
+      dodecaVertexid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
+#     dodecaVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                          [ null, 'hr']
+      dodecaFaces--color:           ['Faces',        'color',    '#88cccc']
+      dodecaFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+
+      dodecaFaceid--label:          ['IDs',          'label']
+      dodecaFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+#     dodecaFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr4:                          [ null, 'hr']
+      dodecaAxes--color:            ['Axis',         'color',    '#aabb99']
+      dodecaAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      dodecaAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
+      dodecaAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  dodecaOut:
+    title:               Dodecahedron outer
+    controls:
+      dodecaOut--scale:              ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr1:                           [ null, 'hr']
+      dodecaOutWireframe--color:     ['Wireframe',    'color',    '#00ffff']
+      dodecaOutWireframe--opacity:   ['Opacity',      'range',     1, [0, 1, .01]]
+      dodecaOutWireframe--linewidth: ['Linewidth',    'range',     3, [0, 5, .1]]
+
+      dodecaOutVertexid--label:      ['IDs',          'label']
+      dodecaOutVertexid--opacity:    ['Opacity',      'range',     0,  [0, 1, .01]]
+#     dodecaOutVertexids--scale:     ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                           [ null, 'hr']
+      dodecaOutFaces--color:         ['Faces',        'color',    '#88cccc']
+      dodecaOutFaces--opacity:       ['Opacity',      'range',     0, [0, 1, .01]]
+
+      dodecaOutFaceid--label:        ['IDs',          'label']
+      dodecaOutFaceid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
+#     dodecaOutFaceids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr4:                           [ null, 'hr']
+      dodecaOutAxes--color:          ['Axis',         'color',    '#aabb99']
+      dodecaOutAxes--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+      dodecaOutAxes--scale:          ['Scale',        'range',     2, [0, 5, .01]]
+      dodecaOutAxes--linewidth:      ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  octahedron:
+    title:               Octahedron
+    controls:
+      octa--scale:                 ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr1:                         [ null, 'hr']
+      octaWireframe--color:        ['Wireframe',    'color',    '#ff00ff']
+      octaWireframe--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
+      octaWireframe--linewidth:    ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      octaVertexid--label:         ['IDs',          'label']
+      octaVertexid--opacity:       ['Opacity',      'range',    0,  [0, 1, .01]]
+#     octaVertexids--scale:        ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr3:                         [ null, 'hr']
+      octaAxes--color:             ['Axis',         'color',    '#ffbbcc']
+      octaAxes--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
+      octaAxes--scale:             ['Scale',        'range',     2, [0, 5, .01]]
+      octaAxes--linewidth:         ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr4:                         [null, 'hr']
+      octa--rotation:              ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+
+  tetrahedron:
+    title:               Tetrahedron
+    controls:
+      tetraWireframe--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr1:                         [ null, 'hr']
+      tetraWireframe--color:       ['Wireframe',    'color',    '#ff5555']
+      tetraWireframe--opacity:     ['Opacity',      'range',     1, [0, 1, .01]]
+      tetraWireframe--linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      tetraVertexid--label:        ['IDs',          'label']
+      tetraVertexid--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
+#     tetraVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                         [ null, 'hr']
+      tetraFaces--color:           ['Faces',        'color',    '#88cccc']
+      tetraFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+
+      tetraFaceid--label:          ['IDs',          'label']
+      tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+#     tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr3:                         [ null, 'hr']
+      tetraAxes--color:            ['Axis',         'color',    '#ffbbcc']
+      tetraAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+      tetraAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
+      tetraAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  scene:
+    title:               Scene
+    controls:
+      header--camera:          ['Camera',        'header']
+      camera--perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
+      camera--position:        ['Position',      'position', [0, 700, -1500], [-3000, 3000, 1]]
+
+      hr1:                     [ null, 'hr']
+      renderer--color:         ['Background',    'color',    '#fcf3ff']
+
+      hr2:                     [ null, 'hr']
+      plane--color:            ['Plane',         'color',    '#cccccc']
+      plane--opacity:          ['Opacity',       'range',    1, [0, 1, .01]]
+      plane--width:            ['Width',         'range',    1200, [500, 1500, 1]]
+      plane--depth:            ['Depth',         'range',    1200, [500, 1500, 1]]
+      plane--position:         ['Position',      'position', [0, -200, 0], [-600, 800, 1]]
+      plane--rotation:         ['Rotation',      'rotation', [0, -180, 1], [-180, 180, 1]]
+
+  lighting:
+    title:               Lighting
+    controls:
+      ambient--color:          ['Ambient',       'color',    '#777777']
+      hr1:                     [ null, 'hr']
+      spotlight-1--color:      ['Spotlight 1',   'color',    '#885555']
+      spotlight-1--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
+      hr2:                     [ null, 'hr']
+      spotlight-2--color:      ['Spotlight 2',   'color',    '#558855']
+      spotlight-2--position:   ['Position',      'position', [ 800, 800, -200], [-1000, 1000, 1]]
+      hr3:                     [ null, 'hr']
+      spotlight-3--color:      ['Spotlight 3',   'color',    '#555588']
+      spotlight-3--position:   ['Position',      'position', [-500, 800, -500], [-1000, 1000, 1]]
+

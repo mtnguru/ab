@@ -1,0 +1,233 @@
+name: Birkeland
+
+sidebar:
+  top:
+    buttons:      {show: true}
+    sceneName:    {show: true}
+  center:
+    select-scene:
+    properties:
+    information:
+    mouse-mode:
+    snapshot:
+    animations:   {show: true}
+    theme:        {show: true}
+
+blocks:
+
+  sceneName:
+    title: Scene Name
+    controls:
+      scene--name:                ['',              container]
+
+  buttons:
+    controls:
+      toggle--select-scene:       ['Select Scene',     'button',       {font-awesome: fa-picture-o,      data-blockid: blocks--select-scene}]
+#     toggle--properties:         ['Properties',       'button',       {font-awesome: fa-list,           data-blockid: blocks--properties}]
+      bessel--dialog:             ['Bessel Graph',     'toggleDialog', {font-awesome: fa-chart-line,     data-module: 'bessel',  data-container: '.az-wrapper'}]
+      toggle--information:        ['Description',      'button',       {font-awesome: fa-info-circle,    data-blockid: blocks--information}]
+#     toggle--mouse-mode:         ['Mouse Mode',       'button',       {font-awesome: fa-mouse-pointer,  data-blockid: blocks--mouse-mode}]
+#     controls--snapshot:         ['Take snapshot',    'snapshot',     {font-awesome: fa-camera,         sound-file: snapshot.wav}]
+      toggle--theme:              ['Edit Theme',       'button',       {font-awesome: fa-paint-brush,    data-blockid: blocks--theme}]
+      toggle--animations:         ['Animations',       'button',       {font-awesome: fa-caret-right,    data-blockid: blocks--animations}]
+      viewer--fullScreen:         ['Full screen',      'toggle',       {font-awesome: fa-arrows-alt}]
+      theme--cameraReset:         ['Reset Camera',     'button',       {font-awesome: fa-video}]
+      atomizer--help:             ['Help',             'popup-node',   {font-awesome: fa-question,       data-blockid: blocks--help, data-nid: 335, data-viewmode: full}]
+
+  graph:
+    title:               Bessel Graph
+    controls:
+      scene--label:                [ 'Bessel Graph',  header,    fa-chart-bar]
+      scene--bessel:               [ '',              container]
+
+  properties:
+    title:               Properties
+    controls:
+      scene--label:                [ 'Properties',    header,    fa-list]
+      scene--properties:           [ '',              container]
+
+  select-scene:
+    title:               Select Scene
+    controls:
+      scene--label:                [ 'Select Scene',  header,    fa-scene]
+      scene--select:
+        - ''
+        - radios
+        - 628
+        -
+          627:   Milestones
+          628:   Milestones x 3
+
+  information:
+    title:               Information
+    controls:
+      scene--label:                [ 'Description',   header,    fa-info-circle]
+      scene--information:          [ null,            container]
+
+  mouse-mode:
+    title:               Mouse Mode
+    controls:
+      mouse-mode--label:          ['Mouse Mode',     header,   fa-mouse-pointer]
+      mouse:
+        - ''
+        - radios
+        - electronsAdd
+        -
+          none: None
+          protonsColor: Color Protons
+          protonsAdd: Add/Delete Protons
+          electronsAdd: Add/Delete Electrons
+          inner-faces: Assign Inner Faces
+      proton--colors:
+        - Proton Color
+        - radios
+        - original
+        -
+          original: '<div id="proton-original-color" class="proton-color">&nbsp;</div> Original'
+          proton:   '<div id="proton-proton-color"   class="proton-color">&nbsp;</div> Proton'
+          neutron:  '<div id="proton-neutron-color"  class="proton-color">&nbsp;</div> Neutron'
+          neutral:  '<div id="proton-neutral-color"  class="proton-color">&nbsp;</div> Neutral'
+
+  animations:
+    title:               Animations
+    controls:
+      animation--label:           ['Animations',       'header',   fa-caret-right]
+      animation--selectyml:       [ null,              'selectyml',       'rotate.yml',   'animation',   'config/animations/birkeland', 'atomizer.ajax_yml_load']
+      animation--wrapper:
+        id: 'animation-wrapper'
+        controls:
+          animation--play:            ['Play',             'button',  {font-awesome: fa-caret-right}]
+          animation--pause:           ['Pause',            'button',  {font-awesome: fa-pause}]
+#         animation--stop:            ['Stop',             'button',  {font-awesome: fa-stop,  class: az-selected}]
+#         animation--step-backward:   ['Previous',         'button',  {font-awesome: fa-step-backward}]
+#         animation--step-forward:    ['Next',             'button',  {font-awesome: fa-step-forward}]
+      animation--speed:               ['Speed',            'range',   3,  [0, 100, .1]]
+      animation--smooth:              ['Smooth',           'range',   3,  [1, 5, 1]]
+      cylinders--extrude:             ['Extrude',        'range',     0, [-300, 300, 1]]
+
+  snapshot:
+    title:               Snapshot,    fa-camera
+    controls:
+      snapshot--label:       ['Snapshot',    header,    fa-camera]
+      snapshot--name:        ['Name',        text, '']
+      snapshot--body:        ['Description', text, '']
+      snapshot--save:        ['Save',             'link',    'modal',   'entity.node.edit_form', {node: 119}]
+#     snapshot--saveNew:     ['Create New',       'link',    'modal',   'node.add',    {node_type: atom}]
+
+  theme:
+    title:               Theme,       fa-paint-brush
+    controls:
+      theme--label:          ['Theme',       header,    fa-paint-brush]
+      theme--selectBlock:
+        -
+        - selectblock
+        - particles
+        -
+          - selectTheme
+          - particles
+          - cylinders
+          - scene
+          - lighting
+
+  selectTheme:
+    title:               Select Theme
+    controls:
+      theme--select:
+        - ''
+        - radios
+        - default
+        -
+          default:   Default
+
+      theme--reset:               ['Reset Theme',      'button']
+      theme--saveButton:          ['Save Changes',     'button']
+      theme--enableNewTheme:      ['Create new theme', 'button']
+      theme--message:             [ null,              'container']
+
+  new-theme:
+    title:               Create new theme
+    controls:
+      theme--saveNew:             ['Create New Theme', 'header']
+      theme--saveNewName:         ['Name',             'textfield', '', 20]
+#     theme--saveNewButton:       ['Save New',         'button',    'config/themes/birkeland']
+      theme--saveNewButton:       ['Save New',         'button']
+      theme--saveNewMessage:      [ null,              'container']
+
+  cylinders:
+    title:               Cylinders
+    controls:
+      cylinders--label:                ['Cylinder Opacity', header]
+      cylinders-master--opacity:       ['Master',         'opacityMaster', .05, [0, 1, .01]]
+      cylinders-Cylinder01--opacity:   ['Cyl 1',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder02--opacity:   ['Cyl 2',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder03--opacity:   ['Cyl 3',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder04--opacity:   ['Cyl 4',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder05--opacity:   ['Cyl 5',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder06--opacity:   ['Cyl 6',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder07--opacity:   ['Cyl 7',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder08--opacity:   ['Cyl 8',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder09--opacity:   ['Cyl 9',          'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder10--opacity:   ['Cyl 10',         'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder11--opacity:   ['Cyl 11',         'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder12--opacity:   ['Cyl 12',         'opacity',       .05, [0, 1, .01]]
+      cylinders-Cylinder13--opacity:   ['Cyl 13',         'opacity',       .05, [0, 1, .01]]
+
+  particles:
+    title:               Particles
+    controls:
+#     cylinders--radius:               ['Radius',         'range',        0, [0, 500, 1]]
+      particles--label:                 ['Particle Opacity', header]
+      particles-master--opacity:       ['Master',         'opacityMaster', .99, [0, 1, .01]]
+      particles-Cylinder01--opacity:   ['Cyl 1',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder02--opacity:   ['Cyl 2',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder03--opacity:   ['Cyl 3',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder04--opacity:   ['Cyl 4',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder05--opacity:   ['Cyl 5',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder06--opacity:   ['Cyl 6',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder07--opacity:   ['Cyl 7',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder08--opacity:   ['Cyl 8',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder09--opacity:   ['Cyl 9',          'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder10--opacity:   ['Cyl 10',         'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder11--opacity:   ['Cyl 11',         'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder12--opacity:   ['Cyl 12',         'opacity',       .99, [0, 1, .01]]
+      particles-Cylinder13--opacity:   ['Cyl 13',         'opacity',       .99, [0, 1, .01]]
+
+  scene:
+    title:               Scene
+    controls:
+      header--camera:          ['Camera',        'header']
+      camera--perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
+      camera--position:        ['Position',      'position', [0, 700, -1500], [-3000, 3000, 1]]
+      camera--focus:           ['Focus',         'position', [500, 0,     0], [-3000, 3000, 1]]
+
+      hr1:                     [ null, 'hr']
+      renderer--color:         ['Background',    'color',    '#fcf3ff']
+
+      hr2:                     [ null, 'hr']
+      plane--color:            ['Plane',         'color',    '#cccccc']
+      plane--opacity:          ['Opacity',       'range',    1, [0, 1, .01]]
+      plane--width:            ['Width',         'range',    1200, [500, 3000, 1]]
+      plane--depth:            ['Depth',         'range',    1200, [500, 3000, 1]]
+      plane--position:         ['Position',      'position', [0, -200, 0], [-1000, 1000, 1]]
+      plane--rotation:         ['Rotation',      'rotation', [0, -180, 1], [-180, 180, 1]]
+
+  lighting:
+    title:               Lighting
+    controls:
+      ambient--color:          ['Ambient',       'color',    '#777777']
+      hr1:                     [ null, 'hr']
+      spotlight-1--color:      ['Spotlight 1',   'color',    '#885555']
+      spotlight-1--position:   ['Position',      'position', [-500, 700, -300], [-1000, 1000, 1]]
+      hr2:                     [ null, 'hr']
+      spotlight-2--color:      ['Spotlight 2',   'color',    '#558855']
+      spotlight-2--position:   ['Position',      'position', [ 500, 700,  300], [-1000, 1000, 1]]
+      hr3:                     [ null, 'hr']
+      spotlight-3--color:      ['Spotlight 3',   'color',    '#555588']
+      spotlight-3--position:   ['Position',      'position', [   0,-700, -300], [-1000, 1000, 1]]
+
+  help:
+    title:               Help Popup
+    controls: 
+      help--label:                    [Help,     header,     fa-question]
+      container:                      [null,     container]
+

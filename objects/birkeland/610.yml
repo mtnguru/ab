@@ -1,0 +1,51 @@
+name: Arrows 1
+object:
+  rotation: {z: 90}
+cylinders:
+  defaults:
+    radius:  120
+    length: 1800
+    color: 0xff00ff
+    opacity: .15
+    chargeMarker: particles
+    markerSize: 3
+  Cylinder1:
+    radius:   25
+    color:  0x00ffff
+    numArrows: 20
+    numArrowPaths: 4
+    rotateInitial: 0
+    animationRotate: 0
+    animationDistance: 4
+  Cylinder3:
+    radius:  105
+    color:  0xff00ff
+    numArrows: 16
+    numArrowPaths: 10
+    rotateInitial: -10
+    animationRotate: 2
+    animationDistance: 0
+  Cylinder5:
+    radius:  185
+    color:  0x66ff66
+    numArrows: 12
+    numArrowPaths: 16
+    rotateInitial: 10
+    animationRotate: 0
+    animationDistance: -4
+  Cylinder7:
+    radius:  265
+    color:  0xffff00
+    numArrows: 8
+    numArrowPaths: 22
+    rotateInitial: 20
+    animationRotate: -2
+    animationDistance: 0
+  Cylinder9:
+    radius:  345
+    color:  0x6666ff
+    numArrows: 4
+    numArrowPaths: 28
+    rotateInitial: -10
+    animationRotate: 0
+    animationDistance: 4

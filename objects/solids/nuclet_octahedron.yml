@@ -1,0 +1,41 @@
+name: Octahedron
+geoGroups:
+  protons:
+    rotation:
+      y: 90
+    components:
+      framework:
+        shape: octahedron
+        particleids: proton
+        scale: 1.38
+        protons:
+          0:
+            pairs: default
+          1:
+            pairs: default
+          2:
+            pairs: default
+          3:
+            pairs: default
+          4:
+            pairs: default
+          5:
+            pairs: default
+  octa:
+    rotation:
+      y: 90
+    components:
+      solid:
+        shape: octahedron
+        scale: 1.20
+        wireframe: true
+        faces: true
+      vertexids:
+        shape: octahedron
+        scale: 1.55
+        vertexids: true
+      faceids:
+        shape: octahedron
+        scale: 1.3
+        faceids: true
+

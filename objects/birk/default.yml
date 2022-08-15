@@ -1,0 +1,64 @@
+name: Default
+object:
+  rotation: {z: 90}
+cylinders:
+  defaults:
+    radius:  120
+    length: 1800
+    color: 0xff00ff
+    opacity: .15
+    chargeSize: 3
+  Cylinder1:
+    radius:   25
+    color:  0xcccccc
+    numArrows: 80
+    numArrowPaths: 10
+    initialRotate: 0
+  Cylinder2:
+    radius:   65
+    color:  0x00cccc
+    numArrows: 70
+    numArrowPaths: 12
+    initialRotate: 10
+  Cylinder3:
+    radius:  105
+    color:  0x0000ff
+    numArrows: 60
+    numArrowPaths: 14
+    initialRotate: -10
+  Cylinder4:
+    radius:  145
+    color:  0xcc00cc
+    numArrows: 50
+    numArrowPaths: 16
+    initialRotate: -15
+  Cylinder5:
+    radius:  185
+    color:  0xff0000
+    numArrows: 40
+    numArrowPaths: 18
+    initialRotate: 10
+  Cylinder6:
+    radius:  225
+    color:  0xff7c00
+    numArrows: 30
+    numArrowPaths: 20
+    initialRotate: -5
+  Cylinder7:
+    radius:  265
+    color:  0xcccc00
+    numArrows: 20
+    numArrowPaths: 22
+    initialRotate: 20
+  Cylinder8:
+    radius:  305
+    color:  0x00ff00
+    numArrows: 10
+    numArrowPaths: 24
+    initialRotate: -5
+  Cylinder9:
+    radius:  345
+    color:  0x0000ff
+    numArrows: 5
+    numArrowPaths: 26
+    initialRotate: -10

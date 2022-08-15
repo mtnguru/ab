@@ -1,0 +1,49 @@
+name: Beryllium
+weight: 3
+boundingSphere: true
+geoGroups:
+  protons:
+#   rotation:
+#     y: 90
+    components:
+      framework:
+        scale: 1
+        shape: beryllium
+        particleids: proton
+        nelectrons: true
+        protons:
+          P1:
+            pairs: grow
+          P3:
+            pairs: grow
+          P4:
+            pairs: valence
+          P5:
+            pairs: valence
+          P6:
+            pairs: valence
+          P7:
+            pairs: valence
+          P8:
+            pairs: neutral
+          P9:
+            pairs: polar
+          P10:
+            pairs: polar
+          P11:
+            pairs: polar
+
+        neutrons:
+          U00: [[P1, P4, P9, -1], [P1, P7, P9]]
+          U01: [[P3, P5, P9], [P3, P6, P9, -1]]
+          U02: [[P6, P7, P9, -1]]
+          U03: [[P4, P5, P9, -1]]
+
+  beryllium:
+    components:
+      solid:
+        volumeNuclet: true
+        shape: beryllium
+        scale: 1
+        wireframe: true
+

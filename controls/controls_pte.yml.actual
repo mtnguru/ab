@@ -1,0 +1,67 @@
+name: PTable
+
+sidebar:
+  top:
+    buttons:      {show: true}
+#   sceneName:    {show: true}
+  center:
+    pte-mode:     {show: true}
+#   snapshot:
+
+blocks:
+
+  sceneName:
+    title: Scene Name
+    controls:
+      scene--name:                ['',              container]
+
+  buttons:
+    controls:
+      toggle--pte-mode:           ['PTE Style',         'button',      {font-awesome: fa-paint-brush,  data-destination: sidebar, data-blockid: blocks--pte-mode}]
+      viewer--fullScreen:         ['Full screen',      'toggle',      {font-awesome: fa-arrows-alt}]
+      snapshot--shutter:          ['Take Snapshot',    'button',      {font-awesome: fa-camera,         sound-file: snapshot.wav}]
+      theme--pteReset:            ['Reset Camera',     'button',      {font-awesome: fa-video}]
+#     atomizer--help:             ['Help',             'popup-node',  {font-awesome: fa-question,       data-destination: sidebar, data-blockid: blocks--help, data-nid: 335,    data-viewmode: full}]
+
+
+  pte-mode:
+    title:               PTE Style
+    controls:
+
+      pte-mode--header:           ['PTE Style',     header, fa-paint-brush]
+
+      producer--layout:
+        - Table Layout
+        - radios
+        - pte
+        -
+          pte: Conventional
+          sam: SAM
+
+      producer--cell:
+        - 'Cell Content'
+        - checkboxes
+        -
+          symbol-large:        [Symbol - large,          false]
+          symbol:              [Symbol,                  true]
+          name:                [Element name,            true]
+          atomic-number:       [Atomic number,           true]
+          valence-primary-lg:  [Ox. state - primary lg,  false]
+          valence-primary:     [Ox. state - primary,     true]
+          valence:             [Ox. state,               false]
+          image-primary:       [Image - primary,         true]
+#         image-protons:       [Image - protons,         false]
+#         image-structure:     [Image - structure,       false]
+#         image-electrons:     [Image - electrons,       false]
+          2d-diagram:          [2D Diagram,             false]
+
+  pte-content:
+    title:               Cell Content
+    controls:
+
+  help:
+    title:               Help Popup
+    controls:
+      help--label:                    [Help,     header,     fa-question]
+      container:                      [null,     container]
+

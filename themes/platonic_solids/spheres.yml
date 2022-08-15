@@ -1,0 +1,331 @@
+name: 'Colored Spheres'
+description: 'Color the spheres using different methods'
+filepath: config/themes/platonic_solids/Spheres.yml
+settings:
+  ambient--color:
+    setting: '#777777'
+    type: color
+  animation--speed:
+    setting: 3
+    type: range
+  camera--perspective:
+    setting: 25
+    type: range
+  camera--position--x:
+    setting: 0
+    type: position
+  camera--position--y:
+    setting: 1400
+    type: position
+  camera--position--z:
+    setting: -1000
+    type: position
+  dodeca--rotation--x:
+    setting: 0
+    type: rotation
+  dodeca--rotation--y:
+    setting: 0
+    type: rotation
+  dodeca--rotation--z:
+    setting: 0
+    type: rotation
+  dodeca--scale:
+    setting: 1
+    type: range
+  dodecaFaceid--opacity:
+    setting: 0
+    type: range
+  dodecaFaceids--scale:
+    setting: 1
+    type: range
+  dodecaFaces--color:
+    setting: '#000077'
+    type: color
+  dodecaFaces--opacity:
+    setting: '0.7'
+    type: range
+  dodecaVertexid--opacity:
+    setting: 0
+    type: range
+  dodecaVertexids--scale:
+    setting: 1
+    type: range
+  dodecaWireframe--color:
+    setting: '#0088ff'
+    type: color
+  dodecaWireframe--linewidth:
+    setting: 3
+    type: range
+  dodecaWireframe--opacity:
+    setting: 1
+    type: range
+  electron--radius:
+    type: range
+    setting: 5
+  hexa--rotation--x:
+    setting: 0
+    type: rotation
+  hexa--rotation--y:
+    setting: 0
+    type: rotation
+  hexa--rotation--z:
+    setting: 0
+    type: rotation
+  hexa--scale:
+    setting: 1
+    type: range
+  hexaFaceid--opacity:
+    setting: 0
+    type: range
+  hexaFaceids--scale:
+    setting: 1
+    type: range
+  hexaFaces--color:
+    setting: '#aa00aa'
+    type: color
+  hexaFaces--opacity:
+    setting: '0.7'
+    type: range
+  hexaVertexid--opacity:
+    setting: 0
+    type: range
+  hexaVertexids--scale:
+    setting: 1
+    type: range
+  hexaWireframe--color:
+    setting: '#ff00ff'
+    type: color
+  hexaWireframe--linewidth:
+    setting: 4
+    type: range
+  hexaWireframe--opacity:
+    setting: 1
+    type: range
+  icosa--rotation--x:
+    setting: 0
+    type: rotation
+  icosa--rotation--y:
+    setting: 0
+    type: rotation
+  icosa--rotation--z:
+    setting: 0
+    type: rotation
+  icosa--scale:
+    setting: 1
+    type: range
+  icosaFaceid--opacity:
+    setting: 0
+    type: range
+  icosaFaceids--scale:
+    setting: 1
+    type: range
+  icosaFaces--color:
+    setting: '#770000'
+    type: color
+  icosaFaces--opacity:
+    setting: '0.7'
+    type: range
+  icosaVertexid--opacity:
+    setting: 0
+    type: range
+  icosaVertexids--scale:
+    setting: 1
+    type: range
+  icosaWireframe--color:
+    setting: '#ff0000'
+    type: color
+  icosaWireframe--linewidth:
+    setting: 3
+    type: range
+  icosaWireframe--opacity:
+    setting: 1
+    type: range
+  octa--rotation--x:
+    setting: 0
+    type: rotation
+  octa--rotation--y:
+    setting: 0
+    type: rotation
+  octa--rotation--z:
+    setting: 0
+    type: rotation
+  octa--scale:
+    setting: 1
+    type: range
+  octaFaceid--opacity:
+    setting: 0
+    type: range
+  octaFaceids--scale:
+    setting: 1
+    type: range
+  octaFaces--color:
+    setting: '#d5d50f'
+    type: color
+  octaFaces--opacity:
+    setting: '0.56'
+    type: range
+  octaVertexid--opacity:
+    setting: 0
+    type: range
+  octaVertexids--scale:
+    setting: 1
+    type: range
+  octaWireframe--color:
+    setting: '#ffff00'
+    type: color
+  octaWireframe--linewidth:
+    setting: 4
+    type: range
+  octaWireframe--opacity:
+    setting: 1
+    type: range
+  plane--color:
+    setting: '#160032'
+    type: color
+  plane--depth:
+    setting: 1500
+    type: range
+  plane--opacity:
+    setting: 1
+    type: range
+  plane--position--x:
+    setting: 0
+    type: position
+  plane--position--y:
+    setting: -200
+    type: position
+  plane--position--z:
+    setting: 0
+    type: position
+  plane--rotation--x:
+    setting: 0
+    type: rotation
+  plane--rotation--y:
+    setting: -180
+    type: rotation
+  plane--rotation--z:
+    setting: 1
+    type: rotation
+  plane--width:
+    setting: 1500
+    type: range
+  proton--color-style:
+    setting: grey
+    type: radios
+  proton--opacity:
+    setting: '1'
+    type: range
+  proton--radius:
+    type: range
+    setting: 50
+  proton--scale:
+    setting: 1
+    type: range
+  proton-default--color:
+    setting: '#919191'
+    type: color
+  proton-ghost--color:
+    setting: '#aa55aa'
+    type: color
+  proton-grow--color:
+    setting: '#559999'
+    type: color
+  proton-neutral--color:
+    setting: '#995555'
+    type: color
+  proton-polar--color:
+    setting: '#999955'
+    type: color
+  proton-valence--color:
+    setting: '#995599'
+    type: color
+  protonVertexid--color:
+    setting: '#ff00ff'
+    type: color
+  protonVertexid--opacity:
+    setting: '0'
+    type: range
+  protonVertexid--scale:
+    setting: 1
+    type: range
+  protons--scale:
+    setting: 1
+    type: range
+  renderer--color:
+    setting: '#000000'
+    type: color
+  spotlight-1--color:
+    setting: '#885555'
+    type: color
+  spotlight-1--position--x:
+    setting: -500
+    type: position
+  spotlight-1--position--y:
+    setting: 800
+    type: position
+  spotlight-1--position--z:
+    setting: -500
+    type: position
+  spotlight-2--color:
+    setting: '#558855'
+    type: color
+  spotlight-2--position--x:
+    setting: 800
+    type: position
+  spotlight-2--position--y:
+    setting: 800
+    type: position
+  spotlight-2--position--z:
+    setting: -200
+    type: position
+  spotlight-3--color:
+    setting: '#555588'
+    type: color
+  spotlight-3--position--x:
+    setting: -500
+    type: position
+  spotlight-3--position--y:
+    setting: 800
+    type: position
+  spotlight-3--position--z:
+    setting: -500
+    type: position
+  tetra--rotation--x:
+    setting: 0
+    type: rotation
+  tetra--rotation--y:
+    setting: 0
+    type: rotation
+  tetra--rotation--z:
+    setting: 0
+    type: rotation
+  tetra--scale:
+    setting: 1
+    type: range
+  tetraFaceid--opacity:
+    setting: 0
+    type: range
+  tetraFaceids--scale:
+    setting: 1
+    type: range
+  tetraFaces--color:
+    setting: '#64b564'
+    type: color
+  tetraFaces--opacity:
+    setting: '0.7'
+    type: range
+  tetraVertexid--opacity:
+    setting: '0'
+    type: range
+  tetraVertexids--scale:
+    setting: 1
+    type: range
+  tetraWireframe--color:
+    setting: '#1aff00'
+    type: color
+  tetraWireframe--linewidth:
+    setting: 4
+    type: range
+  tetraWireframe--opacity:
+    setting: 1
+    type: range

@@ -1,0 +1,18 @@
+name: Birkeland Tease
+defaultView: default
+themeDirectory: config/themes/birkeland
+animateDirectory: config/animations/birkeland
+controlFile: controls_birkeland_tease.yml
+atomizerId: birkeland
+classes: [az-overlay-controls]
+libraries: [atomizer/atomizer-obfuscator, atomizer/atomizer-birkeland-obfuscator]
+librariesDev: [atomizer/atomizer-base, atomizer/atomizer-birkeland]
+canvasRatio: .40
+showBessel: false
+renderer: webgl
+startAnimation: true
+views:
+  default:
+    name: Birkeland Current Tease
+    producer: prod_birkeland
+    defaultTheme: tease

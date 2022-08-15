@@ -1,0 +1,9 @@
+name:  Backbone
+defaultView: backbone
+themeDirectory: config/themes/backbone
+views:
+  backbone:
+    name: Backbone Builder
+    producer: backbone_builder
+    defaultAtom: half_backbone.yml
+    defaultTheme: backbone

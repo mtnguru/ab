@@ -1,0 +1,232 @@
+name: Protons
+type: birkeland
+description: 'Highlight Protons'
+filepath: config/themes/birkeland/default.yml
+settings:
+  ambient--color:
+    setting: '#c9c9c9'
+    type: color
+  animation--speed:
+    setting: '20'
+    type: range
+  arrow--color:
+    setting: '#ffff33'
+    type: color
+  arrow--opacity:
+    setting: 1
+    type: range
+  arrow--scale:
+    setting: 1
+    type: range
+  bessel--dialog:
+    setting:
+      font-awesome: fa-bar-chart
+      blockid: blocks--graph
+      data-container: .az-canvas-wrapper
+    type: toggleDialog
+  camera--focus--x:
+    setting: '-200'
+    type: position
+  camera--focus--y:
+    setting: 150
+    type: position
+  camera--focus--z:
+    setting: 0
+    type: position
+  camera--perspective:
+    setting: 30
+    type: range
+  camera--position--x:
+    setting: '80'
+    type: position
+  camera--position--y:
+    setting: 1200
+    type: position
+  camera--position--z:
+    setting: -2500
+    type: position
+  cylinders--extrude:
+    setting: '100'
+    type: range
+  cylinders-Cylinder01--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder02--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder03--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder04--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder05--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder06--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder07--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder08--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder09--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder10--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder11--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder12--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-Cylinder13--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: range
+  cylinders-master--opacity:
+    setting: '0.05'
+    mode: transparent
+    type: opacityMaster
+  particles-Cylinder01--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder02--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder03--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder04--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder05--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder06--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder07--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder08--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder09--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder10--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: range
+  particles-Cylinder11--opacity:
+    setting: '0.99'
+    type: opacity
+  particles-Cylinder12--opacity:
+    setting: '0.99'
+    type: opacity
+  particles-Cylinder13--opacity:
+    setting: '0.99'
+    type: opacity
+  particles-master--opacity:
+    setting: '0.99'
+    mode: transparent
+    type: opacityMaster
+  plane--color:
+    setting: '#1d1324'
+    type: color
+  plane--depth:
+    setting: 1200
+    type: range
+  plane--opacity:
+    setting: 1
+    type: range
+  plane--position--x:
+    setting: 0
+    type: position
+  plane--position--y:
+    setting: -400
+    type: position
+  plane--position--z:
+    setting: 0
+    type: position
+  plane--rotation--x:
+    setting: 0
+    type: rotation
+  plane--rotation--y:
+    setting: -180
+    type: rotation
+  plane--rotation--z:
+    setting: 1
+    type: rotation
+  plane--width:
+    setting: 1800
+    type: range
+  renderer--color:
+    setting: '#0d1732'
+    type: color
+  spotlight-1--color:
+    setting: '#978d97'
+    type: color
+  spotlight-1--position--x:
+    setting: -500
+    type: position
+  spotlight-1--position--y:
+    setting: 700
+    type: position
+  spotlight-1--position--z:
+    setting: -300
+    type: position
+  spotlight-2--color:
+    setting: '#caf6f6'
+    type: color
+  spotlight-2--position--x:
+    setting: 500
+    type: position
+  spotlight-2--position--y:
+    setting: 700
+    type: position
+  spotlight-2--position--z:
+    setting: 300
+    type: position
+  spotlight-3--color:
+    setting: '#c5c5a9'
+    type: color
+  spotlight-3--position--x:
+    setting: 0
+    type: position
+  spotlight-3--position--y:
+    setting: -700
+    type: position
+  spotlight-3--position--z:
+    setting: -300
+    type: position
+  viewer--fullScreen:
+    setting:
+      font-awesome: fa-arrows-alt
+    type: toggle

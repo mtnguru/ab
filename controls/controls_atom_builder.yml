@@ -1,0 +1,651 @@
+name: Atom Builder
+
+sidebar:
+  top:
+    buttons:     {show: true}
+    sceneName:   {show: true}
+  center:
+    properties:
+#   properties:  {show: true}
+    information:
+    mouse-mode:
+#   mouse-mode:  {show: true}
+    snapshot:
+#   snapshot:    {show: true}
+    nuclet-list:
+#   nuclet-list: {show: true}
+    nuclet:
+    animations:
+#   animations:  {show: true}
+#   theme:
+    theme:       {show: true}
+
+blocks:
+
+  sceneName:
+    title: Atom Name
+    controls:
+      scene--name:                ['',              container]
+#     atom--select:               ['Select Atom',      'text-button', {font-awesome: fa-dot-circle-o, label: 'Select'}]
+
+  buttons:
+    controls:
+      toggle--properties:         ['Atom Properties',  'button',      {font-awesome: fa-list,           data-destination: sidebar, data-blockid: blocks--properties}]
+      toggle--information:        ['Atom Description', 'button',      {font-awesome: fa-info-circle,    data-destination: sidebar, data-blockid: blocks--information}]
+      toggle--nuclet-list:        ['Edit Nuclet',      'button',      {font-awesome: fa-futbol,         data-destination: sidebar, data-blockid: blocks--nuclet-list}]
+      toggle--volume-info:        ['Volume',           'button',      {font-awesome: fa-atom,           data-destination: sidebar, data-blockid: blocks--volume-info}]
+      toggle--mouse-mode:         ['Mouse',            'button',      {font-awesome: fa-mouse-pointer,  data-destination: sidebar, data-blockid: blocks--mouse-mode}]
+      toggle--snapshot:           ['Take snapshot',    'button',      {font-awesome: fa-camera,         data-destination: sidebar, data-blockid: blocks--snapshot}]
+#     snapshot--shutter:          ['Take snapshot',    'button',      {font-awesome: fa-camera,         sound-file: snapshot.wav}]
+      toggle--theme:              ['Edit Theme',       'button',      {font-awesome: fa-paint-brush,    data-destination: sidebar, data-blockid: blocks--theme}]
+      toggle--animations:         ['Animations',       'button',      {font-awesome: fa-caret-right,    data-destination: sidebar, data-blockid: blocks--animations}]
+      viewer--fullScreen:         ['Full screen',      'toggle',      {font-awesome: fa-arrows-alt}]
+      theme--cameraReset:         ['Reset Camera',     'button',      {font-awesome: fa-video}]
+      atomizer--help:             ['Help',             'popup-node',  {font-awesome: fa-question,       data-destination: sidebar, data-blockid: blocks--help, data-nid: 335,    data-viewmode: full}]
+
+  properties:
+    title: Properties
+    controls:
+      atom--label:                [ 'Atom Properties',    header,    fa-list]
+      atom--properties:           [ '',              container]
+
+  information:
+    title:               Atom Information
+    controls:
+      atom--label:                [ 'Atom Description',   header,    fa-info-circle]
+      atom--information:          [ null,            container]
+
+  volume-info:
+    title:               Atom Information
+    controls:
+      volume--label:              [ 'Volume',             header,    fa-atom]
+      volume--information:        [ null,            container]
+
+  mouse-mode:
+    title:               Mouse
+    controls:
+      mouse-mode--label:          ['Mouse',          header,   fa-mouse-pointer]
+      mouse:
+        - Mode
+        - radios
+        - orbitals
+        -
+          none: None
+          protonsColor: Color Protons
+          protonsAdd: Add/Delete Protons
+          electronsAdd: Add/Delete Electrons
+          inner-faces: Assign Inner Faces
+          outer-faces: Assign Outer Faces
+          orbitals: Assign Orbitals
+      proton--colors:
+        - Proton Color
+        - radios
+        - original
+        -
+          original: '<div id="proton-original-color" class="proton-color">&nbsp;</div> Original'
+          proton:   '<div id="proton-proton-color"   class="proton-color">&nbsp;</div> Proton'
+          neutron:  '<div id="proton-neutron-color"  class="proton-color">&nbsp;</div> Neutron'
+          neutral:  '<div id="proton-neutral-color"  class="proton-color">&nbsp;</div> Neutral'
+
+  animations:
+    title:               Animations
+    controls:
+      animation--label:           ['Animations',       'header',   fa-caret-right]
+      animation--selectyml:       [ null, 'selectyml', 'calculate_sam_lines.yml', 'animation', 'config/animations/atom_builder', 'atomizer.ajax_yml_load']
+      animation--wrapper:
+        id: 'animation-wrapper'
+        controls:
+          animation--reverse:         ['Reverse',          'button',  {font-awesome: fa-caret-left}]
+          animation--play:            ['Play',             'button',  {font-awesome: fa-caret-right}]
+          animation--pause:           ['Pause',            'button',  {font-awesome: fa-pause}]
+#         animation--stop:            ['Stop',             'button',  {font-awesome: fa-stop,  class: az-selected}]
+#         animation--step-backward:   ['Previous',         'button',  {font-awesome: fa-step-backward}]
+#         animation--step-forward:    ['Next',             'button',  {font-awesome: fa-step-forward}]
+      animation--speed:               ['Speed',            'range',   3,  [0, 100, 1]]
+
+  nuclet-list:
+    title:               Edit Nuclets
+    controls:
+      nuclet-label:               ['Nuclets',             'header',  fa-futbol]
+      atom--num-protons:          ['Protons',             'text', '', 6 ]
+      atom--num-electrons:        ['Electrons',           'text', '', 6 ]
+      atom--sam-lines:            ['SAM Lines',           'text', '', 6 ]
+      atom--be-sam-lines:         ['BE SAM Lines',        'text', '', 6 ]
+      atom--be-actual:            ['BE Actual',           'text', '', 6 ]
+      atom--be-sam-lines-perc:    ['BE Difference',       'text', '', 6 ]
+      hr1:                        [ null,                 'hr']
+      atom--sam-lines-button:     ['Show SAM Lines', 'toggle',  {font-awesome: fa-bolt}]
+      nuclet--list:               [ null,                 'container']
+      hr2:                        [ null,                 'hr']
+      atom--save:                 ['Save Atom',           'link',    'modal',   'entity.node.edit_form', {node: 119}]
+      atom--saveNew:              ['Create New Atom',     'link',    'modal',   'node.add',    {node_type: atom}]
+
+# binding:
+#   title:               Binding Energy Nuclets
+#   controls:
+#     binding-label:              ['Binding Energies',          'header',  fa-bolt]
+#     binding--select:            ['select-node']
+
+  nuclet-form:
+    title:               Nuclet Form
+    controls:
+      nuclet--state:
+        - State
+        - radios
+        - initial
+        -
+          lithium: Lithium 7
+          beryllium: Beryllium 8
+          boron10: Boron 10
+          boron11: Boron 11
+          carbon: Carbon 12
+          initial: Initial Backbone
+          final: Final Backbone
+      nuclet--attachAngle:        ['Angle',            'range',   1,  [1, 5, 1]]
+      nuclet--fizzer:             ['Fizzer',           'range',   1,  [1, 5, .2]]
+      nuclet--grow-label:         ['Grow Points',      'label']
+      nuclet--grow-0:             ['&nbsp;&nbsp;0',    'html',    '--']
+      nuclet--grow-1:             ['&nbsp;&nbsp;1',    'html',    '--']
+      nuclet--delete:             ['Delete',           'button']
+
+  snapshot:
+    title:               Snapshot,    fa-camera
+    controls:
+      snapshot--label:       ['Snapshot',      header,    fa-camera]
+      snapshot--name:        ['Name',          textfield, '', 20]
+      snapshot--resolution:  ['Resolution',    header]
+      snapshot--width:       ['Width',         range, 1000, [0, 5000, 10]]
+      snapshot--height:      ['Height',        range, 1000, [0, 5000, 10]]
+      snapshot--save:        ['Take Snapshot', button,   {sound-file: snapshot.wav}]
+
+  theme:
+    title:               Theme,       fa-paint-brush
+    controls:
+      theme--label:          ['Theme',       header,    fa-paint-brush]
+      theme--selectBlock:
+        -
+        - selectblock
+        - selectTheme
+#       - icosaOut
+        -
+          - selectTheme
+          - proton
+#         - electronsTorus
+          - electronsSpherical
+          - electronOrbitals
+          - labels
+          - valence
+          - volume
+          - axes
+          - lithium
+          - beryllium
+          - boron10
+          - boron11
+          - carbon
+          - icosa
+          - icosaOut
+          - dodeca
+          - octahedron
+          - tetrahedron
+          - scene
+          - lighting
+
+  selectTheme:
+    title:               Select Theme
+    controls:
+      theme--select:
+        - 'Themes'
+        - radios
+#       - electrons-spherical
+        - electron-orbitals
+        -
+          basic:                Basic
+          protons:              Protons
+          structure:            Structure
+          electrons:            Electrons Small
+#         electrons-torus:      Electrons Torus
+          electrons-spherical:  Electrons Spherical
+          electrons-orbitals:   Electrons w/Orbitals
+          electron-orbitals:    Electron Orbitals
+          electrons-outer:      Outer Electron Shells
+          electrons-andreas1:   Andreas 1
+          electrons-andreas2:   Andreas 2
+          electrons-andreas3:   Andreas 3
+        - {directory: atom_viewer }
+
+      theme--reset:               ['Reset Theme',        'button']
+      theme--saveButton:          ['Save Theme Changes', 'button']
+      theme--enableNewTheme:      ['Create new theme',   'button']
+      theme--message:             [ null,                'container']
+
+  new-theme:
+    title:               Create new theme
+    controls:
+      theme--saveNew:             ['Create New Theme',   'header']
+      theme--saveNewName:         ['Name',               'textfield', '', 20]
+#     theme--saveNewButton:       ['Save New',           'button',    'config/themes/atom_viewer']
+      theme--saveNewButton:       ['Save New',           'button']
+      theme--saveNewMessage:      [ null,                'container']
+
+
+  proton:
+    title:               Protons
+    controls:
+      proton--opacity:            ['Opacity',          'range',     1, [0, 1, .01]]
+      proton--scale:              ['Scale',            'range',     1, [0, 2, .01]]
+      proton--nuclet-colors:      ['Display Nuclet Colors', 'checkbox',  true]
+      proton--proton-colors:      ['Display Proton Colors', 'checkbox',  true]
+      hr1:                        [ null,              'hr']
+      proton--nuclet-type-label:  ['Nuclet Colors',    'header']
+      proton-lithium--color:      ['Lithium',          'color',    '#777777']
+      proton-beryllium--color:    ['Beryllium',        'color',    '#559999']
+      proton-boron10--color:      ['Boron 10',         'color',    '#76763b']
+      proton-boron11--color:      ['Boron 11',         'color',    '#76763b']
+      proton-carbon--color:       ['Carbon',           'color',    '#999955']
+      proton-initial--color:      ['Backbone initial', 'color',    '#999955']
+      proton-capped--color:       ['Backbone capped',  'color',    '#666666']
+      proton-final--color:        ['Backbone final',   'color',    '#888888']
+
+#     proton--proton-type-label:  ['Proton Type',      'header']
+      proton-default--color:      ['Default',          'color',    '#559999']
+      proton-neutron--color:      ['Neutron',          'color',    '#995555']
+      proton-proton--color:       ['Proton',           'color',    '#995555']
+      proton-neutral--color:      ['Neutral',          'color',    '#995555']
+      proton-ghost--color:        ['Ghost',            'color',    '#aa55aa']
+#     proton--color-style:
+#       - 'Apply color style:'
+#       - radios
+#       - nuclet
+#       -
+#         nuclet: Nuclet type
+#         proton: Proton type
+
+      hr2:                        [ null,           'hr']
+      protonVertexid--color:      ['Proton IDs',    'color',    '#ff00ff']
+      protonVertexid--opacity:    ['Opacity',       'range',    1, [0, 1, .01]]
+      protonVertexid--scale:      ['Scale',         'range',    1,  [0, 3, .01]]
+
+  electronsTorus:
+    title:               Electrons - Torus
+    controls:
+      electronTorus--label:        ['Torus',   header]
+      electronTorus--color:                       ['Color',          color,    '#22ffff']
+      electronTorus--opacity:                     ['Opacity',        range,     1, [0, 1, .01]]
+      electronTorus--diameter:                    ['Diameter',       range,     1, [0, 5, .01]]
+      electronTorus--scale:                       ['radius',         range,     1, [0, 10, .01]]
+
+      hr1:                         [ null,           'hr']
+      electronTorus-axes--label:   ['Axes',   header]
+      electronTorus-axes--color:                  ['Color',          color,     '#11cccc']
+      electronTorus-axes--opacity:                ['Opacity',        range,     1, [0, 1, .01]]
+      electronTorus-axes--scale:                  ['Scale',          range,     1, [0, 10, .01]]
+
+  electronsSpherical:
+    title:               Electrons - Spherical
+    controls:
+      electronSpherical-core--label:              ['Core',  header]
+      electronSpherical-core--color:              ['Color',          color,    '#ffff33']
+      electronSpherical-core--color-highlight:    ['Highlight',            'color',    '#9e30ff']
+      electronSpherical-core--opacity:            ['Opacity',        range,     1, [0, 1, .01]]
+      electronSpherical-core--scale:              ['Scale',          range,     1, [0, 5, .01]]
+
+      hr1:                         [ null,            hr]
+      electronSpherical-field--label:             ['Field', header]
+      electronSpherical-field--color:             ['Color',          color,    '#ffff33']
+      electronSpherical-field--color-highlight:   ['Highlight',           'color',    '#9e30ff']
+      electronSpherical-field--opacity:           ['Opacity',        range,     .3, [0, 1, .01]]
+      electronSpherical-field--scale:             ['Scale',          range,     1, [0, 3, .01]]
+
+  electronOrbitals:
+    title:               Electron Orbitals
+    controls:
+      electronSpherical-orbital--label:           ['Orbitals', header]
+      electronSpherical-orbital--color:           ['Color',          color,    '#ff6030']
+      electronSpherical-orbital--color-highlight: ['Highlight',         'color',    '#cc4020']
+      electronSpherical-orbital--opacity:         ['Opacity',        range,     .3, [0, 1, .01]]
+      electronSpherical-orbital--scale:           ['Scale',          range,     1,  [0, 5, .01]]
+      electronSpherical-orbital--volume:          ['Volume',         container]
+
+  electronsOrbitals:
+    title:               Electrons 2
+    controls:
+      electron2-core--label:       ['Electron Core',  header]
+      electron2-core--color:       ['Color',          color,    '#ffff33']
+      electron2-core--opacity:     ['Opacity',        range,     1, [0, 1, .01]]
+      electron2-core--scale:       ['Scale',          range,     1, [0, 2, .01]]
+
+      hr1:                        [ null,            hr]
+      electron2-field--label:      ['Electron Field', header]
+      electron2-field--color:      ['Color',          color,    '#ffff33']
+      electron2-field--opacity:    ['Opacity',        range,     .3, [0, 1, .01]]
+      electron2-field--scale:      ['Scale',          range,     1, [0, 2, .01]]
+
+  valence:
+    title:               Valence Rings
+    controls:
+      valence--opacity:           ['Opacity',       'range',     1, [0, 1, .01]]
+      valence--scale:             ['Scale',         'range',     1, [0, 3, .01]]
+      valence--diameter:          ['Diameter',      'range',     .12, [0, 10, .01]]
+
+      valence-active--color:      ['Active',        'color',    '#85223C']
+      valence-inactive--color:    ['Inactive',      'color',    '#666666']
+
+  labels:
+    title:               Labels
+    controls:
+      labels--label:               ['Labels',  header]
+      labels--enable:              ['Enable', 'checkbox', true]
+      labels--color:               ['Color',          color,    '#ffff33']
+      labels--fontsize:            ['Font Size',      range,     14,  [10, 70, 1]]
+
+  volume:
+    title:               Volume
+    controls:
+      atom-spherical--label:        [Atom - Spherical,        header]
+      atom-spherical--color:        [Color,              color,    '#ffff33']
+      atom-spherical--opacity:      [Opacity,            range,    0, [0, 1, .01]]
+#     atom-spherical--scale:        [Scale,              range,    5, [1, 10, .01]]
+      atom-spherical--volume:       ['Volume',           container]
+      atom-spherical--center:       ['Center',           container]
+
+#     atom-box--label:              [Atom Box,        header]
+#     atom-box--color:              [Color,              color,    '#ffff33']
+#     atom-box--opacity:            [Opacity,            range,    0, [0, 1, .01]]
+#     atom-box--scale:              [Scale,              range,    5, [1, 10, .01]]
+#     atom-box--volume:             ['Volume',           container]
+#     atom-box--center:             ['Center',           container]
+
+      nuclet-volume--label:         [Nuclet,        header]
+      nuclet-volume--color:         [Color,              color,    '#ffff33']
+      nuclet-volume--opacity:       [Opacity,            range,    0, [0, 1, .01]]
+      nuclet-volume--scale:         [Scale,              range,    3, [1, 8, .01]]
+      nuclet-volume--volume:        ['Volume',         container]
+      nuclet-volume--position:      ['Position',      'position', [0,   0,  0], [-200, +200, .1]]
+
+  axes:
+    title:               Axes
+    controls:
+      attachLines--label:         [Attach Axes,        header]
+      attachLines--color:         [Color,              color,    '#ffff33']
+      attachLines--opacity:       [Opacity,            range,    0, [0, 1, .01]]
+      attachLines--scale:         [Scale,              range,    3, [1, 3, .05]]
+      attachLines--linewidth:     [Linewidth,          range,    1, [0, 5, .1]]
+      hr1:                        [null,               hr]
+      nuclet--label:              [Nuclet,             header]
+      nucletAxes--opacity:        [Opacity,            range,    0, [0, 1, .01]]
+      nucletAxes--scale:          [Scale,              range,    4, [0, 6, .01]]
+      nucletAxes--linewidth:      [Linewidth,          range,    1, [0, 5, .1]]
+      hr2:                        [null,               hr]
+      nucletInnerAxes--label:     [Inner Nuclet Shell, header]
+      nucletInnerAxes--opacity:   [Opacity,            range,    0, [0, 1, .01]]
+      nucletInnerAxes--scale:     [Scale,              range,    3, [0, 6, .01]]
+      nucletInnerAxes--linewidth: [Linewidth,          range,    3, [0, 5, .1]]
+      hr3:                        [null,               hr]
+      nucletOuterAxes--label:     [Outer Nuclet Shell, header]
+      nucletOuterAxes--opacity:   [Opacity,            range,    0, [0, 1, .01]]
+      nucletOuterAxes--scale:     [Scale,              range,    2, [0, 6, .01]]
+      nucletOuterAxes--linewidth: [Linewidth,          range,    5, [0, 5, .1]]
+
+  icosa:
+    title:               Icosahedron - Inner
+    controls:
+      icosa--scale:               ['Scale',        'range',    1,  [0, 6, .01]]
+
+      hr1:                        [ null, 'hr']
+      icosaWireframe--color:      ['Wireframe',    'color',    '#ff33ff']
+      icosaWireframe--opacity:    ['Opacity',      'range',     1, [0, 1, .01]]
+      icosaWireframe--linewidth:  ['Linewidth',    'range',     1, [0, 5, .1]]
+
+#     icosaVertexid--label:       ['IDs',          'label']
+#     icosaVertexid--opacity:     ['Opacity',      'range',     0,  [0, 1, .01]]
+#     icosaVertexids--scale:      ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                        [ null, 'hr']
+      icosaFaces--color:          ['Faces',        'color',    '#88cccc']
+      icosaFaces--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+
+#     icosaFaceid--label:         ['IDs',          'label']
+#     icosaFaceid--opacity:       ['Opacity',      'range',     0,  [0, 1, .01]]
+#     icosaFaceids--scale:        ['Scale',        'range',     1,  [0, 3, .01]]
+
+#     hr4:                        [ null, 'hr']
+#     icosaAxes--color:           ['Axis',         'color',    '#ffbbcc']
+#     icosaAxes--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+#     icosaAxes--scale:           ['Scale',        'range',     2, [0, 5, .01]]
+#     icosaAxes--linewidth:       ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  icosaOut:
+    title:               Icosahedron - Outer
+    controls:
+      icosaOut--scale:              ['Scale',        'range',    1,  [0, 6, .01]]
+
+      hr1:                          [ null, 'hr']
+      icosaOutWireframe--label:     ['Wireframe',    'label']
+      icosaOutWireframe--color:     ['Color',        'color',    '#ff33ff']
+      icosaOutWireframe--opacity:   ['Opacity',      'range',     1, [0, 1, .01]]
+      icosaOutWireframe--linewidth: ['Linewidth',    'range',     3, [0, 5, .1]]
+
+#     icosaOutVertexid--label:      ['IDs',          'label']
+#     icosaOutVertexid--opacity:    ['Opacity',      'range',     0,  [0, 1, .01]]
+#     icosaOutVertexids--scale:     ['Scale',        'range',     1,  [0, 3, .01]]
+
+      hr2:                            [ null, 'hr']
+      icosaOutFaceid--label:          ['Default Faces',      'label']
+      icosaOutFaces--color:           ['Color',        'color',    '#ffaa22']
+      icosaOutFaces--opacity:         ['Opacity',      'range',     .2, [0, 1, .1]]
+
+      hr3:                            [ null, 'hr']
+      icosaOutFaceHoverid--label:     ['Hover Faces',   'label']
+      icosaOutFacesHover--color:      ['Color',      'color',    '#FFCCCC']
+      icosaOutFacesHover--opacity:    ['Opacity',    'range',     .6, [0, 1, .1]]
+
+      hr4:                            [ null, 'hr']
+      icosaOutFaceSelectedid--label:  ['Selected Faces',   'label']
+      icosaOutFacesSelected--color:   ['Color',      'color',    '#00FFFF']
+      icosaOutFacesSelected--opacity: ['Opacity',    'range',     .4, [0, 1, .1]]
+
+#     icosaOutFaceid--label:        ['IDs',          'label']
+#     icosaOutFaceid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
+#     icosaOutFaceids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+#     hr5:                          [ null, 'hr']
+#     icosaOutAxes--color:          ['Axis',         'color',    '#ffbbcc']
+#     icosaOutAxes--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+#     icosaOutAxes--scale:          ['Scale',        'range',     2, [0, 5, .01]]
+#     icosaOutAxes--linewidth:      ['Linewidth',    'range',     1, [0, 5, .1]]
+
+
+  lithium:
+    title:               Lithium
+    controls:
+      lithium--scale:               ['Scale',        'range',    1,  [0, 6, .01]]
+
+      hr1:                          [ null, 'hr']
+      lithiumWireframe--color:      ['Wireframe',    'color',    '#00ffff']
+      lithiumWireframe--opacity:    ['Opacity',      'range',     1, [0, 1, .01]]
+      lithiumWireframe--linewidth:  ['Linewidth',    'range',     1, [0, 5, .1]]
+
+#     hr2:                          [ null, 'hr']
+#     lithiumFaces--color:          ['Faces',        'color',    '#88cccc']
+#     lithiumFaces--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+
+  beryllium:
+    title:               Beryllium
+    controls:
+      beryllium--scale:             ['Scale',        'range',    1,  [0, 6, .01]]
+
+      hr1:                          [ null, 'hr']
+      berylliumWireframe--color:    ['Wireframe',    'color',    '#00ffff']
+      berylliumWireframe--opacity:  ['Opacity',      'range',     1, [0, 1, .01]]
+      berylliumWireframe--linewidth: ['Linewidth',    'range',     1, [0, 5, .1]]
+
+#     hr2:                          [ null, 'hr']
+#     berylliumFaces--color:        ['Faces',        'color',    '#88cccc']
+#     berylliumFaces--opacity:      ['Opacity',      'range',     0, [0, 1, .01]]
+
+  boron10:
+    title:               Boron 10
+    controls:
+      boron10--scale:               ['Scale',        'range',    1,  [0, 6, .01]]
+
+      hr1:                          [ null, 'hr']
+      boron10Wireframe--color:      ['Wireframe',    'color',    '#00ffff']
+      boron10Wireframe--opacity:    ['Opacity',      'range',     1, [0, 1, .01]]
+      boron10Wireframe--linewidth:  ['Linewidth',    'range',     1, [0, 5, .1]]
+
+#     hr2:                          [ null, 'hr']
+#     boron10Faces--color:          ['Faces',        'color',    '#88cccc']
+#     boron10Faces--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+
+  boron11:
+    title:               Boron 11
+    controls:
+      boron11--scale:               ['Scale',        'range',    1,  [0, 6, .01]]
+
+      hr1:                          [ null, 'hr']
+      boron11Wireframe--color:      ['Wireframe',    'color',    '#00ffff']
+      boron11Wireframe--opacity:    ['Opacity',      'range',     1, [0, 1, .01]]
+      boron11Wireframe--linewidth:  ['Linewidth',    'range',     1, [0, 5, .1]]
+
+#     hr2:                          [ null, 'hr']
+#     boron11Faces--color:          ['Faces',        'color',    '#88cccc']
+#     boron11Faces--opacity:        ['Opacity',      'range',     0, [0, 1, .01]]
+
+  carbon:
+    title:               Carbon
+    controls:
+      carbon--scale:                ['Scale',        'range',    1,  [0, 6, .01]]
+
+      hr1:                          [ null, 'hr']
+      carbonWireframe--color:       ['Wireframe',    'color',    '#00ffff']
+      carbonWireframe--opacity:     ['Opacity',      'range',     1, [0, 1, .01]]
+      carbonWireframe--linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr2:                          [ null, 'hr']
+      carbonFaces--color:           ['Faces',        'color',    '#88cccc']
+      carbonFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+
+  dodeca:
+    title:               Dodecahedron
+    controls:
+      dodeca--scale:                ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr1:                          [ null, 'hr']
+      dodecaWireframe--color:       ['Wireframe',    'color',    '#00ffff']
+      dodecaWireframe--opacity:     ['Opacity',      'range',     1, [0, 1, .01]]
+      dodecaWireframe--linewidth:   ['Linewidth',    'range',     1, [0, 5, .1]]
+
+#     dodecaVertexid--label:        ['IDs',          'label']
+#     dodecaVertexid--opacity:      ['Opacity',      'range',     0,  [0, 1, .01]]
+#     dodecaVertexids--scale:       ['Scale',        'range',     1,  [0, 3, .01]]
+
+#     hr2:                          [ null, 'hr']
+#     dodecaFaces--color:           ['Faces',        'color',    '#88cccc']
+#     dodecaFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+
+#     dodecaFaceid--label:          ['IDs',          'label']
+#     dodecaFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+#     dodecaFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+
+#     hr4:                          [ null, 'hr']
+#     dodecaAxes--color:            ['Axis',         'color',    '#aabb99']
+#     dodecaAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+#     dodecaAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
+#     dodecaAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  octahedron:
+    title:               Octahedron
+    controls:
+      octa--scale:                 ['Scale',        'range',    1,  [0, 3, .01]]
+
+      hr1:                         [ null, 'hr']
+      octaWireframe--color:        ['Wireframe',    'color',    '#ff00ff']
+      octaWireframe--opacity:      ['Opacity',      'range',     1, [0, 1, .01]]
+      octaWireframe--linewidth:    ['Linewidth',    'range',     1, [0, 5, .1]]
+
+#     octaVertexid--label:         ['IDs',          'label']
+#     octaVertexid--opacity:       ['Opacity',      'range',    0,  [0, 1, .01]]
+#     octaVertexids--scale:        ['Scale',        'range',    1,  [0, 3, .01]]
+
+#     hr3:                         [ null, 'hr']
+#     octaAxes--color:             ['Axis',         'color',    '#ffbbcc']
+#     octaAxes--opacity:           ['Opacity',      'range',     0, [0, 1, .01]]
+#     octaAxes--scale:             ['Scale',        'range',     2, [0, 5, .01]]
+#     octaAxes--linewidth:         ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      hr4:                         [null, 'hr']
+      octa--rotation:              ['Rotation',      'rotation', [0, 0, 0], [-360, 360, 1]]
+
+  tetrahedron:
+    title:               Tetrahedron
+    controls:
+      tetra--label:                   ['Backbone',     'header']
+      tetra--scale:                   ['Scale',        'range',    1,  [0, 3, .01]]
+
+      tetraWireframe--color:          ['Wireframe',    'color',    '#55ff55']
+      tetraWireframe--opacity:        ['Opacity',      'range',     1, [0, 1, .01]]
+      tetraWireframe--linewidth:      ['Linewidth',    'range',     1, [0, 5, .1]]
+
+      tetraFaces--color:              ['Faces',        'color',    '#0f4f00']
+      tetraFaces--opacity:            ['Opacity',      'range',     1, [0, 1, .01]]
+
+      hr1:                            [ null, 'hr']
+      tetraLines--label:              ['Neutrons',     'header']
+      tetraLinesWireframe--scale:     ['Scale',        'range',    1,  [0, 3, .01]]
+      tetraLinesWireframe--color:     ['Wireframe',    'color',    '#55ff55']
+      tetraLinesWireframe--opacity:   ['Opacity',      'range',     1, [0, 1, .01]]
+      tetraLinesWireframe--linewidth: ['Linewidth',    'range',     1, [0, 5, .1]]
+
+
+#     hr3:                         [ null, 'hr']
+#     tetraFaces--color:           ['Faces',        'color',    '#88cccc']
+#     tetraFaces--opacity:         ['Opacity',      'range',     0, [0, 1, .01]]
+
+#     tetraFaceid--label:          ['IDs',          'label']
+#     tetraFaceid--opacity:        ['Opacity',      'range',     0,  [0, 1, .01]]
+#     tetraFaceids--scale:         ['Scale',        'range',     1,  [0, 3, .01]]
+
+#     hr4:                         [ null, 'hr']
+#     tetraAxes--color:            ['Axis',         'color',    '#ffbbcc']
+#     tetraAxes--opacity:          ['Opacity',      'range',     0, [0, 1, .01]]
+#     tetraAxes--scale:            ['Scale',        'range',     2, [0, 5, .01]]
+#     tetraAxes--linewidth:        ['Linewidth',    'range',     1, [0, 5, .1]]
+
+  scene:
+    title:               Scene
+    controls:
+      header--camera:          ['Camera',        'header']
+      camera--perspective:     ['Perspective',   'range',    25, [1, 90, 1]]
+      camera--position:        ['Position',      'position', [0, 700, -1500], [-3000, 3000, 1]]
+
+      hr1:                     [ null, 'hr']
+      renderer--color:         ['Background',    'color',    '#fcf3ff']
+
+      hr2:                     [ null, 'hr']
+      plane--color:            ['Plane',         'color',    '#cccccc']
+      plane--opacity:          ['Opacity',       'range',    1, [0, 1, .01]]
+      plane--width:            ['Width',         'range',    1200, [500, 1500, 1]]
+      plane--depth:            ['Depth',         'range',    1200, [500, 1500, 1]]
+      plane--position:         ['Position',      'position', [0, -200, 0], [-600, 800, 1]]
+      plane--rotation:         ['Rotation',      'rotation', [0, -180, 1], [-180, 180, 1]]
+
+  lighting:
+    title:               Lighting
+    controls:
+      ambient--color:          ['Ambient',       'color',    '#777777']
+      hr1:                     [ null, 'hr']
+      spotlight-1--color:      ['Spotlight 1',   'color',    '#885555']
+      spotlight-1--position:   ['Position',      'position', [-500, 700, -300], [-1000, 1000, 1]]
+      hr2:                     [ null, 'hr']
+      spotlight-2--color:      ['Spotlight 2',   'color',    '#558855']
+      spotlight-2--position:   ['Position',      'position', [ 500, 700,  300], [-1000, 1000, 1]]
+      hr3:                     [ null, 'hr']
+      spotlight-3--color:      ['Spotlight 3',   'color',    '#555588']
+      spotlight-3--position:   ['Position',      'position', [   0,-700, -300], [-1000, 1000, 1]]
+
+  help:
+    title:               Help Popup
+    controls:
+      help--label:                    [Help,     header,     fa-question]
+      container:                      [null,     container]
+

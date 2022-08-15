@@ -1,0 +1,18 @@
+name: Birkeland Viewer
+defaultView: default
+themeDirectory: config/themes/birkeland
+animateDirectory: config/animations/birkeland
+controlFile: controls_birkeland_viewer.yml
+atomizerId: birkeland
+classes: [az-overlay-controls]
+libraries: [atomizer/atomizer-obfuscator, atomizer/atomizer-birkeland-obfuscator]
+librariesDev: [atomizer/atomizer-base, atomizer/atomizer-birkeland]
+canvasRatio: window
+showBessel: true
+renderer: webgl
+startAnimation: true
+views:
+  default:
+    name: Birkeland Current Simulator
+    producer: prod_birkeland
+    defaultTheme: default

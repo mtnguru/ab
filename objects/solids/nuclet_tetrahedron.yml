@@ -1,0 +1,45 @@
+name: tetrahedron
+position: {x: 0, y: 0, z: 0}
+rotation: {x: 0, y: 0, z: 0}
+allowmove: false
+geoGroups:
+  protons:
+    allowrotate: false
+    components:
+      framework:
+        shape: tetrahedron
+        particleids: proton
+        scale: 1.22
+        protons:
+          0:
+            pairs: default
+          1:
+            pairs: default
+          2:
+            pairs: default
+          3:
+            pairs: default
+  tetra:
+    allowrotate: false
+    components:
+      solid:
+        shape: tetrahedron
+        scale: 1.094
+        wireframe: true
+        faces:
+          0:
+            type: valence
+          1:
+            type: isotope
+          2:
+            type: isotope
+          3:
+            type: valence
+      vertexids:
+        shape: tetrahedron
+        scale: 1.55
+        vertexids: true
+      faceids:
+        shape: tetrahedron
+        scale: 1.3
+        faceids: true

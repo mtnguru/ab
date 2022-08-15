@@ -1,0 +1,39 @@
+name: backbone
+protonRadius: 50
+protons:
+  p0:
+    position:
+      x: 35.276101447486
+      'y': 35.276101447486
+      z: 35.276101447486
+    attachments:
+      - t0
+  p1:
+    position:
+      x: -35.276101447486
+      'y': -35.276101447486
+      z: 35.276101447486
+    attachments:
+      - t0
+  p2:
+    position:
+      x: -35.276101447486
+      'y': 35.276101447486
+      z: -35.276101447486
+    attachments:
+      - t0
+  p3:
+    position:
+      x: 35.276101447486
+      'y': -35.276101447486
+      z: -35.276101447486
+    attachments:
+      - t0
+geometries:
+  t0:
+    geometry: tetrahedron
+    protons:
+      - p0
+      - p1
+      - p2
+      - p3

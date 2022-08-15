@@ -1,0 +1,26 @@
+name: Element Viewer
+defaultView: fivesolids
+themeDirectory: config/themes/elements
+animateDirectory: config/animations/elements
+controlFile: controls_elements.yml
+atomizerId: elements
+classes: [az-float-controls]
+libraries: [atomizer/atomizer-obfuscator, atomizer/atomizer-atom-builder-obfuscator]
+librariesDev: [atomizer/atomizer-base, atomizer/atomizer-atom-builder]
+objects: [nuclets]
+#view: select_atom
+canvasRatio: window
+renderer: webgl
+views:
+  fiveSolids:
+    name: The 5 Platonic Solids
+    producer: prod_platonic_solids
+    defaultTheme: Default.yml
+  dualSolids:
+    name: Platonic solids and their duals 
+    producer: prod_platonic_solids_dual
+    defaultTheme: Default.yml
+  octoNiso:
+    name: The Octahedron and IsocaHedron
+    producer: prod_octo_and_iso_solids
+    defaultTheme: Default.yml
