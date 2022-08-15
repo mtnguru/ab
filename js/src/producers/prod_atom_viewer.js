@@ -105,7 +105,7 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
 //  if (atom) {
 //    viewer.atom.deleteObject(atom);
 //  }
-    nid = (!userAtomNid || userAtomNid == 'undefined') ? 530 : userAtomNid;
+    nid = (!userAtomNid || userAtomNid == 'undefined') ? 692 : userAtomNid;
     viewer.atom.loadObject({
       nid: nid,
       type: 'atom',
