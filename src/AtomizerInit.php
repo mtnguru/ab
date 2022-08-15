@@ -458,7 +458,8 @@ class AtomizerInit {
 //        $build['#attached']['library'] = $atomizer_config['libraries'];
         } else {
           if (!empty($atomizer_config['libraries'])) {
-            $build['#attached']['library'] = $atomizer_config['libraries'];
+            $build['#attached']['library'] = $atomizer_config['librariesDev'];
+//          $build['#attached']['library'] = $atomizer_config['libraries'];
           }
         }
       }
