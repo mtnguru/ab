@@ -1,4 +1,5 @@
 .git
+.git.wtf
 .idea
 node_modules
 config
