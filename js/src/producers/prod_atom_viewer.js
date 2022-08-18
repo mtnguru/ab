@@ -8,6 +8,7 @@
 
 Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
   var viewer = _viewer;
+  let atom;
 
   viewer.controls = Drupal.atomizer.controlsC(viewer);
   viewer.nuclet = Drupal.atomizer.nucletC(viewer);
@@ -82,7 +83,8 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
     }
   }
 
-  var objectLoaded = function objectLoaded(atom) {
+  var objectLoaded = function objectLoaded(_atom) {
+    atom = _atom;
     localStorage.setItem('atomizer_viewer_atom_nid', atom.az.nid);
     viewer.producer.addObject(atom);
     viewer.render();
@@ -95,23 +97,36 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
   var createView = function () {
     viewer.nuclet = Drupal.atomizer.nucletC(viewer);
     viewer.atom = Drupal.atomizer.atomC(viewer);
+    viewer.animation = Drupal.atomizer.animationC(viewer);
+    viewer.atom_select = Drupal.atomizer.atom_selectC(viewer);
 
     // Load and display the default atom - done asynchronously
     var userAtomNid = localStorage.getItem('atomizer_builder_atom_nid');
 //  if (atom) {
 //    viewer.atom.deleteObject(atom);
 //  }
-    nid = (!userAtomNid || userAtomNid == 'undefined') ? 530 : userAtomNid;
+    nid = (!userAtomNid || userAtomNid == 'undefined') ? 692 : userAtomNid;
     viewer.atom.loadObject({
       nid: nid,
       type: 'atom',
     });
 
-    viewer.atom_select.setSelectedAtom({nid: nid});
+    if (viewer.atom_select) {
+      viewer.atom_select.setSelectedAtom({nid: nid});
+    }
 
     // Create the ghost proton.  Displayed when hovering over attachment points.  Initially hidden
     viewer.view.ghostProton = viewer.nuclet.makeProton(0, {type: 'ghost'}, null, 1, {x: 300, y: 50, z: 0});
+
+    if (viewer.atomizer.startAnimation == true) {
+      setTimeout((event) => {
+        viewer.animation.play();
+      }, 2000);
+    }
+
   };
+
+  const getObject = () => atom;
 
   return {
     createView: createView,
@@ -122,6 +137,7 @@ Drupal.atomizer.prod_atom_viewerC = function (_viewer) {
     mouseMove: mouseMove,
     objectLoaded: objectLoaded,
     addObject: addObject,
+    getObject: getObject,
   };
 };
 

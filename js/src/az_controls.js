@@ -481,7 +481,7 @@
             $('.toggle-block', viewer.context).removeClass('az-selected');
             $('.control-block', viewer.context).each(function () {
 //            if (this.id != 'blocks--buttons' && this.id != 'blocks--animation--wrapper') {
-              if (this.id != 'blocks--buttons') {
+              if (this.id != 'blocks--buttons' && this.id != 'blocks--animation--wrapper') {
                 $(this).addClass('az-hidden');
               }
             });
