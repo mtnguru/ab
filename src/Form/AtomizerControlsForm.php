@@ -87,9 +87,9 @@ class AtomizerControlsForm extends FormBase {
     // Mark all hidden blocks.
     foreach ($controlSet['blocks'] as $blockName => $block) {
       if ($form['blocks'][$blockName]['#az-hidden']) {
-//      if ($blockName != 'animations') {
+        if ($blockName != 'blocks--animation--wrapper') {
           $form['blocks'][$blockName]['#attributes']['class'][] = 'az-hidden';
-//      }
+        }
       }
     }
 
