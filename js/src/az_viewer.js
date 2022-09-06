@@ -112,7 +112,7 @@
           if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
             viewer.canvas.height = window.innerHeight - 40 - $toolbarHeight;
           } else {
-            viewer.canvas.height = viewer.canvas.width * viewer.atomizer.canvasRatio;
+            viewer.canvas.height = viewer.canvas.width * viewer.atomizer.canvasRatio + 40;
           }
           viewer.canvasContainer.style.height = viewer.canvas.height + 'px';
           // Now that we set the height, set the width again,
