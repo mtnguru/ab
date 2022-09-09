@@ -11,7 +11,7 @@ Drupal.atomizer.prod_platonic_dualsC = function (_viewer) {
   viewer.labels = Drupal.atomizer.labelsC(viewer);
   viewer.shapes = Drupal.atomizer.shapesC(viewer);
   viewer.atom = Drupal.atomizer.atomC(viewer);
-  viewer.animation = Drupal.atomizer.animation(viewer);
+  viewer.animation = Drupal.atomizer.animationC(viewer);
   
   viewer.objects = [];
   const addObject = (object) => {
