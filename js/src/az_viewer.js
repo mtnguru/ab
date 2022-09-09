@@ -97,7 +97,11 @@
           viewer.canvasContainer.style.width = null;
           viewer.canvas.width = viewer.canvasContainer.clientWidth;
           viewer.canvasContainer.style.width = viewer.canvas.width + 'px';
-          viewer.canvas.height = window.innerHeight - 40 - $toolbarHeight;
+          if (!viewer.atomizer.canvasRatio || viewer.atomizer.canvasRatio === 'window') {
+            viewer.canvas.height = window.innerHeight - 40 - $toolbarHeight;
+          } else {
+            viewer.canvas.height = viewer.canvas.width * viewer.atomizer.canvasRatio + 40;
+          }
           viewer.canvasContainer.style.height = viewer.canvas.height + 'px';
         }
         else {
