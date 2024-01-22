@@ -337,6 +337,7 @@
       }
     };
 
+    // Entry point on startup for viewer
     viewer.getDisplayMode = function() { return displayMode };
     viewer.atomizer = atomizer;
     viewer.view = atomizer.views[atomizer.defaultView];

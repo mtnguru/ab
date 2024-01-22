@@ -1,6 +1,9 @@
 atomizer display structure:
   title: 'Atomizer Display Structure'
   description: 'Display the structure of the atom on the Atom edit form.'
+atomizer display atom viewer nuclets:
+  title: 'Atomizer Display Atom Viewer with Nuclets'
+  description: 'Display the Atom Viewer with Nuclets.'
 atomizer display atom builder:
   title: 'Atomizer Display Atom Builder'
   description: 'Display the Atom Builder.'
