@@ -93,9 +93,45 @@
       setEditNuclet(nuclet);
       viewer.render();
     }
+
+    function highlightProton() {
+      // Return if the proton is already highlighted
+      if (mouse.intersected.length && highlightedProton == mouse.intersected[0].object) return;
+
+      // Change the proton back to it's original color and visibility.
+      viewer.nuclet.setProtonColor(highlightedProton, null);
+      if (highlightedProton.az.selected) {
+        highlightedProton.material.color = viewer.theme.getColor('proton-ghost--color');
+      } else {
+        viewer.nuclet.setProtonColor(highlightedProton, null);
+      }
+
+      highlightedProton.material.visible = highlightedProton.az.visible;
+      highlightedProton = null;
+    }
+    function highlightElectron() {
+      // Return if the proton is already highlighted
+      if (mouse.intersected.length && highlightedElectron == mouse.intersected[0].object.parent) return;
+
+      // 1 is the field - 0 is the core.
+
+      viewer.nuclet.setElectronColor(highlightedElectron, false, false);
+      highlightedElectron = null;
+    }
+
     /**
-     * User has hovered over a proton, reset last highlighted proton to original color
-     * Make the current hovered proton pink.
+     * function mouseMove
+     *
+     * button none
+     *    mode none
+     *     // highlight the intersected proton or electron
+     *     mode atomsMove
+     *     mode electronsInnerEdit
+     *     mode electronsOuterEdit
+     *     mode protonsColor
+     *     mode protonsEdit
+     *     mode innerFacesEdit - highlight the appropriate inner face
+     *     mode outerFacesEdit - highlight the appropriate outer face
      *
      * @param event
      */
@@ -104,51 +140,32 @@
         case 'none':
           return;
 
+        // highLight/De-highlight the current proton
         case 'atomsMove':
-        case 'electronsAdd':
+        case 'electronsInnerEdit':
+        case 'electronsOuterEdit':
         case 'protonsColor':
-        case 'protonsAdd':
-        case 'orbitals':
-
+        case 'protonsEdit':
           // If there is already a highlighted proton then set it back to original color
           if (highlightedProton) {
-            // Return if the proton is already highlighted
-            if (mouse.intersected.length && highlightedProton == mouse.intersected[0].object) return;
-
-            // Change the proton back to it's original color and visibility.
-            viewer.nuclet.setProtonColor(highlightedProton, null);
-            if (highlightedProton.az.selected) {
-              highlightedProton.material.color = viewer.theme.getColor('proton-ghost--color');
-            } else {
-              viewer.nuclet.setProtonColor(highlightedProton, null);
-            }
-
-            highlightedProton.material.visible = highlightedProton.az.visible;
-            highlightedProton = null;
+            highlightProton()
           }
-
           // If there is already a highlighted electron then set it back to original color
           if (highlightedElectron) {
-            // Return if the proton is already highlighted
-            if (mouse.intersected.length && highlightedElectron == mouse.intersected[0].object.parent) return;
-
-            // 1 is the field - 0 is the core.
-
-            viewer.nuclet.setElectronColor(highlightedElectron, false, false);
-            highlightedElectron = null;
+            highlightElectron()
           }
 
           if (mouse.intersected.length) {
             if (mouse.intersected[0].object.az) {  // PROTON
               if (!mouse.intersected[0].object.az.active) return;
 
-              if (mouse.mode == 'protonsAdd') {
+              if (mouse.mode == 'protonsEdit') {
                 // Return if this proton isn't optional
                 if (!mouse.intersected[0].object.az.optional) return;
               }
 
-              // if Mouse mode == orbitals and we already have 2 selected
-              if (mouse.mode == 'orbitals' && Object.keys(selectedProtons).length == 2) return;
+              // if Mouse mode == electronsOuterEdit and we already have 2 selected
+              if (mouse.mode == 'electronsOuterEdit' && Object.keys(selectedProtons).length == 2) return;
 
               // Highlight the proton
               highlightedProton = mouse.intersected[0].object;
@@ -182,48 +199,79 @@
             highlightedIcosa.geometry.verticesNeedUpdate = true;
           }
           break;
-
-        case 'outer-faces':
-          break;
-          // If there is already a highlighted proton
-          if (highlightedOuterFace) {
-            if (mouse.intersected.length && highlightedOuterFace == mouse.intersected[0]) return;
-            if (highlightedOuterFace.selected) {
-              highlightedOuterFace.materialIndex = 2;
-            } else {
-              highlightedOuterFace.materialIndex = 0;
-            }
-            highlightedOuterFace = null;
-            outerFaces.geometry.elementsNeedUpdate = true;
-          }
-
-          if (mouse.intersected.length) {
-            highlightedOuterFace = mouse.intersected[0].face;
-            highlightedOuterFace.materialIndex = 1;
-            outerFaces = mouse.intersected[0].object;
-            outerFaces.geometry.elementsNeedUpdate = true;
-          }
-          viewer.render();
-          break;
       }
-    };
+    }
 
     function drawOrbital(protons) {
+    }
 
+    function mouseUp(event, mouse) {
+      // Do nothing
+      return;
     }
 
     /**
-     * User has clicked somewhere in the scene with the mouse.
+     * function mouseDown()
      *
-     * If they right clicked on a proton, find the parent nuclet and popup the nuclet edit form.
-     * If they right clicked anywhere else, pop down the nuclet edit form.
+     * button left - selects/deselects the current proton or electron
+     *    if no objects are intersected
+     *       deselect all protons and deselect all electrons - if any
+     *    else
+     *       mode electronsInnerEdit
+     *       mode electronsOuterEdit
+     *          if intersecting a proton
+     *            if this proton is already selected
+     *              deselect proton
+     *            else
+     *              if two protons are already selected
+     *                ignore this - return
+     *              else
+     *                select proton
+     *          if intersecting an electron
+     *            if this electron is already selected
+     *              deselect electron
+     *            else
+     *              select electron
+     *
+     *       mode protonsAdd
+     *          hide/unhide 'U' protons - 4 and 5
+     *
+     *       mode protonsColor
+     *          change color of intersected proton
+     *
+     *       mode inner-faces
+     *          select/deselect intersected inner face
+     *
+     *       mode outer-faces
+     *          select/deselect intersected outer face
+     *
+     * button center - select/deselect edit Nuclet
+     *    if nothing is intersected
+     *      popdown nuclet dialog
+     *      editNuclet = undefined
+     *    else
+     *      setEditNuclet
+     *      display nucletFormBlock
+     *      position nucletFormBlock after editNuclet
+     *
+     *
+     * button right
+     *    mode electronsInnerEdit
+     *       if proton is intersected
+     *          if no or 1 protons or > 6 protons are selected
+     *             ignore this - return
+     *          if 2 -> 6 protons are selected and this is one of them
+     *             addInnerElectron
+     *      if electron is intersected and this electron is selected
+     *         deleteElectron
+     *
+     *    mode electronsOuterEdit
+     *       if intersecting a proton
+     *       if intersecting an electron
      *
      * @param event
-     * @returns {boolean}
+     * @param mouse
      */
-    function mouseUp(event, mouse) {
-      return;
-    }
     function mouseDown(event, mouse) {
 
       /**
@@ -243,10 +291,192 @@
        * Deselect an Electron
        */
       function deselectElectron() {
+        deselectProtons();
+
+        var electron = objects[0].object.parent;
+
+        var pid = electron.az.nuclet.id + '-' + electron.az.id;
+        if (selectedElectron == electron) {  // Electron already selected, unselect it.
+          deselectElectron();
+        } else {
+          if (selectedElectron) {  // Set selected electron back to normal.
+            deselectElectron();
+          }
+          electron.az.selected = true;
+          selectedElectron = electron;
+          viewer.nuclet.setElectronColor(electron, true, true);
+        }
         selectedElectron.az.selected = false;
         viewer.nuclet.setElectronColor(selectedElectron, false, true);
         selectedElectron = null;
       }
+      function protonsColor () {
+        var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtons);
+        if (objects.length != 0) {
+          viewer.nuclet.setProtonColor(objects[0].object, mouse.protonColor);
+          viewer.render();
+        }
+      }
+
+      function selectProton() {
+        if (!objects[0].object.az.active) return;
+
+        // If an electron is selected - unselect it.
+        if (selectedElectron) {
+          deselectElectron();
+        }
+      }
+
+      function selectNuclet() {
+        // Middle button always sets the edit nuclet
+        var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtons);
+        if (objects.length == 0) {
+          // Pop down the nuclet edit dialog.
+          if (editNuclet) {
+            viewer.nuclet.highlight(editNuclet, false);
+          }
+          $nucletFormBlock.addClass('az-hidden');
+          editNuclet = undefined;
+        } else {
+          // Initialize to current nuclet.
+          setEditNuclet(objects[0].object.parent.parent);
+          $nucletFormBlock.removeClass('az-hidden');
+          $nucletFormBlock.insertAfter($nucletList.find('.' + editNuclet.name));
+        }
+      }
+
+      function addInnerElectron() {
+        nuclet = objects[0].object.az.nuclet;
+        atom = nuclet.atom;
+        let p;
+        let isPelectron = false;
+        // Check to see if all protons are all in the same nuclet.
+        let nucletId = '';
+        for (p in selectedProtons) {
+          if (selectedProtons.hasOwnProperty(p)) {
+            proton = selectedProtons[p];
+            if (nucletId == '') {
+              nucletId = proton.az.nuclet.id;
+            } else if (nucletId != proton.az.nuclet.id) {
+              isPelectron = true;
+            }
+          }
+        }
+
+        if (isPelectron) {
+          if (nprotons >= 2 && nprotons <= 6) {
+            var pos = new THREE.Vector3();
+            var protons = {};
+            for (p in selectedProtons) {
+              if (selectedProtons.hasOwnProperty(p)) {
+                protons.push = selectedProtons[p];
+                pos.add(selectedProtons[p].getWorldPosition());
+              }
+            }
+            pos.divideScalar(nprotons);
+
+            var id = 'S' + nElectronsId++;
+            var pelectron = viewer.nuclet.createNElectron('electronSpherical', pos);
+            pelectron.az.protons = protons;
+            pelectron.az.id = id;
+            atom.add(pelectron);   // add the pelectron to the atom
+            viewer.nuclet.setPElectronColor(pelectron, false, true);
+            selectedProtons = [];
+          }
+        } else {
+          if (nprotons >= 2 && nprotons <= 6) {
+            var pos = new THREE.Vector3();
+            var vertices = [];
+            for (p in selectedProtons) {
+              if (selectedProtons.hasOwnProperty(p)) {
+                proton = selectedProtons[p];
+                pos.add(selectedProtons[p].position);
+                vertices.push(selectedProtons[p].az.id);
+              }
+            }
+            pos.divideScalar(nprotons);
+            var nelectron = viewer.nuclet.createNElectron('electronSpherical', pos);
+            nelectron.az.vertices = vertices;
+            var id = 'N' + nElectronsId++;
+            nelectron.az.id = id;
+            nelectron.az.nuclet = nuclet;
+            nuclet.nelectrons[id] = nelectron;
+            // Use any proton (P1) to find the nucletGroup
+            nuclet.protons['P1'].az.nucletGroup.add(nelectron);
+            viewer.nuclet.setElectronColor(nelectron, false, true);
+            selectedProtons = [];
+          }
+        }
+      }
+      function protonsEdit() {
+      }
+
+      function orbitalEdit() {
+      }
+
+      function deleteOrbital() {
+      }
+
+      function innerFacesEdit() {
+        var objects = viewer.controls.findIntersects(viewer.producer.intersect().hoverInnerFaces);
+        if (objects.length) {
+          var oldFaces = objects[0].object;
+          var face = objects[0].face;
+
+          for (var i = 0; i < oldFaces.geometry.faces.length; i++) {
+            if (oldFaces.geometry.faces[i] === face) {
+              var index = oldFaces.geometry.reactiveState.indexOf(i);
+              if (index > -1) {
+                oldFaces.geometry.reactiveState.splice(index, 1);
+              } else {
+                oldFaces.geometry.reactiveState.push(i);
+              }
+              break;
+            }
+          }
+          viewer.items.icosaFaces = null;
+          var faces = viewer.nuclet.createGeometryFaces(
+            oldFaces.name,
+            1,
+            oldFaces.geometry,
+            oldFaces.geometry.shapeConf.rotation || null,
+            oldFaces.geometry.reactiveState
+          );
+          var nucletGroup = oldFaces.parent;
+          viewer.items[oldFaces.name] = [];
+          viewer.items[oldFaces.name].push(faces);
+          faces.geometry.reactiveState = oldFaces.geometry.reactiveState;
+          faces.geometry.shapeConf = oldFaces.geometry.shapeConf;
+          nucletGroup.remove(oldFaces);
+          nucletGroup.add(faces);
+          viewer.render();
+        }
+      }
+      function outerFacesEdit() {
+        return;
+        // If there is already a highlighted proton
+        if (highlightedOuterFace) {
+          if (mouse.intersected.length && highlightedOuterFace == mouse.intersected[0]) return;
+          if (highlightedOuterFace.selected) {
+            highlightedOuterFace.materialIndex = 2;
+          } else {
+            highlightedOuterFace.materialIndex = 0;
+          }
+          highlightedOuterFace = null;
+          outerFaces.geometry.elementsNeedUpdate = true;
+        }
+
+        if (mouse.intersected.length) {
+          highlightedOuterFace = mouse.intersected[0].face;
+          highlightedOuterFace.materialIndex = 1;
+          outerFaces = mouse.intersected[0].object;
+          outerFaces.geometry.elementsNeedUpdate = true;
+        }
+        viewer.render();
+      }
+      function editOrbital() {
+      }
+
 
       event.preventDefault();
 
@@ -254,378 +484,58 @@
       let atom;
       let nuclet;
       switch (event.which) {
-        case 1:   // Select/Unselect protons to add an electron to.
+        case 1:   // Left button - Select/Unselect protons to add an electron to.
+          // If no objects are selected
+          //    deselect all electrons
+          //    deselect all protons
           switch (mouse.mode) {
-            case 'electronsAdd':
-            case 'orbitals':
-              var particles;
-              if (mouse.mode == 'electronsAdd') {
-                particles = viewer.producer.intersect().visibleProtonsElectrons;
-              }
-              if (mouse.mode == 'orbitals') {
-                particles = viewer.producer.intersect().visibleProtonsOrbitals;
-              }
+            case 'electronsInnerEdit':
+            case 'electronsInnerEdit':
+              selectProton();
+              break;
+            case 'protonsAdd':
+              protonsAdd()
+              break;
+            case 'protonsColor':
+              protonsColor()
+              break;
+            case 'innerFacesEdit':
+              innerFacesEdit()
+              break;
+            case 'outerFacesEdit':
+              outerFacesEdit()
+              break;
+          }
+          break;
+
+        case 2:   // Center button - Select/deselect nucleus
+          selectNuclet();
+          viewer.render();
+          return false;
+
+        case 3:   // Right button - add/delete inner electron or orbital
+          switch (mouse.mode) {
+            case 'electronsInnerEdit':
+              particles = viewer.producer.intersect().visibleProtonsElectrons;
               var objects = viewer.controls.findIntersects(particles);
               if (objects.length) {          // Object found
-
-                // A proton has been intersected
-                if (objects[0].object.az) {
-
-                  // The selected proton is not active, return;
-                  if (!objects[0].object.az.active) return;
-
-                  // If an electron is selected - unselect it.
-                  if (selectedElectron) {
-                    deselectElectron();
-                  }
-
-                  // Toggle the proton highlight color
-                  if (!objects[0].object.az.active) return;
-                  proton = objects[0].object;
-                  var pid = proton.az.nuclet.id + '-' + proton.az.id;
-                  if (proton.az.selected) {
-                    let np = Object.keys(selectedProtons) .length;
-                    // If there are two protons selected, then delete the orbital
-                    if (mouse.mode == 'orbitals') {
-                      if (np == 2) {
-                        deleteOrbital(selectedProtons);
-                      }
-                    }
-                    proton.az.selected = false;
-                    delete selectedProtons[pid];
-                  } else {
-                    if (mouse.mode == 'orbitals') {
-                      let np = Object.keys(selectedProtons) .length;
-                      // Ignore if attempting to select more than 2 protons
-                      if (np == 2) return;
-                      // Select the proton
-                      proton.az.selected = true;
-                      selectedProtons[pid] = proton;
-                      // If there are two protons selected, draw the orbital
-                      if (Object.keys(selectedProtons) .length == 2) {
-                         createOrbital(selectedProtons);
-                      }
-                    } else if (mouse.mode == 'electronsAdd') {
-                      proton.az.selected = true;
-                      selectedProtons[pid] = proton;
-                    }
-                  }
-                  viewer.nuclet.setProtonColor(proton);
-
-                // ELECTRON
-                } else {
-                  deselectProtons();
-
-                  var electron = objects[0].object.parent;
-
-                  var pid = electron.az.nuclet.id + '-' + electron.az.id;
-                  if (selectedElectron == electron) {  // Electron already selected, unselect it.
-                    deselectElectron();
-                  } else {
-                    if (selectedElectron) {  // Set selected electron back to normal.
-                      deselectElectron();
-                    }
-                    electron.az.selected = true;
-                    selectedElectron = electron;
-                    viewer.nuclet.setElectronColor(electron, true, true);
-                  }
-                }
-
-                // No objects intersected - clear everything.
-              } else {                      // No object found
-                deselectProtons();
-                if (selectedElectron) {
-                  deselectElectron(selectedElectron);
-                }
-              }
-              viewer.render();
-              break;
-
-            case 'protonsAdd':
-              var intersects = viewer.controls.findIntersects(viewer.producer.intersect().optionalProtons);
-              if (intersects.length) {
-                proton = intersects[0].object;
-                let atom = proton.az.nuclet.atom;
-                switch (event.which) {
-                  case 1:       // Left click - select
-                    if (proton.az.optional) {
-                      proton.az.visible = !proton.az.visible;
-                      proton.material.visible = proton.az.visible;
-                      if (proton.az.id.charAt(0) == 'U') {
-                        for (var t = 0; t < proton.az.tetrahedrons.length; t++) {       // for each tetrahedron
-                          proton.az.tetrahedrons[t].material.visible = proton.az.visible;
-                        }
-                      }
-                      viewer.atom.updateValenceRings(atom);
-                      createIntersectLists(atom);
-                      viewer.atom.updateParticleCount(atom);
-                      viewer.atom.updateSamLines(atom);
-                    }
-                    break;
-                  case 3:       // Right click - deselect
-                    break;
-                }
-                viewer.render();
-              }
-              break;
-
-            case 'protonsColor':
-              var intersects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtons);
-              if (intersects.length != 0) {
-                viewer.nuclet.setProtonColor(intersects[0].object, mouse.protonColor);
-                viewer.render();
-              }
-              break;
-
-            case 'inner-faces':
-              var objects = viewer.controls.findIntersects(viewer.producer.intersect().hoverInnerFaces);
-              if (objects.length) {
-                var oldFaces = objects[0].object;
-                var face = objects[0].face;
-
-                for (var i = 0; i < oldFaces.geometry.faces.length; i++) {
-                  if (oldFaces.geometry.faces[i] === face) {
-                    var index = oldFaces.geometry.reactiveState.indexOf(i);
-                    if (index > -1) {
-                      oldFaces.geometry.reactiveState.splice(index, 1);
-                    } else {
-                      oldFaces.geometry.reactiveState.push(i);
-                    }
-                    break;
-                  }
-                }
-                viewer.items.icosaFaces = null;
-                var faces = viewer.nuclet.createGeometryFaces(
-                  oldFaces.name,
-                  1,
-                  oldFaces.geometry,
-                  oldFaces.geometry.shapeConf.rotation || null,
-                  oldFaces.geometry.reactiveState
-                );
-                var nucletGroup = oldFaces.parent;
-                viewer.items[oldFaces.name] = [];
-                viewer.items[oldFaces.name].push(faces);
-                faces.geometry.reactiveState = oldFaces.geometry.reactiveState;
-                faces.geometry.shapeConf = oldFaces.geometry.shapeConf;
-                nucletGroup.remove(oldFaces);
-                nucletGroup.add(faces);
-                viewer.render();
-              }
-              break;
-
-            case 'outer-faces':
-              var objects = viewer.controls.findIntersects(viewer.producer.intersect().hoverOuterFaces);
-              if (objects.length) {
-                highlightedOuterFace = mouse.intersected[0].face;
-                if (highlightedOuterFace.selected) {
-                  highlightedOuterFace.selected = false;
-                  highlightedOuterFace.materialIndex = 0;
-                } else {
-                  highlightedOuterFace.selected = true;
-                  highlightedOuterFace.materialIndex = 2;
-                }
-                outerFaces = mouse.intersected[0].object;
-                outerFaces.geometry.elementsNeedUpdate = true;
-                viewer.render();
-              }
-              break;
-          }
-          break;
-
-        case 2:
-          // Middle button always sets the edit nuclet
-          var intersects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtons);
-          if (intersects.length == 0) {
-            // Pop down the nuclet edit dialog.
-            if (editNuclet) {
-              viewer.nuclet.highlight(editNuclet, false);
-            }
-            $nucletFormBlock.addClass('az-hidden');
-            editNuclet = undefined;
-            viewer.render();
-            return false;
-          } else {
-            // Initialize to current nuclet.
-            setEditNuclet(intersects[0].object.parent.parent);
-            $nucletFormBlock.removeClass('az-hidden');
-            $nucletFormBlock.insertAfter($nucletList.find('.' + editNuclet.name));
-            viewer.render();
-            return false;
-          }
-          break;
-
-        case 3:
-          switch (mouse.mode) {
-            case 'electronsAdd':
-              var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtonsElectrons);
-              var nprotons = Object.keys(selectedProtons).length;
-              if (objects.length) {          // Object found
-                // PROTON
                 if (objects[0].object.az) {    // Only protons have this record, electrons do not
-                  nuclet = objects[0].object.az.nuclet;
-                  atom = nuclet.atom;
-                  let p;
-                  let isPelectron = false;
-                  // Check to see if all protons are all in the same nuclet.
-                  let nucletId = '';
-                  for (p in selectedProtons) {
-                    if (selectedProtons.hasOwnProperty(p)) {
-                      proton = selectedProtons[p];
-                      if (nucletId == '') {
-                        nucletId = proton.az.nuclet.id;
-                      } else if (nucletId != proton.az.nuclet.id) {
-                        isPelectron = true;
-                      }
-                    }
-                  }
-
-                  if (isPelectron) {
-                    if (nprotons >= 2 && nprotons <= 6) {
-                      var pos = new THREE.Vector3();
-                      var protons = {};
-                      for (p in selectedProtons) {
-                        if (selectedProtons.hasOwnProperty(p)) {
-                          protons.push = selectedProtons[p];
-                          pos.add(selectedProtons[p].getWorldPosition());
-                        }
-                      }
-                      pos.divideScalar(nprotons);
-
-                      var id = 'S' + nElectronsId++;
-                      var pelectron = viewer.nuclet.createElectron('electronSpherical', pos);
-                      pelectron.az.protons = protons;
-                      pelectron.az.id = id;
-                      atom.add(pelectron);   // add the pelectron to the atom
-                      viewer.nuclet.setPElectronColor(pelectron, false, true);
-                      selectedProtons = [];
-                    }
-                  } else {
-                    if (nprotons >= 2 && nprotons <= 6) {
-                      var pos = new THREE.Vector3();
-                      var vertices = [];
-                      for (p in selectedProtons) {
-                        if (selectedProtons.hasOwnProperty(p)) {
-                          proton = selectedProtons[p];
-                          pos.add(selectedProtons[p].position);
-                          vertices.push(selectedProtons[p].az.id);
-                        }
-                      }
-                      pos.divideScalar(nprotons);
-                      var nelectron = viewer.nuclet.createElectron('electronSpherical', pos);
-                      nelectron.az.vertices = vertices;
-                      var id = 'N' + nElectronsId++;
-                      nelectron.az.id = id;
-                      nelectron.az.nuclet = nuclet;
-                      nuclet.nelectrons[id] = nelectron;
-                      // Use any proton (P1) to find the nucletGroup
-                      nuclet.protons['P1'].az.nucletGroup.add(nelectron);
-                      viewer.nuclet.setElectronColor(nelectron, false, true);
-                      selectedProtons = [];
-                    }
-                  }
-
-                  // ELECTRON
+                  addInnerElectron();
                 } else {
-                  electron = objects[0].object.parent;
-
-                  if (electron == selectedElectron) {
-                    viewer.atom.deleteElectron(selectedElectron);
-                    atom = electron.az.nuclet.atom;
-                    selectedElectron = null;
-                  }
+                  deleteInnerElectron()       //              deleteInnerElectron();
                 }
-                createIntersectLists(atom);
-                viewer.atom.updateParticleCount(atom);
-                viewer.atom.updateSamLines(atom);
-                viewer.render();
               }
-              break;   // electronsAdd
-
-            case 'orbitals':
-              var objects = viewer.controls.findIntersects(viewer.producer.intersect().visibleProtonsElectrons);
-              var nprotons = Object.keys(selectedProtons).length;
+              break;   // electronsInnerEdit
+            case 'electronsOuterEdit':
+              particles = viewer.producer.intersect().visibleProtonsElectrons;
+              var objects = viewer.controls.findIntersects(particles);
               if (objects.length) {          // Object found
-                // PROTON
                 if (objects[0].object.az) {    // Only protons have this record, electrons do not
-                  nuclet = objects[0].object.az.nuclet;
-                  atom = nuclet.atom;
-                  let p;
-                  let isPelectron = false;
-                  // Check to see if all protons are all in the same nuclet.
-                  let nucletId = '';
-                  for (p in selectedProtons) {
-                    if (selectedProtons.hasOwnProperty(p)) {
-                      proton = selectedProtons[p];
-                      if (nucletId == '') {
-                        nucletId = proton.az.nuclet.id;
-                      } else if (nucletId != proton.az.nuclet.id) {
-                        isPelectron = true;
-                      }
-                    }
-                  }
-
-                  if (isPelectron) {
-                    if (nprotons >= 2 && nprotons <= 6) {
-                      var pos = new THREE.Vector3();
-                      var protons = {};
-                      for (p in selectedProtons) {
-                        if (selectedProtons.hasOwnProperty(p)) {
-                          protons.push = selectedProtons[p];
-                          pos.add(selectedProtons[p].getWorldPosition());
-                        }
-                      }
-                      pos.divideScalar(nprotons);
-
-                      var id = 'S' + nElectronsId++;
-                      var pelectron = viewer.nuclet.createElectron('electronSpherical', pos);
-                      pelectron.az.protons = protons;
-                      pelectron.az.id = id;
-                      atom.add(pelectron);   // add the pelectron to the atom
-                      viewer.nuclet.setPElectronColor(pelectron, false, true);
-                      selectedProtons = [];
-                    }
-                  } else {
-                    if (nprotons >= 2 && nprotons <= 6) {
-                      var pos = new THREE.Vector3();
-                      var vertices = [];
-                      for (p in selectedProtons) {
-                        if (selectedProtons.hasOwnProperty(p)) {
-                          proton = selectedProtons[p];
-                          pos.add(selectedProtons[p].position);
-                          vertices.push(selectedProtons[p].az.id);
-                        }
-                      }
-                      pos.divideScalar(nprotons);
-                      var nelectron = viewer.nuclet.createElectron('electronSpherical', pos);
-                      nelectron.az.vertices = vertices;
-                      var id = 'N' + nElectronsId++;
-                      nelectron.az.id = id;
-                      nelectron.az.nuclet = nuclet;
-                      nuclet.nelectrons[id] = nelectron;
-                      // Use any proton (P1) to find the nucletGroup
-                      nuclet.protons['P1'].az.nucletGroup.add(nelectron);
-                      viewer.nuclet.setElectronColor(nelectron, false, true);
-                      selectedProtons = [];
-                    }
-                  }
-
-                  // ELECTRON
-                } else {
-                  electron = objects[0].object.parent;
-
-                  if (electron == selectedElectron) {
-                    viewer.atom.deleteElectron(selectedElectron);
-                    atom = electron.az.nuclet.atom;
-                    selectedElectron = null;
-                  }
+                  editOrbital();
+                } else {  // electron
+                  deleteOrbital()
                 }
-                createIntersectLists(atom);
-                viewer.atom.updateParticleCount(atom);
-                viewer.atom.updateSamLines(atom);
-                viewer.render();
               }
-              break;   // electronsAdd
-
           } // switch mouse.mode
           break;
       } // switch which mouse button
@@ -708,7 +618,7 @@
         }
       }
 
-      // Combine protons and orbitals
+      // Combine protons and electronsOuterEdit
       atom.az.intersect.visibleProtonsOrbitals = atom.az.intersect.visibleProtons.concat();
       for (var o in visibleOrbitals) {
         if (visibleOrbitals.hasOwnProperty(e)) {
@@ -1018,9 +928,9 @@
         totalProtons += particles.numProtons;
 
         let out = '<div class="nuclet shell-' + shell + ' ' + nuclet.name + '">';
-        out += `<div 
-          class="header" 
-          data-nuclet-id="${id}" 
+        out += `<div
+          class="header"
+          data-nuclet-id="${id}"
           data-atom-id="${atom.az.id}"
         >
            ${id} ${nuclet.az.state} - ${particles.numProtons} ${totalProtons != particles.numProtons ? ' - ' + totalProtons : ''}

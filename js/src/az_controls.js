@@ -735,7 +735,7 @@
     }
 
     /**
-     * When user clicks mouse button, call the directors mouseUp function if it exists.
+     * When user unclicks mouse button, call the directors mouseUp function if it exists.
      * @param event
      */
     function onMouseUp(event) {

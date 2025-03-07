@@ -322,7 +322,8 @@ function atomizer_preprocess_node(&$variables) {
         $atomizer_block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties([
           'plugin' => 'atomizer_block'
         ]);
-//      $atomizer_block = \Drupal\block\Entity\Block::load('atomizer_controls');
+        $atomizer_block = \Drupal\block\Entity\Block::load('atomizer_block');
+        $atomizer_block = \Drupal\block\Entity\Block::load('atomizer_controls');
         $atomizer_block = \Drupal\block\Entity\Block::load('atomizerblockcontrolsandviewerinoneblock');
 
         if (!empty($atomizer_block)) {

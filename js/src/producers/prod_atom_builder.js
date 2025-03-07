@@ -17,7 +17,7 @@
 
     var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
 
-    viewer.controls.mouseMode('electronsAdd');
+    viewer.controls.mouseMode('electronsInnerEdit');
 
     viewer.objects = [];
 
@@ -64,15 +64,15 @@
       switch (mouse.mode) {
         case 'none':
           return null;
-        case 'electronsAdd':
+        case 'electronsInnerEdit':
           if (atom && atom.az.intersect.visibleProtonsElectrons) {
             console.log(`hoverObjects - atom.az.intersect.visibleProtons`)
             return atom.az.intersect.visibleProtonsElectrons;
           }
           return [];
-        case 'orbitals':
+        case 'electronsOuterEdit':
           return atom.az.intersect.visibleProtons;
-        case 'protonsAdd':
+        case 'protonsEdit':
           return atom.az.intersect.optionalProtons;
         case 'protonsColor':
           return atom.az.intersect.visibleProtons;
