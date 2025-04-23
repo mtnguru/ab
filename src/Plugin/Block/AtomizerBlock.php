@@ -28,7 +28,8 @@ class AtomizerBlock extends BlockBase {
       '#default_value' => isset($this->configuration['atomizerId']) ? $this->configuration['atomizerId'] : 'Atomizer',
     ];
 
-    $control_files = \Drupal::service('file_system')->scanDirectory(drupal_get_path('module','atomizer') . '/config/controls', '/\.yml/');
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
+    $control_files = \Drupal::service('file_system')->scanDirectory($module_path . '/config/controls', '/\.yml/');
     $control_options = [];
     foreach ($control_files as $file) {
       $control_options[$file->filename] = $file->name;
@@ -46,7 +47,7 @@ class AtomizerBlock extends BlockBase {
       '#title' => $this->t('Atomizer file'),
       '#description' => $this->t(''),
       '#default_value' => isset($this->configuration['atomizerFile']) ? $this->configuration['atomizerFile'] : 'default',
-      '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/producers', '/\.yml/'),
+      '#options' => AtomizerFiles::createFileList($module_path . '/config/producers', '/\.yml/'),
     ];
     return $form;
   }

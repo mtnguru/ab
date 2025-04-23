@@ -97,7 +97,8 @@ class AtomizerControlsForm extends FormBase {
 
     // Attach the theme to form for later use.
     $form['#az-theme'] =  $theme;
-//  file_put_contents(drupal_get_path('module', 'atomizer') . '/config/style/base2.yml', Yaml::encode($theme));
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+//  file_put_contents($module_path . '/config/style/base2.yml', Yaml::encode($theme));
     return $form;
   }
 

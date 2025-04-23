@@ -3,7 +3,7 @@ var gutil = require('gulp-util');
 var sass = require('gulp-sass')(require('sass'));
 // var watch = require('gulp-watch');
 // var livereload = require('livereload')
-var notify = require('gulp-notify');
+// var notify = require('gulp-notify');
 var autoprefixer = require('gulp-autoprefixer');
 var sourcemaps = require('gulp-sourcemaps');
 var concat = require('gulp-concat');
@@ -65,11 +65,11 @@ gulp.task('compress', function() {
     .pipe(gulp.dest('./js/min/'))
     .pipe(concat('az_obfuscate.js'))
     .pipe(gulp.dest('./js/min/'))
-    .pipe(notify({
-      title: "JS Obfuscator",
-      message: "All JS files in atomizer have been obfuscated.",
-      onLast: true
-    }));
+//  .pipe(notify({
+//    title: "JS Obfuscator",
+//    message: "All JS files in atomizer have been obfuscated.",
+//    onLast: true
+//  }));
 });
 
 

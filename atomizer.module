@@ -184,11 +184,12 @@ function _atomizer_what_is_this_form_alter_for (&$form, FormStateInterface $form
   $form['field_configuration_file']['#access'] = false;
   $entity = $form_state->getFormObject()->getEntity();
   $configFile = $entity->field_configuration_file->value;
+  $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
   $form['field_config'] = [
     '#type' => 'select',
     '#title' => t('Configuration file'),
     '#default_value' => $configFile,
-    '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/producers', '/\.yml/'),
+    '#options' => AtomizerFiles::createFileList($module_path . '/config/producers', '/\.yml/'),
   ];
 
   $form['#validate'][] = 'atomizer_form_node_atomizer_validate';
@@ -256,11 +257,12 @@ function _atomizer_atomizer_form_alter (&$form, FormStateInterface $form_state) 
   $form['field_configuration_file']['#access'] = false;
   $entity = $form_state->getFormObject()->getEntity();
   $configFile = $entity->field_configuration_file->value;
+  $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
   $form['field_config'] = [
     '#type' => 'select',
     '#title' => t('Configuration file'),
     '#default_value' => $configFile,
-    '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/producers', '/\.yml/'),
+    '#options' => AtomizerFiles::createFileList($module_path . '/config/producers', '/\.yml/'),
   ];
 
   $form['#validate'][] = 'atomizer_form_node_atomizer_validate';
@@ -329,7 +331,8 @@ function atomizer_preprocess_node(&$variables) {
           // Read in the configuration file and save it back into the block for use later.
           $configFile = $node->field_configuration_file->value;
           \Drupal::logger('atomizer')->notice('atomizer_preprocess_node: configFile ' . $configFile . '  nid ' . $nid);
-          $atomizerConfig = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/producers/' . $configFile));
+          $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
+          $atomizerConfig = Yaml::decode(file_get_contents($module_path . '/config/producers/' . $configFile));
           $atomizerConfig['filename'] = $configFile;
           $atomizer_block->getPlugin()->setConfigurationValue('atomizer_configuration', $atomizerConfig);
           $atomizer_block->save();

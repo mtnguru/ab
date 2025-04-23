@@ -274,9 +274,10 @@ class AtomizerInit {
     $atomizerId = str_replace(['_', ' '], '-', strtolower($config['atomizerId'])) . '--' . self::$idNum;
     self::$idNum++;
 // Read in the config/atomizer file
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
     if (empty($config['atomizer_configuration'])) {
       $atomizer_config = Yaml::decode(file_get_contents(
-        drupal_get_path('module', 'atomizer') . '/config/producers/' . $config['atomizerFile']
+        $module_path . '/config/producers/' . $config['atomizerFile']
       ));
       $atomizer_config['filename']   = $config['atomizerFile'];
       $atomizer_config['atomizerId'] = $atomizerId;
@@ -294,10 +295,10 @@ class AtomizerInit {
     if (!empty($atomizer_config)) {
       if (!empty($atomizer_config['objects'])) {
         foreach ($atomizer_config['objects'] as $object) {
-          $files = \Drupal::service('file_system')->scanDirectory(drupal_get_path('module', 'atomizer') . '/config/objects/' . $object, '/\.yml/');
+          $files = \Drupal::service('file_system')->scanDirectory($module_path . '/config/objects/' . $object, '/\.yml/');
           foreach ($files as $file) {
             $objects[str_replace('nuclet_', '', $file->name)] = Yaml::decode(
-              file_get_contents(drupal_get_path('module', 'atomizer') . '/config/objects/' . $object . '/' . $file->filename)
+              file_get_contents($module_path . '/config/objects/' . $object . '/' . $file->filename)
             );
           }
         }
@@ -405,7 +406,7 @@ class AtomizerInit {
       $controlFile = $atomizer_config['controlFile'];
     }
     if (isset($controlFile)) {
-      $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $controlFile));
+      $controlSet = Yaml::decode(file_get_contents($module_path . '/config/controls/' . $controlFile));
       $controlSet['filename'] = $controlFile;
 
       // Create the controls form

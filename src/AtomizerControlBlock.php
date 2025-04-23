@@ -105,7 +105,8 @@ class AtomizerControlBlock {
 
       case 'selectyml':
 
-        $fileList = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/' . $controlConf[4], '/\.yml/');
+        $path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
+        $fileList = AtomizerFiles::createFileList($path . '/' . $controlConf[4], '/\.yml/');
         $control = [
           '#type' => 'container',
           '#attributes' => ['class' => ['selectyml']],

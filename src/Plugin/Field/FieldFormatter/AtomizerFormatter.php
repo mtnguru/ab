@@ -42,11 +42,12 @@ class AtomizerFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $atomizerFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/producers', '/\.yml/');
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $atomizerFiles = AtomizerFiles::createFileList($module_path . '/config/producers', '/\.yml/');
     $atomizer = $this->getSetting('atomizer');
     $atomizerClass = $this->getSetting('atomizerClass');
 
-    $controlFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/controls', '/\.yml/');
+    $controlFiles = AtomizerFiles::createFileList($module_path . '/config/controls', '/\.yml/');
     $control = $this->getSetting('control');
 
     $elements['atomizer'] = array(
@@ -77,7 +78,8 @@ class AtomizerFormatter extends FormatterBase {
    */
   public function settingsSummary() {
     $summary = array();
-    $atomizerFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/producers', '/\.yml/');
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $atomizerFiles = AtomizerFiles::createFileList($module_path . '/config/producers', '/\.yml/');
     $atomizer = $this->getSetting('atomizer');
     $atomizer = ($atomizer) ? $atomizer : $this->defaultSettings()['atomizer'];
     if ($atomizer == 'atom_viewer.yml') {
@@ -85,7 +87,7 @@ class AtomizerFormatter extends FormatterBase {
     }
     $summary[] = t('Atomizer: @atomizer', array('@atomizer' => $atomizerFiles[$atomizer]));
 
-    $controlFiles = AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/controls', '/\.yml/');
+    $controlFiles = AtomizerFiles::createFileList($module_path . '/config/controls', '/\.yml/');
     $control = $this->getSetting('control');
     $control = ($control) ? $control : $this->defaultSettings()['control'];
     $summary[] = t('Control file: @control', array('@control' => $controlFiles[$control]));

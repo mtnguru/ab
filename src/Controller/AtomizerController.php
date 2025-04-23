@@ -92,7 +92,8 @@ class AtomizerController extends ControllerBase {
   public function loadYml() {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $path = drupal_get_path('module', 'atomizer') . '/' . $data['filepath'];
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $path = $module_path . '/' . $data['filepath'];
     if (!file_exists($path)) {
        $path =  dirname($path) . '/Default.yml';
        $data['message'] = 'Could not find ' . $data['filepath'] . ' -- Default.yml file loaded.';
@@ -100,7 +101,7 @@ class AtomizerController extends ControllerBase {
        $data['themeId'] = 'default';
     }
     $response = new AjaxResponse();
-    $ymlContents = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath']));
+    $ymlContents = Yaml::decode(file_get_contents($module_path . '/' . $data['filepath']));
     $response->addCommand(new LoadYmlCommand($data, $ymlContents));
 
     return $response;
@@ -114,7 +115,8 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), true);
 
     $response = new AjaxResponse();
-    $data['success'] = file_put_contents(drupal_get_path('module', 'atomizer') . '/' . $data['filepath'], Yaml::encode($data['ymlContents']));
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $data['success'] = file_put_contents($module_path . '/' . $data['filepath'], Yaml::encode($data['ymlContents']));
     $response->addCommand(new SaveYmlCommand($data));
 
     return $response;
@@ -128,7 +130,8 @@ class AtomizerController extends ControllerBase {
   public function listDirectory() {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $files = \Drupal::service('file_system')->scanDirectory(drupal_get_path('module', 'atomizer') . '/' . $data['directory'], '/\.yml/');
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $files = \Drupal::service('file_system')->scanDirectory($module_path . '/' . $data['directory'], '/\.yml/');
     foreach ($files as $file) {
       $filelist[$file->filename] = $file->name;
     }
@@ -662,7 +665,8 @@ class AtomizerController extends ControllerBase {
   public function saveCoordinates() {
     $data = json_decode(file_get_contents("php://input"), true);
     $atomicNumber = (($data['atomicNumber'] < 10) ? '0' : '') . $data['atomicNumber'];
-    $path = drupal_get_path('module', 'atomizer') .
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $path = $module_path .
               '/config/coordinates/' .
               $atomicNumber . '.' .
               str_replace(' ', '-',$data['name']) . '.' .
@@ -717,7 +721,8 @@ class AtomizerController extends ControllerBase {
         break;
       case 'birkeland':
         $field = $node->field_structure;
-        $path = drupal_get_path('module', 'atomizer') . '/config/objects/birkeland/' . $data['conf']['nid'] . '.yml';
+        $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+        $path = $module_path . '/config/objects/birkeland/' . $data['conf']['nid'] . '.yml';
         if (file_exists($path)) {
           $data['nodeConf'] = Yaml::decode(file_get_contents($path));
         } else {

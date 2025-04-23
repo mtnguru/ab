@@ -26,7 +26,8 @@ class AtomizerControls extends BlockBase {
       '#default_value' => isset($this->configuration['atomizerId']) ? $this->configuration['atomizerId'] : 'Atomizer',
     );
 
-    $control_files = \Drupal::service('file_system')->scanDirectory(drupal_get_path('module','atomizer') . '/config/controls', '/\.yml/');
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $control_files = \Drupal::service('file_system')->scanDirectory($module_path . '/config/controls', '/\.yml/');
     foreach ($control_files as $file) {
       $control_options[$file->filename] = $file->name;
     }
@@ -55,7 +56,8 @@ class AtomizerControls extends BlockBase {
     $config = $this->getConfiguration();
 
     // Read in the controls file
-    $controlSet = Yaml::decode(file_get_contents(drupal_get_path('module', 'atomizer') . '/config/controls/' . $config['controlFile']));
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
+    $controlSet = Yaml::decode(file_get_contents($module_path . '/config/controls/' . $config['controlFile']));
     $controlSet['filename'] = $config['controlFile'];
 
     // Create the form

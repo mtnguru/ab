@@ -27,12 +27,13 @@ class AtomizerViewer extends BlockBase {
       '#default_value' => isset($this->configuration['atomizerId']) ? $this->configuration['atomizerId'] : 'Atomizer',
     ];
 
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
     $form['atomizerFile'] = [
       '#type' => 'select',
       '#title' => $this->t('Atomizer file'),
       '#description' => $this->t(''),
       '#default_value' => isset($this->configuration['atomizerFile']) ? $this->configuration['atomizerFile'] : 'default',
-      '#options' => AtomizerFiles::createFileList(drupal_get_path('module', 'atomizer') . '/config/producers', '/\.yml/'),
+      '#options' => AtomizerFiles::createFileList($module_path . '/config/producers', '/\.yml/'),
     ];
 
     return $form;

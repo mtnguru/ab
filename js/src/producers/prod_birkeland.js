@@ -158,7 +158,10 @@
 
       // Load and display the initial birkeland current
       var objectNid = localStorage.getItem('atomizer_birkeland_nid');
-      objectNid = ((!objectNid || objectNid == 'undefined') ? 628 : objectNid);  // Loads a birkeland content type
+//    The older systems - Ethereal Matters, StructuredAtom
+//    objectNid = ((!objectNid || objectNid == 'undefined') ? 52 : objectNid);  // Loads a birkeland content type
+//    Its All Electric
+      objectNid = ((!objectNid || objectNid == 'undefined') ? 52 : objectNid);  // Loads a birkeland content type
 //    IAE or EM
 //    objectNid = ((!objectNid || objectNid == 'undefined') ? 17 : objectNid);  // Loads a birkeland content type
       viewer.birkeland.loadObject(
@@ -174,11 +177,14 @@
 
       // Set the ID of the scene select radio buttons - scene--select--610
       var $radios = $('#edit-scene-select .az-control-radios', viewer.context);
-      $radios.once('az-processed').each(function() {
-        var id = 'scene--select--' + $(this).val();
-        $(this).attr('id', id);
-        if ($(this).val() == objectNid) {
-          $(this).prop('checked', true);
+      $radios.each(function() {
+        if (!$(this).hasClass('az-processed')) { // Check if already processed
+          $(this).addClass('az-processed'); // Mark as processed
+          var id = 'scene--select--' + $(this).val();
+          $(this).attr('id', id);
+          if ($(this).val() == objectNid) {
+            $(this).prop('checked', true);
+          }
         }
       });
 
