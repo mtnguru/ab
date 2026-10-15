@@ -1,85 +1,112 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var sass = require('gulp-sass')(require('sass'));
+var sass = require('gulp-sass')(require('sass'))
 // var watch = require('gulp-watch');
-// var livereload = require('livereload')
-// var notify = require('gulp-notify');
-var autoprefixer = require('gulp-autoprefixer');
+var shell = require('gulp-shell');
 var sourcemaps = require('gulp-sourcemaps');
-var concat = require('gulp-concat');
-var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var fs = require("fs");
+var runSequence = require('run-sequence');
+var config = require("./example.config");
 var sassGlob = require('gulp-sass-glob');
-var obfuscator = require('gulp-javascript-obfuscator');
-
-gulp.task('sass', function () {
-  gulp.src('sass/**/*.scss')
-    .pipe(sassGlob())
-    .pipe(sourcemaps.init())
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('css'));
-});
-
-
-//script paths
-var jsFiles = 'js/src/**/*.js',
-    jsDest = 'js/min';
-
-gulp.task('scripts', function() {
-    return gulp.src(jsFiles)
-//      .pipe(gulp.dest(jsDest))
-//      .pipe(rename('scripts.min.js'))
-        .pipe(uglify())
-        .pipe(concat('scripts.min.js'))
-        .pipe(gulp.dest(jsDest));
-});
-
-
-gulp.task('uglify', function() {
-  gulp.src('js/src/**/*.js')
-    .pipe(gup.dest('js'))
-    .pipe(uglify('main.js'))
-});
+var path = require('path');
 
 /**
- * This task minifies javascript in the js/js-src folder and places them in the js directory.
+ * If config.js exists, load that config for overriding certain values below.
  */
-gulp.task('compress', function() {
-//return gulp.src([
-//    './js/src/az_base.js',
-//    './js/src/az_viewer.js',
-//    './js/src/az_controls.js',
-//    './js/src/az_theme.js',
-//    './js/src/az.js',
-//    './js/src/az_sprites.js',
-//    './js/src/az_shapes.js',
-//    './js/src/az_nuclet.js',
-//    './js/src/az_atom.js',
-//    './js/src/az_animation.js'
-//  ])
+function loadConfig() {
+  if (fs.existsSync(__dirname + "/./config.js")) {
+    config = {};
+    config = require("./config");
+  }
 
-  return gulp.src(['./js/src/**/*.js'])
-    .pipe(obfuscator())
-    .pipe(gulp.dest('./js/min/'))
-    .pipe(concat('az_obfuscate.js'))
-    .pipe(gulp.dest('./js/min/'))
+  return config;
+}
+
+loadConfig();
+
+/**
+ * This task generates CSS from all SCSS files and compresses them down.
+ */
+gulp.task('sass', function () {
+  return gulp.src('./scss/**/*.scss')
+    .pipe(sassGlob())
+    .pipe(sourcemaps.init())
+    .pipe(sass({
+      noCache: true,
+      outputStyle: "compressed",
+      lineNumbers: false,
+      includePaths: [
+        '.',  // your project root
+        path.join(__dirname, 'node_modules/include-media/dist')  // ← this resolves the import
+      ],
+
+      sourceMap: true
+    })).on('error', function(error) {
+      gutil.log(error);
+      this.emit('end');
+    })
+    .pipe(sourcemaps.write('./maps'))
+    .pipe(gulp.dest('./css'))
 //  .pipe(notify({
-//    title: "JS Obfuscator",
-//    message: "All JS files in atomizer have been obfuscated.",
+//    title: "SASS Compiled",
+//    message: "All SASS files have been recompiled to CSS.",
 //    onLast: true
 //  }));
 });
 
+/**
+ * Defines a task that triggers a Drush cache clear (css-js).
+ */
+gulp.task('drush:cc', function () {
+  if (!config.drush.enabled) {
+    return;
+  }
 
-gulp.task('watch', function(){
-//  livereload.listen();
-
-    gulp.watch(['js/src/**/*.js'], ['compress']);
-
-//  gulp.watch('sass/**/*.scss', ['sass']);
-//  gulp.watch(['css/styles.css', '**/*.twig', 'js/*.js'], function (files){
-//      livereload.changed(files)
-//  });
+  return gulp.src('', {read: false})
+    .pipe(shell([
+      config.drush.alias.css_js
+    ]))
+//  .pipe(notify({
+//    title: "Caches cleared",
+//    message: "Drupal CSS/JS caches cleared.",
+//    onLast: true
+//  }));
 });
+
+/**
+ * Defines a task that triggers a Drush cache rebuild.
+ */
+gulp.task('drush:cr', function () {
+  if (!config.drush.enabled) {
+    return;
+  }
+
+  return gulp.src('', {read: false})
+    .pipe(shell([
+      config.drush.alias.cr
+    ]))
+//  .pipe(notify({
+//    title: "Cache rebuilt",
+//    message: "Drupal cache rebuilt.",
+//    onLast: true
+//  }));
+});
+
+/**
+ * Combined tasks that are run synchronously specifically for twig template changes.
+ */
+gulp.task('flush', function() {
+  runSequence('drush:cr', 'reload');
+});
+
+/**
+ * Defines the watcher task.
+ */
+gulp.task('watch', function() {
+
+  // watch scss for changes and clear drupal theme cache on change
+//gulp.watch(['scss/**/*.scss'], gulp.parallel(['sass', 'drush:cc']));
+  gulp.watch(['scss/**/*.scss'], gulp.parallel('sass'));
+});
+

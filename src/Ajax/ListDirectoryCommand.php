@@ -4,6 +4,7 @@ namespace Drupal\atomizer\Ajax;
 use Drupal\Core\Ajax\CommandInterface;
 
 class ListDirectoryCommand implements CommandInterface {
+  protected $data;
   public function __construct($data, $filelist) {
     $this->data = $data;
     $this->filelist = $filelist;

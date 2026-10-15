@@ -4,6 +4,7 @@ namespace Drupal\atomizer\Ajax;
 use Drupal\Core\Ajax\CommandInterface;
 
 class RenderNodeCommand implements CommandInterface {
+  protected $data;
   public function __construct($data, $htmlContents) {
     $this->data = $data;
     $this->htmlContents = $htmlContents;

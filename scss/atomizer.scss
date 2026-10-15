@@ -1,0 +1,50 @@
+
+
+// Make sure the charset is set appropriately
+@charset "UTF-8";
+
+$breakpoints: (
+  phone: 320px,
+  tablet: 768px,
+  desktop: 1024px,
+  wide: 1440px,
+  extrawide: 1920px,
+);
+
+@import '../node_modules/include-media/dist/_include-media';   // This defines the media() mixin
+
+$base-duration: 1000ms;
+$base-timing: ease;
+
+@mixin transition-3d($property: all, $duration: $base-duration, $timing: $base-timing, $transform: null, $transition: true, $origin: null) {
+
+  @if ($transition == true) {
+    transition: $property $duration $timing;
+  }
+
+  $translate-3d: translate3d(0, 0, 0);
+
+  @if ($transform) {
+    transform: $transform $translate-3d;
+  }
+  @else {
+    transform: $translate-3d;
+  }
+
+  @if ($origin) {
+    transform-origin: $origin;
+  }
+} // @mixin transition-3d
+
+//.clearfix::after {
+//  content: "";
+//  display: flow-root;     /* This is the modern, bulletproof way */
+//}
+
+$images-path: '/modules/custom/az_atomizer/images/';
+
+ 
+// Import atomizer.
+@import "colors";
+@import "atomizer/*";
+

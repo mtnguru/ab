@@ -160,7 +160,6 @@ Drupal.atomizer.shapesC = function (_viewer) {
         break;
     }
 
-
     // Set geometry vertices
     var numVertices = vertices.length / 3;
     this.vertices = [];
@@ -185,7 +184,6 @@ Drupal.atomizer.shapesC = function (_viewer) {
       var v3 = p[this.indices[i + 2]];
 
       this.faces[ j ] = new THREE.Face3( v1.index, v2.index, v3.index, [ v1.clone(), v2.clone(), v3.clone() ] );
-
     }
 
     this.type = 'IcoGeometry';
@@ -307,15 +305,15 @@ Drupal.atomizer.shapesC = function (_viewer) {
 
     var vertices = [
       1,  1,  1,     r,  t,  0,
-     -r,  t,  0,    -1,  1,  1,
+      -r,  t,  0,    -1,  1,  1,
       0,  r,  t,     1,  1, -1,
       t,  0,  r,     0, -r,  t,
-     -t,  0,  r,    -1,  1, -1,
+      -t,  0,  r,    -1,  1, -1,
       1, -1, -1,     r, -t,  0,
-     -r, -t,  0,    -1, -1, -1,
+      -r, -t,  0,    -1, -1, -1,
       0, -r, -t,     t,  0, -r,
       1, -1,  1,    -1, -1,  1,
-     -t,  0, -r,     0,  r, -t
+      -t,  0, -r,     0,  r, -t
     ];
 
     var indices = [
@@ -360,6 +358,76 @@ Drupal.atomizer.shapesC = function (_viewer) {
 
   dodecahedronGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
   dodecahedronGeometry.prototype.constructor = dodecahedronGeometry;
+
+  /**
+   * Create the Dodecahedron geometry.
+   *
+   * Defines a different order to the vertices and indices than the THREE.js library.
+   * Adds the azfaces array which defines the faces and wireframes around them.
+   *
+   * @param radius
+   * @param detail
+   */
+  function c60Geometry ( radius, detail ) {
+
+    var t = ( 1 + Math.sqrt( 5 ) ) / 2;
+    var r = 1 / t;
+
+    var vertices = [
+      1,  1,  1,     r,  t,  0,
+      -r,  t,  0,    -1,  1,  1,
+      0,  r,  t,     1,  1, -1,
+      t,  0,  r,     0, -r,  t,
+      -t,  0,  r,    -1,  1, -1,
+      1, -1, -1,     r, -t,  0,
+      -r, -t,  0,    -1, -1, -1,
+      0, -r, -t,     t,  0, -r,
+      1, -1,  1,    -1, -1,  1,
+      -t,  0, -r,     0,  r, -t
+    ];
+
+    var indices = [
+      15, 10, 14,    15, 14, 19,    15, 19,  5,  //  0
+      5, 19,  9,     5,  9,  2,     5,  2,  1,   //  1
+      14, 13, 18,    14, 18,  9,    14,  9, 19,  //  2
+      10, 11, 12,    10, 12, 13,    10, 13, 14,  //  3
+      6, 16, 11,     6, 11, 10,     6, 10, 15,   //  4
+      0,  6, 15,     0, 15,  5,     0,  5,  1,   //  5
+      9, 18,  8,     9,  8,  3,     9,  3,  2,   //  6
+      13, 12, 17,    13, 17,  8,    13,  8, 18,  //  7
+      17, 12, 11,    17, 11, 16,    17, 16,  7,  //  8
+      4,  7, 16,     4, 16,  6,     4,  6,  0,   //  9
+      3,  4,  0,     3,  0,  1,     3,  1,  2,   // 10
+      8, 17,  7,     8,  7,  4,     8,  4,  3    // 11
+    ];
+
+    THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
+
+    this.type = 'C60Geometry';
+
+    this.parameters = {
+      radius: radius,
+      detail: detail
+    };
+
+    this.azfaces = [
+      {'indices': [ 3,  4,  7,  6,  5], 'faces': [0, 1, 2] },    // 0
+      {'indices': [ 0,  1,  3,  4,  2], 'faces': [0, 1, 2] },    // 0
+      {'indices': [ 1,  3,  5,  9,  8], 'faces': [0, 1, 2] },    // 0
+      {'indices': [ 6,  7, 14, 19, 16], 'faces': [0, 1, 2] },    // 0
+      {'indices': [ 5,  6, 16, 15,  9], 'faces': [0, 1, 2] },    // 0
+      {'indices': [ 8,  9, 15, 17, 11], 'faces': [0, 1, 2] },    // 0
+      {'indices': [15, 16, 19, 18, 17], 'faces': [0, 1, 2] },    // 0
+      {'indices': [10, 11, 17, 18, 12], 'faces': [0, 1, 2] },    // 0
+      {'indices': [ 0,  1,  8, 11, 10], 'faces': [0, 1, 2] },    // 0
+      {'indices': [ 2, 13, 14,  7,  4], 'faces': [0, 1, 2] },    // 0
+      {'indices': [12, 18, 19, 14, 13], 'faces': [0, 1, 2] },    // 0
+      {'indices': [ 0, 10, 12, 13,  2], 'faces': [0, 1, 2] },    // 0
+    ];
+  }
+
+  c60Geometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
+  c60Geometry.prototype.constructor = c60Geometry;
 
   /**
    * Create the Cube geometry.
@@ -418,7 +486,7 @@ Drupal.atomizer.shapesC = function (_viewer) {
       case 'dodecahedron': geometry = new dodecahedronGeometry(radius, detail); break;
       case 'decahedron':   geometry = createBiPyramid(5, radius, height, detail); break;
       case 'hexahedron':   geometry = new cubeGeometry(radius, detail); break;
-      case 'backbone':     geometry = new backboneGeometry(state, radius, detail); break;
+      case 'c60':          geometry = new c60Geometry(radius, detail); break;
     }
     if (!savedGeometries[type]) {
       savedGeometries[type] = {};

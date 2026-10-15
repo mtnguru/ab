@@ -28,7 +28,9 @@ class AtomizerInit {
       ], */
     ]);
     $nids = array_keys($result['results']);
-    $elements = entity_load_multiple('node', $nids);
+    $elements = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadMultiple($nids);
     foreach ($elements as $nid => $element) {
       if ($element->field_default_atom->isEmpty()) {
         $anid = null;
@@ -71,7 +73,10 @@ class AtomizerInit {
       'sort' => 'molecules',
     ]);
     $nids = array_keys($result['results']);
-    $elements = entity_load_multiple('node', $nids);
+    // New (Drupal 10 compatible):
+    $elements = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadMultiple($nids);
     foreach ($elements as $nid => $element) {
       $objects[$nid] = [
         'name' => $element->getTitle(),
@@ -100,12 +105,12 @@ class AtomizerInit {
 
       'fields' => [
         'nfd' => ['nid', 'title'],
-        'nfan' => ['field_atomic_number_value'],
-        'nfp' => ['field__protons_value'],
+//      'nfan' => ['field_atomic_number_value'],
+        'nfp' => ['field_protons_value'],
         'nfap' => ['field_approval_value'],
         'nfe' => ['field_element_target_id'],
-        'nfm' => ['field_media_target_id'],
-        'nfi' => ['field_image_target_id'],
+        'nfai' => ['field_atom_image_target_id'],
+        'fm' => ['uri'],
         'nfab' => ['field_abundance_value'],
         'nfhl' => ['field_half_life_value'],
         'ttfd' => ['name'],  // Stability - taxonomy term name
@@ -128,7 +133,7 @@ class AtomizerInit {
       $eid = $atom->field_element_target_id;
       if (!empty($elements[$eid])) {
         $elements[$eid]['isotopes'][] = $atom;
-        $isobars[$atom->field__protons_value][] = $atom;
+        $isobars[$atom->field_protons_value][] = $atom;
         if (empty($elements[$eid]['numIsotopes'])) {
           $elements[$eid]['numIsotopes'] = 1;
         } else {
@@ -138,7 +143,7 @@ class AtomizerInit {
     }
 
     foreach ($atoms as $atom) {
-      $atom->isobars = $isobars[$atom->field__protons_value];
+      $atom->isobars = $isobars[$atom->field_protons_value];
     }
 
     // Create render array of elements and their isotopes.

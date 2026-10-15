@@ -1157,10 +1157,10 @@
           $textarea.val(extractStructure(atom));
 
           let protons = $('.atom--num-protons--value').html();
-          $nodeForm.find('.field--name-field__protons input').val(protons);
+          $nodeForm.find('.field--name-field_protons input').val(protons);
 
           let electrons = $('.atom--num-electrons--value').html();
-          $nodeForm.find('.field--name-field__electrons input').val(electrons);
+          $nodeForm.find('.field--name-field_electrons input').val(electrons);
 
           let be_sam_nuclets = $('.atom--be-sam-nuclets--value').html();
           $nodeForm.find('.field--name-field-be-sam-nuclets input').val(be_sam_nuclets);

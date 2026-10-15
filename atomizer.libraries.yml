@@ -1,4 +1,4 @@
-# Atomizer base files
+
 
 atomizer-base:
   js:
@@ -22,10 +22,14 @@ atomizer-base:
     js/src/az_atom_select.js: {}
     js/src/az_atom_list.js: {}
     js/src/az_animation.js: {}
-# css:
-#   component:
-#     css/atomizer.css: {}
+  css:
+    component:
+      css/atomizer.css: {}
   dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+    - core/jquery
     - core/drupal.dialog.ajax
     - core/drupal.ajax
 
@@ -50,16 +54,22 @@ atomizer-obfuscator:
     js/min/az_atom_select.js: {}
     js/min/az_atom_list.js: {}
     js/min/az_animation.js: {}
-# css:
-#   component:
-#     css/atomizer.css: {}
+  css:
+    component:
+      css/atomizer.css: {}
   dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+    - core/jquery
     - core/drupal.dialog.ajax
     - core/drupal.ajax
 
 ############ Atom Builder
 
 atomizer-atom-builder:
+  dependencies:
+    - atomizer/atomizer-base
   js:
     js/threejs/renderers/CSS3DRenderer.js: {}
     js/threejs/renderers/CSS2DRenderer.js: {}
@@ -70,6 +80,8 @@ atomizer-atom-builder:
     js/src/producers/prod_atom_builder.js: {}
 
 atomizer-atom-builder-obfuscator:
+  dependencies:
+    - atomizer/atomizer-obfuscator
   js:
     js/threejs/renderers/CSS3DRenderer.js: {}
     js/threejs/renderers/CSS2DRenderer.js: {}
@@ -82,11 +94,15 @@ atomizer-atom-builder-obfuscator:
 ############ Atom Viewer
 
 atomizer-atom-viewer:
+  dependencies:
+    - atomizer/atomizer-base
   js:
     js/src/az_pte.js: {}
     js/src/producers/prod_atom_viewer.js: {}
 
 atomizer-atom-viewer-obfuscator:
+  dependencies:
+    - atomizer/atomizer-base-obfuscator
   js:
     js/src/az_pte.js: {}
     js/min/producers/prod_atom_viewer.js: {}

@@ -79,6 +79,61 @@
     }
 
     /**
+     * Modernized, promise-based AJAX helper
+     * Backward compatible signature + many improvements
+     */
+    var doAjaxModern = function (url, data, successCallback, errorCallback) {
+      const isFormData = data instanceof FormData;
+
+      const options = {
+        method: 'POST',
+        headers: isFormData ? {} : { 'Content-Type': 'application/json; charset=utf-8' },
+        body: isFormData ? data : JSON.stringify(data),
+        credentials: 'same-origin',
+        timeout: 30000,
+      };
+
+      // Show loading (optional - customize selector/class)
+      const loadingEl = document.querySelector('.atomizer-loading, body');
+      loadingEl?.classList?.add('uploading');
+
+      fetch(url, options)
+        .then(async (response) => {
+          if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`HTTP ${response.status}: ${text}`);
+          }
+
+          let result;
+          try {
+            result = await response.json();
+          } catch {
+            result = await response.text();
+          }
+
+          // Drupal-style message handling (your original logic)
+          if (Array.isArray(result) && result.length > 0) {
+            const first = result[0];
+            if (first?.data?.message) {
+              alert(first.data.message);
+            }
+          }
+
+          if (successCallback) successCallback(result);
+          return result;
+        })
+        .catch((error) => {
+          console.error('doAjaxModern error:', error);
+          alert('Communication error: ' + (error.message || 'Unknown problem'));
+
+          if (errorCallback) errorCallback(error);
+        })
+        .finally(() => {
+          loadingEl?.classList?.remove('uploading');
+        });
+    };
+
+    /**
      * Execute an AJAX command - use a promise to return result.
      *
      * @param url
@@ -158,6 +213,9 @@
             geo = new THREE.IcosahedronGeometry(shapeConf.length || 3);
             break;
           case 'dodecahedron':
+            geo = new THREE.DodecahedronGeometry(shapeConf.length || 3);
+            break;
+          case 'c60':
             geo = new THREE.DodecahedronGeometry(shapeConf.length || 3);
             break;
           case 'cube':
@@ -351,6 +409,7 @@
       toDegrees,
       toRadians,
       doAjax,
+      doAjaxModern,
       promiseAjax,
       alignObjectToAxis,
       initDraggable,

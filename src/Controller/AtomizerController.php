@@ -12,11 +12,10 @@ use Drupal\Core\Ajax\OpenModalDialogCommand;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\Entity\File;
+use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
-use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Url;
 
 use Drupal\Component\Serialization\Yaml;
@@ -67,6 +66,15 @@ class AtomizerController extends ControllerBase {
   }
 
   /**
+   * renderArray - Execute the service renderRoot
+   * @param array $build
+   * @return string
+   */
+  private function renderArray(array $build): string {
+    return \Drupal::service('renderer')->renderRoot($build);
+  }
+
+  /**
    * Load a YML file.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
@@ -79,7 +87,7 @@ class AtomizerController extends ControllerBase {
     $htmlContents = $this->entityTypeManager->getViewBuilder('node')->view($snippet, 'full');
 
     $response = new AjaxResponse();
-    $response->addCommand(new RenderNodeCommand($data, render($htmlContents)));
+    $response->addCommand(new RenderNodeCommand($data, $this->renderArray($htmlContents)));
 
     return $response;
   }
@@ -92,7 +100,7 @@ class AtomizerController extends ControllerBase {
   public function loadYml() {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
     $path = $module_path . '/' . $data['filepath'];
     if (!file_exists($path)) {
        $path =  dirname($path) . '/Default.yml';
@@ -115,7 +123,7 @@ class AtomizerController extends ControllerBase {
     $data = json_decode(file_get_contents("php://input"), true);
 
     $response = new AjaxResponse();
-    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
     $data['success'] = file_put_contents($module_path . '/' . $data['filepath'], Yaml::encode($data['ymlContents']));
     $response->addCommand(new SaveYmlCommand($data));
 
@@ -130,7 +138,7 @@ class AtomizerController extends ControllerBase {
   public function listDirectory() {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
     $files = \Drupal::service('file_system')->scanDirectory($module_path . '/' . $data['directory'], '/\.yml/');
     foreach ($files as $file) {
       $filelist[$file->filename] = $file->name;
@@ -199,7 +207,7 @@ class AtomizerController extends ControllerBase {
         'id' =>"edit-link",
       ],
     ];
-    $data['link'] = render($link);
+    $data['link'] = $this->renderArray($link);
 
     $node = Node::load($data['conf']['nid']);
     $element = $node->field_element->entity;
@@ -209,8 +217,8 @@ class AtomizerController extends ControllerBase {
     $anid = $node->id();
     $data['defaultAtom'] = ($node->id() == $element->field_default_atom->target_id) ? '1' : '0';
 
-    $boundingSphere = $node->field_bounding_sphere->entity;
-    if ($boundingSphere) {
+    if ($node->hasField('field_bounding_sphere') && !$node->get('field_bounding_sphere')->isEmpty()) {
+      $boundingSphere = $node->field_bounding_sphere->entity;
       $data['boundingSphere'] = [
         'x' => $boundingSphere->field_center_x->value,
         'y' => $boundingSphere->field_center_y->value,
@@ -241,11 +249,11 @@ class AtomizerController extends ControllerBase {
       '#url' => Url::fromUri($isotopeUrl),
     ];
     // Render the properties block.
-    $data['properties'] = render($build);
+    $data['properties'] = $this->renderArray($build);
 
     // Render the atom information using teaser view.
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
-    $data['information'] = render($build);
+    $data['information'] = $this->renderArray($build);
 
     // Get the atomic structure field.
     $field = $node->field_atomic_structure;
@@ -281,7 +289,7 @@ class AtomizerController extends ControllerBase {
         if (!empty($elements[$eid])) {
           // Count the number of isotopes
           $elements[$eid]['isotopes'][] = $atom;
-          $isobars[$atom->field__protons_value][] = $atom;
+          $isobars[$atom->field_protons_value][] = $atom;
           if (empty($elements[$eid]['numIsotopes'])) {
             $elements[$eid]['numIsotopes'] = 1;
           } else {
@@ -292,31 +300,36 @@ class AtomizerController extends ControllerBase {
 
       // Create list of elements and their isotopes.
       $list = [];
+      $image_style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
+      $file_url_generator = \Drupal::service('file_url_generator');
+
       foreach ($elements as $element) {
         $defaultAtom = null;
         $imageUrl = '';
         $title = '';
 
         if ($element['numIsotopes'] > 0) {
-          $defaultAtomNid = (!empty($element['defaultAtom'])) ? $element['defaultAtom'] : $element['isotopes'][0]->nid;
-          if (empty($atoms[$defaultAtomNid])) {
-            $defaultAtom = $atoms[$element['isotopes'][0]->nid];
-          } else {
-            $defaultAtom = $atoms[$defaultAtomNid];
-          }
-          $title = $defaultAtom->title;
+          $defaultAtomNid = $element['defaultAtom'] ?? $element['isotopes'][0]->nid ?? NULL;
 
-          // add image url
-          $media = \Drupal::entityTypeManager()->getStorage('media')->load($defaultAtom->field_media_target_id);
-          if ($defaultAtom->field_image_target_id) {
-            $fid = $defaultAtom->field_image_target_id;
-            $file = \Drupal\file\Entity\File::load($fid);
-            $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
-            $imageUrl = $style->buildUrl($file->getFileUri());
+          if (!empty($defaultAtomNid) && !empty($atoms[$defaultAtomNid])) {
+            $defaultAtom = $atoms[$defaultAtomNid];
+            $title = $defaultAtom->title ?? '';
+
+            // New: Use field_atom_image (media reference)
+            if ($defaultAtom->uri) {
+              if ($image_style) {
+                $imageUrl = $image_style->buildUrl($defaultAtom->uri);
+              } else {
+                $imageUrl = $file_url_generator->generateAbsoluteString($defaultAtom->uri);
+              }
+            } else {
+              \Drupal::logger('atomizer')->warning('Missing file entity for media @mid on atom @nid', [
+                '@mid' => 209,
+                '@nid' => $defaultAtomNid,
+              ]);
+            }
           }
         }
-
-        // if media exists then create the URL for the image.
 
         $name = strtolower($element['name']);
         $list[$name] = [
@@ -325,7 +338,7 @@ class AtomizerController extends ControllerBase {
           'defaultAtomName' => $title,
           'nid' => $element['nid'],
           'default_atom_nid' => $defaultAtomNid,
-          'stability' => (!empty($defaultAtom->name)) ? $defaultAtom->name : 'Not Set',
+          'stability' => $defaultAtom->name ?? 'Not Set',
           'atomic_number' => $element['atomicNumber'],
           'image_url' => $imageUrl,
           'pte_row' => $element['pte_row'],
@@ -335,10 +348,11 @@ class AtomizerController extends ControllerBase {
           'num_isotopes' => $element['numIsotopes'],
           'num_isobars' => $element['numIsobars'],
           'valence' => $element['valence'],
-          'isotopes' => ($element['numIsotopes']) ? $element['isotopes'] : null,
+          'isotopes' => $element['numIsotopes'] ? $element['isotopes'] : NULL,
         ];
       }
-      \Drupal::cache()->set($cid, $list);
+
+//    \Drupal::cache()->set($cid, $list, Cache::PERMANENT, ['node_list:atom']);
     }
 
     $data['list'] = &$list;
@@ -377,7 +391,7 @@ class AtomizerController extends ControllerBase {
         'id' =>"edit-link",
       ],
     ];
-    $data['link'] = render($link);
+    $data['link'] = $this->renderArray($link);
 
     $node = Node::load($data['conf']['nid']);
 
@@ -397,11 +411,11 @@ class AtomizerController extends ControllerBase {
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
 
     // Render the properties block.
-    $data['properties'] = render($build);
+    $data['properties'] = $this->renderArray($build);
 
     // Render the atom information using teaser view.
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
-    $data['information'] = render($build);
+    $data['information'] = $this->renderArray($build);
 
 
     $response->addCommand(new LoadMoleculeCommand($data));
@@ -451,9 +465,9 @@ class AtomizerController extends ControllerBase {
     }
 
     $dialog = self::$dialogs->buildDialog($data);
-    $data['content'] = render($dialog['content']);
+    $data['content'] = $this->renderArray($dialog['content']);
     if (!empty($dialog['buttonpane'])) {
-      $data['buttonpane'] = render($dialog['buttonpane']);
+      $data['buttonpane'] = $this->renderArray($dialog['buttonpane']);
     }
     $data['id'] = $dialog['id'];
 
@@ -484,7 +498,7 @@ class AtomizerController extends ControllerBase {
     if (!empty($data['lines'] != '0')) {
       $samBE = $data['lines'] * 2.225;
       $atom->set('field_sam_lines', $samBE);
-      if (!$atom->field_actual_be->isEmpty()) {
+      if ($atom->hasField('field_actual_be') && !$atom->get('field_actual_be')->isEmpty()) {
         $actualBE = $atom->field_actual_be->value;
         $perc = (($samBE > $actualBE) ? $actualBE / $samBE : -$samBE / $actualBE) * 100;
         $atom->set('field_be_sam_lines', $samBE);
@@ -516,63 +530,110 @@ class AtomizerController extends ControllerBase {
     return new AjaxResponse();
   }
 
+  /**
+   * _saveAtomImage()
+   *
+   * @param $data
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
+   */
+
   public function _saveAtomImage($data) {
+    \Drupal::logger('atomizer')->notice('_saveAtomImage - enter');
 
-    error_log("_saveAtomImage - enter");
     $atom = $this->entityTypeManager->getStorage('node')->load($data['sceneNid']);
-    $filename = $data['filename'] . '.png';
-    $tmpPath = file_directory_temp() . '/' . $filename;
-    $finalpath = DRUPAL_ROOT . '/sites/default/files/atoms_primary/' . $filename;
-    $stylepath = DRUPAL_ROOT . '/sites/default/files/styles/*/public/atoms_primary/' . $filename;
-
-    if ($atom->hasField('field_image') && !$atom->field_image->isEmpty()) {
-      $file = $atom->field_image->entity;
-      $file->delete();
+    if (!$atom) {
+      throw new \Exception("Node not found: {$data['sceneNid']}");
     }
 
-    error_log("_saveAtomImage - create new");
-    $file = File::create(['uri' => 'public://atoms_primary/' . $filename]);
+    $filename = $data['filename'] . '.png';
+
+    // 1. Decode base64 (robust version)
+    $base64_string = $data['imgBase64'];
+    if (strpos($base64_string, 'data:') === 0) {
+      $base64_string = explode(',', $base64_string, 2)[1];
+    }
+    $base64_string = str_replace(["\r", "\n", " ", "\t"], '', $base64_string);
+
+    $mod = strlen($base64_string) % 4;
+    if ($mod) {
+      $base64_string .= str_repeat('=', 4 - $mod);
+    }
+
+    $image_data = base64_decode($base64_string, TRUE);
+    if ($image_data === FALSE) {
+      throw new \Exception('Invalid base64 image data - decoding failed');
+    }
+
+    // 2. Write to temporary://
+    $tmp_uri = 'temporary://' . $filename;
+    $file_repository = \Drupal::service('file.repository');
+
+    $temp_file = $file_repository->writeData(
+      $image_data,
+      $tmp_uri,
+      FileSystemInterface::EXISTS_REPLACE
+    );
+
+    if (!$temp_file) {
+      throw new \Exception('Failed to write temporary file');
+    }
+
+    // 3. Move to permanent public location
+    $destination = 'public://atoms_primary/' . $filename;
+    $file = $file_repository->move(
+      $temp_file,
+      $destination,
+      FileSystemInterface::EXISTS_REPLACE
+    );
+
+    if (!$file) {
+      throw new \Exception('Failed to move file to permanent destination');
+    }
+
+    $file->setPermanent();
     $file->save();
 
-    // Set the image
-    $image = $atom->field_image->getValue();
-    $image[0]['target_id'] = $file->id();
-    $atom->field_image->setValue(($image));
-
-    $atom->save();
-    /*
-    // The atom does not have a image file, create a new one
-    if (!$atom->hasField('field_image') || $atom->field_image->isEmpty()) {
-
-      error_log("_saveAtomImage - create new");
-      $file = File::create(['uri' => 'public://atoms_primary/' . $filename]);
-      $file->save();
-
-      // Set the image
-      $image = $atom->field_image->getValue();
-      $image[0]['target_id'] = $file->id();
-      $atom->field_image->setValue(($image));
-
-      $atom->save();
-    } else {
-      error_log("_saveAtomImage - overwrite");
-      $file = $atom->field_image->entity;
-      $file->setFileUri('public://atoms_primary/' . $filename);
-      $file->setFilename($filename);
-      $file->save;
+    // 4. Clean up old media + file (if exists)
+    if ($atom->hasField('field_atom_image') && !$atom->field_atom_image->isEmpty()) {
+      $old_media = $atom->field_atom_image->entity;
+      if ($old_media instanceof Media) {
+        $old_file = $old_media->field_media_image->entity;
+        if ($old_file instanceof File) {
+          $old_file->delete();
+        }
+        $old_media->delete();
+      }
     }
-    */
 
-    error_log("_saveAtomImage - writeImage " . $tmpPath);
-    $this->writeImage($tmpPath, $data['imgBase64']);
-    error_log("_saveAtomImage - convertImage " . $finalpath);
-    system('rm  ' . $finalpath);
-    system('rm  ' . $stylepath);
-    $this->convertImage($tmpPath, $finalpath);
+    // 5. Create new Media entity
+    $media = Media::create([
+      'bundle' => 'image',  // ← Verify this matches your media bundle
+      'uid' => $atom->getOwnerId(),
+      'name' => $data['filename'],
+      'status' => 1,
+      'field_media_image' => [
+        'target_id' => $file->id(),
+        'alt' => $data['alt'] ?? $filename,
+        'title' => $data['title'] ?? '',
+      ],
+    ]);
+    $media->save();
 
-    // @TODO - return confirmation message.
-    $response = new AjaxResponse();
-    return $response;
+    // 6. Attach media to node
+    $atom->field_atom_image->setValue(['target_id' => $media->id()]);
+    $atom->save();
+
+    \Drupal::logger('atomizer')->notice(
+      '_saveAtomImage - success | Media: @media | Node: @node',
+      ['@media' => $media->id(), '@node' => $atom->id()]
+    );
+
+    return new AjaxResponse();
   }
 
   /**
@@ -595,7 +656,7 @@ class AtomizerController extends ControllerBase {
     } while (file_exists($newpath));
 
     // Save image, process through 'convert' command to reduce file size.
-    $tmpPath = file_directory_temp() . '/' . $newfilename;
+    $tmpPath = $temp_dir = \Drupal::service('file_system')->getTempDirectory() . '/' . $newfilename;
     $this->writeImage($tmpPath, $data['imgBase64']);
     $this->convertImage($tmpPath, $newpath);
 
@@ -616,7 +677,7 @@ class AtomizerController extends ControllerBase {
     $media = ($data['overwrite'] == "TRUE") ? $media : $media->createDuplicate();
 
     // Set published status and moderation state.
-    $media->status->setValue(NODE_PUBLISHED);
+//  $media->status->setValue(NODE_PUBLISHED);
     $media->moderation_state->setValue('published');
 
     // Set the image
@@ -665,7 +726,7 @@ class AtomizerController extends ControllerBase {
   public function saveCoordinates() {
     $data = json_decode(file_get_contents("php://input"), true);
     $atomicNumber = (($data['atomicNumber'] < 10) ? '0' : '') . $data['atomicNumber'];
-    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+    $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
     $path = $module_path .
               '/config/coordinates/' .
               $atomicNumber . '.' .
@@ -708,11 +769,11 @@ class AtomizerController extends ControllerBase {
     switch ($type) {
       case 'atom':
         $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'atom_viewer');
-        $data['properties'] = render($build);
+        $data['properties'] = $this->renderArray($build);
 
         // Render the node/atom using teaser view mode.
         $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, 'teaser');
-        $data['information'] = render($build);
+        $data['information'] = $this->renderArray($build);
 
         $field = $node->field_atomic_structure;
         if ($field) {
@@ -721,7 +782,7 @@ class AtomizerController extends ControllerBase {
         break;
       case 'birkeland':
         $field = $node->field_structure;
-        $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer'); 
+        $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.path.resolver')->getPath('module', 'atomizer');
         $path = $module_path . '/config/objects/birkeland/' . $data['conf']['nid'] . '.yml';
         if (file_exists($path)) {
           $data['nodeConf'] = Yaml::decode(file_get_contents($path));

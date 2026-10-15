@@ -28,9 +28,9 @@
       switch (mouse.mode) {
         case 'none':
           return null;
-        case 'electronsAdd':
+        case 'electronsInnerEdit':
           return null;
-        case 'protonsAdd':
+        case 'protonsEdit':
           return optionalProtons;
       }
     };
@@ -46,8 +46,8 @@
         case 'none':
           return;
 
-        case 'electronsAdd':
-        case 'protonsAdd':
+        case 'electronsInnerEdit':
+        case 'protonsEdit':
 
           viewer.render();
           break;
@@ -98,7 +98,7 @@
       switch (event.which) {
         case 1:   // Select/Unselect protons to add an electron to.
           switch (mouse.mode) {
-            case 'electronsAdd_breakit':
+            case 'electronsInnerEdit':
               viewer.render();
               break;
           }
@@ -207,8 +207,8 @@
       viewer.snapshot = Drupal.atomizer.snapshotC(viewer);
       viewer.animation = Drupal.atomizer.animationC(viewer);
 
-//    let nid = localStorage.getItem('atomizer_pte_nid', 2344);
-      let nid = 2552;
+      let nid = localStorage.getItem('atomizer_pte_nid', 3099);
+      nid = 3099;
       viewer.atom_list.getAtomList('full').then(function(list) {
         elements = list;
         return loadEpisode(nid);

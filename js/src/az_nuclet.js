@@ -356,8 +356,6 @@
         case 'neutral':
         case 'icosahedron':
           return viewer.shapes.getGeometry('icosahedron', shape, scale, null, detail);
-        case 'decahedron':
-          return viewer.shapes.getGeometry('decahedron', 'final', scale, height, detail);
         case 'line':
           var lineGeometry = new THREE.Geometry();
           var pos = protonRadius * 2;
@@ -371,6 +369,8 @@
         case 'hexahedron':
         case 'backbone':
           return viewer.shapes.getGeometry(shape, state, scale, null, detail);
+        case 'c60':
+          return viewer.shapes.getGeometry('c60', shape, scale, null, detail);
         case 'octahedron':
           return new THREE.OctahedronGeometry(scale, detail);
       }
@@ -953,6 +953,7 @@
     function createWireframe(name, geometry, shapeConf) {
       var wireframe;
       if (shapeConf.shape == 'dodecahedron' ||
+          shapeConf.shape == 'c60' ||
           shapeConf.shape == 'carbon' ||
           shapeConf.shape == 'lithium' ||
           shapeConf.shape == 'hexahedron' ||

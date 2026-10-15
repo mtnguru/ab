@@ -4,6 +4,7 @@ namespace Drupal\atomizer\Ajax;
 use Drupal\Core\Ajax\CommandInterface;
 
 class LoadNodeCommand implements CommandInterface {
+  protected $data;
   public function __construct($data) {
     $this->data = $data;
   }

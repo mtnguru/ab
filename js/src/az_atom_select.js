@@ -56,7 +56,7 @@
             for (let i = 0; i < element.isotopes.length; i++) {
               let isotope = element.isotopes[i];
               if (isotope.nid == element.default_atom_nid) {
-                numNucleons = isotope.field__protons_value;
+                numNucleons = isotope.field_protons_value;
               }
             }
 

@@ -31,9 +31,9 @@
       switch (mouse.mode) {
         case 'none':
           return null;
-        case 'electronsAdd':
+        case 'electronsInnerEdit':
           return null;
-        case 'protonsAdd':
+        case 'protonsEdit':
           return optionalProtons;
       }
     };
@@ -49,8 +49,8 @@
         case 'none':
           return;
 
-        case 'electronsAdd':
-        case 'protonsAdd':
+        case 'electronsInnerEdit':
+        case 'protonsEdit':
 
           viewer.render();
           break;
@@ -71,7 +71,7 @@
       switch (event.which) {
         case 1:   // Select/Unselect protons to add an electron to.
           switch (mouse.mode) {
-            case 'electronsAdd_breakit':
+            case 'electronsInnerEdit':
               break;
           }
           break;

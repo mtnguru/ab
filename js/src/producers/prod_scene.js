@@ -19,7 +19,7 @@
     let mousePressed = false;
 
     var $protonsColor = $('#edit-proton-colors--wrapper', viewer.context);
-    viewer.controls.mouseMode('electronsAdd');
+    viewer.controls.mouseMode('electronsInnerEdit');
 
     /**
      * deleteObject from scene and objects arraw
@@ -113,9 +113,9 @@
           return null;
         case 'atomsMove':
           return intersect.visibleProtonsElectrons;
-        case 'electronsAdd':
+        case 'electronsInnerEdit':
           return intersect.visibleProtonsElectrons;
-        case 'protonsAdd':
+        case 'protonsEdit':
           return intersect.optionalProtons;
         case 'protonsColor':
           return intersect.visibleProtons;
@@ -195,8 +195,8 @@
           } // switch which mouse button
           break;
 
-        case 'electronsAdd':
-        case 'protonsAdd':
+        case 'electronsInnerEdit':
+        case 'protonsEdit':
         case 'protonsColor':
         case 'inner-faces':
         case 'outer-faces':
@@ -226,8 +226,8 @@
             viewer.dir_atom.mouseMove(event, mouse);
             break;
 
-          case 'electronsAdd':
-          case 'protonsAdd':
+          case 'electronsInnerEdit':
+          case 'protonsEdit':
           case 'protonsColor':
           case 'inner-faces':
           case 'outer-faces':

@@ -4,6 +4,7 @@ namespace Drupal\atomizer\Ajax;
 use Drupal\Core\Ajax\CommandInterface;
 
 class LoadDialogCommand implements CommandInterface {
+  protected $data;
   public function __construct($data) {
     $this->data = $data;
   }

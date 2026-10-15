@@ -117,10 +117,10 @@ function _atomizer_atom_form_alter(&$form, FormStateInterface $form_state) {
 function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
   //
   if ($form_state->hasValue(['field_be_nucleon', 0, 'value']) &&
-      $form_state->hasValue(['field__protons', 0, 'value'])) {
+      $form_state->hasValue(['field_protons', 0, 'value'])) {
     // Given the per nucleon binding energy, calculate the binding energy for the full nucleus
     $be_nucleon = $form_state->getValue('field_be_nucleon')[0]['value'];
-    $protons = $form_state->getValue('field__protons')[0]['value'];
+    $protons = $form_state->getValue('field_protons')[0]['value'];
     $be_actual = $be_nucleon * $protons / 1000;
     $form_state->setValue(['field_be_actual', 0, 'value'], $be_actual);
 
@@ -152,13 +152,13 @@ function _atomizer_atom_form_validate(&$form, FormStateInterface &$form_state) {
     $form_state->setValue(['field_mass_h_norm', 0, 'value'], $form_state->getValue('field_mass_actual')[0]['value'] / 1.0078250322);
   }
     // Calculate mass using Carl Johnsons formula - this isn't correct - needs work.
-  if ($form_state->hasValue(['field__protons', 0, 'value']) &&
-      $form_state->hasValue(['field__inner_electrons', 0, 'value']) &&
-      $form_state->hasValue(['field__outer_electrons', 0, 'value'])) {
+  if ($form_state->hasValue(['field_protons', 0, 'value']) &&
+      $form_state->hasValue(['field_inner_electrons', 0, 'value']) &&
+      $form_state->hasValue(['field_outer_electrons', 0, 'value'])) {
     $massProton = 1.007276466879;
     $massElectron = .000548579909070;
-    $mass = $massElectron * ($form_state->getValue('field__inner_electrons')[0]['value'] + $form_state->getValue('field__outer_electrons')[0]['value']) +
-      $massProton * $form_state->getValue('field__protons')[0]['value'];
+    $mass = $massElectron * ($form_state->getValue('field_inner_electrons')[0]['value'] + $form_state->getValue('field_outer_electrons')[0]['value']) +
+      $massProton * $form_state->getValue('field_protons')[0]['value'];
     //  $form_state->setValue(['field_mass_actual', 0, 'value'], $mass);
     $form_state->setValue(['field_mass_calculated', 0, 'value'], $mass);
 
@@ -324,8 +324,9 @@ function atomizer_preprocess_node(&$variables) {
         $atomizer_block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties([
           'plugin' => 'atomizer_block'
         ]);
+//      $atomizer_block = \Drupal\block\Entity\Block::load('atomizer_block');
 //      $atomizer_block = \Drupal\block\Entity\Block::load('atomizer_controls');
-        $atomizer_block = \Drupal\block\Entity\Block::load('atomizerblockcontrolsandviewerinoneblock');
+        $atomizer_block = \Drupal\block\Entity\Block::load('my_olivero_atomizerblockcontrolsandviewerinoneblock');
 
         if (!empty($atomizer_block)) {
           // Read in the configuration file and save it back into the block for use later.
@@ -386,16 +387,16 @@ function atomizer_node_presave(EntityInterface $entity) {
   switch ($entity->getType()) {
     case 'atom':
       $element = Node::load($entity->field_element->target_id);
-      $protons = $entity->field__protons->value;
-//  $inner = $entity->field__inner->value;
-//  $outer = $entity->field__outer->value;
+      $protons = $entity->field_protons->value;
+//  $inner = $entity->field_inner->value;
+//  $outer = $entity->field_outer->value;
 //  if (!$inner) {
       $inner = $protons - $element->field_atomic_number->value;
-      $entity->field__inner_electrons->value = $inner;
+      $entity->field_inner_electrons->value = $inner;
 //  }
 //  if (!$outer) {
       $outer = $element->field_atomic_number->value;
-      $entity->field__outer_electrons->value = $outer;
+      $entity->field_outer_electrons->value = $outer;
 //  }
 
       // Calculate the mass as per Carl Johnson

@@ -11,99 +11,69 @@
     let viewer = _viewer;
     let snapshotType = 'single';
     let audio = $('#snapshot--shutter audio', viewer.context)[0];
+    //let audio = true;
     let downloadLink = document.createElement('a');
 
-    function takeSnapshot(settings) {
-      // Play the click sound
-      if (audio) {
-        audio.volume = .2;
-        audio.play();
-      }
 
-      // Save the current size of the canvas
-      let width = viewer.canvas.width;
-      let height = viewer.canvas.height;
+    /**
+     * takeSnapshot()
+     */
+    async function takeSnapshot(settings, viewer2, callback = null) {
+      const cleanup = () => {
+        // any cleanup code you had (revoke URLs, etc.)
+      };
 
-      let $snapshotWidth = $('#snapshot--width--az-slider', viewer.context);
-      let $snapshotHeight = $('#snapshot--height--az-slider', viewer.context);
+      try {
+        const blob = await new Promise((resolve, reject) => {
+          viewer.canvas.toBlob(
+            (b) => (b ? resolve(b) : reject(new Error('toBlob returned null'))),
+            settings.imageType || 'image/png',
+            settings.quality || 0.92
+          );
+        });
 
-      let nwidth  = 2560;
-      let nheight = 2560;
-      if (settings['width']) {
-        nwidth  = settings['width'];
-        nheight = settings['height'];
-      } else if ($snapshotWidth) {
-        nwidth = $snapshotWidth.val();
-        nheight = $snapshotHeight.val();
-      }
+        const formData = new FormData();
+        const safeFilename = settings.filename
+          .replace(/[^a-z0-9-_]/gi, '-')
+          .toLowerCase() + '.png';
 
-      // Change canvas size to 2560x2560 pixels
-      viewer.canvas.width  = nwidth;
-      viewer.canvas.height = nheight;
-      viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
-      if (viewer.render.setViewport) {
-        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
-      }
-      viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
-      viewer.camera.updateProjectionMatrix();
-      viewer.render();
+        formData.append('file', blob, safeFilename);
+        formData.append('nid', settings.nid || viewer.scene.az.sceneNid);
+        formData.append('action', 'saveImage');
+        formData.append('type', 'atom');
+        formData.append('overwrite', settings.overwrite ? 'true' : 'false');
+        formData.append('sceneName', viewer.scene.az.name);
+        formData.append('imageType', settings.imageType);
 
-      let $snapshotName = $('.snapshot--name', viewer.context);
-      let filename = viewer.scene.az.name;
-      if (settings.filename) {
-//      filename  = settings.width;
-        filename  = settings.filename;
-      } else if ($snapshotName) {
-        filename = $snapshotName.val();
-      }
-      filename = filename.replace(/ /g, "-").toLowerCase();
+        const response = await fetch('/ajax/saveImage', {
+          method: 'POST',
+          body: formData,
+          credentials: 'same-origin',
+        });
 
-      // Create image from canvas
-      let dataurl;
-      if (viewer.renderer.name == 'WebGL') {
-        dataurl = viewer.canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
-        downloadLink.setAttribute('download', filename + '.png');
-        downloadLink.setAttribute('href', dataurl);
-        downloadLink.click();
-      } else if (viewer.renderer.name == 'CSS3D') {
-        window.open(viewer.renderer.domElement.toDataURL('image/png'), 'screenshot');
-      }
+        if (!response.ok) {
+          throw new Error(`Server responded with ${response.status}`);
+        }
 
-      // Put canvas back to original size.
-      viewer.canvas.width = width;
-      viewer.canvas.height = height;
-      viewer.renderer.setSize(viewer.canvas.width, viewer.canvas.height);
-      if (viewer.render.setViewport) {
-        viewer.renderer.setViewport(0, 0, viewer.canvas.width, viewer.canvas.height);
-      }
-      viewer.camera.aspect = viewer.canvas.width / viewer.canvas.height;
-      viewer.camera.updateProjectionMatrix();
-      viewer.render();
+        const data = await response.json();
+        console.log('Image saved successfully:', data);
 
-      Drupal.atomizer.base.doAjax(
-        '/ajax/saveImage',
-        {
-          type: 'atom',
-          sceneNid: viewer.scene.az.sceneNid,
-          action: 'saveImage',
-          filename: filename,
-          directory: 'atoms',
-          overwrite: settings.overwrite || false,
-          sceneName: viewer.scene.az.name,
-          imgBase64: dataurl,
-          imageType: settings.imageType,
-        },
-        imageSaved
-      );
+        // Success callback / event
+        if (typeof imageSaved === 'function') {
+          imageSaved(data);
+        }
+        if (typeof callback === 'function') {
+          callback(data);
+        }
 
-      function imageSaved(response) {
-        return;
+      } catch (err) {
+        console.error('Snapshot save failed:', err);
+        alert('Failed to save atom snapshot. Check console for details.');
+      } finally {
+        cleanup();
       }
     }
 
-    /**
-     * Initialize all controls.
-     */
     function init() {
     }
 
